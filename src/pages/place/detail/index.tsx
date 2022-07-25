@@ -2,7 +2,7 @@ import type { NextPage } from 'next';
 import Head from 'next/head';
 import React from 'react';
 
-const HomePage: NextPage = () => {
+const PlaceDetail: NextPage = () => {
   return (
     <React.Fragment>
       <Head>
@@ -11,9 +11,9 @@ const HomePage: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main>HomePage</main>
+      <main>PlaceDetail</main>
     </React.Fragment>
   );
 };
 
-export default HomePage;
+export default PlaceDetail;
