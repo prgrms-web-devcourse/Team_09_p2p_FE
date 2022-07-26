@@ -57,11 +57,19 @@ const buttonStyle: buttonStyleInterface = {
   primary: `
     color: #fff;
     background-color:${mainColor};
+
+    &:hover{
+      background-color:#438ce1;
+    }
   `,
   borderPrimary: `
     color: ${mainColor};
     background-color: #fff;
     border: 1px solid ${mainColor};
+
+    &:hover {
+      background-color: #f6f9ff;
+    }
   `,
   tag: `
     color: ${fontDarkGray};
