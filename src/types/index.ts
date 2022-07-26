@@ -3,3 +3,8 @@ export interface User {
   nickname: string;
   gender: 'man' | 'woman';
 }
+
+export type LoginValues = {
+  readonly email: string;
+  readonly password: string;
+};
