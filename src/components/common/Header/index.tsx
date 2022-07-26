@@ -7,44 +7,51 @@ import theme from '~/styles/theme';
 
 const Header = () => {
   return (
-    <PageContainer>
-      <Inner>
-        <LeftArea>
-          <Link href="/" passHref>
-            <a>
-              <Logo width={130} height={35} />
-            </a>
-          </Link>
-          <Category>
-            <li>
-              <Link href="/course">여행코스</Link>
-            </li>
-            <li>
-              <Link href="/place">추천장소</Link>
-            </li>
-          </Category>
-        </LeftArea>
+    <HeaderContainer>
+      <PageContainer>
+        <Inner>
+          <LeftArea>
+            <Link href="/" passHref>
+              <a>
+                <Logo width={130} height={35} />
+              </a>
+            </Link>
+            <Category>
+              <li>
+                <Link href="/course">여행코스</Link>
+              </li>
+              <li>
+                <Link href="/place">추천장소</Link>
+              </li>
+            </Category>
+          </LeftArea>
 
-        <div>
-          <input placeholder="지역, 장소를 입력해주세요" />
-        </div>
+          <div>
+            <input placeholder="지역, 장소를 입력해주세요" />
+          </div>
 
-        <Buttons>
-          <Link href="/course/create" passHref>
-            <Button>코스등록</Button>
-          </Link>
-          <Link href="/login" passHref>
-            <Button buttonType="borderPrimary">로그인</Button>
-          </Link>
-        </Buttons>
-      </Inner>
-    </PageContainer>
+          <Buttons>
+            <Link href="/course/create" passHref>
+              <Button>코스등록</Button>
+            </Link>
+            <Link href="/login" passHref>
+              <Button buttonType="borderPrimary">로그인</Button>
+            </Link>
+          </Buttons>
+        </Inner>
+      </PageContainer>
+    </HeaderContainer>
   );
 };
 
 export default Header;
 
-const { mainColor } = theme.color;
+const { mainColor, borderGray } = theme.color;
+
+const HeaderContainer = styled.div`
+  width: 100%;
+  border-bottom: 1px solid ${borderGray};
+`;
 
 const Inner = styled.div`
   display: flex;
