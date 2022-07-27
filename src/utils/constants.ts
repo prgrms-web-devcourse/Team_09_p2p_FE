@@ -21,3 +21,7 @@ export const FONT_COLORS: { [key: string]: string } = {
   darkGray: fontDarkGray,
   dark: fontDarkBlack
 };
+
+export const ICON_URLS: { [key: string]: string } = {
+  heart: '/assets/icons/heart'
+};
