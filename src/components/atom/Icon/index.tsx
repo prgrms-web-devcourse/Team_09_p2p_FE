@@ -3,12 +3,14 @@ import { ICON_URLS } from '~/utils/constants';
 
 interface IconProps {
   name: string;
-  size: number;
-  rotate: number;
+  size?: number;
+  rotate?: number;
 }
 
 const Icon: React.FC<IconProps> = ({ name, size = 15, rotate, ...props }) => {
   const { [name]: iconUrl } = ICON_URLS;
+
+  console.log(iconUrl, 'iconUrl');
 
   const IconStyle = {
     width: size,
