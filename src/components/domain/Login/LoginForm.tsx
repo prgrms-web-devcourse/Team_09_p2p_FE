@@ -66,7 +66,10 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSubmit: trigger }) => {
       </form>
       <div>
         <span>
-          아직 회원이 아니신가요? <Link href="/signup">회원가입</Link>
+          아직 회원이 아니신가요?{' '}
+          <Link href="/signup" passHref>
+            회원가입
+          </Link>
         </span>
       </div>
     </div>
