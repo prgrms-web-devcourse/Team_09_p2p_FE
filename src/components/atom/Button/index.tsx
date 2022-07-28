@@ -6,6 +6,7 @@ type ButtonTypes = 'primary' | 'borderPrimary' | 'tag' | 'darkGray';
 type ButtonSizes = 'sm' | 'md' | 'lg';
 
 interface ButtonProps {
+  type?: 'button' | 'submit';
   buttonType?: ButtonTypes;
   size?: ButtonSizes;
   disabled?: boolean;
@@ -18,6 +19,7 @@ interface ButtonProps {
 }
 
 const Button = ({
+  type = 'button',
   buttonType = 'primary',
   size = 'sm',
   fontSize,
