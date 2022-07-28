@@ -1,17 +1,20 @@
 import type { NextPage } from 'next';
 import Head from 'next/head';
 import React from 'react';
+import { SignupForm } from '~/components/domain';
 
 const Signup: NextPage = () => {
   return (
     <React.Fragment>
       <Head>
-        <title>우리의 여행코스 | 이곳저곳</title>
-        <meta name="description" content="our travel course" />
+        <title>여행할 땐 | 이곳저곳</title>
+        <meta name="description" content="sign-up" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main>Signup</main>
+      <main>
+        <SignupForm />
+      </main>
     </React.Fragment>
   );
 };
