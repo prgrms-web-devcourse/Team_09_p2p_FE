@@ -4,12 +4,13 @@ import React from 'react';
 import { Button, Icon, Text, Title } from '~/components/atom';
 import Avatar from '~/components/atom/Avatar';
 import theme from '~/styles/theme';
+import BookmarkIcon from '../BookmarkIcon';
 
 const CourseItem = () => {
   return (
     <ItemContainer>
       <Thumbnail>
-        <BookmarkIcon name="bookmark" size={40} />
+        <BookmarkIcon />
         <Text size="xs">제주 5코스</Text>
         <Title level={3} size={18} ellipsis>
           [1박 2일] 제주도 여행 추천! 힐링하고 싶은 사람 모두 모여라!
@@ -89,8 +90,8 @@ const Profile = styled.div`
   }
 `;
 
-const BookmarkIcon = styled(Icon)`
-  position: absolute;
-  top: 16px;
-  right: 16px;
-`;
+// const BookmarkIcon = styled(Icon)`
+//   position: absolute;
+//   top: 16px;
+//   right: 16px;
+// `;
