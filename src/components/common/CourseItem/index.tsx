@@ -5,6 +5,7 @@ import { Button, Icon, Text, Title } from '~/components/atom';
 import Avatar from '~/components/atom/Avatar';
 import theme from '~/styles/theme';
 import BookmarkIcon from '../BookmarkIcon';
+import LikeCount from '../LikeCount';
 
 const CourseItem = () => {
   return (
@@ -22,10 +23,7 @@ const CourseItem = () => {
         </Text>
         <Text block>#혼자여행 #맛집 #카페</Text>
         <InfoFooter>
-          <Like>
-            <Icon name="heart" size={20} />
-            <Text color="gray">12</Text>
-          </Like>
+          <LikeCount count={12} />
           <Profile>
             <Avatar src="/assets/location/jeju.jpg" size={26} />
             <Text color="gray">jinist</Text>
