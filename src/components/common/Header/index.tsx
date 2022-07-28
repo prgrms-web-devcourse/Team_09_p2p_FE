@@ -32,10 +32,14 @@ const Header = () => {
 
           <Buttons>
             <Link href="/course/create" passHref>
-              <Button>코스등록</Button>
+              <a>
+                <Button>코스등록</Button>
+              </a>
             </Link>
             <Link href="/login" passHref>
-              <Button buttonType="borderPrimary">로그인</Button>
+              <a>
+                <Button buttonType="borderPrimary">로그인</Button>
+              </a>
             </Link>
           </Buttons>
         </Inner>
