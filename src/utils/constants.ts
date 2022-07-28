@@ -24,5 +24,6 @@ export const FONT_COLORS: { [key: string]: string } = {
 
 export const ICON_URLS: { [key: string]: string } = {
   heart: '/assets/icons/heart.svg',
-  bookmark: '/assets/icons/bookmark.svg'
+  bookmark: '/assets/icons/bookmark.svg',
+  arrow: '/assets/icons/arrow.svg'
 };
