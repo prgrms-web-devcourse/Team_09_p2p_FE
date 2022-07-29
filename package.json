@@ -16,10 +16,12 @@
     "next": "12.2.2",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "yup": "^0.32.11",
-    "react-kakao-maps-sdk": "^1.1.1"
+    "react-kakao-maps-sdk": "^1.1.1",
+    "yup": "^0.32.11"
   },
   "devDependencies": {
+    "@babel/core": "^7.18.9",
+    "@emotion/babel-plugin": "^11.9.5",
     "@types/kakaomaps": "^1.1.2",
     "@types/node": "18.0.6",
     "@types/react": "18.0.15",
