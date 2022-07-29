@@ -4,7 +4,7 @@ import { useFormik } from 'formik';
 import { SchemaOf, object, string } from 'yup';
 import styled from '@emotion/styled';
 import theme from '~/styles/theme';
-import { PageContainer, Logo, Input, Label, Button } from '~/components/atom';
+import { PageContainer, Logo, Input, Label, Button, Text } from '~/components/atom';
 import { LoginValues } from '~/types';
 import { Form } from '~/components/common';
 
@@ -64,15 +64,14 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSubmit: handleSubmitAction }) =
             </Button>
           </Form>
         </FormWrapper>
-        <div>
-          {/* TODO - Text컴포넌트 머지 후 변경 */}
-          <span>
-            아직 회원이 아니신가요?{' '}
+        <Texts>
+          <Text size="md">아직 회원이 아니신가요?</Text>
+          <Text style={{ fontWeight: '600' }} size="md" color={theme.color.mainColor}>
             <Link href="/signup" passHref>
               회원가입
             </Link>
-          </span>
-        </div>
+          </Text>
+        </Texts>
       </Container>
     </Layout>
   );
@@ -81,7 +80,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSubmit: handleSubmitAction }) =
 export default LoginForm;
 
 const Layout = styled(PageContainer)`
-  height: calc(100vh - 100px);
+  height: calc(100vh - 120px);
   display: flex;
   align-items: center;
 `;
@@ -101,4 +100,9 @@ const FormWrapper = styled.div`
   box-sizing: border-box;
   width: 100%;
   padding: 60px;
+`;
+
+const Texts = styled.div`
+  display: flex;
+  gap: 10px;
 `;
