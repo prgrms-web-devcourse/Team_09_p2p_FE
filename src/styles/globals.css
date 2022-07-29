@@ -16,6 +16,10 @@ a {
   text-decoration: none;
 }
 
+li {
+  list-style: none;
+}
+
 button {
   padding: 0;
   outline: 0;

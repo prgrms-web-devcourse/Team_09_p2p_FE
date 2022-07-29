@@ -19,7 +19,7 @@ const Icon: React.FC<IconProps> = ({ name, size = 15, rotate, ...props }) => {
   };
 
   return (
-    <IconWrapper style={IconStyle}>
+    <IconWrapper style={IconStyle} {...props}>
       <img src={iconUrl} width={size} height={size} alt={name} />
     </IconWrapper>
   );
