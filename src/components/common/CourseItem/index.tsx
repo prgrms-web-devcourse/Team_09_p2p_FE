@@ -87,9 +87,3 @@ const Profile = styled.div`
     margin-left: 5px;
   }
 `;
-
-// const BookmarkIcon = styled(Icon)`
-//   position: absolute;
-//   top: 16px;
-//   right: 16px;
-// `;
