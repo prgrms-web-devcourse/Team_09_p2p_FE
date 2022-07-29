@@ -19,7 +19,7 @@ const CourseItem = () => {
       </Thumbnail>
       <CourseInfo>
         <Text block ellipsis>
-          인천공항→ 도렐제주본점 → 서귀포 1번길 → 기타등등의 여행지
+          인천공항 → 도렐제주본점 → 서귀포 1번길 → 기타등등의 여행지
         </Text>
         <Text block>#혼자여행 #맛집 #카페</Text>
         <InfoFooter>
