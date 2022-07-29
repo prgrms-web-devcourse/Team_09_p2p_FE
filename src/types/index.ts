@@ -12,3 +12,8 @@ export type SignupValues = {
   readonly birth: string;
   readonly sex: 'male' | 'female';
 };
+
+export type LoginValues = {
+  readonly email: string;
+  readonly password: string;
+};

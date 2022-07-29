@@ -1,23 +1,53 @@
 import styled from '@emotion/styled';
-import React, { ReactNode } from 'react';
-import { FONT_SIZE } from '~/utils/constants';
+import React, { CSSProperties, ReactNode } from 'react';
+import { FONT_SIZES, FONT_COLORS } from '~/utils/constants';
 
 interface TextProps {
   children: ReactNode;
-  size?: string;
+  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | number;
+  block?: boolean;
   color?: string;
+  ellipsis?: boolean;
+  paragraph?: boolean;
+  style?: CSSProperties;
 }
 
-const Text: React.FC<TextProps> = ({ children, size, color }) => {
+let tag: 'span' | 'p' = 'span';
+
+const Text: React.FC<TextProps> = ({
+  children,
+  size = 'sm',
+  block,
+  color,
+  ellipsis,
+  paragraph,
+  ...props
+}) => {
+  tag = paragraph ? 'p' : 'span';
+
   return (
-    <StyledButton size={size} color={color}>
+    <StyledText size={size} color={color} ellipsis={ellipsis} {...props}>
       {children}
-    </StyledButton>
+    </StyledText>
   );
 };
 
 export default Text;
 
-const StyledButton = styled.text<Omit<TextProps, 'children'>>`
-  font-size: ${({ size }) => size || FONT_SIZE.normal};
+const StyledText = styled[tag]<Omit<TextProps, 'children'>>`
+  font-size: ${({ size }) =>
+    size && (typeof size === 'number' ? size + 'px' : FONT_SIZES[size] + 'px')};
+
+  color: ${({ color }) => color && (FONT_COLORS[color] || color)};
+
+  display: ${({ block }) => (block ? 'block' : 'inline-block')};
+
+  ${({ ellipsis }) =>
+    ellipsis &&
+    `
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  `};
 `;
