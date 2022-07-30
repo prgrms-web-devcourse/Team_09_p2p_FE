@@ -6,3 +6,4 @@ export { default as BookmarkIcon } from './BookmarkIcon';
 export { default as Form } from './Form';
 export { default as SortFilter } from './SortFilter';
 export { default as CategoryTitle } from './CategoryTitle';
+export { default as CourseList } from './CourseList';
