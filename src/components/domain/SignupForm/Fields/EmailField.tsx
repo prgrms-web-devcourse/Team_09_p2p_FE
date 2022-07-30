@@ -1,15 +1,19 @@
-import React, { ChangeEvent } from 'react';
+import React, { ChangeEvent, useState } from 'react';
 import { Button, Input, Label } from '~/components/atom';
 import { Field } from '~/components/common';
+import { FONT_SIZES } from '~/utils/constants';
 
 interface EmailFieldProps {
   value: string;
   onChange: (e: ChangeEvent<HTMLInputElement>) => void;
+  errors: string | undefined;
 }
 
-const EmailField: React.FC<EmailFieldProps> = ({ value, onChange }) => {
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    onChange(e);
+const EmailField: React.FC<EmailFieldProps> = ({ value, onChange, errors }) => {
+  const [error, setError] = useState(errors);
+
+  const handleBlur = () => {
+    setError(errors);
   };
 
   return (
@@ -21,9 +25,11 @@ const EmailField: React.FC<EmailFieldProps> = ({ value, onChange }) => {
         placeholder="이메일"
         required
         value={value}
-        onChange={handleChange}
+        onChange={onChange}
+        onBlur={handleBlur}
       />
-      <Button fontSize={16}>이메일 중복확인</Button>
+      {error && <div>{error}</div>}
+      <Button fontSize={FONT_SIZES.sm}>이메일 중복확인</Button>
     </Field>
   );
 };

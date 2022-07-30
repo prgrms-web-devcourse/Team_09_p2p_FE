@@ -5,11 +5,17 @@ import { Field } from '~/components/common';
 interface PasswordCheckFieldProps {
   value: string;
   onChange: (e: ChangeEvent<HTMLInputElement>) => void;
+  errors: string | undefined;
 }
 
-const PasswordCheckField: React.FC<PasswordCheckFieldProps> = ({ value, onChange }) => {
+const PasswordCheckField: React.FC<PasswordCheckFieldProps> = ({ value, onChange, errors }) => {
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    console.log(e.target.value);
     onChange(e);
+  };
+
+  const handleBlur = () => {
+    console.log(errors);
   };
 
   return (
@@ -22,6 +28,7 @@ const PasswordCheckField: React.FC<PasswordCheckFieldProps> = ({ value, onChange
         required
         value={value}
         onChange={handleChange}
+        onBlur={handleBlur}
       />
     </Field>
   );
