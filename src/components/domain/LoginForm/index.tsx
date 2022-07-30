@@ -5,8 +5,8 @@ import { SchemaOf, object, string } from 'yup';
 import styled from '@emotion/styled';
 import theme from '~/styles/theme';
 import { PageContainer, Logo, Input, Label, Button, Text } from '~/components/atom';
-import { LoginValues } from '~/types';
 import { Form } from '~/components/common';
+import { LoginValues } from '~/types';
 
 const LoginValidationSchema: SchemaOf<LoginValues> = object().shape({
   email: string().email('이메일 형식이 아닙니다.').required('이메일을 입력해주세요.'),
@@ -31,7 +31,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSubmit: handleSubmitAction }) =
     validationSchema: LoginValidationSchema
   });
 
-  const disableButton = useMemo(() => {
+  const submittable = useMemo(() => {
     return Boolean(!values.email || !values.password || errors.email || errors.password);
   }, [values.email, values.password, errors.email, errors.password]);
 
@@ -59,7 +59,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSubmit: handleSubmitAction }) =
               value={values.password}
               onChange={handleChange}
             />
-            <Button type="submit" disabled={disableButton}>
+            <Button type="submit" disabled={submittable}>
               로그인
             </Button>
           </Form>
