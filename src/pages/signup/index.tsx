@@ -2,8 +2,14 @@ import type { NextPage } from 'next';
 import Head from 'next/head';
 import React from 'react';
 import { SignupForm } from '~/components/domain';
+import { SignupValues } from '~/types';
 
 const Signup: NextPage = () => {
+  const handleSubmit = (data: SignupValues) => {
+    console.log('제출!');
+    console.log(data);
+  };
+
   return (
     <React.Fragment>
       <Head>
@@ -13,7 +19,7 @@ const Signup: NextPage = () => {
       </Head>
 
       <main>
-        <SignupForm />
+        <SignupForm onSubmit={handleSubmit} />
       </main>
     </React.Fragment>
   );
