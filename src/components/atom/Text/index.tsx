@@ -28,7 +28,14 @@ const Text: React.FC<TextProps> = ({
   tag = paragraph ? 'p' : 'span';
 
   return (
-    <StyledText size={size} color={color} ellipsis={ellipsis} fontWeight={fontWeight} {...props}>
+    <StyledText
+      size={size}
+      color={color}
+      ellipsis={ellipsis}
+      fontWeight={fontWeight}
+      block={block}
+      {...props}
+    >
       {children}
     </StyledText>
   );
