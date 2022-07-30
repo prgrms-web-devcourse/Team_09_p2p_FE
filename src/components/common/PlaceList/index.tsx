@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import PlaceItem from '../PlaceItem';
+import PlaceItem from './PlaceItem';
 
 const PlaceList = () => {
   return (
