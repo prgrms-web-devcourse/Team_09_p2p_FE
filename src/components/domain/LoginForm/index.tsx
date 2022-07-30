@@ -23,17 +23,18 @@ interface LoginFormProps {
 }
 
 const LoginForm: React.FC<LoginFormProps> = ({ onSubmit: handleSubmitAction }) => {
-  const { values, handleChange, handleSubmit, errors } = useFormik({
+  const { values, handleChange, handleSubmit } = useFormik({
     initialValues,
     onSubmit: (data: LoginValues) => {
+      console.log(data, values);
       handleSubmitAction && handleSubmitAction(data);
     },
     validationSchema: LoginValidationSchema
   });
 
   const submittable = useMemo(() => {
-    return Boolean(!values.email || !values.password || errors.email || errors.password);
-  }, [values.email, values.password, errors.email, errors.password]);
+    return !Object.values(values).every((value) => value.length > 0);
+  }, [values]);
 
   return (
     <Layout>
