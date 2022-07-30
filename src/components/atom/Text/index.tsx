@@ -9,6 +9,7 @@ interface TextProps {
   color?: string;
   ellipsis?: boolean;
   paragraph?: boolean;
+  fontWeight?: number;
   style?: CSSProperties;
 }
 
@@ -21,12 +22,13 @@ const Text: React.FC<TextProps> = ({
   color,
   ellipsis,
   paragraph,
+  fontWeight,
   ...props
 }) => {
   tag = paragraph ? 'p' : 'span';
 
   return (
-    <StyledText size={size} color={color} ellipsis={ellipsis} {...props}>
+    <StyledText size={size} color={color} ellipsis={ellipsis} fontWeight={fontWeight} {...props}>
       {children}
     </StyledText>
   );
@@ -50,4 +52,6 @@ const StyledText = styled[tag]<Omit<TextProps, 'children'>>`
     text-overflow: ellipsis;
     white-space: nowrap;
   `};
+
+  font-weight: ${({ fontWeight }) => fontWeight && fontWeight};
 `;
