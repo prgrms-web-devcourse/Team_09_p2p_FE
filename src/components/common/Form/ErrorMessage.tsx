@@ -5,7 +5,7 @@ interface ErrorMessageProps {
   message: string;
 }
 
-const ErrorMessage = ({ message }: ErrorMessageProps) => {
+const ErrorMessage: React.FC<ErrorMessageProps> = ({ message }) => {
   return (
     <Text color="tomato" size="xs">
       {message}
@@ -13,4 +13,4 @@ const ErrorMessage = ({ message }: ErrorMessageProps) => {
   );
 };
 
-export default ErrorMessage;
+export default React.memo(ErrorMessage);
