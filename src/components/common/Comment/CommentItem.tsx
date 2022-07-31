@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 import { Text } from '~/components/atom';
 import Avatar from '~/components/atom/Avatar';
 import theme from '~/styles/theme';
-import { IComment, IRecomment } from '.';
+import { IComment, IRecomment } from './types';
 
 interface CommentItemProps {
   comment?: IComment | IRecomment;
