@@ -28,7 +28,7 @@ const NicknameField: React.FC<NicknameFieldProps> = ({ value, onChange, errors }
     <Field>
       <Label htmlFor="nickname" text="닉네임" />
       <Text size="xs" color={theme.color.fontGray}>
-        2-10자 이내의 닉네임을 입력해주세요.
+        2~6자 이내의 닉네임을 입력해주세요.
       </Text>
       <StyledField>
         <Input
