@@ -9,6 +9,11 @@ interface CommentItemProps {
   isRecomment?: boolean;
 }
 
+/* TODO:
+1. 댓글 단 유저가 작성자일 경우 닉네임 옆에 표시
+2. 본인 댓글일 경우 수정/삭제 버튼 노출
+*/
+
 const CommentItem = ({ comment, isRecomment }: CommentItemProps) => {
   return (
     <>
@@ -17,7 +22,7 @@ const CommentItem = ({ comment, isRecomment }: CommentItemProps) => {
           <CommentWrapper>
             <Avatar size={66} src={comment.user.profileImage} />
             <CommentContent>
-              <Text size="lg" block style={{ fontWeight: 'bold' }}>
+              <Text size="lg" block fontWeight={700}>
                 {comment.user.nickname}
               </Text>
               <Text size="lg" block>
