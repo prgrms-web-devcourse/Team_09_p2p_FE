@@ -14,11 +14,11 @@ const PlaceItem = () => {
           <Title size={16}>도렐 제주본점</Title>
           <LikeCount count={15} />
         </InfoHead>
-        <Discription>
+        <Description>
           <Text color="gray" size={15} ellipsis>
             12개의 여행코스에 포함된 장소입니다.
           </Text>
-        </Discription>
+        </Description>
       </PlaceInfo>
     </PlaceContainer>
   );
@@ -50,6 +50,6 @@ const InfoHead = styled.div`
   align-items: center;
   justify-content: space-between;
 `;
-const Discription = styled.div`
+const Description = styled.div`
   margin-top: 8px;
 `;
