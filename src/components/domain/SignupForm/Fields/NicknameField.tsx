@@ -53,6 +53,7 @@ const NicknameField: React.FC<NicknameFieldProps> = ({
           value={value}
           onChange={handleChange}
           onBlur={handleBlur}
+          autoComplete="off"
         />
         <Button onClick={handleClickDuplicate} width="120px" fontSize={16}>
           중복확인

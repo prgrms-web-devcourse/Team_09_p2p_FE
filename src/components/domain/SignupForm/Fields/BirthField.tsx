@@ -19,12 +19,14 @@ const BirthField: React.FC<BirthFieldProps> = ({ value, onChange, errors }) => {
     <Field>
       <Label htmlFor="birth" text="생년월일" />
       <Input
+        type="date"
         name="birth"
         placeholder="YYYY-MM-DD"
         required
         value={value}
         onChange={onChange}
         onBlur={handleBlur}
+        autoComplete="off"
       />
       {error && <ErrorMessage message={error} />}
     </Field>
