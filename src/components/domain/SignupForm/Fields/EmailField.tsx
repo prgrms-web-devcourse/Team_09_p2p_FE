@@ -7,20 +7,35 @@ interface EmailFieldProps {
   value: string;
   onChange: (e: ChangeEvent<HTMLInputElement>) => void;
   errors: string | undefined;
+  setInitDuplicateFn: () => void;
+  setDuplicateCheckFn: () => void;
 }
 
-const EmailField: React.FC<EmailFieldProps> = ({ value, onChange, errors }) => {
+const EmailField: React.FC<EmailFieldProps> = ({
+  value,
+  onChange,
+  errors,
+  setInitDuplicateFn,
+  setDuplicateCheckFn
+}) => {
   const [error, setError] = useState(errors);
 
   const handleBlur = useCallback(() => {
     setError(errors);
   }, [errors]);
 
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setInitDuplicateFn();
+    onChange(e);
+  };
+
   const handleClickDuplicate = async () => {
     //TODO
     // 1. 이메일 중복확인 로직 추가
     // 2. 응답에 따라 ConfirmModal 불러오기
-    console.log('이메일 중복확인!');
+    if (!error && window.confirm(`${value}는 사용가능한 메일입니다!`)) {
+      setDuplicateCheckFn();
+    }
   };
 
   return (
@@ -32,7 +47,7 @@ const EmailField: React.FC<EmailFieldProps> = ({ value, onChange, errors }) => {
         placeholder="이메일"
         required
         value={value}
-        onChange={onChange}
+        onChange={handleChange}
         onBlur={handleBlur}
       />
       {error && <ErrorMessage message={error} />}

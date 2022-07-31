@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import { useFormik } from 'formik';
-import React, { useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { Button, PageContainer, Title } from '~/components/atom';
 import { Form } from '~/components/common';
 import theme from '~/styles/theme';
@@ -29,29 +29,34 @@ const initialValues: SignupValues = {
 };
 
 const SignupForm: React.FC<SignupFormProps> = ({ onSubmit: handleSubmitAction }) => {
-  const [isCheckedDuplicateEmail, setIsCheckedDuplicateEmail] = useState(true);
-  const [isCheckedDuplicateNickname, setIsCheckedDuplicateNickname] = useState(true);
-
-  const validDuplicateEmail = () => setIsCheckedDuplicateEmail(true);
-  const validDuplicateNickname = () => setIsCheckedDuplicateNickname(true);
+  const [isCheckedDuplicateEmail, setIsCheckedDuplicateEmail] = useState(false);
+  const [isCheckedDuplicateNickname, setIsCheckedDuplicateNickname] = useState(false);
+  const initDuplicatedEmail = useCallback(() => setIsCheckedDuplicateEmail(false), []);
+  const initDuplicatedNickname = useCallback(() => setIsCheckedDuplicateNickname(false), []);
+  const checkDuplicatedEmail = () => setIsCheckedDuplicateEmail(true);
+  const checkDuplicatedNickname = () => setIsCheckedDuplicateNickname(true);
 
   const { values, handleChange, handleSubmit, errors } = useFormik({
     initialValues,
+    validationSchema: SignupValidationRules,
     onSubmit: (data: SignupValues) => {
-      console.log(errors);
-      console.log(values);
+      if (!isCheckedDuplicateEmail) {
+        //TODO - ConfirmModal 사용하기
+        window.alert('이메일 중복확인을 해주세요.');
+        return;
+      }
+      if (!isCheckedDuplicateNickname) {
+        //TODO - ConfirmModal 사용하기
+        window.alert('닉네임 중복확인을 해주세요.');
+        return;
+      }
       handleSubmitAction && handleSubmitAction(data);
-    },
-    validationSchema: SignupValidationRules
+    }
   });
 
   const submittable = useMemo(() => {
-    return !(
-      Object.values(values).every((value) => value.length > 0) &&
-      isCheckedDuplicateEmail &&
-      isCheckedDuplicateNickname
-    );
-  }, [values, isCheckedDuplicateEmail, isCheckedDuplicateNickname]);
+    return !Object.values(values).every((value) => value.length > 0);
+  }, [values]);
 
   return (
     <Layout>
@@ -61,7 +66,13 @@ const SignupForm: React.FC<SignupFormProps> = ({ onSubmit: handleSubmitAction })
         </Title>
         <Form onSubmit={handleSubmit}>
           <Fields>
-            <EmailField value={values.email} onChange={handleChange} errors={errors.email} />
+            <EmailField
+              value={values.email}
+              onChange={handleChange}
+              errors={errors.email}
+              setInitDuplicateFn={initDuplicatedEmail}
+              setDuplicateCheckFn={checkDuplicatedEmail}
+            />
             <PasswordField
               value={values.password}
               onChange={handleChange}
@@ -76,6 +87,8 @@ const SignupForm: React.FC<SignupFormProps> = ({ onSubmit: handleSubmitAction })
               value={values.nickname}
               onChange={handleChange}
               errors={errors.nickname}
+              setInitDuplicateFn={initDuplicatedNickname}
+              setDuplicateCheckFn={checkDuplicatedNickname}
             />
             <BirthField value={values.birth} onChange={handleChange} errors={errors.birth} />
             <SexField value={values.sex} onChange={handleChange} />

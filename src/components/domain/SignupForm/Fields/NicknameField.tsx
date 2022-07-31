@@ -8,20 +8,35 @@ interface NicknameFieldProps {
   value: string;
   onChange: (e: ChangeEvent<HTMLInputElement>) => void;
   errors: string | undefined;
+  setInitDuplicateFn: () => void;
+  setDuplicateCheckFn: () => void;
 }
 
-const NicknameField: React.FC<NicknameFieldProps> = ({ value, onChange, errors }) => {
+const NicknameField: React.FC<NicknameFieldProps> = ({
+  value,
+  onChange,
+  errors,
+  setInitDuplicateFn,
+  setDuplicateCheckFn
+}) => {
   const [error, setError] = useState(errors);
 
   const handleBlur = () => {
     setError(errors);
   };
 
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setInitDuplicateFn();
+    onChange(e);
+  };
+
   const handleClickDuplicate = async () => {
     //TODO
     // 1. 이메일 중복확인 로직 추가
     // 2. 응답에 따라 ConfirmModal 불러오기
-    console.log('닉네임 중복확인!');
+    if (!error && window.confirm(`${value}는 사용가능한 닉네임입니다!`)) {
+      setDuplicateCheckFn();
+    }
   };
 
   return (
@@ -36,7 +51,7 @@ const NicknameField: React.FC<NicknameFieldProps> = ({ value, onChange, errors }
           placeholder="닉네임"
           required
           value={value}
-          onChange={onChange}
+          onChange={handleChange}
           onBlur={handleBlur}
         />
         <Button onClick={handleClickDuplicate} width="120px" fontSize={16}>
