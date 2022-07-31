@@ -3,7 +3,7 @@ import { ReactNode } from 'react';
 
 type LinkProps = Omit<NextLinkProps, 'as' | 'passHref'> & { children: ReactNode };
 
-const Link: React.FC<LinkProps> = ({
+const Link = ({
   href,
   prefetch,
   replace,
@@ -12,7 +12,7 @@ const Link: React.FC<LinkProps> = ({
   locale,
   children,
   ...props
-}) => {
+}: LinkProps) => {
   return (
     <NextLink
       href={href}
