@@ -6,3 +6,5 @@ export { default as PageContainer } from './PageContainer';
 export { default as Input } from './Input';
 export { default as Label } from './Label';
 export { default as Logo } from './Logo';
+export { default as Link } from './Link';
+export { default as Image } from './Image';
