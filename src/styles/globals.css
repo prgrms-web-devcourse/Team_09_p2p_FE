@@ -27,3 +27,9 @@ button {
   cursor: pointer;
   background-color: transparent;
 }
+
+body.modal-open {
+  position: fix;
+  width: 100%;
+  overflow-y: hidden;
+}
