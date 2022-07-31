@@ -1,9 +1,9 @@
 import styled from '@emotion/styled';
 import Image from 'next/image';
-import { ICON_URLS } from '~/utils/constants';
+import { ICON_URLS, IconName } from './types';
 
 interface IconProps {
-  name: string;
+  name: IconName;
   size?: number;
   rotate?: number;
 }
