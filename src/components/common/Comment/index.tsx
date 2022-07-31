@@ -58,7 +58,9 @@ const Comment = ({ comments = dummyComments }: CommentProps) => {
 
 export default Comment;
 
-const CommentContainer = styled.div``;
+const CommentContainer = styled.div`
+  margin-top: 20px;
+`;
 const CommentList = styled.div`
   margin-top: 42px;
 `;
