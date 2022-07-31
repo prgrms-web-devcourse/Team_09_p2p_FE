@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useState } from 'react';
+import React, { ChangeEvent, useCallback, useState } from 'react';
 import { Input, Label } from '~/components/atom';
 import { ErrorMessage, Field } from '~/components/common';
 
@@ -11,9 +11,9 @@ interface BirthFieldProps {
 const BirthField: React.FC<BirthFieldProps> = ({ value, onChange, errors }) => {
   const [error, setError] = useState(errors);
 
-  const handleBlur = () => {
+  const handleBlur = useCallback(() => {
     setError(errors);
-  };
+  }, [errors]);
 
   return (
     <Field>

@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import React, { ChangeEvent, useState } from 'react';
+import React, { ChangeEvent, useCallback, useState } from 'react';
 import { Button, Input, Label, Text } from '~/components/atom';
 import { ErrorMessage, Field } from '~/components/common';
 import theme from '~/styles/theme';
@@ -21,14 +21,17 @@ const NicknameField: React.FC<NicknameFieldProps> = ({
 }) => {
   const [error, setError] = useState(errors);
 
-  const handleBlur = () => {
+  const handleBlur = useCallback(() => {
     setError(errors);
-  };
+  }, [errors]);
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setInitDuplicateFn();
-    onChange(e);
-  };
+  const handleChange = useCallback(
+    (e: ChangeEvent<HTMLInputElement>) => {
+      setInitDuplicateFn();
+      onChange(e);
+    },
+    [onChange, setInitDuplicateFn]
+  );
 
   const handleClickDuplicate = async () => {
     //TODO

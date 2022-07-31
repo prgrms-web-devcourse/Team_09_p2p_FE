@@ -24,10 +24,13 @@ const EmailField: React.FC<EmailFieldProps> = ({
     setError(errors);
   }, [errors]);
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setInitDuplicateFn();
-    onChange(e);
-  };
+  const handleChange = useCallback(
+    (e: ChangeEvent<HTMLInputElement>) => {
+      setInitDuplicateFn();
+      onChange(e);
+    },
+    [onChange, setInitDuplicateFn]
+  );
 
   const handleClickDuplicate = async () => {
     //TODO
