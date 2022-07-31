@@ -5,6 +5,8 @@ import React from 'react';
 import { Icon, Image, PageContainer, Text, Title } from '~/components/atom';
 import Avatar from '~/components/atom/Avatar';
 import Comment from '~/components/common/Comment';
+import CourseOverview from '~/components/domain/CourseDetail/CourseOverview';
+import theme from '~/styles/theme';
 
 const CourseDetail: NextPage = () => {
   return (
@@ -18,48 +20,26 @@ const CourseDetail: NextPage = () => {
       <main>
         <PageContainer type="detail">
           <CourseDetailHeader>
-            <Title>[1박 2일] 제주도 여행 추천!!!</Title>
-            <Text>업로드 날짜: / 수정된 날짜:</Text>
-            <HeaderButtons>
-              <button>수정</button>
-              <button>삭제</button>
-            </HeaderButtons>
+            <CourseTitle>
+              <Title level={2} size="sm" fontWeight={700} block>
+                [1박 2일] 제주도 여행 추천!!!
+              </Title>
+              <HeaderButtons>
+                <button>수정</button>
+                <button>삭제</button>
+              </HeaderButtons>
+            </CourseTitle>
+            <Text color="gray">업로드 날짜: / 수정된 날짜:</Text>
+            <Profile>
+              <Avatar size={66} />
+              <Text color="dark" fontWeight={500}>
+                Jinist
+              </Text>
+            </Profile>
           </CourseDetailHeader>
-          <Profile>
-            <Avatar size={66} />
-            <Text>Jinist</Text>
-          </Profile>
-          <CourseDetails>
-            <CourseOverview>
-              <CourseInfo>
-                <li>
-                  <Icon name="marker" />
-                  <Text>여행지역</Text>
-                  <Text>제주</Text>
-                </li>
-                <li>
-                  <Icon name="calendar" />
-                  <Text>여행기간</Text>
-                  <Text>당일</Text>
-                </li>
-                <li>
-                  <Icon name="route" />
-                  <Text>총 코스</Text>
-                  <Text>5코스</Text>
-                </li>
-              </CourseInfo>
 
-              <CourseInfoDetail>
-                <li>
-                  <Text>여행테마</Text>
-                  <Text>#데이트코스 #힐링 #나혼자여행</Text>
-                </li>
-                <li>
-                  <Text>포함장소</Text>
-                  <Text>카페, 바다, 테마파크, 음식점</Text>
-                </li>
-              </CourseInfoDetail>
-            </CourseOverview>
+          <CourseDetails>
+            <CourseOverview />
           </CourseDetails>
           <TravelRoute>
             <Title>여행경로</Title>
@@ -91,13 +71,34 @@ const CourseDetail: NextPage = () => {
 
 export default CourseDetail;
 
-const CourseDetailHeader = styled.div``;
-const HeaderButtons = styled.div``;
-const Profile = styled.div``;
+const { fontGray, mainBackground } = theme.color;
+
+const CourseDetailHeader = styled.div`
+  position: relative;
+  margin-top: 40px;
+`;
+const CourseTitle = styled.div`
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 12px;
+`;
+
+const HeaderButtons = styled.div`
+  button {
+    color: ${fontGray};
+    font-size: 16px;
+    margin-left: 8px;
+  }
+`;
+const Profile = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 32px;
+  margin-bottom: 70px;
+`;
 const CourseDetails = styled.div``;
-const CourseOverview = styled.section``;
-const CourseInfo = styled.ul``;
-const CourseInfoDetail = styled.ul``;
+
 const TravelRoute = styled.div``;
 const TravelCourse = styled.div``;
 const CourseDetailList = styled.div``;
