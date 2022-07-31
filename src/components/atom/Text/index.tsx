@@ -1,14 +1,16 @@
 import styled from '@emotion/styled';
 import React, { CSSProperties, ReactNode } from 'react';
+import { FontColors, FontSizes } from '~/types/font';
 import { FONT_SIZES, FONT_COLORS } from '~/utils/constants';
 
 interface TextProps {
   children: ReactNode;
-  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | number;
+  size?: FontSizes | number;
   block?: boolean;
-  color?: string;
+  color?: FontColors;
   ellipsis?: boolean;
   paragraph?: boolean;
+  fontWeight?: number;
   style?: CSSProperties;
 }
 
@@ -21,12 +23,20 @@ const Text: React.FC<TextProps> = ({
   color,
   ellipsis,
   paragraph,
+  fontWeight,
   ...props
 }) => {
   tag = paragraph ? 'p' : 'span';
 
   return (
-    <StyledText size={size} color={color} ellipsis={ellipsis} {...props}>
+    <StyledText
+      size={size}
+      color={color}
+      ellipsis={ellipsis}
+      fontWeight={fontWeight}
+      block={block}
+      {...props}
+    >
       {children}
     </StyledText>
   );
@@ -50,4 +60,6 @@ const StyledText = styled[tag]<Omit<TextProps, 'children'>>`
     text-overflow: ellipsis;
     white-space: nowrap;
   `};
+
+  font-weight: ${({ fontWeight }) => fontWeight && fontWeight};
 `;

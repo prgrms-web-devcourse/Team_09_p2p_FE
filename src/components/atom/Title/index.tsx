@@ -1,12 +1,13 @@
 import styled from '@emotion/styled';
 import { CSSProperties, ReactNode } from 'react';
+import { FontColors, TitleSizes } from '~/types/font';
 import { TITLE_SIZES, FONT_COLORS } from '~/utils/constants';
 
 interface TitleProps {
-  size?: 'sm' | 'md' | 'lg' | number;
+  size?: TitleSizes | number;
   level?: 1 | 2 | 3 | 4 | 5 | 6;
   fontWeight?: number;
-  color?: string;
+  color?: FontColors;
   block?: boolean;
   ellipsis?: boolean;
   style?: CSSProperties;

@@ -8,6 +8,7 @@ const theme = {
     fontGray: '#909090',
     fontDarkGray: '#515151',
     fontDarkBlack: '#2B2B2B',
+    fontBlueGray: '#828C94',
     borderGray: '#EAEDEF',
     borderDarkGray: '#E1E1E1'
   }
