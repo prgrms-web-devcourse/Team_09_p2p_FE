@@ -33,10 +33,12 @@ export const SignupValidationRules: ObjectSchema<Assign<ObjectShape, SchemaInter
       .max(15, MESSAGE.password)
       .matches(VALIDATION.password, MESSAGE.password)
       .required('비밀번호를 입력해주세요.'),
-    passwordCheck: string().when('password', {
-      is: (password: string) => (password && password.length > 0 ? true : false),
-      then: string().oneOf([ref('password')], MESSAGE.passwordCheck)
-    }),
+    passwordCheck: string()
+      .required('비밀번호를 한번 더 입력해주세요.')
+      .when('password', {
+        is: (password: string) => (password && password.length > 0 ? true : false),
+        then: string().oneOf([ref('password')], MESSAGE.passwordCheck)
+      }),
     nickname: string()
       .min(2, MESSAGE.nickname)
       .max(6, MESSAGE.nickname)
