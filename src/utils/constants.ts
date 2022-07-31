@@ -25,3 +25,25 @@ export const FONT_COLORS: { [key: string]: string } = {
 export const ICON_URLS: { [key: string]: string } = {
   heart: '/assets/icons/heart.svg'
 };
+
+export const MARKER_IMAGE_URLS: { [key: string]: string } = {
+  academy: '/assets/place/academy.png',
+  agency: '/assets/place/agency.png',
+  bank: '/assets/place/bank.png',
+  convenience: '/assets/place/convenience.png',
+  culturalFacility: '/assets/place/culturalFacility.png',
+  defaultPlace: '/assets/place/defaultPlace.png',
+  gasStation: '/assets/place/gasStation.png',
+  kindergarden: '/assets/place/kindergarden.png',
+  parking: '/assets/place/parking.png',
+  publicInstitutions: '/assets/place/publicInstitutions.png',
+  school: '/assets/place/school.png',
+  shopping: '/assets/place/shopping.png',
+  subway: '/assets/place/subway.png',
+  attractions: '/assets/place/attractions.png',
+  accommodation: '/assets/place/accommodation.png',
+  restaurant: '/assets/place/restaurant.png',
+  cafe: '/assets/place/cafe.png',
+  hospital: '/assets/place/hospital.png',
+  pharmacy: '/assets/place/pharmacy.png'
+};
