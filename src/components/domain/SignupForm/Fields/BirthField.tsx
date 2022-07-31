@@ -1,6 +1,6 @@
-import React, { ChangeEvent } from 'react';
+import React, { ChangeEvent, useState } from 'react';
 import { Input, Label } from '~/components/atom';
-import { Field } from '~/components/common';
+import { ErrorMessage, Field } from '~/components/common';
 
 interface BirthFieldProps {
   value: string;
@@ -9,13 +9,10 @@ interface BirthFieldProps {
 }
 
 const BirthField: React.FC<BirthFieldProps> = ({ value, onChange, errors }) => {
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    console.log(e.target.value);
-    onChange(e);
-  };
+  const [error, setError] = useState(errors);
 
   const handleBlur = () => {
-    console.log(errors);
+    setError(errors);
   };
 
   return (
@@ -26,11 +23,12 @@ const BirthField: React.FC<BirthFieldProps> = ({ value, onChange, errors }) => {
         placeholder="YYYY-MM-DD"
         required
         value={value}
-        onChange={handleChange}
+        onChange={onChange}
         onBlur={handleBlur}
       />
+      {error && <ErrorMessage message={error} />}
     </Field>
   );
 };
 
-export default BirthField;
+export default React.memo(BirthField);

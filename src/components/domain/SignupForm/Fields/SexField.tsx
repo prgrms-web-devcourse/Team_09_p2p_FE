@@ -9,27 +9,36 @@ interface SexFieldProps {
 }
 
 const SexField: React.FC<SexFieldProps> = ({ value, onChange }) => {
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    console.log(e.target.value);
-    onChange(e);
-  };
-
   return (
     <Field>
       <Label htmlFor="sex" text="성별" />
       <Options role="sex" aria-labelledby="sex">
         <label>
-          <input type="radio" name="sex" value="male" onChange={handleChange} /> <span>남성</span>
+          <input
+            type="radio"
+            checked={value === 'male'}
+            name="sex"
+            value="male"
+            onChange={onChange}
+          />
+          <span>남성</span>
         </label>
         <label>
-          <input type="radio" name="sex" value="female" onChange={handleChange} /> <span>여성</span>
+          <input
+            type="radio"
+            checked={value === 'female'}
+            name="sex"
+            value="female"
+            onChange={onChange}
+          />
+          <span>여성</span>
         </label>
       </Options>
     </Field>
   );
 };
 
-export default SexField;
+export default React.memo(SexField);
 
 const Options = styled.div`
   display: flex;

@@ -1,22 +1,33 @@
-import React, { ChangeEvent } from 'react';
+import { FormikErrors } from 'formik';
+import React, { ChangeEvent, useCallback, useState } from 'react';
 import { Input, Label } from '~/components/atom';
-import { Field } from '~/components/common';
+import { ErrorMessage, Field } from '~/components/common';
+import { SignupValues } from '~/types';
 
 interface PasswordCheckFieldProps {
   value: string;
   onChange: (e: ChangeEvent<HTMLInputElement>) => void;
   errors: string | undefined;
+  password: string;
+  setError: (errors: FormikErrors<SignupValues>) => void;
 }
 
-const PasswordCheckField: React.FC<PasswordCheckFieldProps> = ({ value, onChange, errors }) => {
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    console.log(e.target.value);
-    onChange(e);
-  };
+const PasswordCheckField: React.FC<PasswordCheckFieldProps> = ({
+  value,
+  onChange,
+  errors,
+  password,
+  setError: setErrorFormikFn
+}) => {
+  const [error, setError] = useState(errors);
 
-  const handleBlur = () => {
-    console.log(errors);
-  };
+  const handleBlur = useCallback(() => {
+    setError(errors);
+    if (value.length > 0 && password !== value) {
+      setError(() => '동일한 비밀번호가 아니에요.');
+      setErrorFormikFn({ passwordCheck: error });
+    }
+  }, [password, setErrorFormikFn, value, errors, error]);
 
   return (
     <Field>
@@ -27,11 +38,12 @@ const PasswordCheckField: React.FC<PasswordCheckFieldProps> = ({ value, onChange
         placeholder="비밀번호 확인"
         required
         value={value}
-        onChange={handleChange}
+        onChange={onChange}
         onBlur={handleBlur}
       />
+      {error && <ErrorMessage message={error} />}
     </Field>
   );
 };
 
-export default PasswordCheckField;
+export default React.memo(PasswordCheckField);

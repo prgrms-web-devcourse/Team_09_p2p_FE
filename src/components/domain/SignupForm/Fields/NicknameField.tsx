@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
-import React, { ChangeEvent } from 'react';
+import React, { ChangeEvent, useState } from 'react';
 import { Button, Input, Label, Text } from '~/components/atom';
-import { Field } from '~/components/common';
+import { ErrorMessage, Field } from '~/components/common';
 import theme from '~/styles/theme';
 
 interface NicknameFieldProps {
@@ -11,13 +11,17 @@ interface NicknameFieldProps {
 }
 
 const NicknameField: React.FC<NicknameFieldProps> = ({ value, onChange, errors }) => {
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    console.log(e.target.value);
-    onChange(e);
-  };
+  const [error, setError] = useState(errors);
 
   const handleBlur = () => {
-    console.log(errors);
+    setError(errors);
+  };
+
+  const handleClickDuplicate = async () => {
+    //TODO
+    // 1. 이메일 중복확인 로직 추가
+    // 2. 응답에 따라 ConfirmModal 불러오기
+    console.log('닉네임 중복확인!');
   };
 
   return (
@@ -32,18 +36,19 @@ const NicknameField: React.FC<NicknameFieldProps> = ({ value, onChange, errors }
           placeholder="닉네임"
           required
           value={value}
-          onChange={handleChange}
+          onChange={onChange}
           onBlur={handleBlur}
         />
-        <Button width="120px" fontSize={16}>
+        <Button onClick={handleClickDuplicate} width="120px" fontSize={16}>
           중복확인
         </Button>
       </StyledField>
+      {error && <ErrorMessage message={error} />}
     </Field>
   );
 };
 
-export default NicknameField;
+export default React.memo(NicknameField);
 
 const StyledField = styled.div`
   display: flex;

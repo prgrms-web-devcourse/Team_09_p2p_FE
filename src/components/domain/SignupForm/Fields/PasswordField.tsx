@@ -1,6 +1,6 @@
-import React, { ChangeEvent } from 'react';
+import React, { ChangeEvent, useCallback, useState } from 'react';
 import { Input, Label, Text } from '~/components/atom';
-import { Field } from '~/components/common';
+import { ErrorMessage, Field } from '~/components/common';
 import theme from '~/styles/theme';
 
 interface PasswordFieldProps {
@@ -10,14 +10,11 @@ interface PasswordFieldProps {
 }
 
 const PasswordField: React.FC<PasswordFieldProps> = ({ value, onChange, errors }) => {
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    console.log(e.target.value);
-    onChange(e);
-  };
+  const [error, setError] = useState(errors);
 
-  const handleBlur = () => {
-    console.log(errors);
-  };
+  const handleBlur = useCallback(() => {
+    setError(errors);
+  }, [errors]);
 
   return (
     <Field>
@@ -31,11 +28,12 @@ const PasswordField: React.FC<PasswordFieldProps> = ({ value, onChange, errors }
         placeholder="비밀번호"
         required
         value={value}
-        onChange={handleChange}
+        onChange={onChange}
         onBlur={handleBlur}
       />
+      {error && <ErrorMessage message={error} />}
     </Field>
   );
 };
 
-export default PasswordField;
+export default React.memo(PasswordField);

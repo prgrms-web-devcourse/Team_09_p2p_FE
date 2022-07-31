@@ -1,6 +1,6 @@
-import React, { ChangeEvent, useState } from 'react';
+import React, { ChangeEvent, useCallback, useState } from 'react';
 import { Button, Input, Label } from '~/components/atom';
-import { Field } from '~/components/common';
+import { ErrorMessage, Field } from '~/components/common';
 import { FONT_SIZES } from '~/utils/constants';
 
 interface EmailFieldProps {
@@ -12,8 +12,15 @@ interface EmailFieldProps {
 const EmailField: React.FC<EmailFieldProps> = ({ value, onChange, errors }) => {
   const [error, setError] = useState(errors);
 
-  const handleBlur = () => {
+  const handleBlur = useCallback(() => {
     setError(errors);
+  }, [errors]);
+
+  const handleClickDuplicate = async () => {
+    //TODO
+    // 1. 이메일 중복확인 로직 추가
+    // 2. 응답에 따라 ConfirmModal 불러오기
+    console.log('이메일 중복확인!');
   };
 
   return (
@@ -28,10 +35,12 @@ const EmailField: React.FC<EmailFieldProps> = ({ value, onChange, errors }) => {
         onChange={onChange}
         onBlur={handleBlur}
       />
-      {error && <div>{error}</div>}
-      <Button fontSize={FONT_SIZES.sm}>이메일 중복확인</Button>
+      {error && <ErrorMessage message={error} />}
+      <Button onClick={handleClickDuplicate} fontSize={FONT_SIZES.sm}>
+        이메일 중복확인
+      </Button>
     </Field>
   );
 };
 
-export default EmailField;
+export default React.memo(EmailField);

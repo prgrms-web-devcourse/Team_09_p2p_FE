@@ -29,13 +29,13 @@ const initialValues: SignupValues = {
 };
 
 const SignupForm: React.FC<SignupFormProps> = ({ onSubmit: handleSubmitAction }) => {
-  const [isCheckedDuplicateEmail, setIsCheckedDuplicateEmail] = useState(false);
-  const [isCheckedDuplicateNickname, setIsCheckedDuplicateNickname] = useState(false);
+  const [isCheckedDuplicateEmail, setIsCheckedDuplicateEmail] = useState(true);
+  const [isCheckedDuplicateNickname, setIsCheckedDuplicateNickname] = useState(true);
 
   const validDuplicateEmail = () => setIsCheckedDuplicateEmail(true);
   const validDuplicateNickname = () => setIsCheckedDuplicateNickname(true);
 
-  const { values, handleChange, handleSubmit, errors } = useFormik({
+  const { values, handleChange, handleSubmit, errors, setErrors } = useFormik({
     initialValues,
     onSubmit: (data: SignupValues) => {
       console.log(values);
@@ -70,6 +70,8 @@ const SignupForm: React.FC<SignupFormProps> = ({ onSubmit: handleSubmitAction })
               value={values.passwordCheck}
               onChange={handleChange}
               errors={errors.passwordCheck}
+              password={values.password}
+              setError={setErrors}
             />
             <NicknameField
               value={values.nickname}
