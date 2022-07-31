@@ -5,7 +5,7 @@ interface ImageProps extends NextImageProps {
   width?: number | string;
 }
 
-const Image: React.FC<ImageProps> = ({ width = '100%', ...props }) => {
+const Image = ({ width = '100%', ...props }: ImageProps) => {
   return (
     <ImageWrapper width={width}>
       <NextImage layout="fill" objectFit="contain" {...props} />
