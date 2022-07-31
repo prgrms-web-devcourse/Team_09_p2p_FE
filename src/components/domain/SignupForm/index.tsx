@@ -13,7 +13,7 @@ import {
   PasswordField,
   SexField
 } from './Fields';
-import { SignupValidationSchema } from './rules';
+import { SignupValidationRules } from './rules';
 
 interface SignupFormProps {
   onSubmit: (data: SignupValues) => void;
@@ -35,13 +35,14 @@ const SignupForm: React.FC<SignupFormProps> = ({ onSubmit: handleSubmitAction })
   const validDuplicateEmail = () => setIsCheckedDuplicateEmail(true);
   const validDuplicateNickname = () => setIsCheckedDuplicateNickname(true);
 
-  const { values, handleChange, handleSubmit, errors, setErrors } = useFormik({
+  const { values, handleChange, handleSubmit, errors } = useFormik({
     initialValues,
     onSubmit: (data: SignupValues) => {
+      console.log(errors);
       console.log(values);
       handleSubmitAction && handleSubmitAction(data);
     },
-    validationSchema: SignupValidationSchema
+    validationSchema: SignupValidationRules
   });
 
   const submittable = useMemo(() => {
@@ -70,8 +71,6 @@ const SignupForm: React.FC<SignupFormProps> = ({ onSubmit: handleSubmitAction })
               value={values.passwordCheck}
               onChange={handleChange}
               errors={errors.passwordCheck}
-              password={values.password}
-              setError={setErrors}
             />
             <NicknameField
               value={values.nickname}

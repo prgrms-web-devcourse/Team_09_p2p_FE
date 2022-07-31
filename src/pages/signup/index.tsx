@@ -7,7 +7,6 @@ import { SignupValues } from '~/types';
 const Signup: NextPage = () => {
   const handleSubmit = (data: SignupValues) => {
     console.log('제출!');
-    console.log(data);
   };
 
   return (
