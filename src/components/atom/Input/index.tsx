@@ -1,11 +1,11 @@
 import styled from '@emotion/styled';
-import React, { ChangeEvent, forwardRef } from 'react';
+import React, { ChangeEvent, forwardRef, InputHTMLAttributes } from 'react';
 import theme from '~/styles/theme';
 import { FONT_SIZES } from '~/utils/constants';
 
-interface InputProps {
+interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   name: string;
-  type?: 'email' | 'password' | 'text';
+  type?: 'email' | 'password' | 'text' | 'date';
   placeholder: string;
   required: boolean;
   value: string;
@@ -24,7 +24,8 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
       value,
       height = 60,
       onChange,
-      onBlur
+      onBlur,
+      ...props
     },
     ref
   ) => {
@@ -39,6 +40,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
         height={height}
         ref={ref}
         onBlur={onBlur}
+        {...props}
       />
     );
   }
