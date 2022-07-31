@@ -5,7 +5,7 @@ interface MainCategoryTitleProps {
   name: string;
 }
 
-const MainCategoryTitle: React.FC<MainCategoryTitleProps> = ({ name }) => {
+const MainCategoryTitle = ({ name }: MainCategoryTitleProps) => {
   return (
     <Container>
       <Title size="md" fontWeight={700}>

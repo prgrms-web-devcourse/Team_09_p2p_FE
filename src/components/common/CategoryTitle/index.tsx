@@ -5,7 +5,7 @@ interface CategoryTitleProps {
   name: string;
 }
 
-const CategoryTitle: React.FC<CategoryTitleProps> = ({ name }) => {
+const CategoryTitle = ({ name }: CategoryTitleProps) => {
   return (
     <Container>
       <Title size="sm" fontWeight={700}>
