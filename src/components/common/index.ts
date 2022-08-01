@@ -6,3 +6,5 @@ export { default as SortFilter } from './SortFilter';
 export { default as CategoryTitle } from './CategoryTitle';
 export { default as CourseList } from './CourseList';
 export { default as PlaceList } from './PlaceList';
+export { default as Field } from './Field';
+export { default as ErrorMessage } from './Form/ErrorMessage';
