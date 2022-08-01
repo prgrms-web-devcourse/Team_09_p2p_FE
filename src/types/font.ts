@@ -10,7 +10,7 @@ export const FONT_SIZES = {
   xl: 24
 };
 
-export type FontSizes = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+export type FontSizes = keyof typeof FONT_SIZES;
 
 export const TITLE_SIZES = {
   sm: 24,
@@ -18,13 +18,13 @@ export const TITLE_SIZES = {
   lg: 40
 };
 
-export type TitleSizes = 'sm' | 'md' | 'lg';
+export type TitleSizes = keyof typeof TITLE_SIZES;
 
-export const FONT_COLORS: { [key: string]: string } = {
+export const FONT_COLORS = {
   gray: fontGray,
   darkGray: fontDarkGray,
   dark: fontDarkBlack,
   blueGray: fontBlueGray
 };
 
-export type FontColors = 'gray' | 'darkGray' | 'dark' | 'blueGray';
+export type FontColors = keyof typeof FONT_COLORS;

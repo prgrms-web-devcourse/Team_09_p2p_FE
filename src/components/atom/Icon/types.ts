@@ -7,4 +7,4 @@ export const ICON_URLS = {
   route: '/assets/icons/route.svg'
 };
 
-export type IconName = 'heart' | 'bookmark' | 'arrow' | 'calendar' | 'marker' | 'route';
+export type IconName = keyof typeof ICON_URLS;
