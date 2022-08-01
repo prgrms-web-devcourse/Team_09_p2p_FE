@@ -1,8 +1,8 @@
 import styled from '@emotion/styled';
-import React, { FormEvent, ReactNode } from 'react';
+import React from 'react';
 
 interface FormProps {
-  children: ReactNode;
+  children: React.ReactNode;
   onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
 }
 
