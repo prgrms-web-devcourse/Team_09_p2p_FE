@@ -7,7 +7,6 @@ interface OverviewDetailItemProps {
 }
 
 const OverviewDetailItem = ({ title, list }: OverviewDetailItemProps) => {
-  console.log(list, 'list');
   return (
     <Container>
       <Text size="sm" color="blueGray">

@@ -104,6 +104,11 @@ const courseData: ICourseData = {
 };
 
 const CourseDetail: NextPage = () => {
+  /* TODO
+    1. 여행 경로 map이미지로 변경
+    2. 추천 아이콘 작업
+    3. 업로드, 수정 날짜 가공하여 적용
+  */
   return (
     <React.Fragment>
       <Head>

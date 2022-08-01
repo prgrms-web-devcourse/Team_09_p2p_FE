@@ -7,6 +7,9 @@ interface CourseDetailList {
 }
 
 const CourseDetailList = ({ places }: CourseDetailList) => {
+  /* TODO:
+    1. 추천아이콘 변경하기
+  */
   return (
     <Container>
       {places.map((place, index) => (
