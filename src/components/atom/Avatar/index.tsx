@@ -6,12 +6,13 @@ interface AvatarProps {
   size: number;
 }
 
-const defaultImage = '/assets/location/jeju.jpg';
+const defaultImage = '/assets/profile-default.jpg';
 
-const Avatar: React.FC<AvatarProps> = ({ src = defaultImage, size }) => {
+const Avatar: React.FC<AvatarProps> = ({ src, size }) => {
+  const imageUrl = src || defaultImage;
   return (
     <ImageWrapper style={{ width: size, height: size }}>
-      <Image src={src} layout="fill" alt="profile" />
+      <Image src={imageUrl} layout="fill" alt="profile" />
     </ImageWrapper>
   );
 };
