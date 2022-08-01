@@ -1,8 +1,13 @@
 import styled from '@emotion/styled';
 import React, { ReactNode, useEffect } from 'react';
+import { useClickAway } from '~/hooks';
 
-interface BackgroundDimProps {
+export interface BackgroundDimProps {
+  visible: boolean;
   children: ReactNode;
+  onClose?: () => void;
+  closeDimActive?: boolean;
+  dimOpacity?: number;
 }
 
 const blockTabKey = (e: KeyboardEvent): void => {
@@ -11,7 +16,19 @@ const blockTabKey = (e: KeyboardEvent): void => {
   }
 };
 
-const BackgroundDim: React.FC<BackgroundDimProps> = ({ children }) => {
+const BackgroundDim = ({
+  visible,
+  children,
+  onClose,
+  closeDimActive = true,
+  dimOpacity = 0.5
+}: BackgroundDimProps) => {
+  const ref = useClickAway<HTMLDivElement>(() => {
+    if (closeDimActive && onClose) {
+      onClose();
+    }
+  });
+
   useEffect(() => {
     document.body.classList.add('modal-open');
     document.addEventListener('keydown', blockTabKey);
@@ -23,21 +40,22 @@ const BackgroundDim: React.FC<BackgroundDimProps> = ({ children }) => {
     };
   }, []);
   return (
-    <Background>
-      <Inner>{children}</Inner>
+    <Background visible={visible} dimOpacity={dimOpacity}>
+      <Inner ref={ref}>{children}</Inner>
     </Background>
   );
 };
 
 export default BackgroundDim;
 
-const Background = styled.div`
+const Background = styled.div<Pick<BackgroundDimProps, 'visible' | 'dimOpacity'>>`
+  display: ${({ visible }) => (visible ? 'block' : 'none')};
   position: fixed;
   top: 0;
   left: 0;
   width: 100vw;
   height: 100vh;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: ${({ dimOpacity }) => `rgba(0, 0, 0, ${dimOpacity})`};
   z-index: 1000;
   overflow: hidden;
 `;
