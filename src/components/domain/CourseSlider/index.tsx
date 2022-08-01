@@ -22,8 +22,14 @@ const CourseSlider = ({ places }: CourseSliderProps) => {
   return (
     <div>
       <StyledSlider {...settings}>
-        {places?.map((place) => (
-          <CourseSliderItem key={place.id} name={place.name} id={place.id} />
+        {places?.map((place, index) => (
+          <CourseSliderItem
+            key={place.id}
+            name={place.name}
+            id={place.id}
+            index={index}
+            lastCount={places.length}
+          />
         ))}
       </StyledSlider>
     </div>
@@ -35,11 +41,12 @@ export default CourseSlider;
 const { borderDarkGray } = theme.color;
 export const StyledSlider = styled(Slider)`
   .card-item {
-    margin-left: 20px;
+    /* margin-left: 20px; */
   }
 
   .slick-list {
-    margin-left: -20px;
+    margin-left: -10px;
+    margin-right: -10px;
   }
 
   .slick-prev,
@@ -64,6 +71,7 @@ export const StyledSlider = styled(Slider)`
   }
 
   .slick-dots {
-    bottom: -40px;
+    position: static;
+    margin-top: 20px;
   }
 `;
