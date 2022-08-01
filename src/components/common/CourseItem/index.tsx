@@ -1,7 +1,6 @@
 import styled from '@emotion/styled';
-import Link from 'next/link';
 import React from 'react';
-import { Button, Icon, Text, Title } from '~/components/atom';
+import { Text, Title } from '~/components/atom';
 import Avatar from '~/components/atom/Avatar';
 import theme from '~/styles/theme';
 import BookmarkIcon from '../BookmarkIcon';
@@ -72,11 +71,6 @@ const InfoFooter = styled.div`
   display: flex;
   margin-top: 16px;
   justify-content: space-between;
-`;
-
-const Like = styled.div`
-  display: flex;
-  align-items: center;
 `;
 
 const Profile = styled.div`

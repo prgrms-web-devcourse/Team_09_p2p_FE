@@ -1,8 +1,10 @@
 import styled from '@emotion/styled';
 import Head from 'next/head';
 import React from 'react';
-import { Button, Icon, PageContainer, Title } from '~/components/atom';
+import { Button, Link, PageContainer, Image } from '~/components/atom';
 import { CourseItem, PlaceItem } from '~/components/common';
+import Footer from '~/components/common/Footer';
+import CategoryTitle from '~/components/domain/home/CategoryTitle';
 import theme from '~/styles/theme';
 
 const HomePage = () => {
@@ -25,6 +27,7 @@ const HomePage = () => {
       <main>
         <PageContainer>
           <SearchArea>
+            <Image width={550} src="/assets/search-img.png" alt="여행할 땐 이곳저곳" />
             <MainSearchInput type="text" placeholder="지역, 장소를 검색해보세요." />
             <Tags>
               <Button buttonType="tag">#힐링</Button>
@@ -39,27 +42,28 @@ const HomePage = () => {
         <MainContent>
           <PageContainer>
             <CategoryArea>
-              <CategoryTitle size="md" fontWeight={700}>
-                인기 여행코스 <Icon name="arrow" size={25} />
-              </CategoryTitle>
+              <Link href="/course">
+                <CategoryTitle name="인기 여행코스" />
+              </Link>
               <CourseList>
-                {Array.from({ length: 6 }).map(() => (
-                  <CourseItem />
+                {Array.from({ length: 6 }).map((_, index) => (
+                  <CourseItem key={index} />
                 ))}
               </CourseList>
             </CategoryArea>
             <CategoryArea>
-              <CategoryTitle size="md" fontWeight={700}>
-                추천 핫플레이스 <Icon name="arrow" size={25} />
-              </CategoryTitle>
+              <Link href="/place">
+                <CategoryTitle name="추천 핫플레이스" />
+              </Link>
               <PlaceList>
-                {Array.from({ length: 4 }).map(() => (
-                  <PlaceItem />
+                {Array.from({ length: 4 }).map((_, index) => (
+                  <PlaceItem key={index} />
                 ))}
               </PlaceList>
             </CategoryArea>
           </PageContainer>
         </MainContent>
+        <Footer />
       </main>
     </React.Fragment>
   );
@@ -86,7 +90,7 @@ const MainSearchInput = styled.input`
   border-radius: 8px;
   background-color: #f1f7ff;
   box-sizing: border-box;
-  box-shadow: 0px 2px 4px 1px rgb(0 0 0 / 5%); // shadow 종류별로 파일 나눌 예정
+  box-shadow: 0px 2px 4px 1px rgb(0 0 0 / 5%); // TODO :shadow 종류별로 파일 나누기
 
   &::placeholder {
     color: ${mainColor};
@@ -96,7 +100,7 @@ const MainSearchInput = styled.input`
 const MainContent = styled.div`
   padding-top: 1px;
   background-color: ${backgroundLightGray};
-  margin-top: 64px;
+  margin-top: 80px;
   padding-bottom: 80px;
 `;
 
@@ -104,13 +108,9 @@ const Tags = styled.div`
   text-align: center;
   margin-top: 30px;
 
-  button {
+  button:not(:first-of-type) {
     margin-left: 10px;
   }
-`;
-
-const CategoryTitle = styled(Title)`
-  margin-bottom: 30px;
 `;
 
 const CategoryArea = styled.div`
