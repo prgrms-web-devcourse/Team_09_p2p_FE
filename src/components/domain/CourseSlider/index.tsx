@@ -64,6 +64,6 @@ export const StyledSlider = styled(Slider)`
   }
 
   .slick-dots {
-    position: static;
+    bottom: -40px;
   }
 `;

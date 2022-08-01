@@ -10,7 +10,7 @@ interface CourseSliderItemProps {
 const CourseSliderItem = ({ name, id }: CourseSliderItemProps) => {
   return (
     <CardContainer className="card-item">
-      <Image src="/assets/location/jeju.jpg" />
+      <CardImage style={{ backgroundImage: `url(/assets/location/jeju.jpg)` }}></CardImage>
       <CardInfo>
         <Title>{name}</Title>
         <Link href={`/place/${id}`}>
@@ -27,6 +27,11 @@ const { borderGray } = theme.color;
 const CardContainer = styled.div`
   border-radius: 8px;
   overflow: hidden;
+`;
+
+const CardImage = styled.div`
+  height: 230px;
+  background-size: cover;
 `;
 
 const CardInfo = styled.div`
