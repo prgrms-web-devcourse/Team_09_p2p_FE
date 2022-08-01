@@ -95,7 +95,7 @@ const CardInfo = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 20px;
+  gap: 16px;
   padding: 26px;
   border: 1px solid ${borderGray};
   border-top: none;

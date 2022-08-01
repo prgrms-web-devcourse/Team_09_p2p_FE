@@ -37,7 +37,7 @@ export interface IPlace {
   longitude: string;
   category: string;
   phone: string;
-  recommended: false;
+  recommended: boolean;
 }
 
 const courseData: ICourseData = {
@@ -80,7 +80,7 @@ const courseData: ICourseData = {
       longitude: '',
       category: '',
       phone: '',
-      recommended: false
+      recommended: true
     },
     {
       id: 4,
@@ -116,7 +116,7 @@ const CourseDetail: NextPage = () => {
         <PageContainer type="detail">
           <CourseDetailHeader>
             <CourseTitle>
-              <Title level={2} size="sm" fontWeight={700} block>
+              <Title level={2} size="lg" fontWeight={700} block>
                 {courseData.title}
               </Title>
               <HeaderButtons>
@@ -145,11 +145,15 @@ const CourseDetail: NextPage = () => {
             />
 
             <TravelRoute>
-              <DetailTitle size="md">여행경로</DetailTitle>
+              <DetailTitle size="md" fontWeight={700}>
+                여행경로
+              </DetailTitle>
               <Image src="/assets/location/jeju.jpg" alt="여행경로" />
             </TravelRoute>
             <TravelCourse>
-              <DetailTitle size="md">다녀온 코스</DetailTitle>
+              <DetailTitle size="md" fontWeight={700}>
+                다녀온 코스
+              </DetailTitle>
               <CourseSlider places={courseData.places} />
             </TravelCourse>
             <CourseDetailList places={courseData.places} />
@@ -194,7 +198,7 @@ const CourseDetails = styled.div`
 `;
 
 const DetailTitle = styled(Title)`
-  margin-top: 70px;
+  margin-top: 110px;
   margin-bottom: 28px;
 `;
 

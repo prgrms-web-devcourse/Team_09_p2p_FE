@@ -20,29 +20,26 @@ const CourseSlider = ({ places }: CourseSliderProps) => {
   };
 
   return (
-    <div>
-      <StyledSlider {...settings}>
-        {places?.map((place, index) => (
-          <CourseSliderItem
-            key={place.id}
-            name={place.name}
-            id={place.id}
-            index={index}
-            lastCount={places.length}
-          />
-        ))}
-      </StyledSlider>
-    </div>
+    <StyledSlider {...settings}>
+      {places?.map((place, index) => (
+        <CourseSliderItem
+          key={place.id}
+          name={place.name}
+          id={place.id}
+          index={index}
+          lastCount={places.length}
+        />
+      ))}
+    </StyledSlider>
   );
 };
 
 export default CourseSlider;
 
 const { borderDarkGray } = theme.color;
+
 export const StyledSlider = styled(Slider)`
-  .card-item {
-    /* margin-left: 20px; */
-  }
+  margin-top: 24px;
 
   .slick-list {
     margin-left: -10px;

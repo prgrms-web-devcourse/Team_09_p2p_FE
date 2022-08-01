@@ -10,19 +10,19 @@ const CourseDetailList = ({ places }: CourseDetailList) => {
   return (
     <Container>
       {places.map((place, index) => (
-        <CourseDetailItem>
+        <CourseDetailItem key={place.id}>
           <CourseDetailTitle>
-            <Title>
+            <Title size="md" fontWeight={700}>
               {index + 1}. {place.name}
             </Title>
             {place.recommended && <button>추천 아이콘</button>}
           </CourseDetailTitle>
-          <Adress size="md" color="gray">
+          <Address size="md" color="gray">
             {place.address}
-          </Adress>
+          </Address>
           <Image src="/assets/location/jeju.jpg" alt={place.name} style={{ borderRadius: 8 }} />
           <CourseDescription>
-            <Text size="lg" paragraph>
+            <Text size="lg" color="dark" paragraph>
               {place.description}
             </Text>
           </CourseDescription>
@@ -37,7 +37,9 @@ export default CourseDetailList;
 const Container = styled.div`
   margin-top: 70px;
 `;
-const CourseDetailItem = styled.div``;
+const CourseDetailItem = styled.div`
+  margin-bottom: 70px;
+`;
 const CourseDetailTitle = styled.div`
   display: flex;
   align-items: center;
@@ -50,6 +52,6 @@ const CourseDescription = styled.div`
   margin-top: 37px;
 `;
 
-const Adress = styled(Text)`
+const Address = styled(Text)`
   margin-bottom: 37px;
 `;
