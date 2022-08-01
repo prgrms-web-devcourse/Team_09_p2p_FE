@@ -3,16 +3,22 @@ import { Text } from '~/components/atom';
 
 interface OverviewDetailItemProps {
   title: string;
-  content: string;
+  list: string[];
 }
 
-const OverviewDetailItem = ({ title, content }: OverviewDetailItemProps) => {
+const OverviewDetailItem = ({ title, list }: OverviewDetailItemProps) => {
+  console.log(list, 'list');
   return (
     <Container>
       <Text size="sm" color="blueGray">
         {title}
       </Text>
-      <Text fontWeight={500}>{content}</Text>
+
+      {list.map((item) => (
+        <Text key={item} fontWeight={500}>
+          {item}
+        </Text>
+      ))}
     </Container>
   );
 };
