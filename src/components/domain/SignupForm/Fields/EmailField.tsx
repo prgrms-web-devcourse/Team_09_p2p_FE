@@ -33,10 +33,15 @@ const EmailField: React.FC<EmailFieldProps> = ({
   );
 
   const handleClickDuplicate = async () => {
+    if (error) {
+      //TODO
+      // error가 있으면 중복확인버튼을 disable
+      return;
+    }
     //TODO
     // 1. 이메일 중복확인 로직 추가
     // 2. 응답에 따라 ConfirmModal 불러오기
-    if (!error && window.confirm(`${value}는 사용가능한 메일입니다!`)) {
+    if (window.confirm(`${value}는 사용가능한 메일입니다!`)) {
       setDuplicateCheckFn();
     }
   };

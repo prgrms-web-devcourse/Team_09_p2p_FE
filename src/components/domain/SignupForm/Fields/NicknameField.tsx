@@ -34,6 +34,11 @@ const NicknameField: React.FC<NicknameFieldProps> = ({
   );
 
   const handleClickDuplicate = async () => {
+    if (error) {
+      //TODO
+      // error가 있으면 중복확인버튼을 disable
+      return;
+    }
     //TODO
     // 1. 이메일 중복확인 로직 추가
     // 2. 응답에 따라 ConfirmModal 불러오기
@@ -46,7 +51,7 @@ const NicknameField: React.FC<NicknameFieldProps> = ({
     <Field>
       <Label htmlFor="nickname" text="닉네임" />
       <Text size="xs" color={theme.color.fontGray}>
-        2~6자 이내의 닉네임을 입력해주세요.
+        2~8자 이내의 닉네임을 입력해주세요.
       </Text>
       <StyledField>
         <Input
