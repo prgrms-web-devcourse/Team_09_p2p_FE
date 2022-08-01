@@ -7,6 +7,7 @@ import Avatar from '~/components/atom/Avatar';
 import Comment from '~/components/common/Comment';
 import CourseDetailList from '~/components/domain/CourseDetail/CourseDetailList';
 import CourseOverview from '~/components/domain/CourseDetail/CourseOverview';
+import CourseSlider from '~/components/domain/CourseSlider';
 import theme from '~/styles/theme';
 
 interface ICourseData {
@@ -50,6 +51,39 @@ const courseData: ICourseData = {
   places: [
     {
       id: 1,
+      name: '인천공항',
+      description: '인천공항에 다녀왔어요',
+      address: '인천 중구 공항로 207 인천국제공항역',
+      latitude: '',
+      longitude: '',
+      category: '',
+      phone: '',
+      recommended: false
+    },
+    {
+      id: 2,
+      name: '인천공항',
+      description: '인천공항에 다녀왔어요',
+      address: '인천 중구 공항로 207 인천국제공항역',
+      latitude: '',
+      longitude: '',
+      category: '',
+      phone: '',
+      recommended: false
+    },
+    {
+      id: 3,
+      name: '인천공항',
+      description: '인천공항에 다녀왔어요',
+      address: '인천 중구 공항로 207 인천국제공항역',
+      latitude: '',
+      longitude: '',
+      category: '',
+      phone: '',
+      recommended: false
+    },
+    {
+      id: 4,
       name: '인천공항',
       description: '인천공항에 다녀왔어요',
       address: '인천 중구 공항로 207 인천국제공항역',
@@ -109,16 +143,17 @@ const CourseDetail: NextPage = () => {
               courseCount={courseData.places.length}
               spots={courseData.spots}
             />
+
+            <TravelRoute>
+              <DetailTitle size="md">여행경로</DetailTitle>
+              <Image src="/assets/location/jeju.jpg" alt="여행경로" />
+            </TravelRoute>
+            <TravelCourse>
+              <DetailTitle size="md">다녀온 코스</DetailTitle>
+              <CourseSlider places={courseData.places} />
+            </TravelCourse>
+            <CourseDetailList places={courseData.places} />
           </CourseDetails>
-          <TravelRoute>
-            <Title>여행경로</Title>
-            <Image src="/assets/location/jeju.jpg" alt="여행경로" />
-          </TravelRoute>
-          <TravelCourse>
-            <Title>다녀온 코스</Title>
-            <div>슬라이드 이미지 넣기</div>
-          </TravelCourse>
-          <CourseDetailList places={courseData.places} />
           <Comment />
         </PageContainer>
       </main>
@@ -154,7 +189,14 @@ const Profile = styled.div`
   margin-top: 32px;
   margin-bottom: 70px;
 `;
-const CourseDetails = styled.div``;
+const CourseDetails = styled.div`
+  margin-bottom: 100px;
+`;
+
+const DetailTitle = styled(Title)`
+  margin-top: 70px;
+  margin-bottom: 28px;
+`;
 
 const TravelRoute = styled.div``;
 const TravelCourse = styled.div``;
