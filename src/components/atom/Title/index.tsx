@@ -47,6 +47,7 @@ const Title: React.FC<TitleProps> = ({
 export default Title;
 
 const Styled = styled[tag]<Omit<TitleProps, 'children'>>`
+  line-height: 1.5;
   font-size: ${({ size }) =>
     size && (typeof size === 'number' ? size + 'px' : TITLE_SIZES[size] + 'px')};
   font-weight: ${({ fontWeight }) => fontWeight && fontWeight};
