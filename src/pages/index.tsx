@@ -2,9 +2,9 @@ import styled from '@emotion/styled';
 import Head from 'next/head';
 import React from 'react';
 import { Button, Link, PageContainer, Image } from '~/components/atom';
-import { CourseItem, PlaceItem } from '~/components/common';
+import { CourseList, PlaceList } from '~/components/common';
 import Footer from '~/components/common/Footer';
-import CategoryTitle from '~/components/domain/home/CategoryTitle';
+import MainCategoryTitle from '~/components/domain/home/MainCategoryTitle';
 import theme from '~/styles/theme';
 
 const HomePage = () => {
@@ -43,23 +43,15 @@ const HomePage = () => {
           <PageContainer>
             <CategoryArea>
               <Link href="/course">
-                <CategoryTitle name="인기 여행코스" />
+                <MainCategoryTitle name="인기 여행코스" />
               </Link>
-              <CourseList>
-                {Array.from({ length: 6 }).map((_, index) => (
-                  <CourseItem key={index} />
-                ))}
-              </CourseList>
+              <CourseList />
             </CategoryArea>
             <CategoryArea>
               <Link href="/place">
-                <CategoryTitle name="추천 핫플레이스" />
+                <MainCategoryTitle name="추천 핫플레이스" />
               </Link>
-              <PlaceList>
-                {Array.from({ length: 4 }).map((_, index) => (
-                  <PlaceItem key={index} />
-                ))}
-              </PlaceList>
+              <PlaceList />
             </CategoryArea>
           </PageContainer>
         </MainContent>
@@ -115,16 +107,4 @@ const Tags = styled.div`
 
 const CategoryArea = styled.div`
   margin-top: 80px;
-`;
-
-const CourseList = styled.ul`
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
-`;
-
-const PlaceList = styled.ul`
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
 `;
