@@ -1,12 +1,13 @@
 import styled from '@emotion/styled';
 import React, { CSSProperties, ReactNode } from 'react';
+import { FontColors, FontSizes } from '~/types/font';
 import { FONT_SIZES, FONT_COLORS } from '~/utils/constants';
 
 interface TextProps {
   children: ReactNode;
-  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | number;
+  size?: FontSizes | number;
   block?: boolean;
-  color?: string;
+  color?: FontColors;
   ellipsis?: boolean;
   paragraph?: boolean;
   fontWeight?: number;
