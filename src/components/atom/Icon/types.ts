@@ -4,7 +4,9 @@ export const ICON_URLS = {
   arrow: '/assets/icons/arrow.svg',
   calendar: '/assets/icons/calendar.svg',
   marker: '/assets/icons/marker.svg',
-  route: '/assets/icons/route.svg'
+  route: '/assets/icons/route.svg',
+  close: '/assets/icons/close.svg',
+  plus: '/assets/icons/plus.svg'
 };
 
 export type IconName = keyof typeof ICON_URLS;
