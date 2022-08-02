@@ -1,6 +1,8 @@
 import type { NextPage } from 'next';
 import Head from 'next/head';
 import React from 'react';
+import { PageContainer } from '~/components/atom';
+import { CategoryTitle, PlaceList, SortFilter } from '~/components/common';
 
 const Place: NextPage = () => {
   return (
@@ -11,7 +13,13 @@ const Place: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main>Place</main>
+      <main>
+        <PageContainer>
+          <CategoryTitle name="추천장소" />
+          <SortFilter />
+          <PlaceList />
+        </PageContainer>
+      </main>
     </React.Fragment>
   );
 };

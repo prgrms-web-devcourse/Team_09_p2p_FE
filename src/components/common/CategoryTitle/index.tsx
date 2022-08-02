@@ -1,17 +1,16 @@
 import styled from '@emotion/styled';
-import { Icon, Title } from '~/components/atom';
+import { Title } from '~/components/atom';
 
 interface CategoryTitleProps {
   name: string;
 }
 
-const CategoryTitle: React.FC<CategoryTitleProps> = ({ name }) => {
+const CategoryTitle = ({ name }: CategoryTitleProps) => {
   return (
     <Container>
-      <Title size="md" fontWeight={700}>
+      <Title size="sm" fontWeight={700}>
         {name}
       </Title>
-      <Icon name="arrow" size={25} />
     </Container>
   );
 };
@@ -19,5 +18,6 @@ const CategoryTitle: React.FC<CategoryTitleProps> = ({ name }) => {
 export default CategoryTitle;
 
 const Container = styled.div`
+  margin-top: 40px;
   margin-bottom: 30px;
 `;

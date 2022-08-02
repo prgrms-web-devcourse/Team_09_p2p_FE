@@ -33,6 +33,7 @@ const Button = ({
 }: ButtonProps) => {
   return (
     <StyledButton
+      type={type}
       buttonType={buttonType}
       size={size}
       width={width}

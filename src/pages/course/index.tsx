@@ -1,6 +1,8 @@
 import type { NextPage } from 'next';
 import Head from 'next/head';
 import React from 'react';
+import { PageContainer } from '~/components/atom';
+import { CategoryTitle, CourseList, SortFilter } from '~/components/common';
 
 const Course: NextPage = () => {
   return (
@@ -10,8 +12,13 @@ const Course: NextPage = () => {
         <meta name="description" content="our travel course" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-
-      <main>Course</main>
+      <main>
+        <PageContainer>
+          <CategoryTitle name="여행코스" />
+          <SortFilter />
+          <CourseList />
+        </PageContainer>
+      </main>
     </React.Fragment>
   );
 };
