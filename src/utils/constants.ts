@@ -25,7 +25,9 @@ export const FONT_COLORS: { [key: string]: string } = {
 export const ICON_URLS: { [key: string]: string } = {
   heart: '/assets/icons/heart.svg',
   bookmark: '/assets/icons/bookmark.svg',
-  arrow: '/assets/icons/arrow.svg'
+  arrow: '/assets/icons/arrow.svg',
+  close: '/assets/icons/close.svg',
+  plus: '/assets/icons/plus.svg'
 };
 
 export const MARKER_IMAGE_URLS: { [key: string]: string } = {
