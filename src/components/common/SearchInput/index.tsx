@@ -1,6 +1,7 @@
 import styled from '@emotion/styled';
 import React, { FormEvent, useState } from 'react';
-import { Icon, Input } from '~/components/atom';
+import { Icon } from '~/components/atom';
+import theme from '~/styles/theme';
 
 interface SearchInputProps {
   placeholder?: string;
@@ -18,24 +19,51 @@ const SearchInput = ({ onSearch, placeholder = '검색어를 입력해주세요.
   };
 
   return (
-    <FormContainer onSubmit={handleSearch}>
-      <Icon name="search" />
-      <Input
-        name="search-input"
-        placeholder={placeholder}
-        value={keyword}
-        onChange={(e) => setKeyword(e.target.value)}
-        autoComplete="off"
-      />
-    </FormContainer>
+    <StyledForm onSubmit={handleSearch}>
+      <Wrapper>
+        <Icon size={18} name="search" />
+        <StyledInput
+          name="search-input"
+          placeholder={placeholder}
+          value={keyword}
+          onChange={(e) => setKeyword(e.target.value)}
+          autoComplete="off"
+        />
+      </Wrapper>
+    </StyledForm>
   );
 };
 
 export default SearchInput;
 
-const FormContainer = styled.form`
-  width: 356px;
+const StyledForm = styled.form`
+  width: 100%;
   height: 55px;
-  padding: 13px;
   display: flex;
+`;
+
+const Wrapper = styled.div`
+  background-color: ${theme.color.backgroundGray};
+  border-radius: 4px;
+  padding: 23px;
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  i {
+    margin-top: 4px;
+  }
+`;
+
+const StyledInput = styled.input`
+  background-color: inherit;
+  color: ${theme.color.fontDarkGray};
+  width: 100%;
+  border: none;
+  font-size: 18px;
+  :focus {
+    border: none;
+    outline: none;
+  }
 `;

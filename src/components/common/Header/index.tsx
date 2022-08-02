@@ -34,9 +34,9 @@ const Header = () => {
             </Category>
           </LeftArea>
 
-          <Inner>
-            <SearchInput onSearch={handleSearch} placeholder="지역, 장소를 입력해주세요" />
-          </Inner>
+          <InputContainer>
+            <SearchInput onSearch={handleSearch} placeholder="지역, 장소를 검색해보세요" />
+          </InputContainer>
 
           <Buttons>
             <Link href="/course/create" passHref>
@@ -70,6 +70,14 @@ const Inner = styled.div`
   height: 100px;
   align-items: center;
   justify-content: space-between;
+`;
+
+const InputContainer = styled.div`
+  box-sizing: border-box;
+  width: 356px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 const LeftArea = styled.div`
