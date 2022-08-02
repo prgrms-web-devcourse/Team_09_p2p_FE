@@ -53,7 +53,7 @@ const Container = styled.div`
 
 const Sticky = styled.div`
   position: sticky;
-  top: 0px;
+  top: 110px;
   padding-top: 1px;
 `;
 
@@ -68,4 +68,9 @@ const IconButton = styled.button`
   border: 1px solid ${borderDarkGray};
   margin-top: 20px;
   box-shadow: 0px 2px 4px 1px rgb(0 0 0 / 5%);
+  transition: all 0.3s;
+
+  &:hover {
+    border-color: #adadad;
+  }
 `;
