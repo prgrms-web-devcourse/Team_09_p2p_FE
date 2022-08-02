@@ -4,6 +4,7 @@ import React from 'react';
 import { PageContainer, Button } from '~/components/atom';
 import Logo from '~/components/atom/Logo';
 import theme from '~/styles/theme';
+import SearchInput from '../SearchInput';
 
 const Header = () => {
   return (
@@ -26,9 +27,9 @@ const Header = () => {
             </Category>
           </LeftArea>
 
-          <div>
-            <input placeholder="지역, 장소를 입력해주세요" />
-          </div>
+          <Inner>
+            <SearchInput placeholder="지역, 장소를 입력해주세요" />
+          </Inner>
 
           <Buttons>
             <Link href="/course/create" passHref>
