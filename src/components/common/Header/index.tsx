@@ -55,6 +55,10 @@ const { mainColor, borderGray } = theme.color;
 const HeaderContainer = styled.div`
   width: 100%;
   border-bottom: 1px solid ${borderGray};
+  position: sticky;
+  top: 0;
+  background-color: white;
+  z-index: 999;
 `;
 
 const Inner = styled.div`
