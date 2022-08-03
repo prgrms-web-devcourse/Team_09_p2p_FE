@@ -21,7 +21,7 @@ let tag: tagType = 'h2'; // default
 const Title: React.FC<TitleProps> = ({
   size = 'sm',
   level = 2,
-  fontWeight = 500,
+  fontWeight = 700,
   color,
   block,
   ellipsis,
