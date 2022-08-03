@@ -5,7 +5,7 @@ import { TAGS } from '~/utils/constants';
 import Tags from './Tags';
 
 interface SelectTagsProps {
-  style: CSSProperties;
+  style?: CSSProperties;
 }
 
 const SelectTags = ({ ...props }: SelectTagsProps) => {
