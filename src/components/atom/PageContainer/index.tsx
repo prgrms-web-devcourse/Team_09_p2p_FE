@@ -1,11 +1,12 @@
 import styled from '@emotion/styled';
-import { ReactNode } from 'react';
+import { CSSProperties, ReactNode } from 'react';
 
 type LayoutType = 'main' | 'detail';
 
 interface PageContainer {
   type?: LayoutType;
   children: ReactNode;
+  style?: CSSProperties;
 }
 
 const PageContainer = ({ type = 'main', children, ...props }: PageContainer) => {

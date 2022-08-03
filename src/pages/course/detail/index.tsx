@@ -1,10 +1,12 @@
 import styled from '@emotion/styled';
 import type { NextPage } from 'next';
 import Head from 'next/head';
+import { relative } from 'path';
 import React from 'react';
 import { Icon, Image, PageContainer, Text, Title } from '~/components/atom';
 import Avatar from '~/components/atom/Avatar';
 import Comment from '~/components/common/Comment';
+import DetailSidebar from '~/components/common/DetailSidebar';
 import CourseDetailList from '~/components/domain/CourseDetail/CourseDetailList';
 import CourseOverview from '~/components/domain/CourseDetail/CourseOverview';
 import CourseSlider from '~/components/domain/CourseSlider';
@@ -118,7 +120,7 @@ const CourseDetail: NextPage = () => {
       </Head>
 
       <main>
-        <PageContainer type="detail">
+        <PageContainer type="detail" style={{ position: 'relative' }}>
           <CourseDetailHeader>
             <CourseTitle>
               <Title level={2} size="lg" fontWeight={700} block>
@@ -164,6 +166,11 @@ const CourseDetail: NextPage = () => {
             <CourseDetailList places={courseData.places} />
           </CourseDetails>
           <Comment />
+          <DetailSidebar
+            likes={courseData.likes}
+            isLiked={courseData.isLiked}
+            isBookmarked={courseData.isBookmarked}
+          />
         </PageContainer>
       </main>
     </React.Fragment>
@@ -172,7 +179,7 @@ const CourseDetail: NextPage = () => {
 
 export default CourseDetail;
 
-const { fontGray, mainBackground } = theme.color;
+const { fontGray } = theme.color;
 
 const CourseDetailHeader = styled.div`
   position: relative;
