@@ -2,9 +2,12 @@ import styled from '@emotion/styled';
 import type { NextPage } from 'next';
 import Head from 'next/head';
 import React from 'react';
-import { PageContainer } from '~/components/atom';
+import { Button, PageContainer } from '~/components/atom';
 import { CategoryTitle, CourseList, SortFilter } from '~/components/common';
 import CourseMap from '~/components/domain/Map/CourseMap';
+import theme from '~/styles/theme';
+import numbering from '~/../public/assets/numbering.png';
+import PlaceInfomation from '~/components/domain/CourseCreate/PlaceInfomation';
 
 const Course: NextPage = () => {
   const course = [
@@ -17,6 +20,9 @@ const Course: NextPage = () => {
     { placeId: 8202423, lat: 35.1538826, lng: 129.118628, placeName: '광안리해수욕장' },
     { placeId: 8111808, lat: 35.0554585, lng: 129.087973, placeName: '태종대유원지' }
   ];
+  const courseCreatehandler = () => {
+    console.log('추후 생성 구현');
+  };
   return (
     <React.Fragment>
       <Head>
@@ -25,7 +31,7 @@ const Course: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
-        <PageContainer>
+        <PageContainer type="detail">
           <MapWrapper>
             <CourseMap course={course} />
           </MapWrapper>
@@ -33,6 +39,19 @@ const Course: NextPage = () => {
             <TitleInput placeholder="코스의 제목을 입력해주세요" />
             <TitleUnderLine />
           </TitleInputWrapper>
+          <PlacesWrapper>
+            <PlaceInfomation isLastPlace={false}>1</PlaceInfomation>
+            <PlaceInfomation isLastPlace={false}>2</PlaceInfomation>
+            <PlaceInfomation isLastPlace={true}>3</PlaceInfomation>
+          </PlacesWrapper>
+          <SubmitWrapper>
+            <Button buttonType="darkGray" width={184} height={75} onClick={courseCreatehandler}>
+              코스 수정{/* 요건 아마 취소버튼으로 변경될거같네요 */}
+            </Button>
+            <Button buttonType="primary" width={184} height={75} onClick={courseCreatehandler}>
+              코스 등록
+            </Button>
+          </SubmitWrapper>
         </PageContainer>
       </main>
     </React.Fragment>
@@ -48,21 +67,21 @@ const TitleInputWrapper = styled.div`
   border-radius: 2px;
   box-sizing: border-box;
   height: 300px;
-  width: 300px;
+  width: 100%;
+  text-align: center;
 `;
 
 const TitleInput = styled.input`
   background-color: transparent;
   border: none;
-  border-bottom: 1px solid #ccc;
-  color: #555;
+  border-bottom: 1px solid ${theme.color.fontGray};
   box-sizing: border-box;
   font-family: 'Arvo';
-  font-size: 18px;
+  font-size: 32px;
   height: 50px;
   padding: 10px 0px;
 
-  width: 200px;
+  width: 100%;
 
   &:focus {
     outline: none;
@@ -74,7 +93,7 @@ const TitleInput = styled.input`
     }
   }
   ::-webkit-input-placeholder {
-    color: #aaa;
+    color: ${theme.color.fontGray};
   }
 `;
 
@@ -82,9 +101,23 @@ const TitleUnderLine = styled.span`
   background-color: dodgerblue;
   display: inline-block;
   height: 2px;
-  width: 202px;
+  width: 100%;
   transform: scale(0, 1);
   margin-bottom: 20px;
+`;
+
+const PlacesWrapper = styled.div`
+  width: 100%;
+  border-top: 1px solid ${theme.color.fontGray};
+  border-bottom: 1px solid ${theme.color.fontGray};
+  padding-top: 50px;
+`;
+
+const SubmitWrapper = styled.div`
+  justify-content: center;
+  display: flex;
+  margin: 70px 0 151px 0;
+  gap: 20px;
 `;
 
 export default Course;
