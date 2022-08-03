@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import React, { ReactElement, ReactNode, useMemo, useState } from 'react';
+import React, { ReactElement, ReactNode, useMemo } from 'react';
 import TabItem from './TabItem';
 
 interface TabProps {
@@ -11,27 +11,24 @@ interface TabProps {
 const Tab = ({ children, active, onActive, ...props }: TabProps) => {
   const childrenArray = React.Children.toArray(children);
 
-  const [currentActive, setCurrentActive] = useState(active);
-
   const items = useMemo(() => {
     return childrenArray.map((element) => {
       if (React.isValidElement(element)) {
         return React.cloneElement(element as ReactElement, {
           ...element.props,
           key: element.props.value,
-          active: element.props.value === currentActive,
+          active: element.props.value === active,
           onClick: () => {
             onActive(element.props.value);
-            setCurrentActive(element.props.value);
           }
         });
       }
     });
-  }, [childrenArray, currentActive, onActive]);
+  }, [childrenArray, active, onActive]);
 
   const activeItem = useMemo(() => {
-    return items.find((element) => currentActive === element?.props.value);
-  }, [currentActive, items]);
+    return items.find((element) => active === element?.props.value);
+  }, [active, items]);
 
   return (
     <div {...props}>
