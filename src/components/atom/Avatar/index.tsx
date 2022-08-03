@@ -10,7 +10,7 @@ interface AvatarProps {
 
 const defaultImage = '/assets/profile-default.jpg';
 
-const Avatar: React.FC<AvatarProps> = ({ src, size = 66 }) => {
+const Avatar: React.FC<AvatarProps> = ({ src, size = 66, ...props }) => {
   const imageUrl = src || defaultImage;
   return (
     <ImageWrapper {...props} style={{ width: size, height: size }}>
