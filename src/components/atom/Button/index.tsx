@@ -28,7 +28,6 @@ const Button = ({
   onClick,
   disabled,
   children,
-  style,
   ...props
 }: ButtonProps) => {
   return (
