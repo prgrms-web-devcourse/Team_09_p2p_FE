@@ -11,6 +11,9 @@ const theme = {
     fontBlueGray: '#828C94',
     borderGray: '#EAEDEF',
     borderDarkGray: '#E1E1E1'
+  },
+  shadow: {
+    basicShadow: '0px 2px 4px 1px rgb (0 0 0 / 5%)'
   }
 };
 
