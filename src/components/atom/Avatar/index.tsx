@@ -4,13 +4,13 @@ import { CSSProperties } from 'react';
 
 interface AvatarProps {
   src?: string;
-  size: number;
+  size?: number;
   style?: CSSProperties;
 }
 
 const defaultImage = '/assets/profile-default.jpg';
 
-const Avatar: React.FC<AvatarProps> = ({ src, size, ...props }) => {
+const Avatar: React.FC<AvatarProps> = ({ src, size = 66 }) => {
   const imageUrl = src || defaultImage;
   return (
     <ImageWrapper {...props} style={{ width: size, height: size }}>
