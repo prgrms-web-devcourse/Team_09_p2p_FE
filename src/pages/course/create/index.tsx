@@ -9,9 +9,10 @@ import theme from '~/styles/theme';
 import Button from '~/components/atom/Button';
 import { Icon, Text } from '~/components/atom';
 import SearchAddress from '~/components/domain/Map/SearchAddress';
-import CloseIcon from '~/components/domain/course/SelectedArea/CloseIcon';
-import PlusIcon from '~/components/domain/course/SearchArea/PlusIcon';
-
+import CloseIcon from '~/components/domain/CourseCreate/SelectedArea/CloseIcon';
+import PlusIcon from '~/components/domain/CourseCreate/SearchArea/PlusIcon';
+import Modal from '~/components/atom/Modal';
+import RegionSelect from '~/components/domain/CourseCreate/RegionSelect';
 interface Marker {
   position: {
     lat: number;
@@ -29,6 +30,8 @@ const CourseCreate: NextPage = () => {
   const [Value, setValue] = useState('');
   const [map, setMap] = useState<kakao.maps.Map>();
   const [markers, setMarkers] = useState<Marker[]>([]);
+  const [visible, setVisible] = useState(true);
+  const [region, setRegion] = useState('서울');
 
   useEffect(() => {
     if (!map) return;
@@ -92,12 +95,15 @@ const CourseCreate: NextPage = () => {
       </Head>
 
       <main>
+        <Modal visible={visible} onClose={() => setVisible(visible)}>
+          <RegionSelect setRegion={setRegion} onClose={() => setVisible(false)} />
+        </Modal>
         <CreateWrapper className="landing-page">
           <SelectedArea>
             <SelectedHeader>
               <Icon name="arrow" size={25} rotate={180} />
               <Text size={'xl'} style={{ marginLeft: '40%' }}>
-                제주
+                {visible === false ? region : '서울'}
               </Text>
             </SelectedHeader>
             <SelectedPlace>
