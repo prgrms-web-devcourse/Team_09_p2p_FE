@@ -12,7 +12,9 @@ export const ICON_URLS = {
   share: '/assets/icons/share.svg',
   search: '/assets/icons/search.svg',
   close: '/assets/icons/close.svg',
-  plus: '/assets/icons/plus.svg'
+  plus: '/assets/icons/plus.svg',
+  pencil: '/assets/icons/pencil.svg',
+  comment: '/assets/icons/comment.svg'
 };
 
 export type IconName = keyof typeof ICON_URLS;
