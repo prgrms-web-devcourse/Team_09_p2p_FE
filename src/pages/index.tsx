@@ -1,9 +1,9 @@
 import styled from '@emotion/styled';
 import Head from 'next/head';
-import React from 'react';
+import React, { ReactElement } from 'react';
 import { Button, Link, PageContainer, Image } from '~/components/atom';
 import { CourseList, PlaceList } from '~/components/common';
-import Footer from '~/components/common/Footer';
+import Layout from '~/components/common/Layout';
 import MainCategoryTitle from '~/components/domain/home/MainCategoryTitle';
 import theme from '~/styles/theme';
 
@@ -55,13 +55,16 @@ const HomePage = () => {
             </CategoryArea>
           </PageContainer>
         </MainContent>
-        <Footer />
       </main>
     </React.Fragment>
   );
 };
 
 export default HomePage;
+
+HomePage.getLayout = function getLayout(page: ReactElement) {
+  return <Layout footer>{page}</Layout>;
+};
 
 const { backgroundLightGray, mainColor } = theme.color;
 
