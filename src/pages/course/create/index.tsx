@@ -1,7 +1,6 @@
 import styled from '@emotion/styled';
 import type { NextPage } from 'next';
 import PlaceMap from '~/components/domain/Map/PlaceMap';
-import CourseMap from '~/components/domain/Map/CourseMap';
 import Head from 'next/head';
 import React, { useEffect, useState } from 'react';
 import { Map, MapMarker, CustomOverlayMap } from 'react-kakao-maps-sdk';
@@ -30,6 +29,7 @@ const CourseCreate: NextPage = () => {
   const [Value, setValue] = useState('');
   const [map, setMap] = useState<kakao.maps.Map>();
   const [markers, setMarkers] = useState<Marker[]>([]);
+
   useEffect(() => {
     if (!map) return;
     console.log(kakao.maps);
