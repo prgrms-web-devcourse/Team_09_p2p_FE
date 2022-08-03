@@ -13,7 +13,7 @@ interface RegionSelectProps {
 const RegionSelect = ({ setRegion, onClose }: RegionSelectProps) => {
   const firstRegionList = ['서울', '인천', '대전', '대구', '광주', '부산', '울산', '세종', '경기'];
   const secondRegionList = ['강원', '충북', '충남', '경북', '경남', '전북', '전남', '제주'];
-  const [beforeRegion, setBeforeRegion] = useState<any>(null);
+  const [beforeRegion, setBeforeRegion] = useState<HTMLButtonElement | null>(null);
   const [isSeleted, setIsSeleted] = useState(false);
   const closeForm = () => {
     Router.back();
