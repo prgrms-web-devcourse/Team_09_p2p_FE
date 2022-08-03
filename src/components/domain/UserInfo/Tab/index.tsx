@@ -4,7 +4,7 @@ import TabItem from './TabItem';
 
 interface TabProps {
   children: ReactNode;
-  onActive: (index?: number) => void;
+  onActive: (value: string) => void;
   active?: string;
 }
 
@@ -18,11 +18,11 @@ const Tab = ({ children, active, onActive, ...props }: TabProps) => {
       if (React.isValidElement(element)) {
         return React.cloneElement(element as ReactElement, {
           ...element.props,
-          key: element.props.index,
-          active: element.props.index === currentActive,
+          key: element.props.value,
+          active: element.props.value === currentActive,
           onClick: () => {
-            onActive(element.props.index);
-            setCurrentActive(element.props.index);
+            onActive(element.props.value);
+            setCurrentActive(element.props.value);
           }
         });
       }
@@ -30,7 +30,7 @@ const Tab = ({ children, active, onActive, ...props }: TabProps) => {
   }, [childrenArray, currentActive, onActive]);
 
   const activeItem = useMemo(() => {
-    return items.find((element) => currentActive === element?.props.index);
+    return items.find((element) => currentActive === element?.props.value);
   }, [currentActive, items]);
 
   return (

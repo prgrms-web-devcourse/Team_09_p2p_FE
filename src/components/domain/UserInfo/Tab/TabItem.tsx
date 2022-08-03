@@ -6,7 +6,7 @@ import theme from '~/styles/theme';
 interface TabItemProps {
   title: string;
   children: ReactNode;
-  index: string | number;
+  value: string;
   active?: boolean;
   onClick?: () => void;
 }
