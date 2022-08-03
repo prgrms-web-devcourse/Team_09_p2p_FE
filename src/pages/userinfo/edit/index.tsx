@@ -48,7 +48,7 @@ const UserinfoEdit: NextPage = () => {
                   <Text>생년월일</Text>
                 </FormTitle>
                 <FormGroup>
-                  <input type="email" name="birth" />
+                  <input type="data" name="birth" />
                 </FormGroup>
               </FormItem>
               <Button size="md" width={195} style={{ marginLeft: 150 }}>
