@@ -2,6 +2,8 @@ import type { NextPage } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import React from 'react';
+import { PageContainer, Title } from '~/components/atom';
+import { SelectTags, SelectRegion } from '~/components/common';
 
 const SearchedKeywordPage: NextPage = () => {
   const {
@@ -23,8 +25,13 @@ const SearchedKeywordPage: NextPage = () => {
       </Head>
 
       <main>
-        <h1>검색어 : {keyword} !!!</h1>
-        <h2>여기서 검색 리스트를 보여줍니다.</h2>
+        <PageContainer>
+          <Title level={1} size="sm" style={{ margin: '30px 0' }}>
+            <b>&ldquo;{keyword}&rdquo;</b>로 검색된 결과입니다.
+          </Title>
+          <SelectRegion />
+          <SelectTags style={{ marginTop: '20px' }} />
+        </PageContainer>
       </main>
     </React.Fragment>
   );
