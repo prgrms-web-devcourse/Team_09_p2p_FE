@@ -1,51 +1,69 @@
 import styled from '@emotion/styled';
-import Link from 'next/link';
+// import Link from 'next/link';
 import React from 'react';
-import { PageContainer, Button } from '~/components/atom';
+import { PageContainer, Button, Link } from '~/components/atom';
+import Avatar from '~/components/atom/Avatar';
 import Logo from '~/components/atom/Logo';
 import theme from '~/styles/theme';
 
-const Header = () => {
-  return (
-    <HeaderContainer>
-      <PageContainer>
-        <Inner>
+interface HeaderProps {
+  full?: boolean;
+}
+
+const Header = ({ full }: HeaderProps) => {
+  if (full) {
+    return (
+      <HeaderContainer>
+        <FullInner>
           <LeftArea>
-            <Link href="/" passHref>
-              <a>
-                <Logo width={130} height={35} />
-              </a>
+            <Link href="/">
+              <Logo width={130} height={35} />
             </Link>
-            <Category>
-              <li>
-                <Link href="/course">여행코스</Link>
-              </li>
-              <li>
-                <Link href="/place">추천장소</Link>
-              </li>
-            </Category>
           </LeftArea>
-
-          <div>
-            <input placeholder="지역, 장소를 입력해주세요" />
-          </div>
-
           <Buttons>
-            <Link href="/course/create" passHref>
-              <a>
-                <Button>코스등록</Button>
-              </a>
-            </Link>
-            <Link href="/login" passHref>
-              <a>
-                <Button buttonType="borderPrimary">로그인</Button>
-              </a>
+            <Link href="/userinfo">
+              <Avatar size={54} src="" />
             </Link>
           </Buttons>
-        </Inner>
-      </PageContainer>
-    </HeaderContainer>
-  );
+        </FullInner>
+      </HeaderContainer>
+    );
+  } else {
+    return (
+      <HeaderContainer>
+        <PageContainer>
+          <Inner>
+            <LeftArea>
+              <Link href="/">
+                <Logo width={130} height={35} />
+              </Link>
+              <Category>
+                <li>
+                  <Link href="/course">여행코스</Link>
+                </li>
+                <li>
+                  <Link href="/place">추천장소</Link>
+                </li>
+              </Category>
+            </LeftArea>
+
+            <div>
+              <input placeholder="지역, 장소를 입력해주세요" />
+            </div>
+
+            <Buttons>
+              <Link href="/course/create">
+                <Button>코스등록</Button>
+              </Link>
+              <Link href="/login">
+                <Button buttonType="borderPrimary">로그인</Button>
+              </Link>
+            </Buttons>
+          </Inner>
+        </PageContainer>
+      </HeaderContainer>
+    );
+  }
 };
 
 export default Header;
@@ -66,6 +84,14 @@ const Inner = styled.div`
   height: 100px;
   align-items: center;
   justify-content: space-between;
+`;
+
+const FullInner = styled.div`
+  display: flex;
+  height: 100px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 50px;
 `;
 
 const LeftArea = styled.div`
