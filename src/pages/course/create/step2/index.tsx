@@ -7,7 +7,7 @@ import { CategoryTitle, CourseList, SortFilter } from '~/components/common';
 import CourseMap from '~/components/domain/Map/CourseMap';
 import theme from '~/styles/theme';
 import numbering from '~/../public/assets/numbering.png';
-import PlaceInfomation from '~/components/domain/CourseCreate/PlaceInfomation';
+import PlaceInformation from '~/components/domain/CourseCreate/PlaceInformation';
 
 const Course: NextPage = () => {
   const course = [
@@ -40,9 +40,9 @@ const Course: NextPage = () => {
             <TitleUnderLine />
           </TitleInputWrapper>
           <PlacesWrapper>
-            <PlaceInfomation isLastPlace={false}>1</PlaceInfomation>
-            <PlaceInfomation isLastPlace={false}>2</PlaceInfomation>
-            <PlaceInfomation isLastPlace={true}>3</PlaceInfomation>
+            <PlaceInformation isLastPlace={false}>1</PlaceInformation>
+            <PlaceInformation isLastPlace={false}>2</PlaceInformation>
+            <PlaceInformation isLastPlace={true}>3</PlaceInformation>
           </PlacesWrapper>
           <SubmitWrapper>
             <Button buttonType="darkGray" width={184} height={75} onClick={courseCreatehandler}>
