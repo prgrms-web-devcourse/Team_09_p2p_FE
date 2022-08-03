@@ -1,17 +1,20 @@
 import type { NextPage } from 'next';
 import Head from 'next/head';
 import React from 'react';
+import { PageContainer } from '~/components/atom';
 
 const PlaceDetail: NextPage = () => {
   return (
     <React.Fragment>
       <Head>
-        <title>우리의 여행코스 | 이곳저곳</title>
-        <meta name="description" content="our travel course" />
+        <title>여행할 땐 | 이곳저곳</title>
+        <meta name="description" content="place detail" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main>PlaceDetail</main>
+      <main>
+        <PageContainer type="detail">여기는 장소 detail 페이지의 홈</PageContainer>
+      </main>
     </React.Fragment>
   );
 };
