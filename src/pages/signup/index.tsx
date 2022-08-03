@@ -1,3 +1,4 @@
+import axios from 'axios';
 import type { NextPage } from 'next';
 import Head from 'next/head';
 import React from 'react';
@@ -9,6 +10,9 @@ const Signup: NextPage = () => {
     //TODO
     //회원가입 api 로직 추가
     console.log(data);
+    const response = axios
+      .post('http://3.38.118.35:8080/api/v1/users/', data)
+      .then((res) => console.log(res));
   };
 
   return (
