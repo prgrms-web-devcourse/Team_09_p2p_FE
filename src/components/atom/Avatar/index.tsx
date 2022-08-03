@@ -3,12 +3,12 @@ import Image from 'next/image';
 
 interface AvatarProps {
   src?: string;
-  size: number;
+  size?: number;
 }
 
 const defaultImage = '/assets/profile-default.jpg';
 
-const Avatar: React.FC<AvatarProps> = ({ src, size }) => {
+const Avatar: React.FC<AvatarProps> = ({ src, size = 66 }) => {
   const imageUrl = src || defaultImage;
   return (
     <ImageWrapper style={{ width: size, height: size }}>
