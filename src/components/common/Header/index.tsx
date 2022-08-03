@@ -77,19 +77,20 @@ const HeaderContainer = styled.div`
   top: 0;
   background-color: white;
   z-index: 999;
+  height: 85px;
 `;
 
 const Inner = styled.div`
   display: flex;
-  height: 100px;
   align-items: center;
+  height: 85px;
   justify-content: space-between;
 `;
 
 const FullInner = styled.div`
   display: flex;
-  height: 100px;
   align-items: center;
+  height: 85px;
   justify-content: space-between;
   padding: 0 50px;
 `;
