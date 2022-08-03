@@ -1,13 +1,18 @@
 import styled from '@emotion/styled';
 import React from 'react';
+import { Text } from '~/components/atom';
 import theme from '~/styles/theme';
-import { Region } from './types';
+import { Region } from '~/types';
 
-const Region = ({ text }: Region) => {
-  return <StyledRegion>{text}</StyledRegion>;
+const RegionItem = ({ text }: Region) => {
+  return (
+    <StyledRegion>
+      <Text size="md">{text}</Text>
+    </StyledRegion>
+  );
 };
 
-export default Region;
+export default RegionItem;
 
 const StyledRegion = styled.li`
   border-right: 1px solid ${theme.color.borderDarkGray};

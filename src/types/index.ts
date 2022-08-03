@@ -17,3 +17,7 @@ export type LoginValues = {
   readonly email: string;
   readonly password: string;
 };
+
+export type Region = {
+  text: string;
+};

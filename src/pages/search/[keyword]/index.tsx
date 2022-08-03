@@ -3,7 +3,7 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import React from 'react';
 import { PageContainer, Title } from '~/components/atom';
-import { SelectRegion } from '~/components/common';
+import { SelectTags, SelectRegion } from '~/components/common';
 
 const SearchedKeywordPage: NextPage = () => {
   const {
@@ -30,6 +30,7 @@ const SearchedKeywordPage: NextPage = () => {
             <b>&ldquo;{keyword}&rdquo;</b>로 검색된 결과입니다.
           </Title>
           <SelectRegion />
+          <SelectTags style={{ marginTop: '20px' }} />
         </PageContainer>
       </main>
     </React.Fragment>
