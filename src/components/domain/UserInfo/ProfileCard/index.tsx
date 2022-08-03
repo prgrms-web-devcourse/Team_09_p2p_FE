@@ -7,9 +7,21 @@ interface ProfileCardProps {
   profileImage: string;
   nickname: string;
   email: string;
+  onClickAction: (value: string) => void;
+  postCount: number;
+  bookmarkCount: number;
+  commentCount: number;
 }
 
-const ProfileCard = ({ profileImage, nickname, email }: ProfileCardProps) => {
+const ProfileCard = ({
+  profileImage,
+  nickname,
+  email,
+  onClickAction,
+  postCount,
+  bookmarkCount,
+  commentCount
+}: ProfileCardProps) => {
   return (
     <Container>
       <UserProfile>
@@ -27,21 +39,21 @@ const ProfileCard = ({ profileImage, nickname, email }: ProfileCardProps) => {
       <UserActions>
         <li>
           <Text>게시물</Text>
-          <Text color="main" fontWeight={700}>
-            1
-          </Text>
+          <Text.Button onClick={() => onClickAction('post')} color="main" fontWeight={700}>
+            {postCount}
+          </Text.Button>
         </li>
         <li>
           <Text>북마크</Text>
-          <Text color="main" fontWeight={700}>
-            1
-          </Text>
+          <Text.Button onClick={() => onClickAction('bookmark')} color="main" fontWeight={700}>
+            {bookmarkCount}
+          </Text.Button>
         </li>
         <li>
           <Text>댓글</Text>
-          <Text color="main" fontWeight={700}>
-            1
-          </Text>
+          <Text.Button onClick={() => onClickAction('comment')} color="main" fontWeight={700}>
+            {commentCount}
+          </Text.Button>
         </li>
       </UserActions>
       <InfoEdit>
@@ -69,6 +81,10 @@ const Container = styled.div`
   padding: 30px;
   border: 1px solid ${borderGray};
   box-shadow: ${basicShadow};
+  position: fixed;
+  top: 125px;
+  z-index: 100;
+  background-color: white;
 `;
 
 const UserProfile = styled.div`

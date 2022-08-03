@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 import React, { CSSProperties, ReactNode } from 'react';
 import { FontColors, FontSizes } from '~/types/font';
-import { FONT_SIZES, FONT_COLORS } from '~/utils/constants';
+import { FONT_SIZES, FONT_COLORS } from '~/types/font';
 
 import TextButton from './TextButton';
 export interface TextProps {
