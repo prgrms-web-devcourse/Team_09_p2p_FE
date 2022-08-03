@@ -3,7 +3,8 @@ import React, { CSSProperties, ReactNode } from 'react';
 import { FontColors, FontSizes } from '~/types/font';
 import { FONT_SIZES, FONT_COLORS } from '~/utils/constants';
 
-interface TextProps {
+import TextButton from './TextButton';
+export interface TextProps {
   children: ReactNode;
   size?: FontSizes | number;
   block?: boolean;
@@ -16,7 +17,7 @@ interface TextProps {
 
 let tag: 'span' | 'p' = 'span';
 
-const Text: React.FC<TextProps> = ({
+const Text = ({
   children,
   size = 'sm',
   block,
@@ -25,7 +26,7 @@ const Text: React.FC<TextProps> = ({
   paragraph,
   fontWeight,
   ...props
-}) => {
+}: TextProps) => {
   tag = paragraph ? 'p' : 'span';
 
   return (
@@ -41,6 +42,8 @@ const Text: React.FC<TextProps> = ({
     </StyledText>
   );
 };
+
+Text.Button = TextButton;
 
 export default Text;
 
