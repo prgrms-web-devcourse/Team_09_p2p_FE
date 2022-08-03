@@ -12,7 +12,7 @@ const RegionItem = ({ text }: Region) => {
   );
 };
 
-export default RegionItem;
+export default React.memo(RegionItem);
 
 const StyledRegion = styled.li`
   border-right: 1px solid ${theme.color.borderDarkGray};

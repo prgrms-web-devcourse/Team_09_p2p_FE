@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import React, { CSSProperties } from 'react';
+import React, { CSSProperties, useMemo } from 'react';
 import theme from '~/styles/theme';
 import { TAGS } from '~/utils/constants';
 import Tags from './Tags';
@@ -9,16 +9,18 @@ interface SelectTagsProps {
 }
 
 const SelectTags = ({ ...props }: SelectTagsProps) => {
+  const tagsIterator = useMemo(() => Object.entries(TAGS), []);
+
   return (
     <Container {...props}>
-      {Object.entries(TAGS).map(([tagName, tags]) => (
+      {tagsIterator.map(([tagName, tags]) => (
         <Tags key={tagName} tagName={tagName} tags={tags} />
       ))}
     </Container>
   );
 };
 
-export default SelectTags;
+export default React.memo(SelectTags);
 
 const Container = styled.div`
   box-sizing: border-box;
@@ -28,4 +30,5 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   gap: 20px;
+  color: ${theme.color.fontDarkBlack};
 `;

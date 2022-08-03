@@ -21,7 +21,7 @@ const SelectRegion = ({ col = 9 }: SelectRegionProps) => {
   );
 };
 
-export default SelectRegion;
+export default React.memo(SelectRegion);
 
 const GridContainer = styled.ul<{ col: number }>`
   box-sizing: border-box;
@@ -29,4 +29,5 @@ const GridContainer = styled.ul<{ col: number }>`
   grid-template-columns: ${({ col }) => `repeat(${col}, 1fr)`};
   border-top: 1px solid ${theme.color.borderDarkGray};
   border-left: 1px solid ${theme.color.borderDarkGray};
+  color: ${theme.color.fontDarkBlack};
 `;

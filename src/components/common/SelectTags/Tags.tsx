@@ -23,7 +23,7 @@ const Tags = ({ tagName, tags }: TagsProps) => {
   );
 };
 
-export default Tags;
+export default React.memo(Tags);
 
 const List = styled.ul`
   display: flex;
