@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 import { useRef } from 'react';
 import theme from '~/styles/theme';
 
-interface TextareaInterface {
+interface TextareaProps {
   width: number | string;
   height: number | string;
   placeholder?: string;
@@ -19,7 +19,7 @@ const Textarea = ({
   onChange,
   textAreaRef,
   ...props
-}: TextareaInterface) => {
+}: TextareaProps) => {
   const ref = useRef<HTMLTextAreaElement>(null);
 
   return (
