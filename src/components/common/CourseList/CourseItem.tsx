@@ -6,9 +6,13 @@ import theme from '~/styles/theme';
 import BookmarkIcon from '../BookmarkIcon';
 import LikeCount from '../LikeCount';
 
-const CourseItem = () => {
+interface CourseItem {
+  grid?: number;
+}
+
+const CourseItem = ({ grid = 3 }) => {
   return (
-    <ItemContainer>
+    <ItemContainer grid={grid}>
       <Thumbnail>
         <BookmarkIcon />
         <Text size="xs">제주 5코스</Text>
@@ -37,9 +41,10 @@ export default CourseItem;
 
 const { borderGray, fontDarkGray } = theme.color;
 
-const ItemContainer = styled.li`
-  width: 372px;
-  border-radius: 8px;
+const ItemContainer = styled.li<Pick<CourseItem, 'grid'>>`
+  width: ${({ grid }) => (grid === 3 ? '33.3%' : '50%')};
+  box-sizing: border-box;
+  padding: 0 10px 46px 10px;
   overflow: hidden;
 `;
 
@@ -56,6 +61,7 @@ const Thumbnail = styled.div`
   line-height: 1.5;
   position: relative;
   background-size: cover;
+  border-radius: 8px 8px 0 0;
 `;
 
 const CourseInfo = styled.div`
@@ -65,6 +71,7 @@ const CourseInfo = styled.div`
   line-height: 1.5;
   background-color: white;
   color: ${fontDarkGray};
+  border-radius: 0 0 8px 8px;
 `;
 
 const InfoFooter = styled.div`

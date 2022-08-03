@@ -1,6 +1,7 @@
 import type { NextPage } from 'next';
 import Head from 'next/head';
 import React from 'react';
+import { PageContainer } from '~/components/atom';
 
 const Search: NextPage = () => {
   return (
@@ -11,7 +12,9 @@ const Search: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main>Search</main>
+      <main>
+        <PageContainer>Search 페이지!</PageContainer>
+      </main>
     </React.Fragment>
   );
 };

@@ -1,8 +1,8 @@
 export { default as Header } from './Header';
 export { default as LikeCount } from './LikeCount';
 export { default as BookmarkIcon } from './BookmarkIcon';
-export { default as CloseIcon } from '~/components/domain/course/SelectedArea/CloseIcon';
-export { default as PlusIcon } from '~/components/domain/course/SearchArea/PlusIcon';
+export { default as CloseIcon } from '~/components/domain/CourseCreate/SelectedArea/CloseIcon';
+export { default as PlusIcon } from '~/components/domain/CourseCreate/SearchArea/PlusIcon';
 export { default as Form } from './Form';
 export { default as SortFilter } from './SortFilter';
 export { default as CategoryTitle } from './CategoryTitle';
@@ -11,3 +11,5 @@ export { default as PlaceList } from './PlaceList';
 export { default as Field } from './Field';
 export { default as ErrorMessage } from './Form/ErrorMessage';
 export { default as SearchInput } from './SearchInput';
+export { default as SelectRegion } from './SelectRegion';
+export { default as SelectTags } from './SelectTags';

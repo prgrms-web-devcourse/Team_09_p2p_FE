@@ -6,19 +6,21 @@ interface IconProps {
   name: IconName;
   size?: number;
   rotate?: number;
+  block?: boolean;
 }
 
-const Icon: React.FC<IconProps> = ({ name, size = 15, rotate, ...props }) => {
+const Icon: React.FC<IconProps> = ({ name, size = 15, rotate, block, ...props }) => {
   const { [name]: iconUrl } = ICON_URLS;
 
   const IconStyle = {
     width: size,
     height: size,
-    transform: rotate ? `rotate(${rotate}deg)` : undefined
+    transform: rotate ? `rotate(${rotate}deg)` : undefined,
+    display: block ? 'block' : 'inline-block'
   };
 
   return (
-    <IconWrapper style={IconStyle} {...props}>
+    <IconWrapper style={IconStyle} block={block} {...props}>
       <Image src={iconUrl} width={size} height={size} alt={name} />
     </IconWrapper>
   );
@@ -26,6 +28,8 @@ const Icon: React.FC<IconProps> = ({ name, size = 15, rotate, ...props }) => {
 
 export default Icon;
 
-const IconWrapper = styled.i`
-  display: inline-block;
+const IconWrapper = styled.i<Pick<IconProps, 'block'>>`
+  span {
+    display: block !important;
+  }
 `;
