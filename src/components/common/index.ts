@@ -11,4 +11,4 @@ export { default as PlaceList } from './PlaceList';
 export { default as Field } from './Field';
 export { default as ErrorMessage } from './Form/ErrorMessage';
 export { default as SearchInput } from './SearchInput';
-export { default as SearchLocationFilter } from './SearchLocationFilter';
+export { default as SelectRegion } from './SelectRegion';

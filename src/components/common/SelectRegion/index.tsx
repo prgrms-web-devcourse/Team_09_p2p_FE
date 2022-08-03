@@ -1,10 +1,10 @@
 import styled from '@emotion/styled';
 import React from 'react';
 import theme from '~/styles/theme';
-import Item from './Item';
-import { Location } from './types';
+import Item from './Region';
+import { Region } from './types';
 
-const locations: Location[] = [
+const regions: Region[] = [
   { text: '전체보기' },
   { text: '서울' },
   { text: '인천' },
@@ -25,21 +25,21 @@ const locations: Location[] = [
   { text: '제주' }
 ];
 
-interface LocationFilterProps {
+interface SelectRegionProps {
   col?: number;
 }
 
-const LocationFilter = ({ col = 9 }: LocationFilterProps) => {
+const SelectRegion = ({ col = 9 }: SelectRegionProps) => {
   return (
     <Grid col={col}>
-      {locations.map((location) => (
-        <Item key={location.text} text={location.text} />
+      {regions.map((region) => (
+        <Item key={region.text} text={region.text} />
       ))}
     </Grid>
   );
 };
 
-export default LocationFilter;
+export default SelectRegion;
 
 const Grid = styled.ul<{ col: number }>`
   box-sizing: border-box;

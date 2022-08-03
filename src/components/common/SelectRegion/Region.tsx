@@ -1,15 +1,15 @@
 import styled from '@emotion/styled';
 import React from 'react';
 import theme from '~/styles/theme';
-import { Location } from './types';
+import { Region } from './types';
 
-const Item = ({ text }: Location) => {
-  return <StyledItem>{text}</StyledItem>;
+const Region = ({ text }: Region) => {
+  return <StyledRegion>{text}</StyledRegion>;
 };
 
-export default Item;
+export default Region;
 
-const StyledItem = styled.li`
+const StyledRegion = styled.li`
   border-right: 1px solid ${theme.color.borderDarkGray};
   border-bottom: 1px solid ${theme.color.borderDarkGray};
   padding: 9px;

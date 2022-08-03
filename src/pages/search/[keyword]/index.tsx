@@ -3,7 +3,7 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import React from 'react';
 import { PageContainer, Title } from '~/components/atom';
-import { SearchLocationFilter } from '~/components/common';
+import { SelectRegion } from '~/components/common';
 
 const SearchedKeywordPage: NextPage = () => {
   const {
@@ -29,7 +29,7 @@ const SearchedKeywordPage: NextPage = () => {
           <Title level={1} size="sm" style={{ margin: '30px 0' }}>
             <b>&ldquo;{keyword}&rdquo;</b>로 검색된 결과입니다.
           </Title>
-          <SearchLocationFilter />
+          <SelectRegion />
         </PageContainer>
       </main>
     </React.Fragment>
