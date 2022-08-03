@@ -1,16 +1,23 @@
 import styled from '@emotion/styled';
 // import Link from 'next/link';
+import { useRouter } from 'next/router';
 import React from 'react';
 import { PageContainer, Button, Link } from '~/components/atom';
 import Avatar from '~/components/atom/Avatar';
 import Logo from '~/components/atom/Logo';
 import theme from '~/styles/theme';
+import SearchInput from '../SearchInput';
 
 interface HeaderProps {
   full?: boolean;
 }
 
 const Header = ({ full }: HeaderProps) => {
+  const router = useRouter();
+  const handleSearch = (keyword: string) => {
+    const searchPath = `/search/${keyword}`;
+    router.push(searchPath);
+  };
   if (full) {
     return (
       <HeaderContainer>
@@ -47,9 +54,9 @@ const Header = ({ full }: HeaderProps) => {
               </Category>
             </LeftArea>
 
-            <div>
-              <input placeholder="지역, 장소를 입력해주세요" />
-            </div>
+            <InputContainer>
+              <SearchInput onSearch={handleSearch} placeholder="지역, 장소를 검색해보세요" />
+            </InputContainer>
 
             <Buttons>
               <Link href="/course/create">
@@ -93,6 +100,14 @@ const FullInner = styled.div`
   height: 85px;
   justify-content: space-between;
   padding: 0 50px;
+`;
+
+const InputContainer = styled.div`
+  box-sizing: border-box;
+  width: 356px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 const LeftArea = styled.div`

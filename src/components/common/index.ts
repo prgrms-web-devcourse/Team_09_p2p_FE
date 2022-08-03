@@ -10,3 +10,4 @@ export { default as CourseList } from './CourseList';
 export { default as PlaceList } from './PlaceList';
 export { default as Field } from './Field';
 export { default as ErrorMessage } from './Form/ErrorMessage';
+export { default as SearchInput } from './SearchInput';

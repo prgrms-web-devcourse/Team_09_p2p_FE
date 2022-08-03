@@ -10,6 +10,7 @@ export const ICON_URLS = {
   heartActive: '/assets/icons/heart-active.svg',
   heartInactive: '/assets/icons/heart-inactive.svg',
   share: '/assets/icons/share.svg',
+  search: '/assets/icons/search.svg',
   close: '/assets/icons/close.svg',
   plus: '/assets/icons/plus.svg'
 };
