@@ -7,7 +7,7 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   name: string;
   type?: 'email' | 'password' | 'text' | 'date';
   placeholder: string;
-  required: boolean;
+  required?: boolean;
   value: string;
   height?: string | number;
   onChange: (e: ChangeEvent<HTMLInputElement>) => void;

@@ -9,7 +9,10 @@ export const ICON_URLS = {
   bookmarkInactive: '/assets/icons/bookmark-inactive.svg',
   heartActive: '/assets/icons/heart-active.svg',
   heartInactive: '/assets/icons/heart-inactive.svg',
-  share: '/assets/icons/share.svg'
+  share: '/assets/icons/share.svg',
+  search: '/assets/icons/search.svg',
+  close: '/assets/icons/close.svg',
+  plus: '/assets/icons/plus.svg'
 };
 
 export type IconName = keyof typeof ICON_URLS;
