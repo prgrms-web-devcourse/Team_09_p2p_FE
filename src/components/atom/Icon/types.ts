@@ -5,6 +5,7 @@ export const ICON_URLS = {
   calendar: '/assets/icons/calendar.svg',
   marker: '/assets/icons/marker.svg',
   route: '/assets/icons/route.svg',
+  search: '/assets/icons/search.svg',
   close: '/assets/icons/close.svg',
   plus: '/assets/icons/plus.svg'
 };
