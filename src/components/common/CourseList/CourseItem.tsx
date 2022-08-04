@@ -7,11 +7,11 @@ import BookmarkIcon from '../BookmarkIcon';
 import LikeCount from '../LikeCount';
 
 interface CourseItemProps {
-  course?: CourseItem;
+  course?: ICourseItem;
   grid?: number;
 }
 
-interface CourseItem {
+export interface ICourseItem {
   id: number;
   title: string;
   thumbnail: string;
@@ -25,7 +25,7 @@ interface CourseItem {
   profileUrl: string;
 }
 
-const courseItemData: CourseItem = {
+const courseItemData: ICourseItem = {
   id: 1,
   title: '[1박 2일] 제주도 여행 추천~ 다들 추천하는 여행지입니다',
   thumbnail: '',
@@ -40,13 +40,15 @@ const courseItemData: CourseItem = {
 };
 
 const CourseItem = ({ course = courseItemData, grid = 3 }: CourseItemProps) => {
-  const { region, title, places, theme, likes, profileUrl } = course;
+  const { thumbnail, region, title, places, theme, likes, profileUrl } = course;
   const COURSE_COUNT = course.places.length;
 
+  const THUMBNAIL_URL = thumbnail ? thumbnail : '/assets/location/jeju.jpg';
   return (
     <ItemContainer grid={grid}>
       <ThumbnailWrapper>
-        <Thumbnail className="courseImage" />
+        <ThumbnailBackground></ThumbnailBackground>
+        <Thumbnail className="courseImage" style={{ backgroundImage: `url(${THUMBNAIL_URL})` }} />
         <BookmarkIcon />
         <ThumbnailInfo>
           <Text size="xs">
@@ -109,6 +111,14 @@ const ThumbnailWrapper = styled.div`
   color: white;
 `;
 
+const ThumbnailBackground = styled.div`
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0) 60%);
+  position: absolute;
+  z-index: 10;
+  width: 100%;
+  height: 100%;
+`;
+
 const ThumbnailInfo = styled.div`
   width: 100%;
   position: absolute;
@@ -116,11 +126,11 @@ const ThumbnailInfo = styled.div`
   padding: 14px;
   box-sizing: border-box;
   line-height: 1.5;
+  z-index: 11;
 `;
 
 const Thumbnail = styled.div`
   height: 210px;
-  background-image: url('/assets/location/jeju.jpg');
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
