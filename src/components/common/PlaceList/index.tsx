@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import { placeListData } from '~/utils/dummydata';
-import PlaceItem from './PlaceItem';
+import PlaceItem, { PlaceGrid } from './PlaceItem';
 
 export interface IPlaceItem {
   id: number;
@@ -14,10 +14,10 @@ export interface IPlaceItem {
 
 interface PlaceListProps {
   places?: IPlaceItem[];
-  grid?: 3 | 4;
+  grid?: PlaceGrid;
 }
 
-const PlaceList = ({ grid = 3, places = placeListData }: PlaceListProps) => {
+const PlaceList = ({ grid = 4, places = placeListData }: PlaceListProps) => {
   return (
     <StyledPlaceList>
       {places.map((place, index) => (
