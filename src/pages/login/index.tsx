@@ -3,12 +3,12 @@ import Head from 'next/head';
 import React from 'react';
 import { LoginForm } from '~/components/domain';
 import { LoginValues } from '~/types';
+import { UserApi } from '~/service';
 
 const Login: NextPage = () => {
   const handleSubmit = async (values: LoginValues) => {
-    // TODO
-    // await 비동기 로직 수행
-    console.log(values);
+    const response = await UserApi.login(values);
+    console.log(response);
   };
 
   return (
