@@ -7,6 +7,7 @@ import { SignupValues } from '~/types';
 
 const Signup: NextPage = () => {
   const handleSubmit = async (data: SignupValues) => {
+    console.log('회원가입 시도!', data);
     const response = await UserApi.signup(data);
     console.log(response);
   };

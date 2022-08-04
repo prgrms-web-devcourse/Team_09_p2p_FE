@@ -6,8 +6,9 @@ import { LoginValues } from '~/types';
 import { UserApi } from '~/service';
 
 const Login: NextPage = () => {
-  const handleSubmit = async (values: LoginValues) => {
-    const response = await UserApi.login(values);
+  const handleSubmit = async (data: LoginValues) => {
+    console.log('로그인 시도!', data);
+    const response = await UserApi.login(data);
     console.log(response);
   };
 
@@ -20,7 +21,7 @@ const Login: NextPage = () => {
       </Head>
 
       <main>
-        <LoginForm onSubmit={(values: LoginValues) => handleSubmit(values)} />
+        <LoginForm onSubmit={handleSubmit} />
       </main>
     </React.Fragment>
   );

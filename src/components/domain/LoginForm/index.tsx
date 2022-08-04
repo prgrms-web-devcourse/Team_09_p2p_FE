@@ -26,7 +26,6 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSubmit: handleSubmitAction }) =
   const { values, handleChange, handleSubmit } = useFormik({
     initialValues,
     onSubmit: (data: LoginValues) => {
-      console.log(data, values);
       handleSubmitAction && handleSubmitAction(data);
     },
     validationSchema: LoginValidationSchema
