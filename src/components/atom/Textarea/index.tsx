@@ -45,7 +45,6 @@ export const StyledTextarea = styled.textarea<{
   width: ${({ width }) => (typeof width === 'number' ? `${width}px` : width)};
   height: ${({ height }) => (typeof height === 'number' ? `${height}px` : height)};
   font-size: 16px;
-  height: {{height}}px;
 
   border-color: #d8d9d9;
   outline-color: ${theme.color.mainColor};
