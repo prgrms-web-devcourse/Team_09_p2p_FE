@@ -2,21 +2,31 @@ import styled from '@emotion/styled';
 import { Text, Title } from '~/components/atom';
 import BookmarkIcon from '../BookmarkIcon';
 import LikeCount from '../LikeCount';
+import { IPlaceItem } from '.';
+import { url } from 'inspector';
 
-const PlaceItem = () => {
+interface PlaceItemProps {
+  place: IPlaceItem;
+}
+
+const PlaceItem = ({ place }: PlaceItemProps) => {
+  const { title, likeCount, usedCount, thumbnail } = place;
+  const THUMBNAIL_URL = thumbnail ? thumbnail : '/assets/location/jeju.jpg';
+  console.log(THUMBNAIL_URL);
+
   return (
     <PlaceContainer>
-      <Thumbnail>
+      <Thumbnail style={{ backgroundImage: `url(${THUMBNAIL_URL})` }}>
         <BookmarkIcon />
       </Thumbnail>
       <PlaceInfo>
         <InfoHead>
-          <Title size={16}>도렐 제주본점</Title>
-          <LikeCount count={15} />
+          <Title size={16}>{title}</Title>
+          <LikeCount count={likeCount} />
         </InfoHead>
         <Description>
           <Text color="gray" size={15} ellipsis>
-            12개의 여행코스에 포함된 장소입니다.
+            {usedCount}개의 여행코스에 포함된 장소입니다.
           </Text>
         </Description>
       </PlaceInfo>
@@ -33,7 +43,6 @@ const PlaceContainer = styled.li`
 const Thumbnail = styled.div`
   width: 100%;
   height: 195px;
-  background-image: url('/assets/location/jeju.jpg');
   box-sizing: border-box;
   position: relative;
   background-size: cover;
