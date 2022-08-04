@@ -45,16 +45,19 @@ const CourseItem = ({ course = courseItemData, grid = 3 }: CourseItemProps) => {
 
   return (
     <ItemContainer grid={grid}>
-      <Thumbnail>
+      <ThumbnailWrapper>
+        <Thumbnail className="courseImage" />
         <BookmarkIcon />
-        <Text size="xs">
-          {region} · {COURSE_COUNT}코스
-        </Text>
-        <Title level={3} size={18} ellipsis>
-          {title}
-        </Title>
-      </Thumbnail>
-      <CourseInfo>
+        <ThumbnailInfo>
+          <Text size="xs">
+            {region} · {COURSE_COUNT}코스
+          </Text>
+          <Title level={3} size={18} ellipsis>
+            {title}
+          </Title>
+        </ThumbnailInfo>
+      </ThumbnailWrapper>
+      <CourseInfo className="courseInfo">
         <Text block ellipsis>
           {places.map((place, index) => (
             <>
@@ -80,29 +83,50 @@ const CourseItem = ({ course = courseItemData, grid = 3 }: CourseItemProps) => {
 
 export default CourseItem;
 
-const { borderGray, fontDarkGray } = theme.color;
+const { borderGray, fontDarkGray, fontGray } = theme.color;
 
 const ItemContainer = styled.li<Pick<CourseItemProps, 'grid'>>`
   width: ${({ grid }) => (grid === 3 ? '33.3%' : '50%')};
   box-sizing: border-box;
   padding: 0 10px 46px 10px;
   overflow: hidden;
+  cursor: pointer;
+
+  &:hover .courseImage {
+    transform: scale(1.05);
+  }
+  &:hover .courseInfo {
+    color: ${fontGray};
+  }
+`;
+
+const ThumbnailWrapper = styled.div`
+  width: 100%;
+  height: 210px;
+  border-radius: 8px 8px 0 0;
+  overflow: hidden;
+  position: relative;
+  color: white;
+`;
+
+const ThumbnailInfo = styled.div`
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+  padding: 14px;
+  box-sizing: border-box;
+  line-height: 1.5;
 `;
 
 const Thumbnail = styled.div`
-  width: 100%;
   height: 210px;
   background-image: url('/assets/location/jeju.jpg');
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  padding: 14px;
   box-sizing: border-box;
-  color: white;
-  line-height: 1.5;
-  position: relative;
   background-size: cover;
-  border-radius: 8px 8px 0 0;
+  transition: transform 0.2s;
 `;
 
 const CourseInfo = styled.div`
@@ -113,6 +137,7 @@ const CourseInfo = styled.div`
   background-color: white;
   color: ${fontDarkGray};
   border-radius: 0 0 8px 8px;
+  transition: color 0.2s;
 `;
 
 const InfoFooter = styled.div`
