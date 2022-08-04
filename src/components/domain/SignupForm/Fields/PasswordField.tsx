@@ -19,7 +19,7 @@ const PasswordField: React.FC<PasswordFieldProps> = ({ value, onChange, errors }
   return (
     <Field>
       <Label htmlFor="password" text="비밀번호" />
-      <Text size="xs" color={theme.color.fontGray}>
+      <Text size="xs" color="gray">
         영문과 숫자를 포함한 8~15자로 설정해주세요.
       </Text>
       <Input

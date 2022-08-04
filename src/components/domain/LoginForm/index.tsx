@@ -67,7 +67,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSubmit: handleSubmitAction }) =
         </FormWrapper>
         <Texts>
           <Text size="md">아직 회원이 아니신가요?</Text>
-          <Text style={{ fontWeight: '600' }} size="md" color={theme.color.mainColor}>
+          <Text fontWeight={700} size="md" color="main">
             <Link href="/signup" passHref>
               회원가입
             </Link>
