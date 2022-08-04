@@ -4,11 +4,12 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { PageContainer } from '~/components/atom';
-import { CourseList } from '~/components/common';
+import { CourseList, PlaceList } from '~/components/common';
+import MyBookmarks from '~/components/domain/UserInfo/MyBookmarks';
 import MyComments from '~/components/domain/UserInfo/MyComments';
 import ProfileCard from '~/components/domain/UserInfo/ProfileCard';
 import Tab from '~/components/domain/UserInfo/Tab';
-import { courseListData } from '~/utils/dummydata';
+import { courseListData, placeListData } from '~/utils/dummydata';
 
 export type IComment = {
   id: number;
@@ -42,6 +43,7 @@ const courseCommentData = [
 
 const Userinfo: NextPage = () => {
   const [ActiveMenu, setActiveMenu] = useState('post');
+  const [ActiveBookmark, setActiveBookmark] = useState('course');
   const router = useRouter();
 
   const currentUserId = 1; // 전역데이터라고 가정
@@ -49,6 +51,10 @@ const Userinfo: NextPage = () => {
 
   const onClickAction = (value: string) => {
     setActiveMenu(value);
+  };
+
+  const onClickBookmarkTab = (value: string) => {
+    setActiveBookmark(value);
   };
 
   return (
@@ -79,7 +85,12 @@ const Userinfo: NextPage = () => {
                     <CourseList grid={2} courses={courseListData} />
                   </Tab.item>
                   <Tab.item title="북마크" value="bookmark">
-                    <CourseList grid={2} courses={courseListData} />
+                    <MyBookmarks
+                      courses={courseListData}
+                      places={placeListData}
+                      onActive={onClickBookmarkTab}
+                      active={ActiveBookmark}
+                    />
                   </Tab.item>
                   {isMyPage && (
                     <Tab.item title="댓글" value="comment">
