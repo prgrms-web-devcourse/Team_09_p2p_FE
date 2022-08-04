@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Map, MapMarker, CustomOverlayMap, Polyline } from 'react-kakao-maps-sdk';
 import markerIcon from 'public/assets/place/course.png';
 import Script from 'next/script';
@@ -55,7 +55,7 @@ const CourseMap = ({ course }: CourseMapProps) => {
           onCreate={setMapState}
         >
           {course.map((place, index) => (
-            <>
+            <React.Fragment key={index}>
               <MapMarker
                 position={{ lat: place.lat, lng: place.lng }}
                 image={{
@@ -89,7 +89,7 @@ const CourseMap = ({ course }: CourseMapProps) => {
                   </a>
                 </MarkerWithCustomOverlayStyle>
               </CustomOverlayMap>
-            </>
+            </React.Fragment>
           ))}
           <Polyline
             path={course}

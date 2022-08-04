@@ -63,14 +63,16 @@ const CourseItem = ({ course = courseItemData, grid = 3 }: CourseItemProps) => {
         <CourseInfo className="courseInfo">
           <Text block ellipsis>
             {places.map((place, index) => (
-              <>
+              <React.Fragment key={place}>
                 {place}
                 {COURSE_COUNT - 1 !== index && ' → '}
-              </>
+              </React.Fragment>
             ))}
           </Text>
           <Text block style={{ marginTop: 4 }}>
-            {theme.map((item) => `#${item} `)}
+            {theme.map((item) => (
+              <React.Fragment key={item}>#{item} </React.Fragment>
+            ))}
           </Text>
           <InfoFooter>
             <LikeCount count={likes} />

@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { Dispatch, MouseEvent, SetStateAction, useState } from 'react';
+import React, { Dispatch, MouseEvent, SetStateAction, useState } from 'react';
 import { Button, Text } from '~/components/atom';
 import { REGIONS, FONT_COLORS } from '~/utils/constants';
 import { Region } from '~/types';
@@ -49,13 +49,13 @@ const RegionSelect = ({ setRegion, onClose }: RegionSelectProps) => {
         {regions.map((region) => {
           if (region.text === '강원') {
             return (
-              <>
+              <React.Fragment key={region.text}>
                 <br />
                 <br />
                 <RegionButton key={region.text} onClick={regionSelectHandler}>
                   {region.text}
                 </RegionButton>
-              </>
+              </React.Fragment>
             );
           }
           return (
