@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import React from 'react';
-import { Text, Title } from '~/components/atom';
+import { Link, Text, Title } from '~/components/atom';
 import Avatar from '~/components/atom/Avatar';
 import theme from '~/styles/theme';
 import BookmarkIcon from '../BookmarkIcon';
@@ -40,45 +40,47 @@ const courseItemData: ICourseItem = {
 };
 
 const CourseItem = ({ course = courseItemData, grid = 3 }: CourseItemProps) => {
-  const { thumbnail, region, title, places, theme, likes, profileUrl } = course;
+  const { id, thumbnail, region, title, places, theme, likes, profileUrl } = course;
   const COURSE_COUNT = course.places.length;
 
   const THUMBNAIL_URL = thumbnail ? thumbnail : '/assets/location/jeju.jpg';
   return (
     <ItemContainer grid={grid}>
-      <ThumbnailWrapper>
-        <ThumbnailBackground></ThumbnailBackground>
-        <Thumbnail className="courseImage" style={{ backgroundImage: `url(${THUMBNAIL_URL})` }} />
-        <BookmarkIcon />
-        <ThumbnailInfo>
-          <Text size="xs">
-            {region} · {COURSE_COUNT}코스
+      <Link href={`/course/${id}`}>
+        <ThumbnailWrapper>
+          <ThumbnailBackground></ThumbnailBackground>
+          <Thumbnail className="courseImage" style={{ backgroundImage: `url(${THUMBNAIL_URL})` }} />
+          <BookmarkIcon />
+          <ThumbnailInfo>
+            <Text size="xs">
+              {region} · {COURSE_COUNT}코스
+            </Text>
+            <Title level={3} size={18} ellipsis>
+              {title}
+            </Title>
+          </ThumbnailInfo>
+        </ThumbnailWrapper>
+        <CourseInfo className="courseInfo">
+          <Text block ellipsis>
+            {places.map((place, index) => (
+              <>
+                {place}
+                {COURSE_COUNT - 1 !== index && ' → '}
+              </>
+            ))}
           </Text>
-          <Title level={3} size={18} ellipsis>
-            {title}
-          </Title>
-        </ThumbnailInfo>
-      </ThumbnailWrapper>
-      <CourseInfo className="courseInfo">
-        <Text block ellipsis>
-          {places.map((place, index) => (
-            <>
-              {place}
-              {COURSE_COUNT - 1 !== index && ' → '}
-            </>
-          ))}
-        </Text>
-        <Text block style={{ marginTop: 4 }}>
-          {theme.map((item) => `#${item} `)}
-        </Text>
-        <InfoFooter>
-          <LikeCount count={likes} />
-          <Profile>
-            <Avatar src={profileUrl} size={26} />
-            <Text color="gray">jinist</Text>
-          </Profile>
-        </InfoFooter>
-      </CourseInfo>
+          <Text block style={{ marginTop: 4 }}>
+            {theme.map((item) => `#${item} `)}
+          </Text>
+          <InfoFooter>
+            <LikeCount count={likes} />
+            <Profile>
+              <Avatar src={profileUrl} size={26} />
+              <Text color="gray">jinist</Text>
+            </Profile>
+          </InfoFooter>
+        </CourseInfo>
+      </Link>
     </ItemContainer>
   );
 };
