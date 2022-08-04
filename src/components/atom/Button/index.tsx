@@ -40,6 +40,7 @@ const Button = ({
       fontSize={fontSize}
       onClick={onClick}
       disabled={disabled}
+      style={style}
       {...props}
     >
       {children}
