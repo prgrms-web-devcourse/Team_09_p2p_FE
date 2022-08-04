@@ -1,67 +1,144 @@
 import styled from '@emotion/styled';
 import React from 'react';
-import { Text, Title } from '~/components/atom';
+import { Link, Text, Title } from '~/components/atom';
 import Avatar from '~/components/atom/Avatar';
 import theme from '~/styles/theme';
 import BookmarkIcon from '../BookmarkIcon';
 import LikeCount from '../LikeCount';
 
-interface CourseItem {
+interface CourseItemProps {
+  course?: ICourseItem;
   grid?: number;
 }
 
-const CourseItem = ({ grid = 3 }) => {
+export interface ICourseItem {
+  id: number;
+  title: string;
+  thumbnail: string;
+  region: string;
+  period: string;
+  theme: string[];
+  places: string[];
+  likes: number;
+  isBookmarked: boolean;
+  nickname: string;
+  profileUrl: string;
+}
+
+const courseItemData: ICourseItem = {
+  id: 1,
+  title: '[1박 2일] 제주도 여행 추천~ 다들 추천하는 여행지입니다',
+  thumbnail: '',
+  region: '제주',
+  period: '당일',
+  theme: ['혼자여행', '데이트코스'],
+  places: ['인천공항', '도렐제주본점', '서귀포 1번길', '기타'],
+  likes: 12,
+  isBookmarked: false,
+  nickname: 'Jinist',
+  profileUrl: ''
+};
+
+const CourseItem = ({ course = courseItemData, grid = 3 }: CourseItemProps) => {
+  const { id, thumbnail, region, title, places, theme, likes, profileUrl } = course;
+  const COURSE_COUNT = course.places.length;
+
+  const THUMBNAIL_URL = thumbnail ? thumbnail : '/assets/location/jeju.jpg';
   return (
     <ItemContainer grid={grid}>
-      <Thumbnail>
-        <BookmarkIcon />
-        <Text size="xs">제주 5코스</Text>
-        <Title level={3} size={18} ellipsis>
-          [1박 2일] 제주도 여행 추천! 힐링하고 싶은 사람 모두 모여라!
-        </Title>
-      </Thumbnail>
-      <CourseInfo>
-        <Text block ellipsis>
-          인천공항 → 도렐제주본점 → 서귀포 1번길 → 기타등등의 여행지
-        </Text>
-        <Text block>#혼자여행 #맛집 #카페</Text>
-        <InfoFooter>
-          <LikeCount count={12} />
-          <Profile>
-            <Avatar src="/assets/location/jeju.jpg" size={26} />
-            <Text color="gray">jinist</Text>
-          </Profile>
-        </InfoFooter>
-      </CourseInfo>
+      <Link href={`/course/${id}`}>
+        <ThumbnailWrapper>
+          <ThumbnailBackground></ThumbnailBackground>
+          <Thumbnail className="courseImage" style={{ backgroundImage: `url(${THUMBNAIL_URL})` }} />
+          <BookmarkIcon />
+          <ThumbnailInfo>
+            <Text size="xs">
+              {region} · {COURSE_COUNT}코스
+            </Text>
+            <Title level={3} size={18} ellipsis>
+              {title}
+            </Title>
+          </ThumbnailInfo>
+        </ThumbnailWrapper>
+        <CourseInfo className="courseInfo">
+          <Text block ellipsis>
+            {places.map((place, index) => (
+              <>
+                {place}
+                {COURSE_COUNT - 1 !== index && ' → '}
+              </>
+            ))}
+          </Text>
+          <Text block style={{ marginTop: 4 }}>
+            {theme.map((item) => `#${item} `)}
+          </Text>
+          <InfoFooter>
+            <LikeCount count={likes} />
+            <Profile>
+              <Avatar src={profileUrl} size={26} />
+              <Text color="gray">jinist</Text>
+            </Profile>
+          </InfoFooter>
+        </CourseInfo>
+      </Link>
     </ItemContainer>
   );
 };
 
 export default CourseItem;
 
-const { borderGray, fontDarkGray } = theme.color;
+const { borderGray, fontDarkGray, fontGray } = theme.color;
 
-const ItemContainer = styled.li<Pick<CourseItem, 'grid'>>`
+const ItemContainer = styled.li<Pick<CourseItemProps, 'grid'>>`
   width: ${({ grid }) => (grid === 3 ? '33.3%' : '50%')};
   box-sizing: border-box;
   padding: 0 10px 46px 10px;
   overflow: hidden;
+  cursor: pointer;
+
+  &:hover .courseImage {
+    transform: scale(1.05);
+  }
+  &:hover .courseInfo {
+    color: ${fontGray};
+  }
+`;
+
+const ThumbnailWrapper = styled.div`
+  width: 100%;
+  height: 210px;
+  border-radius: 8px 8px 0 0;
+  overflow: hidden;
+  position: relative;
+  color: white;
+`;
+
+const ThumbnailBackground = styled.div`
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0) 60%);
+  position: absolute;
+  z-index: 10;
+  width: 100%;
+  height: 100%;
+`;
+
+const ThumbnailInfo = styled.div`
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+  padding: 14px;
+  box-sizing: border-box;
+  line-height: 1.5;
+  z-index: 11;
 `;
 
 const Thumbnail = styled.div`
-  width: 100%;
   height: 210px;
-  background-image: url('/assets/location/jeju.jpg');
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  padding: 14px;
   box-sizing: border-box;
-  color: white;
-  line-height: 1.5;
-  position: relative;
   background-size: cover;
-  border-radius: 8px 8px 0 0;
+  transition: transform 0.2s;
 `;
 
 const CourseInfo = styled.div`
@@ -72,6 +149,7 @@ const CourseInfo = styled.div`
   background-color: white;
   color: ${fontDarkGray};
   border-radius: 0 0 8px 8px;
+  transition: color 0.2s;
 `;
 
 const InfoFooter = styled.div`
