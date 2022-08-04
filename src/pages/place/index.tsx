@@ -5,13 +5,13 @@ import React from 'react';
 import { PageContainer } from '~/components/atom';
 import {
   CategoryTitle,
-  CourseList,
+  PlaceList,
   SelectRegion,
   SelectTags,
   SortFilter
 } from '~/components/common';
 
-const Course: NextPage = () => {
+const Place: NextPage = () => {
   return (
     <React.Fragment>
       <Head>
@@ -19,22 +19,22 @@ const Course: NextPage = () => {
         <meta name="description" content="our travel course" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
+
       <main>
         <PageContainer>
-          <CategoryTitle name="여행코스" />
+          <CategoryTitle name="추천장소" />
           <FilterList>
             <SelectRegion />
-            <SelectTags style={{ marginTop: '24px' }} />
           </FilterList>
           <SortFilter />
-          <CourseList />
+          <PlaceList />
         </PageContainer>
       </main>
     </React.Fragment>
   );
 };
 
-export default Course;
+export default Place;
 
 const FilterList = styled.div`
   margin-bottom: 30px;

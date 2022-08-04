@@ -1,9 +1,8 @@
 import styled from '@emotion/styled';
 import type { NextPage } from 'next';
 import Head from 'next/head';
-import { relative } from 'path';
 import React from 'react';
-import { Icon, Image, PageContainer, Text, Title } from '~/components/atom';
+import { Link, PageContainer, Text, Title } from '~/components/atom';
 import Avatar from '~/components/atom/Avatar';
 import Comment from '~/components/common/Comment';
 import DetailSidebar from '~/components/common/DetailSidebar';
@@ -26,6 +25,7 @@ interface ICourseData {
   isLiked: boolean;
   isBookmarked: boolean;
   nickname: string;
+  userId: number;
   profileImage: string;
   createdAt: string;
   updatedAt: string;
@@ -101,6 +101,7 @@ const courseData: ICourseData = {
   isLiked: false,
   isBookmarked: false,
   nickname: 'Jinist',
+  userId: 1,
   profileImage: '',
   createdAt: '',
   updatedAt: ''
@@ -144,7 +145,9 @@ const CourseDetail: NextPage = () => {
               업로드 날짜: {courseData.createdAt} 수정된 날짜: {courseData.updatedAt}
             </Text>
             <Profile>
-              <Avatar size={66} />
+              <Link href={`/userinfo/${courseData.userId}`}>
+                <Avatar size={66} />
+              </Link>
               <Text color="dark" fontWeight={500}>
                 {courseData.nickname}
               </Text>

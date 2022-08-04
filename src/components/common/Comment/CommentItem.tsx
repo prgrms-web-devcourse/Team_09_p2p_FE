@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { Text } from '~/components/atom';
+import { Link, Text } from '~/components/atom';
 import Avatar from '~/components/atom/Avatar';
 import theme from '~/styles/theme';
 import { IComment, IRecomment } from './types';
@@ -21,11 +21,15 @@ const CommentItem = ({ comment, isRecomment }: CommentItemProps) => {
       {comment && (
         <>
           <CommentWrapper isRecomment={isRecomment}>
-            <Avatar size={66} src={comment.user.profileImage} />
+            <Link href={`/userinfo/${comment.user.id}`}>
+              <Avatar size={66} src={comment.user.profileImage} />
+            </Link>
             <CommentContent>
-              <Text size="lg" block fontWeight={700}>
-                {comment.user.nickname}
-              </Text>
+              <Link href={`/userinfo/${comment.user.id}`}>
+                <Text size="lg" block fontWeight={700}>
+                  {comment.user.nickname}
+                </Text>
+              </Link>
               <Text size="lg" block>
                 {comment.comment}
               </Text>

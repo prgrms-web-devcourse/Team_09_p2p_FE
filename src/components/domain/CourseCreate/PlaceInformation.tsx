@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { ReactNode, SetStateAction, useState } from 'react';
+import { ReactNode, SetStateAction, useRef, useState } from 'react';
 import { Text } from '~/components/atom';
 import theme from '~/styles/theme';
 import Textarea from '~/components/atom/Textarea';
@@ -16,6 +16,7 @@ const PlaceInformation = ({ children, isLastPlace }: PlaceInformation) => {
   const [file, setFile] = useState('');
   const [previewUrl, setPreviewUrl] = useState('');
   const [isRecommended, setIsRecommended] = useState(false);
+  const imageRef = useRef(null);
   const handleRecommend = (e: any) => {
     if (!isRecommended) {
       e.target.style = 'background-color: skyblue';
@@ -52,13 +53,17 @@ const PlaceInformation = ({ children, isLastPlace }: PlaceInformation) => {
       setPreviewUrl(reader.result as SetStateAction<string>);
     };
     reader.readAsDataURL(file);
+    const { current } = imageRef as any;
+    if (current !== null) {
+      current.style.display = 'none';
+    }
   };
   let profile_preview = null;
   if (file !== '') {
     profile_preview = (
       // eslint-disable-next-line jsx-a11y/alt-text
       <img
-        style={{ width: '830px', height: '500px', zIndex: '100' }}
+        style={{ width: '830px', height: '500px', zIndex: '100', borderRadius: '8px' }}
         className="profile_preview"
         src={previewUrl}
       ></img>
@@ -91,9 +96,11 @@ const PlaceInformation = ({ children, isLastPlace }: PlaceInformation) => {
               style={{ display: 'none' }}
               onChange={handleFileOnChange}
             />
-            <FileUploadWrapper>
+            <FileUploadWrapper ref={imageRef}>
               <label htmlFor={imageId}>
-                <FileUploadButton>+</FileUploadButton>
+                <SelectImage>
+                  <PlusImage src="/assets/imageUpload.png" />
+                </SelectImage>
               </label>
             </FileUploadWrapper>
             {profile_preview}
@@ -148,7 +155,7 @@ const NumberText = styled.p`
   text-align: center;
   position: absolute;
   top: 47%;
-  left: 2.6%;
+  left: 3.2%;
   transform: translate(-50%, -50%);
 `;
 
@@ -180,14 +187,24 @@ const ImageUploadWrapper = styled.div`
 `;
 
 const FileUploadWrapper = styled.div`
-  position: absolute;
   width: 100%;
 `;
 
-const FileUploadButton = styled.div`
-  width: 10%;
-  border: 1px solid ${theme.color.mainColor};
-  font-size: 30px;
+const SelectImage = styled.div`
+  width: 100px;
+  height: 100px;
+  background-color: ${theme.color.backgroundDarkGray};
+  border-radius: 8px;
+  margin: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const PlusImage = styled.img`
+  vertical-align: middle;
+  width: 32px;
+  height: 32px;
 `;
 
 const DescriptionWrapper = styled.div`
