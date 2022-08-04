@@ -22,10 +22,12 @@ const RegionSelect = ({ setRegion, onClose }: RegionSelectProps) => {
     setIsSeleted(true);
     if (beforeRegion !== null) {
       beforeRegion.style.border = '1px solid white';
+      beforeRegion.style.color = FONT_COLORS.gray;
     }
     if (e.target instanceof HTMLButtonElement) {
       e.target.style.border = `2px solid ${theme.color.mainColor}`;
       e.target.style.borderRadius = '20px';
+      e.target.style.color = theme.color.mainColor;
       setRegion(e.target.innerText);
       setBeforeRegion(e.target);
     }
