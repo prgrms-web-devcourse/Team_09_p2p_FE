@@ -20,7 +20,7 @@ export default class WebStorage {
     }
   }
 
-  static removeItem(): void {
+  static removeToken(): void {
     if (typeof window !== 'undefined') {
       window.localStorage.removeItem(this.tokenKey);
     }
