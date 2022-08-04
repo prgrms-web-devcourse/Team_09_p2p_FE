@@ -21,7 +21,9 @@ export default class Api {
   private createInstance = (url: string, config?: AxiosRequestConfig<any>): AxiosInstance => {
     return axios.create({
       baseURL: url,
-      withCredentials: true,
+      headers: {
+        'Content-Type': 'application/json'
+      },
       ...config
     });
   };
