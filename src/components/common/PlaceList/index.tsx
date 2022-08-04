@@ -14,13 +14,14 @@ export interface IPlaceItem {
 
 interface PlaceListProps {
   places?: IPlaceItem[];
+  grid?: 3 | 4;
 }
 
-const PlaceList = ({ places = placeListData }: PlaceListProps) => {
+const PlaceList = ({ grid = 3, places = placeListData }: PlaceListProps) => {
   return (
     <StyledPlaceList>
       {places.map((place, index) => (
-        <PlaceItem key={index} place={place} />
+        <PlaceItem key={index} grid={grid} place={place} />
       ))}
     </StyledPlaceList>
   );
@@ -31,5 +32,6 @@ export default PlaceList;
 const StyledPlaceList = styled.div`
   display: flex;
   flex-wrap: wrap;
-  gap: 40px 20px;
+  margin-right: -10px;
+  margin-left: -10px;
 `;

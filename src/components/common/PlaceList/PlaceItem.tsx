@@ -3,20 +3,19 @@ import { Text, Title } from '~/components/atom';
 import BookmarkIcon from '../BookmarkIcon';
 import LikeCount from '../LikeCount';
 import { IPlaceItem } from '.';
-import { url } from 'inspector';
 
 interface PlaceItemProps {
   place: IPlaceItem;
+  grid: 3 | 4;
 }
 
-const PlaceItem = ({ place }: PlaceItemProps) => {
+const PlaceItem = ({ place, grid }: PlaceItemProps) => {
   const { title, likeCount, usedCount, thumbnail } = place;
   const THUMBNAIL_URL = thumbnail ? thumbnail : '/assets/location/jeju.jpg';
-  console.log(THUMBNAIL_URL);
 
   return (
-    <PlaceContainer>
-      <Thumbnail style={{ backgroundImage: `url(${THUMBNAIL_URL})` }}>
+    <PlaceContainer grid={grid}>
+      <Thumbnail grid={grid} style={{ backgroundImage: `url(${THUMBNAIL_URL})` }}>
         <BookmarkIcon />
       </Thumbnail>
       <PlaceInfo>
@@ -36,13 +35,15 @@ const PlaceItem = ({ place }: PlaceItemProps) => {
 
 export default PlaceItem;
 
-const PlaceContainer = styled.li`
-  width: 274px;
+const PlaceContainer = styled.li<Pick<PlaceItemProps, 'grid'>>`
+  width: ${({ grid }) => (grid === 3 ? '33.3%' : '25%')};
+  padding: 0 10px 40px 10px;
+  box-sizing: border-box;
 `;
 
-const Thumbnail = styled.div`
+const Thumbnail = styled.div<Pick<PlaceItemProps, 'grid'>>`
   width: 100%;
-  height: 195px;
+  height: ${({ grid }) => (grid === 3 ? '215px' : '195px')};
   box-sizing: border-box;
   position: relative;
   background-size: cover;

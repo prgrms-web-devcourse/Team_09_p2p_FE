@@ -19,7 +19,7 @@ const MyBookmarks = ({ places, courses, onActive, active }: MyBookmarksProps) =>
           <CourseList grid={2} courses={courses} />
         </Tab.item>
         <Tab.item title="장소" value="place">
-          <PlaceList places={places} />
+          <PlaceList grid={3} places={places} />
         </Tab.item>
       </Tab>
     </Wrapper>
