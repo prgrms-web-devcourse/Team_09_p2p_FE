@@ -1,12 +1,14 @@
 import styled from '@emotion/styled';
 import type { NextPage } from 'next';
 import Head from 'next/head';
+import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { PageContainer } from '~/components/atom';
 import { CourseList } from '~/components/common';
 import MyComments from '~/components/domain/UserInfo/MyComments';
 import ProfileCard from '~/components/domain/UserInfo/ProfileCard';
 import Tab from '~/components/domain/UserInfo/Tab';
+import { courseListData } from '~/utils/dummydata';
 
 export type IComment = {
   id: number;
@@ -22,7 +24,7 @@ export type IComment = {
   };
 };
 
-const dummyComment = [
+const courseCommentData = [
   {
     id: 1,
     rootId: '2',
@@ -40,6 +42,10 @@ const dummyComment = [
 
 const Userinfo: NextPage = () => {
   const [ActiveMenu, setActiveMenu] = useState('post');
+  const router = useRouter();
+
+  const currentUserId = 1; // 전역데이터라고 가정
+  const isMyPage = Number(router.query.id) === currentUserId;
 
   const onClickAction = (value: string) => {
     setActiveMenu(value);
@@ -64,19 +70,22 @@ const Userinfo: NextPage = () => {
               postCount={1}
               bookmarkCount={2}
               commentCount={3}
+              isMyPage={isMyPage}
             />
             <ActionContent>
               <ul>
                 <Tab onActive={onClickAction} active={ActiveMenu}>
                   <Tab.item title="게시물" value="post">
-                    <CourseList grid={2} />
+                    <CourseList grid={2} courses={courseListData} />
                   </Tab.item>
                   <Tab.item title="북마크" value="bookmark">
-                    <CourseList grid={2} />
+                    <CourseList grid={2} courses={courseListData} />
                   </Tab.item>
-                  <Tab.item title="댓글" value="comment">
-                    <MyComments comments={dummyComment} />
-                  </Tab.item>
+                  {isMyPage && (
+                    <Tab.item title="댓글" value="comment">
+                      <MyComments comments={courseCommentData} />
+                    </Tab.item>
+                  )}
                 </Tab>
               </ul>
               <div></div>
