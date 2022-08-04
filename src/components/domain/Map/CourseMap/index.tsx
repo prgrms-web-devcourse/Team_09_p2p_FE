@@ -13,7 +13,10 @@ let isAlreadyLoaded = false;
 const CourseMap = ({ course }: CourseMapProps) => {
   const [mapState, setMapState] = useState<kakao.maps.Map>();
   const [loaded, setLoaded] = useState(isAlreadyLoaded);
-
+  useEffect(() => {
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    return () => {};
+  }, []);
   useEffect(() => {
     if (loaded) {
       const bounds = new kakao.maps.LatLngBounds();
