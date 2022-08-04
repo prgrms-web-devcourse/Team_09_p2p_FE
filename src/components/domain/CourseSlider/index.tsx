@@ -4,7 +4,7 @@ import 'slick-carousel/slick/slick-theme.css';
 import styled from '@emotion/styled';
 import theme from '~/styles/theme';
 import CourseSliderItem from './CourseSliderItem';
-import { IPlace } from '~/pages/course/detail';
+import { IPlace } from '~/pages/course/[id]';
 
 interface CourseSliderProps {
   places: IPlace[];
