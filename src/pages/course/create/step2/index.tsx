@@ -8,6 +8,7 @@ import CourseMap from '~/components/domain/Map/CourseMap';
 import theme from '~/styles/theme';
 import numbering from '~/../public/assets/numbering.png';
 import PlaceInformation from '~/components/domain/CourseCreate/PlaceInformation';
+import { SelectTags } from '~/components/common';
 
 const Course: NextPage = () => {
   const course = [
@@ -38,6 +39,7 @@ const Course: NextPage = () => {
           <TitleInputWrapper>
             <TitleInput placeholder="코스의 제목을 입력해주세요" />
             <TitleUnderLine />
+            <SelectTags style={{ marginTop: '10px' }} />
           </TitleInputWrapper>
           <PlacesWrapper>
             <PlaceInformation isLastPlace={false}>1</PlaceInformation>
@@ -66,7 +68,7 @@ const TitleInputWrapper = styled.div`
   background-color: #fff;
   border-radius: 2px;
   box-sizing: border-box;
-  height: 300px;
+  height: 350px;
   width: 100%;
   text-align: center;
 `;
@@ -108,9 +110,10 @@ const TitleUnderLine = styled.span`
 
 const PlacesWrapper = styled.div`
   width: 100%;
-  border-top: 1px solid ${theme.color.fontGray};
-  border-bottom: 1px solid ${theme.color.fontGray};
+  border-top: 1px solid #d9d9d9;
+  border-bottom: 1px solid #d9d9d9;
   padding-top: 50px;
+  padding-bottom: 30px;
 `;
 
 const SubmitWrapper = styled.div`
