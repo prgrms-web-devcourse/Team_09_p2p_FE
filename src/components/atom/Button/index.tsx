@@ -77,10 +77,17 @@ const buttonStyle: buttonStyleInterface = {
     color: ${fontDarkGray};
     border: 1px solid ${borderDarkGray};
     box-shadow: 0px 2px 4px 1px rgb(0 0 0 / 5%);
+
+    &:hover {
+      background-color: #f4f8fb;
+      background-color: #f7f8f9;
+ 
+    }
   `,
   darkGray: `
     color: #fff;
     background-color: #909090;
+
   `
 };
 
@@ -118,4 +125,9 @@ const StyledButton = styled.button<ButtonInterface>`
 
   border-radius: 5px;
   font-weight: 600;
+  transition: all 0.1s;
+
+  &:disabled {
+    opacity: 0.7;
+  }
 `;
