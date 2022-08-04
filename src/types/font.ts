@@ -1,6 +1,6 @@
 import theme from '~/styles/theme';
 
-const { mainColor, fontGray, fontDarkGray, fontDarkBlack, fontBlueGray } = theme.color;
+const { mainColor, fontGray, fontDarkGray, fontDarkBlack, fontBlueGray, fontRed } = theme.color;
 
 export const FONT_SIZES = {
   xs: 14,
@@ -25,7 +25,8 @@ export const FONT_COLORS = {
   darkGray: fontDarkGray,
   dark: fontDarkBlack,
   blueGray: fontBlueGray,
-  main: mainColor
+  main: mainColor,
+  red: fontRed
 };
 
 export type FontColors = keyof typeof FONT_COLORS;

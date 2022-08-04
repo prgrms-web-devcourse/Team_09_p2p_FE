@@ -7,7 +7,7 @@ interface ErrorMessageProps {
 
 const ErrorMessage: React.FC<ErrorMessageProps> = ({ message }) => {
   return (
-    <Text color="tomato" size="xs">
+    <Text color="red" size="xs">
       {message}
     </Text>
   );
