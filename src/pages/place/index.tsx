@@ -1,8 +1,15 @@
+import styled from '@emotion/styled';
 import type { NextPage } from 'next';
 import Head from 'next/head';
 import React from 'react';
 import { PageContainer } from '~/components/atom';
-import { CategoryTitle, PlaceList, SortFilter } from '~/components/common';
+import {
+  CategoryTitle,
+  PlaceList,
+  SelectRegion,
+  SelectTags,
+  SortFilter
+} from '~/components/common';
 
 const Place: NextPage = () => {
   return (
@@ -16,6 +23,9 @@ const Place: NextPage = () => {
       <main>
         <PageContainer>
           <CategoryTitle name="추천장소" />
+          <FilterList>
+            <SelectRegion />
+          </FilterList>
           <SortFilter />
           <PlaceList />
         </PageContainer>
@@ -25,3 +35,7 @@ const Place: NextPage = () => {
 };
 
 export default Place;
+
+const FilterList = styled.div`
+  margin-bottom: 30px;
+`;
