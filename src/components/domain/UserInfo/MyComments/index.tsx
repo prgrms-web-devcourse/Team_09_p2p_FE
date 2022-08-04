@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import { Icon, Text } from '~/components/atom';
-import { IComment } from '~/pages/userinfo';
+import { IComment } from '~/pages/userinfo/[id]';
 import theme from '~/styles/theme';
 
 interface MyComments {
