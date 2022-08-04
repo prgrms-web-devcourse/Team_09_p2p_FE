@@ -6,29 +6,70 @@ import theme from '~/styles/theme';
 import BookmarkIcon from '../BookmarkIcon';
 import LikeCount from '../LikeCount';
 
-interface CourseItem {
+interface CourseItemProps {
+  course?: CourseItem;
   grid?: number;
 }
 
-const CourseItem = ({ grid = 3 }) => {
+interface CourseItem {
+  id: number;
+  title: string;
+  thumbnail: string;
+  region: string;
+  period: string;
+  theme: string[];
+  places: string[];
+  likes: number;
+  isBookmarked: boolean;
+  nickname: string;
+  profileUrl: string;
+}
+
+const courseItemData: CourseItem = {
+  id: 1,
+  title: '[1박 2일] 제주도 여행 추천~ 다들 추천하는 여행지입니다',
+  thumbnail: '',
+  region: '제주',
+  period: '당일',
+  theme: ['혼자여행', '데이트코스'],
+  places: ['인천공항', '도렐제주본점', '서귀포 1번길', '기타'],
+  likes: 12,
+  isBookmarked: false,
+  nickname: 'Jinist',
+  profileUrl: ''
+};
+
+const CourseItem = ({ course = courseItemData, grid = 3 }: CourseItemProps) => {
+  const { region, title, places, theme, likes, profileUrl } = course;
+  const COURSE_COUNT = course.places.length;
+
   return (
     <ItemContainer grid={grid}>
       <Thumbnail>
         <BookmarkIcon />
-        <Text size="xs">제주 5코스</Text>
+        <Text size="xs">
+          {region} · {COURSE_COUNT}코스
+        </Text>
         <Title level={3} size={18} ellipsis>
-          [1박 2일] 제주도 여행 추천! 힐링하고 싶은 사람 모두 모여라!
+          {title}
         </Title>
       </Thumbnail>
       <CourseInfo>
         <Text block ellipsis>
-          인천공항 → 도렐제주본점 → 서귀포 1번길 → 기타등등의 여행지
+          {places.map((place, index) => (
+            <>
+              {place}
+              {COURSE_COUNT - 1 !== index && ' → '}
+            </>
+          ))}
         </Text>
-        <Text block>#혼자여행 #맛집 #카페</Text>
+        <Text block style={{ marginTop: 4 }}>
+          {theme.map((item) => `#${item} `)}
+        </Text>
         <InfoFooter>
-          <LikeCount count={12} />
+          <LikeCount count={likes} />
           <Profile>
-            <Avatar src="/assets/location/jeju.jpg" size={26} />
+            <Avatar src={profileUrl} size={26} />
             <Text color="gray">jinist</Text>
           </Profile>
         </InfoFooter>
@@ -41,7 +82,7 @@ export default CourseItem;
 
 const { borderGray, fontDarkGray } = theme.color;
 
-const ItemContainer = styled.li<Pick<CourseItem, 'grid'>>`
+const ItemContainer = styled.li<Pick<CourseItemProps, 'grid'>>`
   width: ${({ grid }) => (grid === 3 ? '33.3%' : '50%')};
   box-sizing: border-box;
   padding: 0 10px 46px 10px;
