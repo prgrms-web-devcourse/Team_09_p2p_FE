@@ -10,6 +10,10 @@ const SearchedKeywordPage: NextPage = () => {
     query: { keyword }
   } = useRouter();
 
+  const handleSelectRegion = async (text: string) => {
+    console.log(text);
+  };
+
   //TODO
   //로딩 처리, 데이터가 없을 경우 처리를 해야한다.
   if (!keyword) {
@@ -29,7 +33,7 @@ const SearchedKeywordPage: NextPage = () => {
           <Title level={1} size="sm" style={{ margin: '30px 0' }}>
             <b>&ldquo;{keyword}&rdquo;</b>로 검색된 결과입니다.
           </Title>
-          <SelectRegion />
+          <SelectRegion onSelect={handleSelectRegion} />
           <SelectTags style={{ marginTop: '20px' }} />
         </PageContainer>
       </main>

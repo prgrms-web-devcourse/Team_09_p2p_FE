@@ -3,15 +3,13 @@ import type { NextPage } from 'next';
 import Head from 'next/head';
 import React from 'react';
 import { PageContainer } from '~/components/atom';
-import {
-  CategoryTitle,
-  PlaceList,
-  SelectRegion,
-  SelectTags,
-  SortFilter
-} from '~/components/common';
+import { CategoryTitle, PlaceList, SelectRegion, SortFilter } from '~/components/common';
 
 const Place: NextPage = () => {
+  const handleSelectRegion = async (text: string) => {
+    console.log(text);
+  };
+
   return (
     <React.Fragment>
       <Head>
@@ -24,7 +22,7 @@ const Place: NextPage = () => {
         <PageContainer>
           <CategoryTitle name="추천장소" />
           <FilterList>
-            <SelectRegion />
+            <SelectRegion onSelect={handleSelectRegion} />
           </FilterList>
           <SortFilter />
           <PlaceList />

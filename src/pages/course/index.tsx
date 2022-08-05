@@ -12,6 +12,10 @@ import {
 } from '~/components/common';
 
 const Course: NextPage = () => {
+  const handleSelectRegion = async (text: string) => {
+    console.log(text);
+  };
+
   return (
     <React.Fragment>
       <Head>
@@ -23,7 +27,7 @@ const Course: NextPage = () => {
         <PageContainer>
           <CategoryTitle name="여행코스" />
           <FilterList>
-            <SelectRegion />
+            <SelectRegion onSelect={handleSelectRegion} />
             <SelectTags style={{ marginTop: '24px' }} />
           </FilterList>
           <SortFilter />
