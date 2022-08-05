@@ -7,12 +7,9 @@ import { SignupValues } from '~/types';
 
 const Signup: NextPage = () => {
   const handleSubmit = async (data: SignupValues) => {
-    try {
-      const response = await UserApi.signup(data);
-      console.log(`회원가입 성공! 닉네임 : ${response.nickname}`);
-    } catch (e) {
-      console.log(`회원가입 실패: ${e}`);
-    }
+    console.log('회원가입 시도!', data);
+    const response = await UserApi.signup(data);
+    console.log(`회원가입 성공!`, response);
   };
 
   return (

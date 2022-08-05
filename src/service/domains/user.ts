@@ -7,18 +7,18 @@ class UserApi extends Api {
   login = async (bodyData: LoginValues) => {
     try {
       const response = await this.baseInstance.post(`${this.path}/login`, bodyData);
-      return await response.data;
+      return response.data;
     } catch (e) {
-      console.error(`로그인 에러: ${e}`);
+      console.error(`로그인 에러: `, e);
     }
   };
 
   signup = async (bodyData: SignupValues) => {
     try {
       const response = await this.baseInstance.post(`${this.path}/`, bodyData);
-      return await response.data;
+      return response.data;
     } catch (e) {
-      console.error(`회원가입 에러: ${e}`);
+      console.error(`회원가입 에러:`, e);
     }
   };
 }
