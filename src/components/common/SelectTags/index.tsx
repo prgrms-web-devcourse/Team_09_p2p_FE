@@ -1,26 +1,63 @@
 import styled from '@emotion/styled';
-import React, { CSSProperties, useMemo } from 'react';
+import React, { CSSProperties, useEffect, useState } from 'react';
 import theme from '~/styles/theme';
-import { TAGS } from '~/utils/constants';
-import Tags from './Tags';
+import { Period, SearchTagsValues, Spot, Theme } from '~/types';
+import PeriodTags from './PeriodTags';
+import SpotTags from './SpotTags';
+import ThemeTags from './ThemeTags';
 
 interface SelectTagsProps {
   style?: CSSProperties;
+  onSelect: (data: SearchTagsValues) => void;
 }
 
-const SelectTags = ({ ...props }: SelectTagsProps) => {
-  const tagsIterator = useMemo(() => Object.entries(TAGS), []);
+const SelectTags = ({ style, onSelect }: SelectTagsProps) => {
+  const [selectedPeriod, setSelectedPeriod] = useState<Period | null>(null);
+  const [selectedThemes, setSelectedThemes] = useState<Theme[]>([]);
+  const [selectedSpots, setSelectedSpots] = useState<Spot[]>([]);
+
+  useEffect(() => {
+    onSelect({
+      period: selectedPeriod,
+      themes: selectedThemes,
+      spots: selectedSpots
+    });
+  }, [selectedPeriod, selectedThemes, selectedSpots, onSelect]);
+
+  const handleSelectPeriod = (period: Period) => {
+    if (selectedPeriod === period) {
+      setSelectedPeriod(() => null);
+    } else {
+      setSelectedPeriod(() => period);
+    }
+  };
+
+  const handleSelectThemes = (theme: Theme, isSelected: boolean) => {
+    if (!isSelected) {
+      setSelectedThemes((prev) => [...prev, theme]);
+    } else {
+      setSelectedThemes((prev) => prev.filter((prevTheme) => prevTheme !== theme));
+    }
+  };
+
+  const handleSelectSpots = (spot: Spot, isSelected: boolean) => {
+    if (!isSelected) {
+      setSelectedSpots((prev) => [...prev, spot]);
+    } else {
+      setSelectedSpots((prev) => prev.filter((prevSpot) => prevSpot !== spot));
+    }
+  };
 
   return (
-    <Container {...props}>
-      {tagsIterator.map(([tagName, tags]) => (
-        <Tags key={tagName} tagName={tagName} tags={tags} />
-      ))}
+    <Container style={style}>
+      <PeriodTags selectedPeriod={selectedPeriod} onSelect={handleSelectPeriod} />
+      <ThemeTags selectedThemes={selectedThemes} onSelect={handleSelectThemes} />
+      <SpotTags selectedSpots={selectedSpots} onSelect={handleSelectSpots} />
     </Container>
   );
 };
 
-export default React.memo(SelectTags);
+export default SelectTags;
 
 const Container = styled.div`
   box-sizing: border-box;
