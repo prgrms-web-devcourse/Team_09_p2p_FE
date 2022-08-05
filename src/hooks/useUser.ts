@@ -1,4 +1,4 @@
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useResetRecoilState } from 'recoil';
 import { userState } from '~/recoil';
 import { UserApi } from '~/service';
 import WebStorage from '~/service/core/WebStorage';
@@ -6,6 +6,7 @@ import { LoginValues } from '~/types';
 
 export const useUser = () => {
   const [currentUser, setCurrentUser] = useRecoilState(userState);
+  const resetUser = useResetRecoilState(userState);
   const isLoggedIn = currentUser.accessToken !== null;
 
   const login = async (data: LoginValues) => {
@@ -23,10 +24,16 @@ export const useUser = () => {
     });
   };
 
+  const logout = async () => {
+    WebStorage.removeToken();
+    resetUser();
+  };
+
   return {
     currentUser,
     isLoggedIn,
     login,
+    logout,
     updateUser
   };
 };

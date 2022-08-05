@@ -1,6 +1,8 @@
 import styled from '@emotion/styled';
+import { useRouter } from 'next/router';
 import { Icon, Link, Text, Title } from '~/components/atom';
 import Avatar from '~/components/atom/Avatar';
+import { useUser } from '~/hooks/useUser';
 import theme from '~/styles/theme';
 
 interface ProfileCardProps {
@@ -22,6 +24,14 @@ const ProfileCard = ({
   bookmarkCount,
   commentCount
 }: ProfileCardProps) => {
+  const { logout } = useUser();
+  const router = useRouter();
+
+  const onLogout = () => {
+    logout();
+    router.push('/');
+  };
+
   return (
     <Container>
       <UserProfile>
@@ -66,6 +76,9 @@ const ProfileCard = ({
           <Link href="/userinfo/password">
             <Text>비밀번호 변경</Text>
           </Link>
+        </li>
+        <li>
+          <Text.Button onClick={onLogout}>로그아웃</Text.Button>
         </li>
       </InfoEdit>
     </Container>
