@@ -13,7 +13,7 @@ const SpotTags = ({ selectedSpots, onSelect }: SpotTagsProps) => {
   return (
     <StyledTags>
       <TagName size="md" fontWeight={600}>
-        테마
+        장소
       </TagName>
       {TAGS_SPOT.map((spot) => (
         <Tag key={spot} selectedSpots={selectedSpots} spot={spot} onSelect={onSelect} />
