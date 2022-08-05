@@ -14,11 +14,11 @@ import { Region, SearchTagsValues } from '~/types';
 
 const Course: NextPage = () => {
   const handleSelectRegion = async (region: Region | '전체보기') => {
-    console.log(region);
+    console.log('코스페이지', region);
   };
 
   const handleSelectTags = async (data: SearchTagsValues) => {
-    console.log(data);
+    console.log('코스페이지', data);
   };
 
   return (
