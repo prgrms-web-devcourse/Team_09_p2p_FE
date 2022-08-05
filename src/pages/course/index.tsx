@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 import type { NextPage } from 'next';
 import Head from 'next/head';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { PageContainer } from '~/components/atom';
 import {
   CategoryTitle,
@@ -10,8 +10,21 @@ import {
   SelectTags,
   SortFilter
 } from '~/components/common';
+import { CourseApi } from '~/service';
 
 const Course: NextPage = () => {
+  const [courseList, setCourseList] = useState([]);
+
+  const getCourseList = async () => {
+    const result = await CourseApi.getCourses();
+    console.log('[Courses] :', result.content);
+    setCourseList(result.content);
+  };
+
+  useEffect(() => {
+    getCourseList();
+  }, []);
+
   return (
     <React.Fragment>
       <Head>
@@ -27,7 +40,7 @@ const Course: NextPage = () => {
             <SelectTags style={{ marginTop: '24px' }} />
           </FilterList>
           <SortFilter />
-          <CourseList />
+          <CourseList courses={courseList} />
         </PageContainer>
       </main>
     </React.Fragment>

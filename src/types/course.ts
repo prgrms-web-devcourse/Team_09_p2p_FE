@@ -11,3 +11,16 @@ export interface ICourseItem {
   nickname: string;
   profileUrl: string;
 }
+
+export interface CourseFilter {
+  placeId?: number;
+  period?: string;
+  keyword?: string;
+  region?: string;
+  spot?: string[];
+  theme?: string[];
+  sorting?: string;
+  page?: number;
+  size?: number;
+  sort?: string;
+}
