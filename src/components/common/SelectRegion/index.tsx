@@ -1,21 +1,32 @@
 import styled from '@emotion/styled';
-import React from 'react';
+import React, { useState } from 'react';
 import theme from '~/styles/theme';
-import { Region } from '~/types';
 import { REGIONS } from '~/utils/constants';
 import RegionItem from './RegionItem';
 
-const regions: Region[] = [{ text: '전체보기' }, ...REGIONS];
-
 interface SelectRegionProps {
   col?: number;
+  onSelect: (text: string) => void;
 }
 
-const SelectRegion = ({ col = 9 }: SelectRegionProps) => {
+const regions = ['전체보기', ...REGIONS];
+
+const SelectRegion = ({ onSelect, col = 9 }: SelectRegionProps) => {
+  const [selectedValue, setSelectedValue] = useState(regions[0]);
+  const handleSelect = (text: string) => {
+    setSelectedValue(text);
+    onSelect && onSelect(text);
+  };
+
   return (
     <GridContainer col={col}>
       {regions.map((region) => (
-        <RegionItem key={region.text} text={region.text} />
+        <RegionItem
+          key={region}
+          text={region}
+          onClick={handleSelect}
+          selectedValue={selectedValue}
+        />
       ))}
     </GridContainer>
   );
