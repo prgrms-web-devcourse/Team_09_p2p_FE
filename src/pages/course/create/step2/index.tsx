@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 import type { NextPage } from 'next';
 import Head from 'next/head';
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Button, PageContainer } from '~/components/atom';
 import { CategoryTitle, CourseList, SortFilter } from '~/components/common';
 import CourseMap from '~/components/domain/Map/CourseMap';
@@ -9,20 +9,144 @@ import theme from '~/styles/theme';
 import numbering from '~/../public/assets/numbering.png';
 import PlaceInformation from '~/components/domain/CourseCreate/PlaceInformation';
 import { SelectTags } from '~/components/common';
+import { useRouter } from 'next/router';
+import { CourseApi } from '~/service';
+
+type PlaceType = {
+  id: number;
+  lat: number;
+  lng: number;
+  name: string;
+  address: string;
+  roadAddressName: string;
+  category: string;
+  phoneNumber: string;
+};
+
+type CourseInfoType = {
+  region: string;
+  places: PlaceType[];
+};
+
+type PlaceFormType = {
+  kakaoMapId: string;
+  name: string;
+  description: string;
+  addressName: string;
+  roadAddressName: string;
+  latitude: string;
+  longitude: string;
+  category: string;
+  phoneNumber: string;
+  isRecommended: boolean;
+};
+
+type CourseFormType = {
+  title: string;
+  region: string;
+  period: string;
+  description: string;
+  themes: string[];
+  spots: string[];
+  places: PlaceFormType[];
+};
 
 const Course: NextPage = () => {
-  const course = [
-    {
-      placeId: 1266228191,
-      lat: 35.0768018,
-      lng: 129.023402,
-      placeName: '송도해상케이블카 송도베이스테이션'
-    },
-    { placeId: 8202423, lat: 35.1538826, lng: 129.118628, placeName: '광안리해수욕장' },
-    { placeId: 8111808, lat: 35.0554585, lng: 129.087973, placeName: '태종대유원지' }
-  ];
+  const router = useRouter();
+  const { courseQuery } = router.query;
+  const titleRef = useRef<HTMLInputElement>(null as unknown as HTMLInputElement);
+  // todo: 필터 컴포넌트 호출 후 사용할 예정
+  /* const [period, setPeriod] = useState('');
+  const [themes, setThemes] = useState([]);
+  const [spots, setSpots] = useState([]); */
+  const textAreasRef = useRef([] as HTMLTextAreaElement[]);
+  const placeImagesRef = useRef([] as any);
+  const [placeImages, setPlaceImages] = useState([] as any);
+  if (!courseQuery) {
+    return null;
+  }
+  const courseInfo: CourseInfoType = JSON.parse(courseQuery as string);
+  const formCourseData = {} as CourseFormType;
+  formCourseData.region = courseInfo.region;
+
+  const courseMapData = courseInfo.places.map((place) => {
+    return {
+      placeId: place.id,
+      lat: place.lat,
+      lng: place.lng,
+      placeName: place.name
+    };
+  });
+  const placesFormDataSetter = () => {
+    return courseInfo.places.map((place, index) => {
+      return {
+        kakaoMapId: place.id.toString(),
+        name: place.name,
+        description: textAreasRef.current[index].value,
+        addressName: place.address,
+        roadAddressName: place.roadAddressName,
+        latitude: place.lat.toString(),
+        longitude: place.lng.toString(),
+        category: place.category,
+        phoneNumber: place.phoneNumber,
+        isRecommended: false
+      };
+    });
+  };
+  const placesImageDataSetter = () => {
+    return courseInfo.places.map((place, index) => {
+      return {
+        imageFile: placeImagesRef.current[index].files[0]
+      };
+    });
+  };
   const courseCreatehandler = () => {
-    console.log('추후 생성 구현');
+    if (titleRef.current.value === '') {
+      alert('코스 제목을 입력해주세요!');
+      if (titleRef.current !== null) {
+        titleRef.current.focus();
+      }
+      return;
+    } else {
+      formCourseData.title = titleRef.current.value;
+    }
+    // 추후 필터 구현되면 연결
+    ////
+    formCourseData.period = '당일';
+    formCourseData.themes = ['힐링', '가족여행'];
+    formCourseData.spots = ['음식점', '테마파크'];
+    ////
+    formCourseData.places = placesFormDataSetter();
+    const formData = new FormData();
+    setPlaceImages(placesImageDataSetter());
+    console.log(formCourseData);
+    formData.append('course', JSON.stringify(formCourseData));
+    const placesImageData: any = placesImageDataSetter();
+
+    for (let i = 0; i < placesImageData.length; i++) {
+      formData.append('images', placesImageData[i]);
+    }
+    const createCourse = async (formData: FormData) => {
+      const response = await CourseApi.create(formData);
+      console.log('코스 등록 성공!!', response);
+      // todo: response status 처리 연동 후 구현
+      /* await CourseApi.create(formData).then((res) => {
+        console.log(res);
+        switch (res.status) {
+          case 200:
+            alert('코스 생성이 완료되었습니다!');
+            router.push('/');
+            break;
+          case 401:
+            alert('잘못된 요청입니다. 메인 페이지로 이동합니다.');
+            router.push('/');
+            break;
+          default:
+            break;
+        }
+      }); */
+    };
+    createCourse(formData);
   };
   return (
     <React.Fragment>
@@ -34,17 +158,25 @@ const Course: NextPage = () => {
       <main>
         <PageContainer type="detail">
           <MapWrapper>
-            <CourseMap course={course} />
+            <CourseMap course={courseMapData} />
           </MapWrapper>
           <TitleInputWrapper>
-            <TitleInput placeholder="코스의 제목을 입력해주세요" />
+            <TitleInput placeholder="코스의 제목을 입력해주세요" ref={titleRef} />
             <TitleUnderLine />
             <SelectTags style={{ marginTop: '10px' }} />
           </TitleInputWrapper>
           <PlacesWrapper>
-            <PlaceInformation isLastPlace={false}>1</PlaceInformation>
-            <PlaceInformation isLastPlace={false}>2</PlaceInformation>
-            <PlaceInformation isLastPlace={true}>3</PlaceInformation>
+            {courseInfo.places.map((place, index, courseInfo) => (
+              <PlaceInformation
+                key={index + 1}
+                isLastPlace={courseInfo.length === index + 1}
+                place={place}
+                textAreaRef={(el: HTMLTextAreaElement) => (textAreasRef.current[index] = el)}
+                placeImageRef={(el: HTMLElement) => (placeImagesRef.current[index] = el)}
+              >
+                {index + 1}
+              </PlaceInformation>
+            ))}
           </PlacesWrapper>
           <SubmitWrapper>
             <Button buttonType="darkGray" width={184} height={75} onClick={courseCreatehandler}>

@@ -5,7 +5,7 @@ import Head from 'next/head';
 import React, { useEffect, useState } from 'react';
 import theme from '~/styles/theme';
 import Button from '~/components/atom/Button';
-import { Icon, Text } from '~/components/atom';
+import { Link, Icon, Text } from '~/components/atom';
 import CloseIcon from '~/components/domain/CourseCreate/SelectedArea/CloseIcon';
 import PlusIcon from '~/components/domain/CourseCreate/SearchArea/PlusIcon';
 import Modal from '~/components/atom/Modal';
@@ -88,6 +88,41 @@ const CourseCreate: NextPage = () => {
   const handleNextStep = () => {
     router.push('/course/create/step2');
   };
+  const dummyCourse = {
+    region: region,
+    places: [
+      {
+        id: 1266228191,
+        lat: 35.0768018,
+        lng: 129.023402,
+        name: '송도해상케이블카 송도베이스테이션',
+        address: '부산 서구 송도해변로 171',
+        roadAddressName: '부산 서구 송도해변로 171',
+        category: '',
+        phoneNumber: '051-247-9900'
+      },
+      {
+        id: 8202423,
+        lat: 35.1538826,
+        lng: 129.118628,
+        name: '광안리해수욕장',
+        address: '부산 수영구 광안해변로 219',
+        roadAddressName: '부산 수영구 광안해변로 219',
+        category: '',
+        phoneNumber: '051-610-4744'
+      },
+      {
+        id: 8111808,
+        lat: 35.0554585,
+        lng: 129.087973,
+        name: '태종대유원지',
+        address: '부산 영도구 동삼동 산 29-1',
+        roadAddressName: '부산광역시 영도구 전망로 209',
+        category: '',
+        phoneNumber: '051-405-8745'
+      }
+    ]
+  };
   return (
     <React.Fragment>
       <Head>
@@ -117,13 +152,21 @@ const CourseCreate: NextPage = () => {
                 인천 중구 공항로 271 인천국제공항역
               </Text>
             </SelectedPlace>
-            <Button buttonType="primary" size="lg" width="100%" onClick={handleNextStep}>
-              코스 지정 완료
-            </Button>
+            <Link
+              href={{
+                pathname: '/course/create/step2',
+                query: { courseQuery: JSON.stringify(dummyCourse) }
+              }}
+              // query string 안보여주기 위해 필요한데 type error때문에 주석처리
+              /* as={`/course/create/step2`} */
+            >
+              <Button buttonType="primary" size="lg" width="100%">
+                코스 지정 완료
+              </Button>
+            </Link>
           </SelectedArea>
           {/* todo: 선택한 장소 정보를 받아와서 지도에서 해당 장소 랜더링 */}
           <MapArea>
-            {/* todo: CreateCourseMap 구현 */}
             <PlaceMap
               placeId={10751028}
               placeName="인천국제공항"

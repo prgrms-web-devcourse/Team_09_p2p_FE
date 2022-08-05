@@ -1,22 +1,41 @@
 import styled from '@emotion/styled';
-import { ReactNode, SetStateAction, useRef, useState } from 'react';
+import { MutableRefObject, ReactNode, SetStateAction, useRef, useState } from 'react';
 import { Text } from '~/components/atom';
 import theme from '~/styles/theme';
 import Textarea from '~/components/atom/Textarea';
-import Image from 'next/image';
 
+type PlaceType = {
+  id: number;
+  lat: number;
+  lng: number;
+  name: string;
+  address: string;
+  roadAddressName: string;
+  category: string;
+  phoneNumber: string;
+};
 interface PlaceInformation {
   children: ReactNode;
   isLastPlace: boolean;
+  place: PlaceType;
+  textAreaRef: (el: HTMLTextAreaElement) => HTMLTextAreaElement;
+  placeImageRef: any;
 }
 
-const PlaceInformation = ({ children, isLastPlace }: PlaceInformation) => {
+const PlaceInformation = ({
+  children,
+  isLastPlace,
+  place,
+  textAreaRef,
+  placeImageRef
+}: PlaceInformation) => {
   const [imgBase64, setImgBase64] = useState(''); // 파일 base64
   const [imgFile, setImgFile] = useState(null); //파일
   const [file, setFile] = useState('');
   const [previewUrl, setPreviewUrl] = useState('');
   const [isRecommended, setIsRecommended] = useState(false);
   const imageRef = useRef(null);
+  // any는 추후 제거하겠습니다!
   const handleRecommend = (e: any) => {
     if (!isRecommended) {
       e.target.style = 'background-color: skyblue';
@@ -25,6 +44,7 @@ const PlaceInformation = ({ children, isLastPlace }: PlaceInformation) => {
     }
     setIsRecommended(!isRecommended);
   };
+  // any는 추후 제거하겠습니다!
   const handleChangeFile = (e: any) => {
     const reader = new FileReader();
     reader.onloadend = () => {
@@ -43,7 +63,7 @@ const PlaceInformation = ({ children, isLastPlace }: PlaceInformation) => {
       console.log('5');
     }
   };
-
+  // any는 추후 제거하겠습니다!
   const handleFileOnChange = (e: any) => {
     e.preventDefault();
     const reader = new FileReader();
@@ -78,14 +98,14 @@ const PlaceInformation = ({ children, isLastPlace }: PlaceInformation) => {
             <NumberText>{children}</NumberText>
             <NumberImage src="/assets/numbering.png" />
             <Text size={'xl'} style={{ margin: '0 20px 0 40px' }}>
-              인천공항
+              {place.name}
             </Text>
             <RecommendButton id={'place_'.concat(children as string)} onClick={handleRecommend}>
               추천👍
             </RecommendButton>
           </NumberWrapper>
           <Text color="gray" size={'md'} style={{ marginLeft: '70px' }}>
-            인천 중구 공항로 207 인천국제공항역
+            {place.roadAddressName}
           </Text>
           <ImageUploadWrapper>
             <input
@@ -95,6 +115,7 @@ const PlaceInformation = ({ children, isLastPlace }: PlaceInformation) => {
               accept="image/jpg,impge/png,image/jpeg,image/gif"
               style={{ display: 'none' }}
               onChange={handleFileOnChange}
+              ref={placeImageRef}
             />
             <FileUploadWrapper ref={imageRef}>
               <label htmlFor={imageId}>
@@ -110,6 +131,7 @@ const PlaceInformation = ({ children, isLastPlace }: PlaceInformation) => {
               width={810}
               height={200}
               placeholder={'장소에 대한 추억을 공유해주세요!☺️☺️'}
+              textAreaRef={textAreaRef as unknown as MutableRefObject<HTMLTextAreaElement>}
             ></Textarea>
           </DescriptionWrapper>
         </GuideLine>
@@ -180,7 +202,7 @@ const ImageUploadWrapper = styled.div`
     height: 200px;
     border: 2px solid black;
     border-radius: 10px;
-    @include alignCenter();
+    /* @include alignCenter(); */
     cursor: pointer;
     transition: 0.12s ease-in;
   }
