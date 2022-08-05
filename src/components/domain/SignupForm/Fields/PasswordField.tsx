@@ -1,7 +1,6 @@
 import React, { ChangeEvent, useCallback, useState } from 'react';
 import { Input, Label, Text } from '~/components/atom';
 import { ErrorMessage, Field } from '~/components/common';
-import theme from '~/styles/theme';
 
 interface PasswordFieldProps {
   value: string;
@@ -19,8 +18,8 @@ const PasswordField: React.FC<PasswordFieldProps> = ({ value, onChange, errors }
   return (
     <Field>
       <Label htmlFor="password" text="비밀번호" />
-      <Text size="xs" color={theme.color.fontGray}>
-        영문과 숫자를 포함한 8~15자로 설정해주세요.
+      <Text size="xs" color="gray">
+        영문, 숫자, 특수문자를 포함한 8~15자로 설정해주세요.
       </Text>
       <Input
         type="password"

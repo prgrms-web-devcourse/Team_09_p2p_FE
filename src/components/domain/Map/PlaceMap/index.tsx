@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Map, MapMarker, CustomOverlayMap } from 'react-kakao-maps-sdk';
 import { MARKER_IMAGE_URLS } from 'src/utils/constants';
 import Script from 'next/script';
@@ -11,10 +11,15 @@ interface PlaceMapProps {
   placeName: string;
   placeType: string;
   center: CenterType;
+  height?: number | string | null;
 }
 let isAlreadyLoaded = false;
-const PlaceMap = ({ placeId, placeName, placeType, center }: PlaceMapProps) => {
+const PlaceMap = ({ placeId, placeName, placeType, center, height = null }: PlaceMapProps) => {
   const [loaded, setLoaded] = useState(isAlreadyLoaded);
+  useEffect(() => {
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    return () => {};
+  }, []);
   let imageSrc = '/assets/place/';
   switch (placeType) {
     case 'MT1':
@@ -78,6 +83,7 @@ const PlaceMap = ({ placeId, placeName, placeType, center }: PlaceMapProps) => {
   return (
     <>
       <Script
+        id="PlaceMap"
         src={`https://dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_KAKAO_MAP_KEY}&autoload=false`}
         onLoad={() => {
           kakao.maps.load(() => {
@@ -94,7 +100,7 @@ const PlaceMap = ({ placeId, placeName, placeType, center }: PlaceMapProps) => {
           }}
           style={{
             width: '100%',
-            height: '500px'
+            height: height === null ? '500px' : height
           }}
           level={4}
         >

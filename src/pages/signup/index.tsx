@@ -1,18 +1,15 @@
-import axios from 'axios';
 import type { NextPage } from 'next';
 import Head from 'next/head';
 import React from 'react';
 import { SignupForm } from '~/components/domain';
+import { UserApi } from '~/service';
 import { SignupValues } from '~/types';
 
 const Signup: NextPage = () => {
-  const handleSubmit = (data: SignupValues) => {
-    //TODO
-    //회원가입 api 로직 추가
-    console.log(data);
-    const response = axios
-      .post('http://3.38.118.35:8080/api/v1/users/', data)
-      .then((res) => console.log(res));
+  const handleSubmit = async (data: SignupValues) => {
+    console.log('회원가입 시도!', data);
+    const response = await UserApi.signup(data);
+    console.log(`회원가입 성공!`, response);
   };
 
   return (

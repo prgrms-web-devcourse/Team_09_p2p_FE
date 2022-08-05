@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { Map, MapMarker, CustomOverlayMap } from 'react-kakao-maps-sdk';
 import DaumPostCode from 'react-daum-postcode';
-import { placeIcon } from 'public/assets/index';
 import Script from 'next/script';
 import styled from '@emotion/styled';
 

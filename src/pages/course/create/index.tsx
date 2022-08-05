@@ -3,16 +3,14 @@ import type { NextPage } from 'next';
 import PlaceMap from '~/components/domain/Map/PlaceMap';
 import Head from 'next/head';
 import React, { useEffect, useState } from 'react';
-import { Map, MapMarker, CustomOverlayMap } from 'react-kakao-maps-sdk';
-import DaumPostcode from 'react-daum-postcode';
 import theme from '~/styles/theme';
 import Button from '~/components/atom/Button';
 import { Icon, Text } from '~/components/atom';
-import SearchAddress from '~/components/domain/Map/SearchAddress';
 import CloseIcon from '~/components/domain/CourseCreate/SelectedArea/CloseIcon';
 import PlusIcon from '~/components/domain/CourseCreate/SearchArea/PlusIcon';
 import Modal from '~/components/atom/Modal';
 import RegionSelect from '~/components/domain/CourseCreate/RegionSelect';
+import { useRouter } from 'next/router';
 interface Marker {
   position: {
     lat: number;
@@ -32,6 +30,7 @@ const CourseCreate: NextPage = () => {
   const [markers, setMarkers] = useState<Marker[]>([]);
   const [visible, setVisible] = useState(true);
   const [region, setRegion] = useState('서울');
+  const router = useRouter();
 
   useEffect(() => {
     if (!map) return;
@@ -86,6 +85,9 @@ const CourseCreate: NextPage = () => {
       }
     }
   };
+  const handleNextStep = () => {
+    router.push('/course/create/step2');
+  };
   return (
     <React.Fragment>
       <Head>
@@ -94,7 +96,7 @@ const CourseCreate: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main>
+      <main style={{ height: '100%', overflow: 'hidden' }}>
         <Modal visible={visible} onClose={() => setVisible(visible)}>
           <RegionSelect setRegion={setRegion} onClose={() => setVisible(false)} />
         </Modal>
@@ -115,12 +117,7 @@ const CourseCreate: NextPage = () => {
                 인천 중구 공항로 271 인천국제공항역
               </Text>
             </SelectedPlace>
-            <Button
-              buttonType="primary"
-              size="lg"
-              width="100%"
-              style={{ margin: '20px 20px 20px 20px' }}
-            >
+            <Button buttonType="primary" size="lg" width="100%" onClick={handleNextStep}>
               코스 지정 완료
             </Button>
           </SelectedArea>
@@ -128,10 +125,11 @@ const CourseCreate: NextPage = () => {
           <MapArea>
             {/* todo: CreateCourseMap 구현 */}
             <PlaceMap
-              placeId={22318989}
-              placeName="맥도날드 강남2호점"
-              placeType="FD6"
-              center={{ lat: 37.49868217455176, lng: 127.0287412218641 }}
+              placeId={10751028}
+              placeName="인천국제공항"
+              placeType=""
+              center={{ lat: 37.4795073, lng: 126.440877 }}
+              height="1000px"
             />
           </MapArea>
           <SearchArea>
@@ -186,7 +184,7 @@ const { mainColor } = theme.color;
 const CreateWrapper = styled.div`
   display: flex;
   flex-direction: row;
-  flex-weap: nowrap;
+  height: 100%;
 `;
 
 const SelectedArea = styled.div`

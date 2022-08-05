@@ -17,38 +17,30 @@ const UserinfoEdit: NextPage = () => {
       <main>
         <PageContainer>
           <Container>
-            <Title>내 정보 수정</Title>
+            <Title>비밀번호 변경</Title>
             <Form>
               <FormItem>
                 <FormTitle>
-                  <Text>이메일</Text>
+                  <Text>현재 비밀번호</Text>
                 </FormTitle>
                 <FormGroup>
-                  <input type="email" name="email" />
+                  <input type="password" name="password" />
                 </FormGroup>
               </FormItem>
               <FormItem>
                 <FormTitle>
-                  <Text>닉네임</Text>
+                  <Text>새 비밀번호</Text>
                 </FormTitle>
                 <FormGroup>
-                  <input type="text" name="nickname" />
+                  <input type="password" name="newPassword" />
                 </FormGroup>
               </FormItem>
               <FormItem>
                 <FormTitle>
-                  <Text>성별</Text>
+                  <Text>새 비밀번호 확인</Text>
                 </FormTitle>
                 <FormGroup>
-                  <input type="text" name="sex" />
-                </FormGroup>
-              </FormItem>
-              <FormItem>
-                <FormTitle>
-                  <Text>생년월일</Text>
-                </FormTitle>
-                <FormGroup>
-                  <input type="data" name="birth" />
+                  <input type="password" name="newPasswordConfirm" />
                 </FormGroup>
               </FormItem>
               <Button size="md" width={195} style={{ marginLeft: 150 }}>

@@ -1,15 +1,15 @@
 import styled from '@emotion/styled';
 import type { NextPage } from 'next';
 import Head from 'next/head';
-import { relative } from 'path';
 import React from 'react';
-import { Icon, Image, PageContainer, Text, Title } from '~/components/atom';
+import { Link, PageContainer, Text, Title } from '~/components/atom';
 import Avatar from '~/components/atom/Avatar';
 import Comment from '~/components/common/Comment';
 import DetailSidebar from '~/components/common/DetailSidebar';
 import CourseDetailList from '~/components/domain/CourseDetail/CourseDetailList';
 import CourseOverview from '~/components/domain/CourseDetail/CourseOverview';
 import CourseSlider from '~/components/domain/CourseSlider';
+import CourseMap from '~/components/domain/Map/CourseMap';
 import theme from '~/styles/theme';
 
 interface ICourseData {
@@ -25,6 +25,7 @@ interface ICourseData {
   isLiked: boolean;
   isBookmarked: boolean;
   nickname: string;
+  userId: number;
   profileImage: string;
   createdAt: string;
   updatedAt: string;
@@ -56,8 +57,8 @@ const courseData: ICourseData = {
       name: '인천공항',
       description: '인천공항에 다녀왔어요',
       address: '인천 중구 공항로 207 인천국제공항역',
-      latitude: '',
-      longitude: '',
+      latitude: '35.0768018',
+      longitude: '129.023402',
       category: '',
       phone: '',
       recommended: false
@@ -67,8 +68,8 @@ const courseData: ICourseData = {
       name: '인천공항',
       description: '인천공항에 다녀왔어요',
       address: '인천 중구 공항로 207 인천국제공항역',
-      latitude: '',
-      longitude: '',
+      latitude: '35.1538826',
+      longitude: '129.118628',
       category: '',
       phone: '',
       recommended: false
@@ -78,38 +79,47 @@ const courseData: ICourseData = {
       name: '인천공항',
       description: '인천공항에 다녀왔어요',
       address: '인천 중구 공항로 207 인천국제공항역',
-      latitude: '',
-      longitude: '',
+      latitude: '35.0554585',
+      longitude: '129.087973',
       category: '',
       phone: '',
       recommended: true
-    },
-    {
-      id: 4,
-      name: '인천공항',
-      description: '인천공항에 다녀왔어요',
-      address: '인천 중구 공항로 207 인천국제공항역',
-      latitude: '',
-      longitude: '',
-      category: '',
-      phone: '',
-      recommended: false
     }
+    // {
+    //   id: 4,
+    //   name: '인천공항',
+    //   description: '인천공항에 다녀왔어요',
+    //   address: '인천 중구 공항로 207 인천국제공항역',
+    //   latitude: '35.0553585',
+    //   longitude: '129.087783',
+    //   category: '',
+    //   phone: '',
+    //   recommended: false
+    // }
   ],
   likes: 12,
   isLiked: false,
   isBookmarked: false,
   nickname: 'Jinist',
+  userId: 1,
   profileImage: '',
   createdAt: '',
   updatedAt: ''
 };
 
+const courseMapData = courseData.places.map((place) => {
+  return {
+    placeId: place.id,
+    lat: Number(place.latitude),
+    lng: Number(place.longitude),
+    placeName: place.name
+  };
+});
+
 const CourseDetail: NextPage = () => {
   /* TODO
-    1. 여행 경로 map이미지로 변경
-    2. 추천 아이콘 작업
-    3. 업로드, 수정 날짜 가공하여 적용
+    1. 추천 아이콘 작업
+    2. 업로드, 수정 날짜 가공하여 적용
   */
   return (
     <React.Fragment>
@@ -135,7 +145,9 @@ const CourseDetail: NextPage = () => {
               업로드 날짜: {courseData.createdAt} 수정된 날짜: {courseData.updatedAt}
             </Text>
             <Profile>
-              <Avatar size={66} />
+              <Link href={`/userinfo/${courseData.userId}`}>
+                <Avatar size={66} />
+              </Link>
               <Text color="dark" fontWeight={500}>
                 {courseData.nickname}
               </Text>
@@ -155,7 +167,7 @@ const CourseDetail: NextPage = () => {
               <DetailTitle size="md" fontWeight={700}>
                 여행경로
               </DetailTitle>
-              <Image src="/assets/location/jeju.jpg" alt="여행경로" />
+              <CourseMap course={courseMapData} />
             </TravelRoute>
             <TravelCourse>
               <DetailTitle size="md" fontWeight={700}>

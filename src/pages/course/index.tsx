@@ -1,8 +1,15 @@
+import styled from '@emotion/styled';
 import type { NextPage } from 'next';
 import Head from 'next/head';
 import React from 'react';
 import { PageContainer } from '~/components/atom';
-import { CategoryTitle, CourseList, SortFilter } from '~/components/common';
+import {
+  CategoryTitle,
+  CourseList,
+  SelectRegion,
+  SelectTags,
+  SortFilter
+} from '~/components/common';
 
 const Course: NextPage = () => {
   return (
@@ -15,6 +22,10 @@ const Course: NextPage = () => {
       <main>
         <PageContainer>
           <CategoryTitle name="여행코스" />
+          <FilterList>
+            <SelectRegion />
+            <SelectTags style={{ marginTop: '24px' }} />
+          </FilterList>
           <SortFilter />
           <CourseList />
         </PageContainer>
@@ -24,3 +35,7 @@ const Course: NextPage = () => {
 };
 
 export default Course;
+
+const FilterList = styled.div`
+  margin-bottom: 30px;
+`;

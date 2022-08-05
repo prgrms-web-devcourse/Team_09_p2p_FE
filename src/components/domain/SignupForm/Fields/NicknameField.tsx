@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import React, { ChangeEvent, useCallback, useState } from 'react';
+import React, { ChangeEvent, useCallback, useMemo, useState } from 'react';
 import { Button, Input, Label, Text } from '~/components/atom';
 import { ErrorMessage, Field } from '~/components/common';
 import theme from '~/styles/theme';
@@ -33,8 +33,10 @@ const NicknameField: React.FC<NicknameFieldProps> = ({
     [onChange, setInitDuplicateFn]
   );
 
+  const disabled = useMemo(() => !!error || value.length === 0, [error, value]);
+
   const handleClickDuplicate = async () => {
-    if (error) {
+    if (disabled) {
       //TODO
       // error가 있으면 중복확인버튼을 disable
       return;
@@ -50,7 +52,7 @@ const NicknameField: React.FC<NicknameFieldProps> = ({
   return (
     <Field>
       <Label htmlFor="nickname" text="닉네임" />
-      <Text size="xs" color={theme.color.fontGray}>
+      <Text size="xs" color="gray">
         2~8자 이내의 닉네임을 입력해주세요.
       </Text>
       <StyledField>
@@ -63,7 +65,7 @@ const NicknameField: React.FC<NicknameFieldProps> = ({
           onBlur={handleBlur}
           autoComplete="off"
         />
-        <Button onClick={handleClickDuplicate} width="120px" fontSize={16}>
+        <Button onClick={handleClickDuplicate} width="120px" fontSize={16} disabled={disabled}>
           중복확인
         </Button>
       </StyledField>

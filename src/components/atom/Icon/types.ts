@@ -2,6 +2,7 @@ export const ICON_URLS = {
   heart: '/assets/icons/heart.svg',
   bookmark: '/assets/icons/bookmark.svg',
   arrow: '/assets/icons/arrow.svg',
+  arrowDown: '/assets/icons/arrow-down.svg',
   calendar: '/assets/icons/calendar.svg',
   marker: '/assets/icons/marker.svg',
   route: '/assets/icons/route.svg',

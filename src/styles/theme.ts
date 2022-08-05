@@ -10,7 +10,8 @@ const theme = {
     fontDarkBlack: '#2B2B2B',
     fontBlueGray: '#828C94',
     borderGray: '#EAEDEF',
-    borderDarkGray: '#E1E1E1'
+    borderDarkGray: '#E1E1E1',
+    fontRed: '#ff3f3f'
   },
   shadow: {
     basicShadow: '0px 2px 4px 1px rgb (0 0 0 / 5%)'

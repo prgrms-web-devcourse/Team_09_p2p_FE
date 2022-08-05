@@ -1,15 +1,16 @@
 import styled from '@emotion/styled';
 import Image from 'next/image';
+import IconButton from './IconButton';
 import { ICON_URLS, IconName } from './types';
 
-interface IconProps {
+export interface IconProps {
   name: IconName;
   size?: number;
   rotate?: number;
   block?: boolean;
 }
 
-const Icon: React.FC<IconProps> = ({ name, size = 15, rotate, block, ...props }) => {
+const Icon = ({ name, size = 15, rotate, block, ...props }: IconProps) => {
   const { [name]: iconUrl } = ICON_URLS;
 
   const IconStyle = {
@@ -25,6 +26,8 @@ const Icon: React.FC<IconProps> = ({ name, size = 15, rotate, block, ...props })
     </IconWrapper>
   );
 };
+
+Icon.Button = IconButton;
 
 export default Icon;
 

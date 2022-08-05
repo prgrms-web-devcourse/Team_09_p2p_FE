@@ -21,3 +21,19 @@ export type LoginValues = {
 export type Region = {
   text: string;
 };
+
+export type PlacePost = {
+  id: number;
+  name: string;
+  addressName: string;
+  roadAddressName: string;
+  latitude: string;
+  longitude: string;
+  category: string;
+  phoneNumber?: string;
+  imageUrl?: string;
+  liked: boolean;
+  bookmarked: boolean;
+  likeCount: number;
+  usedCount: number;
+};

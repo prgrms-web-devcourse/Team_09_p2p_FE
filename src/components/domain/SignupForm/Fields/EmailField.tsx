@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useCallback, useState } from 'react';
+import React, { ChangeEvent, useCallback, useMemo, useState } from 'react';
 import { Button, Input, Label } from '~/components/atom';
 import { ErrorMessage, Field } from '~/components/common';
 import { FONT_SIZES } from '~/utils/constants';
@@ -32,10 +32,10 @@ const EmailField: React.FC<EmailFieldProps> = ({
     [onChange, setInitDuplicateFn]
   );
 
+  const disabled = useMemo(() => !!error || value.length === 0, [error, value]);
+
   const handleClickDuplicate = async () => {
-    if (error) {
-      //TODO
-      // error가 있으면 중복확인버튼을 disable
+    if (disabled) {
       return;
     }
     //TODO
@@ -59,7 +59,7 @@ const EmailField: React.FC<EmailFieldProps> = ({
         onBlur={handleBlur}
       />
       {error && <ErrorMessage message={error} />}
-      <Button onClick={handleClickDuplicate} fontSize={FONT_SIZES.sm}>
+      <Button onClick={handleClickDuplicate} fontSize={FONT_SIZES.sm} disabled={disabled}>
         이메일 중복확인
       </Button>
     </Field>

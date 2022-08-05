@@ -3,12 +3,13 @@ import Head from 'next/head';
 import React from 'react';
 import { LoginForm } from '~/components/domain';
 import { LoginValues } from '~/types';
+import { UserApi } from '~/service';
 
 const Login: NextPage = () => {
-  const handleSubmit = async (values: LoginValues) => {
-    // TODO
-    // await 비동기 로직 수행
-    console.log(values);
+  const handleSubmit = async (data: LoginValues) => {
+    console.log('로그인 시도!', data);
+    const response = await UserApi.login(data);
+    console.log('로그인 성공', response);
   };
 
   return (
@@ -20,7 +21,7 @@ const Login: NextPage = () => {
       </Head>
 
       <main>
-        <LoginForm onSubmit={(values: LoginValues) => handleSubmit(values)} />
+        <LoginForm onSubmit={handleSubmit} />
       </main>
     </React.Fragment>
   );
