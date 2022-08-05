@@ -19,8 +19,8 @@ const SelectTags = ({ style, onSelect }: SelectTagsProps) => {
   useEffect(() => {
     onSelect({
       period: selectedPeriod,
-      themes: selectedThemes,
-      spots: selectedSpots
+      theme: selectedThemes,
+      spot: selectedSpots
     });
   }, [selectedPeriod, selectedThemes, selectedSpots, onSelect]);
 
