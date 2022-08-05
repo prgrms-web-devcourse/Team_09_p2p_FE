@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 import React, { ChangeEvent, useCallback, useMemo, useState } from 'react';
 import { Button, Input, Label, Text } from '~/components/atom';
 import { ErrorMessage, Field } from '~/components/common';
-import theme from '~/styles/theme';
+import { UserApi } from '~/service';
 
 interface NicknameFieldProps {
   value: string;
@@ -37,15 +37,14 @@ const NicknameField: React.FC<NicknameFieldProps> = ({
 
   const handleClickDuplicate = async () => {
     if (disabled) {
-      //TODO
-      // error가 있으면 중복확인버튼을 disable
       return;
     }
-    //TODO
-    // 1. 이메일 중복확인 로직 추가
-    // 2. 응답에 따라 ConfirmModal 불러오기
-    if (!error && window.confirm(`${value}는 사용가능한 닉네임입니다!`)) {
+    try {
+      await UserApi.nicknameCheck({ nickname: value });
+      window.alert(`${value}는 사용가능한 닉네임입니다!`);
       setDuplicateCheckFn();
+    } catch (e) {
+      window.alert('이미 존재하는 닉네임이에요!');
     }
   };
 

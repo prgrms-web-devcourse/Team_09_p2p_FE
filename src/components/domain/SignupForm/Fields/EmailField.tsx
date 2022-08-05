@@ -1,6 +1,7 @@
 import React, { ChangeEvent, useCallback, useMemo, useState } from 'react';
 import { Button, Input, Label } from '~/components/atom';
 import { ErrorMessage, Field } from '~/components/common';
+import { UserApi } from '~/service';
 import { FONT_SIZES } from '~/utils/constants';
 
 interface EmailFieldProps {
@@ -38,11 +39,12 @@ const EmailField: React.FC<EmailFieldProps> = ({
     if (disabled) {
       return;
     }
-    //TODO
-    // 1. 이메일 중복확인 로직 추가
-    // 2. 응답에 따라 ConfirmModal 불러오기
-    if (window.confirm(`${value}는 사용가능한 메일입니다!`)) {
+    try {
+      await UserApi.emailCheck({ email: value });
+      window.alert(`${value}는 사용가능한 메일입니다!`);
       setDuplicateCheckFn();
+    } catch (e) {
+      window.alert('이미 존재하는 메일이에요!');
     }
   };
 
