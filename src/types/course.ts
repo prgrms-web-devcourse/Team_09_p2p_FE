@@ -25,4 +25,9 @@ export interface CourseFilter {
   sort?: string;
 }
 
-export type SortType = 'createdAt' | 'desc';
+export const sortOrder = {
+  CREATED_AT: 'createdAt',
+  DESC: 'desc'
+} as const;
+
+export type SortType = typeof sortOrder[keyof typeof sortOrder];

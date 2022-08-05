@@ -1,24 +1,21 @@
 import styled from '@emotion/styled';
 import { useState } from 'react';
 import { Text } from '~/components/atom';
+import { sortOrder, SortType } from '~/types/course';
 
 interface SortFilterProps {
-  onSort?: (value: string) => void; // TODO: 더미데이터 테스트 시점에 필수로 변경
+  onSort?: (value: SortType) => void; // TODO: 더미데이터 테스트 시점에 필수로 변경
 }
 
-// TODO: 정렬시 보내는 데이터와 맞게 수정 예정
-const CREATED_AT = 'createdAt';
-const POPULAR = 'popular';
-
 const defaultSortData = [
-  { name: '최신순', value: CREATED_AT },
-  { name: '인기순', value: POPULAR }
+  { name: '최신순', value: sortOrder.CREATED_AT },
+  { name: '인기순', value: sortOrder.DESC }
 ];
 
 const SortFilter: React.FC<SortFilterProps> = ({ onSort }) => {
-  const [isSelected, setIsSelected] = useState(CREATED_AT);
+  const [isSelected, setIsSelected] = useState<SortType>(sortOrder.CREATED_AT);
 
-  const handleClick = (value: string) => {
+  const handleClick = (value: SortType) => {
     setIsSelected(value);
     onSort && onSort(value);
   };
