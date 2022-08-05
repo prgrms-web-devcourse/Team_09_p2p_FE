@@ -31,6 +31,13 @@ class UserApi extends Api {
     const response = await this.baseInstance.post(`${this.path}/nickname`, bodyData);
     return response;
   };
+
+  getUser = async (token: string) => {
+    const response = await this.baseInstance.get(`${this.path}`, {
+      headers: { Authorization: token }
+    });
+    return response.data;
+  };
 }
 
 export default new UserApi();

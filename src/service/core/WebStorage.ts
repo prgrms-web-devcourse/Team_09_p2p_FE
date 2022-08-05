@@ -6,8 +6,9 @@ export default class WebStorage {
   static getToken(): string | void {
     if (typeof window !== 'undefined') {
       const value = window.localStorage.getItem(this.tokenKey);
+
       if (value) {
-        return JSON.parse(value);
+        return value;
       }
       this.removeToken();
     }
