@@ -10,10 +10,15 @@ import {
   SelectTags,
   SortFilter
 } from '~/components/common';
+import { SearchTagsValues } from '~/types';
 
 const Course: NextPage = () => {
   const handleSelectRegion = async (text: string) => {
     console.log(text);
+  };
+
+  const handleSelectTags = async (data: SearchTagsValues) => {
+    console.log(data);
   };
 
   return (
@@ -28,7 +33,7 @@ const Course: NextPage = () => {
           <CategoryTitle name="여행코스" />
           <FilterList>
             <SelectRegion onSelect={handleSelectRegion} />
-            <SelectTags style={{ marginTop: '24px' }} />
+            <SelectTags style={{ marginTop: '24px' }} onSelect={handleSelectTags} />
           </FilterList>
           <SortFilter />
           <CourseList />
