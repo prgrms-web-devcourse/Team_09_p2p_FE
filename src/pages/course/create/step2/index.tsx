@@ -9,6 +9,7 @@ import theme from '~/styles/theme';
 import numbering from '~/../public/assets/numbering.png';
 import PlaceInformation from '~/components/domain/CourseCreate/PlaceInformation';
 import { SelectTags } from '~/components/common';
+import { SearchTagsValues } from '~/types';
 
 const Course: NextPage = () => {
   const course = [
@@ -24,6 +25,11 @@ const Course: NextPage = () => {
   const courseCreatehandler = () => {
     console.log('추후 생성 구현');
   };
+
+  const handleSelectTags = (data: SearchTagsValues) => {
+    console.log(data);
+  };
+
   return (
     <React.Fragment>
       <Head>
@@ -39,7 +45,7 @@ const Course: NextPage = () => {
           <TitleInputWrapper>
             <TitleInput placeholder="코스의 제목을 입력해주세요" />
             <TitleUnderLine />
-            <SelectTags style={{ marginTop: '10px' }} />
+            <SelectTags style={{ marginTop: '10px' }} onSelect={handleSelectTags} />
           </TitleInputWrapper>
           <PlacesWrapper>
             <PlaceInformation isLastPlace={false}>1</PlaceInformation>
