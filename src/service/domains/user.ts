@@ -21,6 +21,16 @@ class UserApi extends Api {
       console.error(`회원가입 에러:`, e);
     }
   };
+
+  emailCheck = async (bodyData: { email: string }) => {
+    const response = await this.baseInstance.post(`${this.path}/email`, bodyData);
+    return response;
+  };
+
+  nicknameCheck = async (bodyData: { nickname: string }) => {
+    const response = await this.baseInstance.post(`${this.path}/nickname`, bodyData);
+    return response;
+  };
 }
 
 export default new UserApi();
