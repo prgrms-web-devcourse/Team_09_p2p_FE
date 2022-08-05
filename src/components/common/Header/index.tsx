@@ -6,6 +6,7 @@ import { useRecoilState } from 'recoil';
 import { PageContainer, Button, Link } from '~/components/atom';
 import Avatar from '~/components/atom/Avatar';
 import Logo from '~/components/atom/Logo';
+import { useUser } from '~/hooks/useUser';
 import { userState } from '~/recoil';
 import theme from '~/styles/theme';
 import SearchInput from '../SearchInput';
@@ -15,7 +16,7 @@ interface HeaderProps {
 }
 
 const Header = ({ full }: HeaderProps) => {
-  const [currentUser, setCurrentUser] = useRecoilState(userState);
+  const { currentUser, isLoggedIn } = useUser();
 
   console.log(currentUser, 'currentUser');
   const router = useRouter();
@@ -34,9 +35,11 @@ const Header = ({ full }: HeaderProps) => {
             </Link>
           </LeftArea>
           <Buttons>
-            <Link href="/userinfo">
-              <Avatar size={54} src="" />
-            </Link>
+            {isLoggedIn && (
+              <Link href="/userinfo">
+                <Avatar size={54} src={currentUser.user.profileImage} />
+              </Link>
+            )}
           </Buttons>
         </FullInner>
       </HeaderContainer>
@@ -68,9 +71,13 @@ const Header = ({ full }: HeaderProps) => {
               <Link href="/course/create">
                 <Button>코스등록</Button>
               </Link>
-              {!currentUser.accessToken && (
+              {!isLoggedIn ? (
                 <Link href="/login">
                   <Button buttonType="borderPrimary">로그인</Button>
+                </Link>
+              ) : (
+                <Link href={`/userinfo/${currentUser.user.id}`}>
+                  <Avatar size={54} src={currentUser.user.profileImage} />
                 </Link>
               )}
             </Buttons>
@@ -141,7 +148,7 @@ const Category = styled.ul`
 `;
 
 const Buttons = styled.div`
-  button {
-    margin-left: 20px;
-  }
+  display: flex;
+  align-items: center;
+  gap: 20px;
 `;
