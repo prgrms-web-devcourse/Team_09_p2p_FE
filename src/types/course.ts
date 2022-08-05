@@ -4,7 +4,7 @@ export interface ICourseItem {
   thumbnail: string;
   region: string;
   period: string;
-  theme: string[];
+  themes: string[];
   places: string[];
   likes: number;
   isBookmarked: boolean;

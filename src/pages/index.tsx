@@ -1,20 +1,30 @@
 import styled from '@emotion/styled';
 import Head from 'next/head';
-import React, { ReactElement } from 'react';
+import React, { ReactElement, useEffect, useState } from 'react';
 import { Button, Link, PageContainer, Image } from '~/components/atom';
 import { CourseList, PlaceList } from '~/components/common';
 import Layout from '~/components/common/Layout';
 import MainCategoryTitle from '~/components/domain/home/MainCategoryTitle';
+import { CourseApi } from '~/service';
 import theme from '~/styles/theme';
 
 const HomePage = () => {
   // TODO :
   /*
     1. 메인페이지 기능 구현
-    2. footer 추가
-    3. hover시 애니메이션
-    4. 메인 상단에 이미지 넣기
   */
+  const [courseList, setCourseList] = useState([]);
+
+  const getCourseList = async () => {
+    const filter = { size: 6 };
+    const result = await CourseApi.getCourses(filter);
+    console.log('[Courses] :', result.content);
+    setCourseList(result.content);
+  };
+
+  useEffect(() => {
+    getCourseList();
+  }, []);
 
   return (
     <React.Fragment>
@@ -45,7 +55,7 @@ const HomePage = () => {
               <Link href="/course">
                 <MainCategoryTitle name="인기 여행코스" />
               </Link>
-              <CourseList />
+              <CourseList courses={courseList} />
             </CategoryArea>
             <CategoryArea>
               <Link href="/place">

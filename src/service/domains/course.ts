@@ -8,6 +8,14 @@ class CourseApi extends Api {
   //   const response = await this.authInstance(`${this.path}`, data);
   //   ...
   // };
+
+  getCourses = async (filter) => {
+    const queryString = Object.entries(filter)
+      .map((e) => e.join('='))
+      .join('&');
+    const response = await this.baseInstance.get(`${this.path}/?${queryString}`);
+    return response.data;
+  };
 }
 
 export default new CourseApi();
