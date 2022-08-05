@@ -2,22 +2,23 @@ import styled from '@emotion/styled';
 import React, { useMemo } from 'react';
 import { Text } from '~/components/atom';
 import theme from '~/styles/theme';
+import { Region } from '~/types';
 
 interface RegionItemProps {
-  onClick?: (text: string) => void;
-  text: string;
-  selectedValue: string;
+  onClick?: (region: Region | '전체보기') => void;
+  region: Region | '전체보기';
+  selectedValue: Region | '전체보기';
 }
 
-const RegionItem = ({ onClick, text, selectedValue }: RegionItemProps) => {
-  const isSelected = useMemo(() => selectedValue === text, [selectedValue, text]);
+const RegionItem = ({ onClick, region, selectedValue }: RegionItemProps) => {
+  const isSelected = useMemo(() => selectedValue === region, [selectedValue, region]);
   const handleClick = () => {
-    onClick && onClick(text);
+    onClick && onClick(region);
   };
 
   return (
     <StyledRegion onClick={handleClick} isSelected={isSelected}>
-      <Text size="md">{text}</Text>
+      <Text size="md">{region}</Text>
     </StyledRegion>
   );
 };
