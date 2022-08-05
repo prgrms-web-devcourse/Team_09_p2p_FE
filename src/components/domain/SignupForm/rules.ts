@@ -5,14 +5,14 @@ import StringSchema, { RequiredStringSchema } from 'yup/lib/string';
 import { AnyObject } from 'yup/lib/types';
 
 const MESSAGE = {
-  password: '비밀번호는 영문과 숫자를 포함한 8~15자로 설정해주세요.',
+  password: '비밀번호는 영문, 숫자, 특수문자를 포함한 8~15자로 설정해주세요.',
   passwordCheck: '동일한 비밀번호가 아니에요.',
   nickname: '닉네임은 2~8자리로 설정해주세요.',
   birth: '올바른 생년월일을 입력해주세요.'
 };
 
 const VALIDATION = {
-  password: /(?=.*\d)(?=.*[a-zA-Z]).{8,15}/,
+  password: /(?=.*\d)(?=.*[a-zA-Z])(?=.*[!@#$%^&*()]).{8,15}/,
   birth: /^\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$/g
 };
 
