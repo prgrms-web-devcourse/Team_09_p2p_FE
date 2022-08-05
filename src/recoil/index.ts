@@ -11,12 +11,12 @@ interface UserState {
 }
 
 export const userState = atom<UserState>({
-  key: 'LoginState',
+  key: 'userState',
   default: {
     accessToken: null,
     user: {
-      id: 1,
-      nickname: 'jinist',
+      id: null,
+      nickname: null,
       profileImage: null
     }
   }

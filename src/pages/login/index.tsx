@@ -4,12 +4,17 @@ import React from 'react';
 import { LoginForm } from '~/components/domain';
 import { LoginValues } from '~/types';
 import { UserApi } from '~/service';
+import { useRecoilState } from 'recoil';
+import { userState } from '~/recoil';
 
 const Login: NextPage = () => {
+  const [currentUser, setCurrentUser] = useRecoilState(userState);
+
   const handleSubmit = async (data: LoginValues) => {
     console.log('로그인 시도!', data);
     const response = await UserApi.login(data);
     console.log('로그인 성공', response);
+    setCurrentUser(response);
   };
 
   return (

@@ -2,9 +2,11 @@ import styled from '@emotion/styled';
 // import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
+import { useRecoilState } from 'recoil';
 import { PageContainer, Button, Link } from '~/components/atom';
 import Avatar from '~/components/atom/Avatar';
 import Logo from '~/components/atom/Logo';
+import { userState } from '~/recoil';
 import theme from '~/styles/theme';
 import SearchInput from '../SearchInput';
 
@@ -13,11 +15,15 @@ interface HeaderProps {
 }
 
 const Header = ({ full }: HeaderProps) => {
+  const [currentUser, setCurrentUser] = useRecoilState(userState);
+
+  console.log(currentUser, 'currentUser');
   const router = useRouter();
   const handleSearch = (keyword: string) => {
     const searchPath = `/search/${keyword}`;
     router.push(searchPath);
   };
+
   if (full) {
     return (
       <HeaderContainer>
@@ -62,9 +68,11 @@ const Header = ({ full }: HeaderProps) => {
               <Link href="/course/create">
                 <Button>코스등록</Button>
               </Link>
-              <Link href="/login">
-                <Button buttonType="borderPrimary">로그인</Button>
-              </Link>
+              {!currentUser.accessToken && (
+                <Link href="/login">
+                  <Button buttonType="borderPrimary">로그인</Button>
+                </Link>
+              )}
             </Buttons>
           </Inner>
         </PageContainer>
