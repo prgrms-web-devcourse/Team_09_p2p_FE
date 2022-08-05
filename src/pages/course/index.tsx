@@ -11,18 +11,19 @@ import {
   SortFilter
 } from '~/components/common';
 import { CourseApi } from '~/service';
+import { SortType } from '~/types/course';
 
 const Course: NextPage = () => {
   const [courseList, setCourseList] = useState([]);
 
-  const getCourseList = async () => {
-    const result = await CourseApi.getCourses();
+  const getCourseList = async (sort?: SortType) => {
+    const result = await CourseApi.getCourses({ sort });
     console.log('[Courses] :', result.content);
     setCourseList(result.content);
   };
 
   useEffect(() => {
-    getCourseList();
+    getCourseList('createdAt');
   }, []);
 
   return (
@@ -39,7 +40,7 @@ const Course: NextPage = () => {
             <SelectRegion />
             <SelectTags style={{ marginTop: '24px' }} />
           </FilterList>
-          <SortFilter />
+          <SortFilter onSort={getCourseList} />
           <CourseList courses={courseList} />
         </PageContainer>
       </main>

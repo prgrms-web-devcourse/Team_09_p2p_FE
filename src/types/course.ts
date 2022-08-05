@@ -24,3 +24,5 @@ export interface CourseFilter {
   size?: number;
   sort?: string;
 }
+
+export type SortType = 'createdAt' | 'desc';
