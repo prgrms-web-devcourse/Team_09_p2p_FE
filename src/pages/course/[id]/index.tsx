@@ -124,6 +124,7 @@ const CourseDetail: NextPage = () => {
             likes={like}
             defaultLiked={detailData?.isLiked}
             defaultBookmarked={detailData?.isBookmarked}
+            isLoggedIn={isLoggedIn}
           />
         </PageContainer>
       </main>

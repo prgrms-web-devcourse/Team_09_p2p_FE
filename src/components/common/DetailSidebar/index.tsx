@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { Icon, Text } from '~/components/atom';
 import { CourseApi, LikesApi } from '~/service';
@@ -8,20 +9,41 @@ interface DetailSidebarProps {
   likes?: number;
   defaultLiked?: boolean;
   defaultBookmarked?: boolean;
+  isLoggedIn?: boolean;
 }
+/*
+  TODO: 
+  1. 코스와 장소페이지의 처리가 다르게 되도록 구현
+  2. API 완성될 경우 실제 요청 보내도록 처리
 
-const DetailSidebar = ({ likes = 0, defaultLiked, defaultBookmarked }: DetailSidebarProps) => {
+*/
+
+const DetailSidebar = ({
+  likes = 0,
+  defaultLiked,
+  defaultBookmarked,
+  isLoggedIn
+}: DetailSidebarProps) => {
   const [isLiked, setIsLiked] = useState(defaultLiked);
   const [isBookmarked, setIsBookmarked] = useState(defaultBookmarked);
   const [totalLikes, setTotalLikes] = useState(likes);
+  const router = useRouter();
 
   const handleClickLike = async () => {
+    if (!isLoggedIn) {
+      router.push('/login');
+      return;
+    }
     // const result = await LikesApi.likeCourse(id);
     setIsLiked(!isLiked);
     setTotalLikes(isLiked ? totalLikes - 1 : totalLikes + 1);
   };
 
   const handleClickBookmark = async () => {
+    if (!isLoggedIn) {
+      router.push('/login');
+      return;
+    }
     // const result = await LikesApi.likeCourse(id);
     setIsBookmarked(!isBookmarked);
   };
