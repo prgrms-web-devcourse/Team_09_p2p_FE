@@ -8,27 +8,13 @@ import BookmarkIcon from '../BookmarkIcon';
 import LikeCount from '../LikeCount';
 
 interface CourseItemProps {
-  course?: ICourseItem;
+  course: ICourseItem;
   grid?: number;
 }
 
-const courseItemData: ICourseItem = {
-  id: 1,
-  title: '[1박 2일] 제주도 여행 추천~ 다들 추천하는 여행지입니다',
-  thumbnail: '',
-  region: '제주',
-  period: '당일',
-  theme: ['혼자여행', '데이트코스'],
-  places: ['인천공항', '도렐제주본점', '서귀포 1번길', '기타'],
-  likes: 12,
-  isBookmarked: false,
-  nickname: 'Jinist',
-  profileUrl: ''
-};
-
-const CourseItem = ({ course = courseItemData, grid = 3 }: CourseItemProps) => {
-  const { id, thumbnail, region, title, places, theme, likes, profileUrl } = course;
-  const COURSE_COUNT = course.places.length;
+const CourseItem = ({ course, grid = 3 }: CourseItemProps) => {
+  const { id, thumbnail, region, title, places, themes, likes, profileUrl, nickname } = course;
+  const COURSE_COUNT = course?.places.length;
 
   const THUMBNAIL_URL = thumbnail ? thumbnail : '/assets/location/jeju.jpg';
   return (
@@ -57,7 +43,7 @@ const CourseItem = ({ course = courseItemData, grid = 3 }: CourseItemProps) => {
             ))}
           </Text>
           <Text block style={{ marginTop: 4 }}>
-            {theme.map((item) => (
+            {themes.map((item) => (
               <React.Fragment key={item}>#{item} </React.Fragment>
             ))}
           </Text>
@@ -65,7 +51,7 @@ const CourseItem = ({ course = courseItemData, grid = 3 }: CourseItemProps) => {
             <LikeCount count={likes} />
             <Profile>
               <Avatar src={profileUrl} size={26} />
-              <Text color="gray">jinist</Text>
+              <Text color="gray">{nickname}</Text>
             </Profile>
           </InfoFooter>
         </CourseInfo>
