@@ -3,9 +3,9 @@ import { Icon, Text } from '~/components/atom';
 import theme from '~/styles/theme';
 
 interface DetailSidebarProps {
-  likes: number;
-  isLiked: boolean;
-  isBookmarked: boolean;
+  likes?: number;
+  isLiked?: boolean;
+  isBookmarked?: boolean;
 }
 
 const DetailSidebar = ({ likes = 0, isLiked, isBookmarked }: DetailSidebarProps) => {

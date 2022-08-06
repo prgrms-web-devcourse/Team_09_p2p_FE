@@ -7,7 +7,7 @@ import CourseSliderItem from './CourseSliderItem';
 import { IPlace } from '~/pages/course/[id]';
 
 interface CourseSliderProps {
-  places: IPlace[];
+  places?: IPlace[];
 }
 
 const CourseSlider = ({ places }: CourseSliderProps) => {

@@ -44,13 +44,12 @@ class CourseApi extends Api {
   };
 
   read = async (courseId: string) => {
-    /* try {
+    try {
       const response = await this.baseInstance.get(`${this.path}/${courseId}`);
-      console.log(response);
       return response.data;
     } catch (e) {
       console.error(`코스 상세 조회 오류: ${e}`);
-    } */
+    }
   };
 
   update = async (formData: FormData) => {
