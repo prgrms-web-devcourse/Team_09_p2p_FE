@@ -64,6 +64,7 @@ const CourseDetail: NextPage = () => {
       const result = await CourseApi.authRead(courseId);
       setDetailData(result);
       setLike(result.likes);
+      console.log(result.places[0].latitude, result.places[0].longitude);
     } else {
       const result = await CourseApi.read(courseId);
       setDetailData(result);
@@ -78,6 +79,10 @@ const CourseDetail: NextPage = () => {
     }
     // router.push('/');
   }, [courseId, router]);
+
+  if (!detailData) {
+    return null;
+  }
 
   return (
     <React.Fragment>
@@ -127,7 +132,7 @@ const CourseDetail: NextPage = () => {
               <DetailTitle size="md" fontWeight={700}>
                 여행경로
               </DetailTitle>
-              {/* <CourseMap course={courseMapData} /> */}
+              <CourseMap course={detailData?.places} />
             </TravelRoute>
             <TravelCourse>
               <DetailTitle size="md" fontWeight={700}>
