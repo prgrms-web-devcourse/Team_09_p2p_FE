@@ -21,6 +21,7 @@
   },
   "rules": {
     "eqeqeq": "error",
-    "no-var": "error"
+    "no-var": "error",
+    "prettier/prettier": ["error", { "endOfLine": "auto" }]
   }
 }

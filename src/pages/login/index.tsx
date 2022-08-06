@@ -1,17 +1,28 @@
 import type { NextPage } from 'next';
 import Head from 'next/head';
 import React from 'react';
+import { LoginForm } from '~/components/domain';
+import { LoginValues } from '~/types';
+import { UserApi } from '~/service';
 
 const Login: NextPage = () => {
+  const handleSubmit = async (data: LoginValues) => {
+    console.log('로그인 시도!', data);
+    const response = await UserApi.login(data);
+    console.log('로그인 성공', response);
+  };
+
   return (
     <React.Fragment>
       <Head>
-        <title>우리의 여행코스 | 이곳저곳</title>
-        <meta name="description" content="our travel course" />
+        <title>로그인 | 이곳저곳</title>
+        <meta name="description" content="login" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main>Login</main>
+      <main>
+        <LoginForm onSubmit={handleSubmit} />
+      </main>
     </React.Fragment>
   );
 };
