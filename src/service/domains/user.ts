@@ -1,6 +1,16 @@
 import Api from '~/service/core/Api';
 import { LoginValues, SignupValues } from '~/types';
 
+interface UserInfo {
+  id: number;
+  email: string;
+  nickname: string;
+  profileImage: string;
+  birth: string;
+  sex: string;
+  createdAt: string;
+  updatedAt: string;
+}
 class UserApi extends Api {
   private path = '/users';
 
@@ -30,6 +40,11 @@ class UserApi extends Api {
   nicknameCheck = async (bodyData: { nickname: string }) => {
     const response = await this.baseInstance.post(`${this.path}/nickname`, bodyData);
     return response;
+  };
+
+  getUser = async () => {
+    const response = await this.authInstance.get(`${this.path}`);
+    return response.data;
   };
 }
 

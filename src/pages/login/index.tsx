@@ -3,13 +3,16 @@ import Head from 'next/head';
 import React from 'react';
 import { LoginForm } from '~/components/domain';
 import { LoginValues } from '~/types';
-import { UserApi } from '~/service';
+import { useUser } from '~/hooks/useUser';
+import { useRouter } from 'next/router';
 
 const Login: NextPage = () => {
+  const { login } = useUser();
+  const router = useRouter();
+
   const handleSubmit = async (data: LoginValues) => {
-    console.log('로그인 시도!', data);
-    const response = await UserApi.login(data);
-    console.log('로그인 성공', response);
+    login(data);
+    router.push('/');
   };
 
   return (

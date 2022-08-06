@@ -4,6 +4,7 @@ import type { AppProps } from 'next/app';
 import type { NextPage } from 'next';
 import Layout from '~/components/common/Layout';
 import { ReactElement, ReactNode } from 'react';
+import { RecoilRoot } from 'recoil';
 
 export type NextPageWithLayout = NextPage & { getLayout?: (page: ReactElement) => ReactNode };
 type AppPropsWidthLayout = AppProps & { Component: NextPageWithLayout };
@@ -11,7 +12,7 @@ type AppPropsWidthLayout = AppProps & { Component: NextPageWithLayout };
 function MyApp({ Component, pageProps }: AppPropsWidthLayout) {
   const getLayout = Component.getLayout || ((page) => <Layout>{page}</Layout>);
 
-  return getLayout(<Component {...pageProps} />);
+  return <RecoilRoot>{getLayout(<Component {...pageProps} />)}</RecoilRoot>;
 }
 
 export default MyApp;
