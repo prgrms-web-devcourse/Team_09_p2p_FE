@@ -55,7 +55,7 @@ const CourseDetail: NextPage = () => {
   */
   const { currentUser, isLoggedIn } = useUser();
   const [detailData, setDetailData] = useState<ICourseData | null>(null);
-
+  const [like, setLike] = useState<number>(0);
   const router = useRouter();
   const courseId = router.query.id;
 
@@ -63,9 +63,11 @@ const CourseDetail: NextPage = () => {
     if (isLoggedIn) {
       const result = await CourseApi.authRead(courseId);
       setDetailData(result);
+      setLike(result.likes);
     } else {
       const result = await CourseApi.read(courseId);
       setDetailData(result);
+      setLike(result.likes);
     }
   };
 
@@ -74,7 +76,7 @@ const CourseDetail: NextPage = () => {
       getDetailInfo(courseId);
       return;
     }
-    router.push('/');
+    // router.push('/');
   }, [courseId, router]);
 
   return (
@@ -137,9 +139,9 @@ const CourseDetail: NextPage = () => {
           </CourseDetails>
           <Comment />
           <DetailSidebar
-            likes={detailData?.likes}
-            isLiked={detailData?.isLiked}
-            isBookmarked={detailData?.isBookmarked}
+            likes={like}
+            defaultLiked={detailData?.isLiked}
+            defaultBookmarked={detailData?.isBookmarked}
           />
         </PageContainer>
       </main>
