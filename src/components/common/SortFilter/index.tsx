@@ -7,13 +7,10 @@ interface SortFilterProps {
   onSort?: (value: SortType) => void; // TODO: 더미데이터 테스트 시점에 필수로 변경
 }
 
-const defaultSortData = [
-  { name: '최신순', value: sortOrder.CREATED_AT },
-  { name: '인기순', value: sortOrder.DESC }
-];
+const defaultSortData = [{ value: sortOrder.DESC }, { value: sortOrder.POPULAR }];
 
 const SortFilter: React.FC<SortFilterProps> = ({ onSort }) => {
-  const [isSelected, setIsSelected] = useState<SortType>(sortOrder.CREATED_AT);
+  const [isSelected, setIsSelected] = useState<SortType>(sortOrder.DESC);
 
   const handleClick = (value: SortType) => {
     setIsSelected(value);
@@ -22,9 +19,9 @@ const SortFilter: React.FC<SortFilterProps> = ({ onSort }) => {
 
   return (
     <StyledSortFilter>
-      {defaultSortData.map(({ value, name }) => (
+      {defaultSortData.map(({ value }) => (
         <li key={value} onClick={() => handleClick(value)}>
-          <Text fontWeight={isSelected === value ? 600 : 400}>{name}</Text>
+          <Text fontWeight={isSelected === value ? 600 : 400}>{value}</Text>
         </li>
       ))}
     </StyledSortFilter>

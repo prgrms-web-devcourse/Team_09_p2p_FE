@@ -12,21 +12,20 @@ import {
 } from '~/components/common';
 
 import { RegionAndAll, SearchTagsValues } from '~/types';
-
 import { CourseApi } from '~/service';
-import { SortType } from '~/types/course';
+import { sortOrder, SortType } from '~/types/course';
 
 const Course: NextPage = () => {
   const [courseList, setCourseList] = useState([]);
 
   const getCourseList = async (sort?: SortType) => {
-    const result = await CourseApi.getCourses({ sort });
+    const result = await CourseApi.getCourses({ sorting: sort });
     console.log('[Courses] :', result.content);
     setCourseList(result.content);
   };
 
   useEffect(() => {
-    getCourseList('createdAt');
+    getCourseList(sortOrder.DESC);
   }, []);
 
   const handleSelectRegion = async (region: RegionAndAll) => {

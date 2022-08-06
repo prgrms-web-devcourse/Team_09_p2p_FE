@@ -17,17 +17,16 @@ export interface CourseFilter {
   period?: string;
   keyword?: string;
   region?: string;
-  spot?: string[];
-  theme?: string[];
+  spot?: string;
+  theme?: string;
   sorting?: string;
   page?: number;
   size?: number;
-  sort?: string;
 }
 
 export const sortOrder = {
-  CREATED_AT: 'createdAt',
-  DESC: 'desc'
+  DESC: '최신순',
+  POPULAR: '인기순'
 } as const;
 
 export type SortType = typeof sortOrder[keyof typeof sortOrder];
