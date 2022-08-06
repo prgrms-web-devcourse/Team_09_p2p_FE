@@ -89,8 +89,8 @@ const PlaceDetailByPostId = ({ post }: Props) => {
         <Container type="detail" style={{ position: 'relative' }}>
           <DetailSidebar
             likes={post.likeCount}
-            isLiked={post.liked}
-            isBookmarked={post.bookmarked}
+            defaultLiked={post.liked}
+            defaultBookmarked={post.bookmarked}
           />
           <PostHeader>
             <Title level={1} size="lg" fontWeight={700} block>
