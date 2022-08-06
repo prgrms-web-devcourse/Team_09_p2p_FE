@@ -37,6 +37,8 @@ export type Region =
   | '전남'
   | '제주';
 
+export type RegionAndAll = Region | '전체보기';
+
 export type PlacePost = {
   id: number;
   name: string;

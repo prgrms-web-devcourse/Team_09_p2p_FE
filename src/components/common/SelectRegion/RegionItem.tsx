@@ -1,13 +1,13 @@
 import styled from '@emotion/styled';
-import React, { useMemo } from 'react';
+import React from 'react';
 import { Text } from '~/components/atom';
 import theme from '~/styles/theme';
-import { Region } from '~/types';
+import { RegionAndAll } from '~/types';
 
 interface RegionItemProps {
-  onClick?: (region: Region | '전체보기') => void;
-  region: Region | '전체보기';
-  selectedValue: Region | '전체보기';
+  onClick?: (region: RegionAndAll) => void;
+  region: RegionAndAll;
+  selectedValue: RegionAndAll;
 }
 
 const RegionItem = ({ onClick, region, selectedValue }: RegionItemProps) => {

@@ -1,20 +1,20 @@
 import styled from '@emotion/styled';
 import React, { useState } from 'react';
 import theme from '~/styles/theme';
-import { Region } from '~/types';
+import { RegionAndAll } from '~/types';
 import { REGIONS } from '~/utils/constants';
 import RegionItem from './RegionItem';
 
 interface SelectRegionProps {
   col?: number;
-  onSelect: (region: Region | '전체보기') => void;
+  onSelect: (region: RegionAndAll) => void;
 }
 
-const regions: ('전체보기' | Region)[] = ['전체보기', ...REGIONS];
+const regions: RegionAndAll[] = ['전체보기', ...REGIONS];
 
 const SelectRegion = ({ onSelect, col = 9 }: SelectRegionProps) => {
   const [selectedValue, setSelectedValue] = useState(regions[0]);
-  const handleSelect = (region: Region | '전체보기') => {
+  const handleSelect = (region: RegionAndAll) => {
     setSelectedValue(region);
     onSelect && onSelect(region);
   };
