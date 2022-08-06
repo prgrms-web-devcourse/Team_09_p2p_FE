@@ -52,6 +52,15 @@ class CourseApi extends Api {
     }
   };
 
+  authRead = async (courseId: string) => {
+    try {
+      const response = await this.authInstance.get(`${this.path}/${courseId}`);
+      return response.data;
+    } catch (e) {
+      console.error(`코스 상세 조회 오류: ${e}`);
+    }
+  };
+
   update = async (formData: FormData) => {
     /* try {
       const response = await this.authInstance.put(this.path, formData);

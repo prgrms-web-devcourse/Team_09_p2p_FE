@@ -53,15 +53,20 @@ const CourseDetail: NextPage = () => {
     2. 업로드, 수정 날짜 가공하여 적용
     3. 수정/삭제 버튼 구현
   */
-
+  const { currentUser, isLoggedIn } = useUser();
   const [detailData, setDetailData] = useState<ICourseData | null>(null);
+
   const router = useRouter();
   const courseId = router.query.id;
-  const { currentUser } = useUser();
 
   const getDetailInfo = async (courseId: string) => {
-    const result = await CourseApi.read(courseId);
-    setDetailData(result);
+    if (isLoggedIn) {
+      const result = await CourseApi.authRead(courseId);
+      setDetailData(result);
+    } else {
+      const result = await CourseApi.read(courseId);
+      setDetailData(result);
+    }
   };
 
   useEffect(() => {
