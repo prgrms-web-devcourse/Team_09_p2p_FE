@@ -19,6 +19,7 @@
     "react-dom": "18.2.0",
     "react-kakao-maps-sdk": "^1.1.1",
     "react-slick": "^0.29.0",
+    "recoil": "^0.7.4",
     "slick-carousel": "^1.8.1",
     "yup": "^0.32.11"
   },

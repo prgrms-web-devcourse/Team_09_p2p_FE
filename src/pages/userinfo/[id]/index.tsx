@@ -9,6 +9,7 @@ import MyBookmarks from '~/components/domain/UserInfo/MyBookmarks';
 import MyComments from '~/components/domain/UserInfo/MyComments';
 import ProfileCard from '~/components/domain/UserInfo/ProfileCard';
 import Tab from '~/components/domain/UserInfo/Tab';
+import { useUser } from '~/hooks/useUser';
 import { courseListData, placeListData } from '~/utils/dummydata';
 
 export type IComment = {
@@ -45,9 +46,9 @@ const Userinfo: NextPage = () => {
   const [ActiveMenu, setActiveMenu] = useState('post');
   const [ActiveBookmark, setActiveBookmark] = useState('course');
   const router = useRouter();
+  const { currentUser } = useUser();
 
-  const currentUserId = 1; // 전역데이터라고 가정
-  const isMyPage = Number(router.query.id) === currentUserId;
+  const isMyPage = Number(router.query.id) === currentUser.user.id;
 
   const onClickAction = (value: string) => {
     setActiveMenu(value);
