@@ -1,6 +1,7 @@
-import React, { ChangeEvent, useCallback, useState } from 'react';
+import React, { ChangeEvent, useCallback, useMemo, useState } from 'react';
 import { Button, Input, Label } from '~/components/atom';
 import { ErrorMessage, Field } from '~/components/common';
+import { UserApi } from '~/service';
 import { FONT_SIZES } from '~/utils/constants';
 
 interface EmailFieldProps {
@@ -32,17 +33,18 @@ const EmailField: React.FC<EmailFieldProps> = ({
     [onChange, setInitDuplicateFn]
   );
 
+  const disabled = useMemo(() => !!error || value.length === 0, [error, value]);
+
   const handleClickDuplicate = async () => {
-    if (error) {
-      //TODO
-      // error가 있으면 중복확인버튼을 disable
+    if (disabled) {
       return;
     }
-    //TODO
-    // 1. 이메일 중복확인 로직 추가
-    // 2. 응답에 따라 ConfirmModal 불러오기
-    if (window.confirm(`${value}는 사용가능한 메일입니다!`)) {
+    try {
+      await UserApi.emailCheck({ email: value });
+      window.alert(`${value}는 사용가능한 메일입니다!`);
       setDuplicateCheckFn();
+    } catch (e) {
+      window.alert('이미 존재하는 메일이에요!');
     }
   };
 
@@ -59,7 +61,7 @@ const EmailField: React.FC<EmailFieldProps> = ({
         onBlur={handleBlur}
       />
       {error && <ErrorMessage message={error} />}
-      <Button onClick={handleClickDuplicate} fontSize={FONT_SIZES.sm}>
+      <Button onClick={handleClickDuplicate} fontSize={FONT_SIZES.sm} disabled={disabled}>
         이메일 중복확인
       </Button>
     </Field>

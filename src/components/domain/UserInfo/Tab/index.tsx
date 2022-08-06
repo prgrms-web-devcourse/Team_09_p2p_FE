@@ -6,9 +6,10 @@ interface TabProps {
   children: ReactNode;
   onActive: (value: string) => void;
   active?: string;
+  type?: 'tab' | 'radio';
 }
 
-const Tab = ({ children, active, onActive, ...props }: TabProps) => {
+const Tab = ({ children, active, onActive, type = 'tab', ...props }: TabProps) => {
   const childrenArray = React.Children.toArray(children);
 
   const items = useMemo(() => {
@@ -18,13 +19,14 @@ const Tab = ({ children, active, onActive, ...props }: TabProps) => {
           ...element.props,
           key: element.props.value,
           active: element.props.value === active,
+          type: type,
           onClick: () => {
             onActive(element.props.value);
           }
         });
       }
     });
-  }, [childrenArray, active, onActive]);
+  }, [childrenArray, active, onActive, type]);
 
   const activeItem = useMemo(() => {
     return items.find((element) => active === element?.props.value);
@@ -32,7 +34,7 @@ const Tab = ({ children, active, onActive, ...props }: TabProps) => {
 
   return (
     <div {...props}>
-      <TabItemContainer>{items}</TabItemContainer>
+      <TabItemContainer type={type}>{items}</TabItemContainer>
       <TabItemContent>{activeItem?.props.children}</TabItemContent>
     </div>
   );
@@ -42,8 +44,9 @@ Tab.item = TabItem;
 
 export default Tab;
 
-const TabItemContainer = styled.div`
+const TabItemContainer = styled.div<Pick<TabProps, 'type'>>`
   display: flex;
+  border-bottom: ${({ type }) => type === 'tab' && ' 1px solid #dfdfdf;'};
 `;
 
 const TabItemContent = styled.div`

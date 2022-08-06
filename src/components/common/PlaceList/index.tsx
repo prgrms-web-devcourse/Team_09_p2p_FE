@@ -1,5 +1,6 @@
 import styled from '@emotion/styled';
-import PlaceItem from './PlaceItem';
+import { placeListData } from '~/utils/dummydata';
+import PlaceItem, { PlaceGrid } from './PlaceItem';
 
 export interface IPlaceItem {
   id: number;
@@ -11,54 +12,16 @@ export interface IPlaceItem {
   bookmarked: boolean;
 }
 
-const placesData = [
-  {
-    id: 1,
-    title: '도렐 제주본점',
-    likeCount: 2,
-    usedCount: 1,
-    category: '',
-    thumbnail: '/assets/location/place1.jpg',
-    bookmarked: false
-  },
-  {
-    id: 2,
-    title: '레고랜드',
-    likeCount: 2,
-    usedCount: 1,
-    category: '',
-    thumbnail: '/assets/location/course6.PNG',
-    bookmarked: false
-  },
-  {
-    id: 3,
-    title: '대릉원',
-    likeCount: 2,
-    usedCount: 1,
-    category: '',
-    thumbnail: '/assets/location/course2.jpg',
-    bookmarked: false
-  },
-  {
-    id: 4,
-    title: '광안리해수욕장',
-    likeCount: 2,
-    usedCount: 1,
-    category: '',
-    thumbnail: '/assets/location/course5.jpg',
-    bookmarked: false
-  }
-];
-
 interface PlaceListProps {
   places?: IPlaceItem[];
+  grid?: PlaceGrid;
 }
 
-const PlaceList = ({ places = placesData }: PlaceListProps) => {
+const PlaceList = ({ grid = 4, places = placeListData }: PlaceListProps) => {
   return (
     <StyledPlaceList>
       {places.map((place, index) => (
-        <PlaceItem key={index} place={place} />
+        <PlaceItem key={index} grid={grid} place={place} />
       ))}
     </StyledPlaceList>
   );
@@ -69,5 +32,6 @@ export default PlaceList;
 const StyledPlaceList = styled.div`
   display: flex;
   flex-wrap: wrap;
-  gap: 40px 20px;
+  margin-right: -10px;
+  margin-left: -10px;
 `;

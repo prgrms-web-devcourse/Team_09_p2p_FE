@@ -10,8 +10,17 @@ import {
   SelectTags,
   SortFilter
 } from '~/components/common';
+import { RegionAndAll, SearchTagsValues } from '~/types';
 
 const Course: NextPage = () => {
+  const handleSelectRegion = async (region: RegionAndAll) => {
+    console.log('코스페이지', region);
+  };
+
+  const handleSelectTags = async (data: SearchTagsValues) => {
+    console.log('코스페이지', data);
+  };
+
   return (
     <React.Fragment>
       <Head>
@@ -23,8 +32,8 @@ const Course: NextPage = () => {
         <PageContainer>
           <CategoryTitle name="여행코스" />
           <FilterList>
-            <SelectRegion />
-            <SelectTags style={{ marginTop: '24px' }} />
+            <SelectRegion onSelect={handleSelectRegion} />
+            <SelectTags style={{ marginTop: '24px' }} onSelect={handleSelectTags} />
           </FilterList>
           <SortFilter />
           <CourseList />

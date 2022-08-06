@@ -17,9 +17,15 @@ type CourseSearchBookmarked = {
   readonly sort?: string;
   readonly userId: number;
 };
+
 class CourseApi extends Api {
   private path = '/courses';
 
+  getCourses = async () => {
+    const response = await this.baseInstance.get(`${this.path}`);
+    return response;
+  };
+  
   create = async (formData: FormData) => {
     try {
       const response = await this.authInstance.post(`${this.path}/`, formData);

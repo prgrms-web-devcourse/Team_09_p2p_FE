@@ -3,7 +3,7 @@ import Image from 'next/image';
 import { CSSProperties } from 'react';
 
 interface AvatarProps {
-  src?: string;
+  src?: string | null;
   size?: number;
   style?: CSSProperties;
 }

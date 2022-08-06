@@ -3,12 +3,16 @@ import Head from 'next/head';
 import React from 'react';
 import { LoginForm } from '~/components/domain';
 import { LoginValues } from '~/types';
+import { useUser } from '~/hooks/useUser';
+import { useRouter } from 'next/router';
 
 const Login: NextPage = () => {
-  const handleSubmit = async (values: LoginValues) => {
-    // TODO
-    // await 비동기 로직 수행
-    console.log(values);
+  const { login } = useUser();
+  const router = useRouter();
+
+  const handleSubmit = async (data: LoginValues) => {
+    login(data);
+    router.push('/');
   };
 
   return (
@@ -20,7 +24,7 @@ const Login: NextPage = () => {
       </Head>
 
       <main>
-        <LoginForm onSubmit={(values: LoginValues) => handleSubmit(values)} />
+        <LoginForm onSubmit={handleSubmit} />
       </main>
     </React.Fragment>
   );

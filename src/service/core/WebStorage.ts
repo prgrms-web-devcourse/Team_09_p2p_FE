@@ -3,15 +3,19 @@ type TokenKey = 'jwt-token';
 export default class WebStorage {
   private static readonly tokenKey: TokenKey = 'jwt-token';
 
-  static getToken(): string | null {
+  static getToken(): string | void {
     if (typeof window !== 'undefined') {
-      const value = window.localStorage.getItem(this.tokenKey);
-      if (value) {
-        return JSON.parse(value);
+      try {
+        const value = window.localStorage.getItem(this.tokenKey);
+        if (value) {
+          return value;
+        }
+        this.removeToken();
+      } catch (e) {
+        console.error('토큰 에러!', e);
+        this.removeToken();
       }
-      return null;
     }
-    return null;
   }
 
   static setToken(token: string): void {

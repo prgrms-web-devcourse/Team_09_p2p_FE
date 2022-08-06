@@ -11,6 +11,7 @@ import PlaceInformation from '~/components/domain/CourseCreate/PlaceInformation'
 import { SelectTags } from '~/components/common';
 import { useRouter } from 'next/router';
 import { CourseApi } from '~/service';
+import { SearchTagsValues } from '~/types';
 
 type PlaceType = {
   id: number;
@@ -148,6 +149,11 @@ const Course: NextPage = () => {
     };
     createCourse(formData);
   };
+
+  const handleSelectTags = (data: SearchTagsValues) => {
+    console.log(data);
+  };
+
   return (
     <React.Fragment>
       <Head>
@@ -163,7 +169,7 @@ const Course: NextPage = () => {
           <TitleInputWrapper>
             <TitleInput placeholder="코스의 제목을 입력해주세요" ref={titleRef} />
             <TitleUnderLine />
-            <SelectTags style={{ marginTop: '10px' }} />
+            <SelectTags style={{ marginTop: '10px' }} onSelect={handleSelectTags} />
           </TitleInputWrapper>
           <PlacesWrapper>
             {courseInfo.places.map((place, index, courseInfo) => (
