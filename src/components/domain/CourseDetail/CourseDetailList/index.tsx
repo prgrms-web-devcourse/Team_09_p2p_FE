@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import { Image, Text, Title } from '~/components/atom';
-import { IPlace } from '~/pages/course/[id]';
+import { IPlace } from '~/types/place';
 
 interface CourseDetailList {
   places?: IPlace[];

@@ -14,38 +14,7 @@ import CourseMap from '~/components/domain/Map/CourseMap';
 import { useUser } from '~/hooks/useUser';
 import { CourseApi } from '~/service';
 import theme from '~/styles/theme';
-
-interface ICourseData {
-  id: number;
-  title: string;
-  thumbnail: string;
-  region: string;
-  period: string;
-  themes: string[];
-  spots: string[];
-  places: IPlace[];
-  likes: number;
-  isLiked: boolean;
-  isBookmarked: boolean;
-  nickname: string;
-  userId: number;
-  profileImage: string;
-  createdAt: string;
-  updatedAt: string;
-}
-
-export interface IPlace {
-  id: number;
-  name: string;
-  description: string;
-  address: string;
-  latitude: string;
-  longitude: string;
-  phoneNumber: string;
-  imageUrl: string;
-  isRecommended: boolean;
-  isThumbnail: boolean;
-}
+import { ICourseDetail } from '~/types/course';
 
 const CourseDetail: NextPage = () => {
   /* TODO
@@ -54,7 +23,7 @@ const CourseDetail: NextPage = () => {
     3. 수정/삭제 버튼 구현
   */
   const { currentUser, isLoggedIn } = useUser();
-  const [detailData, setDetailData] = useState<ICourseData | null>(null);
+  const [detailData, setDetailData] = useState<ICourseDetail | null>(null);
   const [like, setLike] = useState<number>(0);
   const router = useRouter();
   const courseId = router.query.id;
