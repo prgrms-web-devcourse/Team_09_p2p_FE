@@ -1,6 +1,7 @@
 import styled from '@emotion/styled';
 import Head from 'next/head';
-import React, { ReactElement, useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
+import React, { FormEvent, ReactElement, useEffect, useRef, useState } from 'react';
 import { Button, Link, PageContainer, Image } from '~/components/atom';
 import { CourseList, PlaceList } from '~/components/common';
 import Layout from '~/components/common/Layout';
@@ -9,6 +10,8 @@ import { CourseApi } from '~/service';
 import theme from '~/styles/theme';
 
 const HomePage = () => {
+  const router = useRouter();
+  const mainSearchInputRef = useRef<HTMLInputElement>(null);
   // TODO :
   /*
     1. 메인페이지 기능 구현
@@ -22,6 +25,16 @@ const HomePage = () => {
     const result = await CourseApi.getCourses(filter);
     console.log('[Courses] :', result.content);
     setCourseList(result.content);
+  };
+
+  const handleSearch = (e: FormEvent) => {
+    e.preventDefault();
+    if (mainSearchInputRef.current) {
+      const keyword = mainSearchInputRef.current.value;
+      if (keyword) {
+        router.push(`/search/${keyword}`);
+      }
+    }
   };
 
   useEffect(() => {
@@ -40,7 +53,13 @@ const HomePage = () => {
         <PageContainer>
           <SearchArea>
             <Image width={550} src="/assets/search-img.png" alt="여행할 땐 이곳저곳" />
-            <MainSearchInput type="text" placeholder="지역, 장소를 검색해보세요." />
+            <form onSubmit={handleSearch}>
+              <MainSearchInput
+                type="text"
+                placeholder="지역, 장소를 검색해보세요."
+                ref={mainSearchInputRef}
+              />
+            </form>
             <Tags>
               <Button buttonType="tag">#힐링</Button>
               <Button buttonType="tag">#이쁜카페</Button>
