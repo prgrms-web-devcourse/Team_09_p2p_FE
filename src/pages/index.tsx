@@ -14,9 +14,11 @@ const HomePage = () => {
     1. 메인페이지 기능 구현
   */
   const [courseList, setCourseList] = useState([]);
+  const COURSE_COUNT = 6;
+  const PLACE_COUNT = 4;
 
   const getCourseList = async () => {
-    const filter = { size: 6 };
+    const filter = { size: COURSE_COUNT };
     const result = await CourseApi.getCourses(filter);
     console.log('[Courses] :', result.content);
     setCourseList(result.content);
