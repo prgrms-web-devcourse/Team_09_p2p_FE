@@ -4,11 +4,11 @@ import OverviewDetailItem from './OverviewDetailItem';
 import OverviewItem from './OverviewItem';
 
 interface CourseOverviewProps {
-  region: string;
-  period: string;
-  courseCount: number;
-  themes: string[];
-  spots: string[];
+  region?: string;
+  period?: string;
+  courseCount?: number;
+  themes?: string[];
+  spots?: string[];
 }
 
 const CourseOverview = ({ region, period, courseCount, themes, spots }: CourseOverviewProps) => {
@@ -20,7 +20,7 @@ const CourseOverview = ({ region, period, courseCount, themes, spots }: CourseOv
         <OverviewItem title="총 코스" content={courseCount + '코스'} iconName="route" />
       </OverviewList>
       <OverviewDetailList>
-        <OverviewDetailItem title="여행테마" list={themes} />
+        <OverviewDetailItem title="여행테마" list={themes} theme />
         <OverviewDetailItem title="포함장소" list={spots} />
       </OverviewDetailList>
     </Container>
