@@ -13,6 +13,13 @@ import { useRouter } from 'next/router';
 import { CourseApi } from '~/service';
 import { SearchTagsValues } from '~/types';
 
+interface CourseType {
+  id: number;
+  latitude: string;
+  longitude: string;
+  name: string;
+}
+
 type PlaceType = {
   id: number;
   lat: number;
@@ -72,11 +79,11 @@ const Course: NextPage = () => {
 
   const courseMapData = courseInfo.places.map((place) => {
     return {
-      placeId: place.id,
-      lat: place.lat,
-      lng: place.lng,
-      placeName: place.name
-    };
+      id: place.id,
+      latitude: place.lat,
+      longitude: place.lng,
+      name: place.name
+    } as unknown as CourseType;
   });
   const placesFormDataSetter = () => {
     return courseInfo.places.map((place, index) => {

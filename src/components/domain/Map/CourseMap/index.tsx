@@ -4,10 +4,32 @@ import markerIcon from 'public/assets/place/course.png';
 import Script from 'next/script';
 import styled from '@emotion/styled';
 
-type CourseType = { placeId: number; lat: number; lng: number; placeName: string };
+interface IPlace {
+  id: number;
+  name: string;
+  description: string;
+  address: string;
+  latitude: string;
+  longitude: string;
+  category: string;
+  phone: string;
+  recommended: boolean;
+}
+interface CourseType {
+  id: number;
+  latitude: string;
+  longitude: string;
+  name: string;
+}
 
+interface PolyLineCourse {
+  placeId: number;
+  lat: number;
+  lng: number;
+  placeName: string;
+}
 interface CourseMapProps {
-  course: CourseType[];
+  course: CourseType[] | IPlace[];
 }
 let isAlreadyLoaded = false;
 const CourseMap = ({ course }: CourseMapProps) => {
@@ -22,7 +44,7 @@ const CourseMap = ({ course }: CourseMapProps) => {
       const bounds = new kakao.maps.LatLngBounds();
 
       course.forEach((place) => {
-        bounds.extend(new kakao.maps.LatLng(place.lat, place.lng));
+        bounds.extend(new kakao.maps.LatLng(Number(place.latitude), Number(place.longitude)));
       });
       const map = mapState;
       if (map) {
@@ -30,7 +52,14 @@ const CourseMap = ({ course }: CourseMapProps) => {
       }
     }
   }, [mapState]);
-
+  const polyLineCourse = course.map((place) => {
+    return {
+      placeId: place.id,
+      lat: Number(place.latitude),
+      lng: Number(place.longitude),
+      placeName: place.name
+    } as PolyLineCourse;
+  });
   return (
     <>
       <Script
@@ -57,7 +86,7 @@ const CourseMap = ({ course }: CourseMapProps) => {
           {course.map((place, index) => (
             <React.Fragment key={index}>
               <MapMarker
-                position={{ lat: place.lat, lng: place.lng }}
+                position={{ lat: Number(place.latitude), lng: Number(place.longitude) }}
                 image={{
                   src: markerIcon.src,
                   size: {
@@ -73,7 +102,7 @@ const CourseMap = ({ course }: CourseMapProps) => {
                 }}
               ></MapMarker>
               <CustomOverlayMap
-                position={{ lat: place.lat, lng: place.lng }}
+                position={{ lat: Number(place.latitude), lng: Number(place.longitude) }}
                 xAnchor={0}
                 yAnchor={1.1}
                 clickable={true}
@@ -81,18 +110,18 @@ const CourseMap = ({ course }: CourseMapProps) => {
                 <span>{index + 1}</span>
                 <MarkerWithCustomOverlayStyle>
                   <a
-                    href={`https://map.kakao.com/link/map/${place.placeId}`}
+                    href={`https://map.kakao.com/link/map/${place.id}`}
                     target="_blank"
                     rel="noreferrer"
                   >
-                    <span>{place.placeName}</span>
+                    <span>{place.name}</span>
                   </a>
                 </MarkerWithCustomOverlayStyle>
               </CustomOverlayMap>
             </React.Fragment>
           ))}
           <Polyline
-            path={course}
+            path={polyLineCourse}
             strokeWeight={5}
             strokeColor={'#FF5F5F'}
             strokeOpacity={0.9}
