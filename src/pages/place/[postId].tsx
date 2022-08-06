@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 import type { NextPageContext } from 'next';
 import Head from 'next/head';
-import React from 'react';
+import React, { useState } from 'react';
 import { Button, Icon, Image, PageContainer, Text, Title } from '~/components/atom';
 import { CourseList } from '~/components/common';
 import Comment from '~/components/common/Comment';
@@ -75,7 +75,8 @@ interface Props {
 }
 
 const PlaceDetailByPostId = ({ post }: Props) => {
-  console.log(post);
+  const [relevantCourses, setRelevantCourses] = useState([]);
+
   return (
     <React.Fragment>
       <Head>
@@ -117,7 +118,7 @@ const PlaceDetailByPostId = ({ post }: Props) => {
           <Title level={2} size="sm">
             이 장소가 포함된 코스
           </Title>
-          <CourseList />
+          <CourseList courses={relevantCourses} />
           <HorizonDivideLine />
           <Comment />
         </Container>
