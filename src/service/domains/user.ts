@@ -1,6 +1,16 @@
 import Api from '~/service/core/Api';
 import { LoginValues, SignupValues } from '~/types';
 
+interface UserInfo {
+  id: number;
+  email: string;
+  nickname: string;
+  profileImage: string;
+  birth: string;
+  sex: string;
+  createdAt: string;
+  updatedAt: string;
+}
 class UserApi extends Api {
   private path = '/users';
 
@@ -32,10 +42,8 @@ class UserApi extends Api {
     return response;
   };
 
-  getUser = async (token: string) => {
-    const response = await this.baseInstance.get(`${this.path}`, {
-      headers: { Authorization: token }
-    });
+  getUser = async () => {
+    const response = await this.authInstance.get(`${this.path}`);
     return response.data;
   };
 }

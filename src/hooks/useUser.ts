@@ -16,7 +16,7 @@ export const useUser = () => {
   };
 
   const updateUser = async (token: string) => {
-    const response = await UserApi.getUser(token);
+    const response = await UserApi.getUser();
     console.log(response, '★update User★');
     setCurrentUser({
       accessToken: token,
