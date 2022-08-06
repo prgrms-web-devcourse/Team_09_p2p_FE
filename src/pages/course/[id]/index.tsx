@@ -167,7 +167,7 @@ const CourseDetail: NextPage = () => {
               <DetailTitle size="md" fontWeight={700}>
                 여행경로
               </DetailTitle>
-              <CourseMap course={courseMapData} />
+              <CourseMap course={courseData.places} />
             </TravelRoute>
             <TravelCourse>
               <DetailTitle size="md" fontWeight={700}>
