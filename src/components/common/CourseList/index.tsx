@@ -1,14 +1,13 @@
 import styled from '@emotion/styled';
 import { ICourseItem } from '~/types/course';
-import { courseListData } from '~/utils/dummydata';
 import CourseItem from './CourseItem';
 
 interface CourseListProps {
-  courses?: ICourseItem[];
+  courses: ICourseItem[];
   grid?: number;
 }
 
-const CourseList = ({ courses = courseListData, grid = 3 }: CourseListProps) => {
+const CourseList = ({ courses, grid = 3 }: CourseListProps) => {
   return (
     <StyledCourseList>
       {courses.map((course) => (
