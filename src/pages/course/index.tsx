@@ -10,10 +10,10 @@ import {
   SelectTags,
   SortFilter
 } from '~/components/common';
-import { Region, SearchTagsValues } from '~/types';
+import { RegionAndAll, SearchTagsValues } from '~/types';
 
 const Course: NextPage = () => {
-  const handleSelectRegion = async (region: Region | '전체보기') => {
+  const handleSelectRegion = async (region: RegionAndAll) => {
     console.log('코스페이지', region);
   };
 

@@ -4,10 +4,11 @@ import Head from 'next/head';
 import React from 'react';
 import { PageContainer } from '~/components/atom';
 import { CategoryTitle, PlaceList, SelectRegion, SortFilter } from '~/components/common';
+import { RegionAndAll } from '~/types';
 
 const Place: NextPage = () => {
-  const handleSelectRegion = async (text: string) => {
-    console.log(text);
+  const handleSelectRegion = async (region: RegionAndAll) => {
+    console.log(region);
   };
 
   return (

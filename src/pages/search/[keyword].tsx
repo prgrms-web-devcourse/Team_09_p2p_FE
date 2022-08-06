@@ -4,14 +4,19 @@ import { useRouter } from 'next/router';
 import React from 'react';
 import { PageContainer, Title } from '~/components/atom';
 import { SelectTags, SelectRegion } from '~/components/common';
+import { RegionAndAll, SearchTagsValues } from '~/types';
 
 const SearchedKeywordPage: NextPage = () => {
   const {
     query: { keyword }
   } = useRouter();
 
-  const handleSelectRegion = async (text: string) => {
-    console.log(text);
+  const handleSelectRegion = async (region: RegionAndAll) => {
+    console.log(region);
+  };
+
+  const handleSelectTags = async (data: SearchTagsValues) => {
+    console.log(data);
   };
 
   //TODO
@@ -34,7 +39,7 @@ const SearchedKeywordPage: NextPage = () => {
             <b>&ldquo;{keyword}&rdquo;</b>로 검색된 결과입니다.
           </Title>
           <SelectRegion onSelect={handleSelectRegion} />
-          <SelectTags style={{ marginTop: '20px' }} />
+          <SelectTags style={{ marginTop: '20px' }} onSelect={handleSelectTags} />
         </PageContainer>
       </main>
     </React.Fragment>
