@@ -9,12 +9,22 @@ import ThemeTags from './ThemeTags';
 interface SelectTagsProps {
   style?: CSSProperties;
   onSelect: (data: SearchTagsValues) => void;
+  toInitializeTrigger?: string | number | boolean | null | undefined;
 }
 
-const SelectTags = ({ style, onSelect }: SelectTagsProps) => {
+const SelectTags = ({ style, onSelect, toInitializeTrigger }: SelectTagsProps) => {
   const [selectedPeriod, setSelectedPeriod] = useState<Period | null>(null);
   const [selectedThemes, setSelectedThemes] = useState<Theme[]>([]);
   const [selectedSpots, setSelectedSpots] = useState<Spot[]>([]);
+  const initialize = () => {
+    setSelectedPeriod(null);
+    setSelectedThemes([]);
+    setSelectedSpots([]);
+  };
+
+  useEffect(() => {
+    initialize();
+  }, [toInitializeTrigger]);
 
   useEffect(() => {
     onSelect({
