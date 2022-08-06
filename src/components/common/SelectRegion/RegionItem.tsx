@@ -11,7 +11,7 @@ interface RegionItemProps {
 }
 
 const RegionItem = ({ onClick, region, selectedValue }: RegionItemProps) => {
-  const isSelected = useMemo(() => selectedValue === region, [selectedValue, region]);
+  const isSelected = selectedValue === region;
   const handleClick = () => {
     onClick && onClick(region);
   };
