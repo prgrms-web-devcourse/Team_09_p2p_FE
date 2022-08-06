@@ -13,6 +13,7 @@ interface ProfileCardProps {
   postCount: number;
   bookmarkCount: number;
   commentCount: number;
+  isMyPage: boolean;
 }
 
 const ProfileCard = ({
@@ -22,7 +23,8 @@ const ProfileCard = ({
   onClickAction,
   postCount,
   bookmarkCount,
-  commentCount
+  commentCount,
+  isMyPage
 }: ProfileCardProps) => {
   const { logout } = useUser();
   const router = useRouter();
@@ -37,9 +39,11 @@ const ProfileCard = ({
       <UserProfile>
         <ProfileImage>
           <ProfileAvatar size={143} src={profileImage} />
-          <EditButton>
-            <Icon size={16} name="pencil" block />
-          </EditButton>
+          {isMyPage && (
+            <EditButton>
+              <Icon size={16} name="pencil" block />
+            </EditButton>
+          )}
         </ProfileImage>
         <ProfileInfo>
           <Title block>{nickname}</Title>
@@ -66,21 +70,24 @@ const ProfileCard = ({
           </Text.Button>
         </li>
       </UserActions>
-      <InfoEdit>
-        <li>
-          <Link href="/userinfo/edit">
-            <Text>내 정보 변경</Text>
-          </Link>
-        </li>
-        <li>
-          <Link href="/userinfo/password">
-            <Text>비밀번호 변경</Text>
-          </Link>
-        </li>
-        <li>
-          <Text.Button onClick={onLogout}>로그아웃</Text.Button>
-        </li>
-      </InfoEdit>
+
+      {isMyPage && (
+        <InfoEdit>
+          <li>
+            <Link href="/userinfo/edit">
+              <Text>내 정보 변경</Text>
+            </Link>
+          </li>
+          <li>
+            <Link href="/userinfo/password">
+              <Text>비밀번호 변경</Text>
+            </Link>
+          </li>
+          <li>
+            <Text.Button onClick={onLogout}>로그아웃</Text.Button>
+          </li>
+        </InfoEdit>
+      )}
     </Container>
   );
 };
@@ -127,10 +134,6 @@ const EditButton = styled.button`
 `;
 
 const UserActions = styled.ul`
-  padding-bottom: 24px;
-  margin-bottom: 24px;
-  border-bottom: 1px solid ${borderGray};
-
   li {
     display: flex;
     justify-content: space-between;
@@ -141,7 +144,11 @@ const ProfileInfo = styled.div`
   margin-top: 18px;
   text-align: center;
 `;
+
 const InfoEdit = styled.div`
+  border-top: 1px solid ${borderGray};
+  margin-top: 24px;
+  padding-top: 24px;
   li {
     padding: 10px 0;
   }

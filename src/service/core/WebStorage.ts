@@ -5,12 +5,16 @@ export default class WebStorage {
 
   static getToken(): string | void {
     if (typeof window !== 'undefined') {
-      const value = window.localStorage.getItem(this.tokenKey);
-
-      if (value) {
-        return value;
+      try {
+        const value = window.localStorage.getItem(this.tokenKey);
+        if (value) {
+          return value;
+        }
+        this.removeToken();
+      } catch (e) {
+        console.error('토큰 에러!', e);
+        this.removeToken();
       }
-      this.removeToken();
     }
   }
 

@@ -3,26 +3,13 @@ import React from 'react';
 import { Link, Text, Title } from '~/components/atom';
 import Avatar from '~/components/atom/Avatar';
 import theme from '~/styles/theme';
+import { ICourseItem } from '~/types/course';
 import BookmarkIcon from '../BookmarkIcon';
 import LikeCount from '../LikeCount';
 
 interface CourseItemProps {
   course?: ICourseItem;
   grid?: number;
-}
-
-export interface ICourseItem {
-  id: number;
-  title: string;
-  thumbnail: string;
-  region: string;
-  period: string;
-  theme: string[];
-  places: string[];
-  likes: number;
-  isBookmarked: boolean;
-  nickname: string;
-  profileUrl: string;
 }
 
 const courseItemData: ICourseItem = {

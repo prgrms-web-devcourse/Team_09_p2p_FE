@@ -1,5 +1,5 @@
 import theme from '~/styles/theme';
-import { Region } from '~/types';
+import { Period, Region, Spot, Theme } from '~/types';
 
 const { fontGray, fontDarkGray, fontDarkBlack } = theme.color;
 
@@ -54,28 +54,34 @@ export const MARKER_IMAGE_URLS: { [key: string]: string } = {
   pharmacy: '/assets/place/pharmacy.png'
 };
 
-export const TAGS = {
-  ['기간']: ['당일', '1~3일', '4~7일', '8~15일', '15일 이상'],
-  ['테마']: ['데이트 코스', '힐링', '드라이브', '이쁜카페', '맛집', '가족여행', '혼자여행'],
-  ['장소']: ['카페', '음식점', '숙소', '산', '바다', '테마파크']
-};
+export const TAGS_PERIOD: Period[] = ['당일', '1~3일', '4~7일', '8~15일', '15일 이상'];
+export const TAGS_THEME: Theme[] = [
+  '데이트 코스',
+  '힐링',
+  '드라이브',
+  '이쁜카페',
+  '맛집',
+  '가족여행',
+  '혼자여행'
+];
+export const TAGS_SPOT: Spot[] = ['카페', '음식점', '숙소', '산', '바다', '테마파크'];
 
 export const REGIONS: Region[] = [
-  { text: '서울' },
-  { text: '인천' },
-  { text: '대구' },
-  { text: '대전' },
-  { text: '광주' },
-  { text: '부산' },
-  { text: '울산' },
-  { text: '경기' },
-  { text: '세종' },
-  { text: '강원' },
-  { text: '충북' },
-  { text: '충남' },
-  { text: '경북' },
-  { text: '경남' },
-  { text: '전북' },
-  { text: '전남' },
-  { text: '제주' }
+  '서울',
+  '인천',
+  '대구',
+  '대전',
+  '광주',
+  '부산',
+  '울산',
+  '경기',
+  '세종',
+  '강원',
+  '충북',
+  '충남',
+  '경북',
+  '경남',
+  '전북',
+  '전남',
+  '제주'
 ];

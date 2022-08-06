@@ -47,20 +47,20 @@ const RegionSelect = ({ setRegion, onClose }: RegionSelectProps) => {
       </FormHeader>
       <FormBody>
         {regions.map((region) => {
-          if (region.text === '강원') {
+          if (region === '강원') {
             return (
-              <React.Fragment key={region.text}>
+              <React.Fragment key={region}>
                 <br />
                 <br />
-                <RegionButton key={region.text} onClick={regionSelectHandler}>
-                  {region.text}
+                <RegionButton key={region} onClick={regionSelectHandler}>
+                  {region}
                 </RegionButton>
               </React.Fragment>
             );
           }
           return (
-            <RegionButton key={region.text} onClick={regionSelectHandler}>
-              {region.text}
+            <RegionButton key={region} onClick={regionSelectHandler}>
+              {region}
             </RegionButton>
           );
         })}
