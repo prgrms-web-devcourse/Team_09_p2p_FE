@@ -4,10 +4,10 @@ import 'slick-carousel/slick/slick-theme.css';
 import styled from '@emotion/styled';
 import theme from '~/styles/theme';
 import CourseSliderItem from './CourseSliderItem';
-import { PlaceData } from '~/types/place';
+import { IPlace } from '~/types/place';
 
 interface CourseSliderProps {
-  places?: PlaceData[];
+  places?: IPlace[];
 }
 
 const CourseSlider = ({ places }: CourseSliderProps) => {

@@ -31,11 +31,19 @@ const CourseDetail: NextPage = () => {
   const getDetailInfo = async (courseId: string) => {
     if (isLoggedIn) {
       const result = await CourseApi.authRead(courseId);
+      if (!result) {
+        // 임시로 값 없을 경우 처리
+        router.push('/');
+        return;
+      }
       setDetailData(result);
       setLike(result.likes);
-      console.log(result.places[0].latitude, result.places[0].longitude);
     } else {
       const result = await CourseApi.read(courseId);
+      if (!result) {
+        router.push('/');
+        return;
+      }
       setDetailData(result);
       setLike(result.likes);
     }
@@ -46,7 +54,7 @@ const CourseDetail: NextPage = () => {
       getDetailInfo(courseId);
       return;
     }
-    // router.push('/');
+    // 의존성 추가 시 네트워크 요청 2번 함
   }, [courseId, router]);
 
   if (!detailData) {
@@ -101,7 +109,7 @@ const CourseDetail: NextPage = () => {
               <DetailTitle size="md" fontWeight={700}>
                 여행경로
               </DetailTitle>
-              <CourseMap course={detailData?.places} />
+              <CourseMap course={detailData.places} />
             </TravelRoute>
             <TravelCourse>
               <DetailTitle size="md" fontWeight={700}>
