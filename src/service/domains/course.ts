@@ -43,7 +43,7 @@ class CourseApi extends Api {
     }
   };
 
-  read = async (courseId: string) => {
+  read = async (courseId: number) => {
     try {
       const response = await this.baseInstance.get(`${this.path}/${courseId}`);
       return response.data;
@@ -52,7 +52,7 @@ class CourseApi extends Api {
     }
   };
 
-  authRead = async (courseId: string) => {
+  authRead = async (courseId: number) => {
     try {
       const response = await this.authInstance.get(`${this.path}/${courseId}`);
       return response.data;

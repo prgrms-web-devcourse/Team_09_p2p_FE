@@ -28,7 +28,7 @@ const CourseDetail: NextPage = () => {
   const router = useRouter();
   const courseId = router.query.id;
 
-  const getDetailInfo = async (courseId: string) => {
+  const getDetailInfo = async (courseId: number) => {
     if (isLoggedIn) {
       const result = await CourseApi.authRead(courseId);
       if (!result) {
@@ -51,7 +51,12 @@ const CourseDetail: NextPage = () => {
 
   useEffect(() => {
     if (typeof courseId === 'string') {
-      getDetailInfo(courseId);
+      if (!Number.isNaN(Number(courseId))) {
+        getDetailInfo(Number(courseId));
+        return;
+      }
+
+      router.push('/');
       return;
     }
     // 의존성 추가 시 네트워크 요청 2번 함
