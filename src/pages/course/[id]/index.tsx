@@ -15,6 +15,7 @@ import { useUser } from '~/hooks/useUser';
 import { CourseApi } from '~/service';
 import theme from '~/styles/theme';
 import { ICourseDetail } from '~/types/course';
+import { sliceDate } from '~/utils/converter';
 
 const CourseDetail: NextPage = () => {
   /* TODO
@@ -88,9 +89,11 @@ const CourseDetail: NextPage = () => {
                 </HeaderButtons>
               )}
             </CourseTitle>
-            <Text color="gray">
-              업로드 날짜: {detailData?.createdAt} 수정된 날짜: {detailData?.updatedAt}
-            </Text>
+            <CourseDate>
+              <Text color="gray">업로드한 날: {sliceDate(detailData.createdAt)}</Text>
+              <Text color="gray">마지막 수정한 날: {sliceDate(detailData?.updatedAt)}</Text>
+            </CourseDate>
+
             <Profile>
               <Link href={`/userinfo/${detailData?.userId}`}>
                 <Avatar size={66} />
@@ -149,6 +152,12 @@ const CourseTitle = styled.div`
   display: flex;
   justify-content: space-between;
   margin-bottom: 12px;
+`;
+
+const CourseDate = styled.div`
+  span {
+    margin-right: 14px;
+  }
 `;
 
 const HeaderButtons = styled.div`

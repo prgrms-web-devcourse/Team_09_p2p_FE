@@ -4,3 +4,7 @@ export const ObjectToQuery = (obj: any) => {
     .map((e) => e.join('='))
     .join('&')}`;
 };
+
+export const sliceDate = (data: string) => {
+  return data.substring(0, 10);
+};
