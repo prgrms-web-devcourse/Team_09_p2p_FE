@@ -54,9 +54,9 @@ export const MARKER_IMAGE_URLS: { [key: string]: string } = {
   pharmacy: '/assets/place/pharmacy.png'
 };
 
-export const TAGS_PERIOD: Period[] = ['당일', '1~3일', '4~7일', '8~15일', '15일 이상'];
+export const TAGS_PERIOD: Period[] = ['당일', '1~3일', '4~7일', '8~15일', '15일이상'];
 export const TAGS_THEME: Theme[] = [
-  '데이트 코스',
+  '데이트코스',
   '힐링',
   '드라이브',
   '이쁜카페',
