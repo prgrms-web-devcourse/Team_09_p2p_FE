@@ -26,9 +26,9 @@ const CourseDetailList = ({ places }: CourseDetailList) => {
           </Address>
           <Image src={place.imageUrl} alt={place.name} style={{ borderRadius: 8 }} />
           <CourseDescription>
-            <Text size="lg" color="dark" paragraph>
+            <ContentText size="lg" color="dark" paragraph>
               {place.description}
-            </Text>
+            </ContentText>
           </CourseDescription>
         </CourseDetailItem>
       ))}
@@ -59,4 +59,8 @@ const CourseDescription = styled.div`
 
 const Address = styled(Text)`
   margin-bottom: 37px;
+`;
+
+const ContentText = styled(Text)`
+  white-space: pre;
 `;
