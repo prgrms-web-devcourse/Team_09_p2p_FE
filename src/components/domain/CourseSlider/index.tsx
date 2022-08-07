@@ -28,6 +28,7 @@ const CourseSlider = ({ places }: CourseSliderProps) => {
           id={place.id}
           index={index}
           lastCount={places.length}
+          imageUrl={place.imageUrl}
         />
       ))}
     </StyledSlider>

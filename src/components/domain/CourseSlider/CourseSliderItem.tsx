@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { Button, Image, Link, Title } from '~/components/atom';
+import { Button, Link, Title } from '~/components/atom';
 import theme from '~/styles/theme';
 
 interface CourseSliderItemProps {
@@ -7,14 +7,17 @@ interface CourseSliderItemProps {
   id: number;
   index: number;
   lastCount: number;
+  imageUrl: string;
 }
 
 const DOT_BG = 'url(/assets/dot-gray.png)';
 const LINE_BG = 'url(/assets/line-bluegray.png)';
 
-const CourseSliderItem = ({ name, id, index, lastCount }: CourseSliderItemProps) => {
+const CourseSliderItem = ({ name, id, index, lastCount, imageUrl }: CourseSliderItemProps) => {
   const IS_START = index === 0;
   const IS_END = index === lastCount - 1;
+
+  const IMAGE_URL = imageUrl ? imageUrl : '';
 
   return (
     <div className="card-item">
@@ -30,7 +33,7 @@ const CourseSliderItem = ({ name, id, index, lastCount }: CourseSliderItemProps)
         <Circle>{index + 1}</Circle>
       </CourseLine>
       <CourseCard>
-        <CardImage style={{ backgroundImage: `url(/assets/location/jeju.jpg)` }}></CardImage>
+        <CardImage style={{ backgroundImage: `url(${IMAGE_URL})` }}></CardImage>
         <CardInfo>
           <Title>{name}</Title>
           <Link href={`/place/${id}`}>
@@ -44,7 +47,7 @@ const CourseSliderItem = ({ name, id, index, lastCount }: CourseSliderItemProps)
 
 export default CourseSliderItem;
 
-const { borderGray, mainColor } = theme.color;
+const { borderGray, mainColor, backgroundGray } = theme.color;
 
 const CourseLine = styled.div`
   margin-bottom: 18px;
@@ -89,6 +92,7 @@ const CardImage = styled.div`
   border-radius: 8px 8px 0 0;
   height: 230px;
   background-size: cover;
+  background-color: ${backgroundGray};
 `;
 
 const CardInfo = styled.div`
