@@ -6,12 +6,16 @@ import React, { useEffect, useState } from 'react';
 import { PageContainer, Title } from '~/components/atom';
 import { SelectTags, SelectRegion, CourseList, SortFilter } from '~/components/common';
 import { CourseApi } from '~/service';
-import { RegionAndAll, SearchTagsValues } from '~/types';
+import { Period, RegionAndAll, SearchTagsValues, Spot, Theme } from '~/types';
 import { ICourseItem } from '~/types/course';
 
 const SearchedKeywordPage: NextPage = () => {
   const [loading, setLoading] = useState(true);
   const [courseList, setCourseList] = useState<ICourseItem[]>([]);
+  const [region, setRegion] = useState<RegionAndAll | null>(null);
+  const [period, setPeriod] = useState<Period | null>(null);
+  const [themes, setThemes] = useState<Theme[]>([]);
+  const [spots, setSpots] = useState<Spot[]>([]);
   const isSearched = courseList.length !== 0;
   const {
     query: { keyword }
@@ -19,7 +23,7 @@ const SearchedKeywordPage: NextPage = () => {
 
   const getCourseListByKeyword = async (keyword: string) => {
     try {
-      const response = await CourseApi.getCourses({ keyword });
+      const response = await CourseApi.getCourses({ keyword, size: 10, page: 0 });
       setCourseList(response.content);
     } catch (e) {
       console.error('리스트를 불러오지 못했어요.', e);
@@ -27,13 +31,14 @@ const SearchedKeywordPage: NextPage = () => {
   };
 
   const handleSelectRegion = async (region: RegionAndAll) => {
-    if (!isSearched) return;
-    console.log(region);
+    setRegion(region);
   };
 
   const handleSelectTags = async (data: SearchTagsValues) => {
-    if (!isSearched) return;
-    console.log(data);
+    const { period, theme, spot } = data;
+    setPeriod(period);
+    setThemes([...theme]);
+    setSpots([...spot]);
   };
 
   const handleSort = async () => {
@@ -44,9 +49,13 @@ const SearchedKeywordPage: NextPage = () => {
     setLoading(true);
     if (keyword && typeof keyword === 'string') {
       getCourseListByKeyword(keyword);
-      setLoading(false);
     }
+    setLoading(false);
   }, [keyword]);
+
+  useEffect(() => {
+    console.log(region, period, themes, spots);
+  }, [region, period, themes, spots]);
 
   return (
     <React.Fragment>
