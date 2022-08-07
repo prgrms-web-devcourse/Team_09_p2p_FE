@@ -3,18 +3,8 @@ import { Map, MapMarker, CustomOverlayMap, Polyline } from 'react-kakao-maps-sdk
 import markerIcon from 'public/assets/place/course.png';
 import Script from 'next/script';
 import styled from '@emotion/styled';
+import { IPlace } from '~/types/place';
 
-interface IPlace {
-  id: number;
-  name: string;
-  description: string;
-  address: string;
-  latitude: string;
-  longitude: string;
-  category: string;
-  phone: string;
-  recommended: boolean;
-}
 interface CourseType {
   id: number;
   latitude: string;

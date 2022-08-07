@@ -1,29 +1,30 @@
 import styled from '@emotion/styled';
 import { Image, Text, Title } from '~/components/atom';
-import { IPlace } from '~/pages/course/[id]';
+import { IPlace } from '~/types/place';
 
 interface CourseDetailList {
-  places: IPlace[];
+  places?: IPlace[];
 }
 
 const CourseDetailList = ({ places }: CourseDetailList) => {
   /* TODO:
     1. 추천아이콘 변경하기
   */
+
   return (
     <Container>
-      {places.map((place, index) => (
+      {places?.map((place, index) => (
         <CourseDetailItem key={place.id}>
           <CourseDetailTitle>
             <Title size="md" fontWeight={700}>
               {index + 1}. {place.name}
             </Title>
-            {place.recommended && <button>추천 아이콘</button>}
+            {place.isRecommended && <button>추천 아이콘</button>}
           </CourseDetailTitle>
           <Address size="md" color="gray">
             {place.address}
           </Address>
-          <Image src="/assets/location/jeju.jpg" alt={place.name} style={{ borderRadius: 8 }} />
+          <Image src={place.imageUrl} alt={place.name} style={{ borderRadius: 8 }} />
           <CourseDescription>
             <Text size="lg" color="dark" paragraph>
               {place.description}
@@ -53,6 +54,7 @@ const CourseDetailTitle = styled.div`
 `;
 const CourseDescription = styled.div`
   margin-top: 37px;
+  line-height: 1.7;
 `;
 
 const Address = styled(Text)`
