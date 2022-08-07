@@ -150,6 +150,13 @@ const Course: NextPage = () => {
       alert('이미지를 전부 등록해주세요!');
       return;
     }
+    for (let i = 0; i < courseInfo.places.length; i++) {
+      if (textAreasRef.current[i].value === '') {
+        alert('장소 설명을 적어주세요!');
+        textAreasRef.current[i].focus();
+        return;
+      }
+    }
     formCourseData.places = placesFormDataSetter();
     const formData = new FormData();
     const uploaderString = JSON.stringify(formCourseData);
@@ -184,7 +191,9 @@ const Course: NextPage = () => {
         }
       });
     };
-    createCourse(formData);
+    if (window.confirm('코스를 등록하시겠어요?')) {
+      createCourse(formData);
+    }
   };
 
   const handleSelectTags = (data: SearchTagsValues) => {
