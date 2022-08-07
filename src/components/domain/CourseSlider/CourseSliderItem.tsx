@@ -35,7 +35,9 @@ const CourseSliderItem = ({ name, id, index, lastCount, imageUrl }: CourseSlider
       <CourseCard>
         <CardImage style={{ backgroundImage: `url(${IMAGE_URL})` }}></CardImage>
         <CardInfo>
-          <Title>{name}</Title>
+          <TitleContainer>
+            <Title ellipsis>{name}</Title>
+          </TitleContainer>
           <Link href={`/place/${id}`}>
             <Button buttonType="borderPrimary">장소정보보기</Button>
           </Link>
@@ -104,4 +106,11 @@ const CardInfo = styled.div`
   border: 1px solid ${borderGray};
   border-top: none;
   border-radius: 0 0 8px 8px;
+  width: 100%;
+  box-sizing: border-box;
+`;
+
+const TitleContainer = styled.div`
+  width: 100%;
+  text-align: center;
 `;
