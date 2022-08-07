@@ -6,7 +6,7 @@ const nextConfig = {
     BASE_URL: process.env.BASE_URL
   },
   images: {
-    domains: ['devcourse-f-s3-storage.s3.ap-northeast-2.amazonaws.com']
+    domains: [process.env.NEXT_PUBLIC_IMAGE_URL]
   }
 };
 
