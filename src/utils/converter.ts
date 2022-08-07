@@ -4,3 +4,11 @@ export const ObjectToQuery = (obj: any) => {
     .map((e) => e.join('='))
     .join('&')}`;
 };
+
+export function updateList<T>(list: T[], item: T): T[] {
+  return [...list, item];
+}
+
+export function removeList<T>(list: T[], item: T): T[] {
+  return list.filter((listItem) => listItem !== item);
+}
