@@ -75,3 +75,5 @@ export interface SearchTagsValues {
 export interface SearchCourseValues extends SearchTagsValues {
   region: Region;
 }
+
+export type CourseOrPlace = 'course' | 'place';

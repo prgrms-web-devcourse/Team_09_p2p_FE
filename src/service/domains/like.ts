@@ -1,5 +1,5 @@
 import Api from '~/service/core/Api';
-import { LikeType } from '~/types/like';
+import { CourseOrPlace } from '~/types';
 
 class LikeApi extends Api {
   private path = '/likes';
@@ -14,7 +14,7 @@ class LikeApi extends Api {
     return response.data;
   };
 
-  like = async (id: number, type: LikeType) => {
+  like = async (id: number, type: CourseOrPlace) => {
     switch (type) {
       case 'course':
         return await this.likeCourse(id);
