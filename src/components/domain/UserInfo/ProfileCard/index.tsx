@@ -6,7 +6,7 @@ import { useUser } from '~/hooks/useUser';
 import theme from '~/styles/theme';
 
 interface ProfileCardProps {
-  profileImage: string;
+  profileImage: string | null;
   nickname: string;
   email: string;
   onClickAction: (value: string) => void;
