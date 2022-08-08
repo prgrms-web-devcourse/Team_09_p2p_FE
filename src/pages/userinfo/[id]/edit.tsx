@@ -10,17 +10,15 @@ import theme from '~/styles/theme';
 const UserinfoEdit: NextPage = () => {
   const { currentUser } = useUser();
   const router = useRouter();
-  const userId = router.query.id;
+  const userId = Number(router.query.id);
 
   const getUserData = (userId: number) => {
     // 유저데이터 불러오기
   };
 
   useEffect(() => {
-    if (typeof userId === 'string') {
-      console.log(currentUser.user.id, Number(userId));
-
-      if (!currentUser.isLoading && currentUser.user.id !== Number(userId)) {
+    if (typeof router.query.id === 'string') {
+      if (!currentUser.isLoading && currentUser.user.id !== userId) {
         alert('잘못된 요청입니다.');
         router.push('/');
         return;
@@ -30,7 +28,7 @@ const UserinfoEdit: NextPage = () => {
     }
   }, [currentUser, userId, router]);
 
-  if (currentUser.user.id !== Number(userId)) {
+  if (currentUser.user.id !== userId) {
     return null;
   }
 
