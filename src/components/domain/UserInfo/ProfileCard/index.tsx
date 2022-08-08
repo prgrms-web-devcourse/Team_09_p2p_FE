@@ -14,6 +14,7 @@ interface ProfileCardProps {
   bookmarkCount: number;
   commentCount: number;
   isMyPage: boolean;
+  userId: number;
 }
 
 const ProfileCard = ({
@@ -24,7 +25,8 @@ const ProfileCard = ({
   postCount,
   bookmarkCount,
   commentCount,
-  isMyPage
+  isMyPage,
+  userId
 }: ProfileCardProps) => {
   const { logout } = useUser();
   const router = useRouter();
@@ -74,12 +76,12 @@ const ProfileCard = ({
       {isMyPage && (
         <InfoEdit>
           <li>
-            <Link href="/userinfo/edit">
+            <Link href={`/userinfo/${userId}/edit`}>
               <Text>내 정보 변경</Text>
             </Link>
           </li>
           <li>
-            <Link href="/userinfo/password">
+            <Link href={`/userinfo/${userId}/password`}>
               <Text>비밀번호 변경</Text>
             </Link>
           </li>
