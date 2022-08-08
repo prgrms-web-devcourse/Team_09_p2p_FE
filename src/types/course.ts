@@ -1,3 +1,5 @@
+import { Period, RegionAndAll, Spot, Theme } from '.';
+
 export interface ICourseItem {
   id: number;
   title: string;
@@ -30,3 +32,15 @@ export const sortOrder = {
 } as const;
 
 export type SortType = typeof sortOrder[keyof typeof sortOrder];
+
+export type CourseSearchParams = {
+  readonly placeId?: number;
+  readonly keyword?: string;
+  readonly period: Period | null;
+  readonly region?: RegionAndAll | null;
+  readonly spot?: Spot[];
+  readonly theme?: Theme[];
+  readonly page?: number;
+  readonly size?: number;
+  readonly sorting: SortType;
+};

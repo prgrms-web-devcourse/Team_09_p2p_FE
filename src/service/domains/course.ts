@@ -1,6 +1,6 @@
 import Api from '~/service/core/Api';
-import { CourseFilter } from '~/types/course';
-import { ObjectToQuery } from '~/utils/converter';
+import { CourseFilter, CourseSearchParams } from '~/types/course';
+import { makeQueryString, ObjectToQuery } from '~/utils/converter';
 
 type CourseReadingType = {
   readonly placeId?: number;
@@ -73,25 +73,17 @@ class CourseApi extends Api {
     } */
   };
 
-  search = async (paramData: CourseReadingType) => {
-    /* try {
-      const response = await this.baseInstance.get(this.path, {
-        params: {
-          placeId: paramData.placeId,
-          keyword: paramData.keyword,
-          region: paramData.region,
-          spot: paramData.spot,
-          theme: paramData.theme,
-          page: paramData.page,
-          size: paramData.size,
-          sort: paramData.sort
-        }
-      });
-      console.log(response);
-      return response.data;
+  search = async (params: CourseSearchParams) => {
+    const queries = makeQueryString(params);
+    try {
+      const response = await this.baseInstance.get(`${this.path}${queries}`);
+      if (response.status === 200 || response.status === 204) {
+        return response.data;
+      }
+      throw new Error(`코스 목록 조회 오류, 상태코드 : ${response.status}`);
     } catch (e) {
       console.error(`코스 목록 조회 오류: ${e}`);
-    } */
+    }
   };
 
   searchBookmarked = async (paramData: CourseSearchBookmarked) => {
