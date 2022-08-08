@@ -13,14 +13,14 @@ import { useRouter } from 'next/router';
 import { CourseApi } from '~/service';
 import { SearchTagsValues } from '~/types';
 
-interface CourseType {
+interface ICourse {
   id: number;
   latitude: string;
   longitude: string;
   name: string;
 }
 
-type PlaceType = {
+interface IPlace {
   id: number;
   lat: number;
   lng: number;
@@ -29,14 +29,14 @@ type PlaceType = {
   roadAddressName: string;
   category: string;
   phoneNumber: string;
-};
+}
 
-type CourseInfoType = {
+interface ICourseInfo {
   region: string;
-  places: PlaceType[];
-};
+  places: IPlace[];
+}
 
-type PlaceFormType = {
+interface IPlaceForm {
   kakaoMapId: string;
   name: string;
   description: string;
@@ -47,17 +47,17 @@ type PlaceFormType = {
   category: string;
   phoneNumber: string;
   isRecommended: boolean;
-};
+}
 
-type CourseFormType = {
+interface ICourseForm {
   title: string;
   region: string;
   period: string;
   description: string;
   themes: string[];
   spots: string[];
-  places: PlaceFormType[];
-};
+  places: IPlaceForm[];
+}
 
 const Course: NextPage = () => {
   const router = useRouter();
@@ -68,14 +68,17 @@ const Course: NextPage = () => {
   const [themes, setThemes] = useState([]);
   const [spots, setSpots] = useState([]); */
   const textAreasRef = useRef([] as HTMLTextAreaElement[]);
+  const isRecommendedRef = useRef([] as HTMLButtonElement[]);
   const placeImagesRef = useRef([] as any);
-  const [placeImages, setPlaceImages] = useState([] as any);
+  const ThumbnailButtonRef = useRef([] as HTMLButtonElement[]);
   if (!courseQuery) {
     return null;
   }
-  const courseInfo: CourseInfoType = JSON.parse(courseQuery as string);
-  const formCourseData = {} as CourseFormType;
+  const courseInfo: ICourseInfo = JSON.parse(courseQuery as string);
+  const formCourseData = {} as ICourseForm;
   formCourseData.region = courseInfo.region;
+  formCourseData.description =
+    '인천은 하루에 돌아보기 좋은 관광지다. 구한말 외세의 세력이 밀려들던 곳도 이곳이고 그만큼 많은 애환과 흔적을 남겼다. 인천차이나타운만의 이국적 색깔과 중국과 한국이 믹스된 중국식 음식들과 바다, 어시장 그리고 혁신적인 인천대교의 웅장함까지 아주 즐거운 하루를 선사받을 것이다.';
 
   const courseMapData = courseInfo.places.map((place) => {
     return {
@@ -83,7 +86,7 @@ const Course: NextPage = () => {
       latitude: place.lat,
       longitude: place.lng,
       name: place.name
-    } as unknown as CourseType;
+    } as unknown as ICourse;
   });
   const placesFormDataSetter = () => {
     return courseInfo.places.map((place, index) => {
@@ -95,17 +98,30 @@ const Course: NextPage = () => {
         roadAddressName: place.roadAddressName,
         latitude: place.lat.toString(),
         longitude: place.lng.toString(),
-        category: place.category,
+        category: place.category !== '' ? place.category : 'FD6',
         phoneNumber: place.phoneNumber,
-        isRecommended: false
+        isRecommended: JSON.parse(isRecommendedRef.current[index].value),
+        isThumbnail: JSON.parse(ThumbnailButtonRef.current[index].value)
       };
     });
   };
   const placesImageDataSetter = () => {
     return courseInfo.places.map((place, index) => {
-      return {
-        imageFile: placeImagesRef.current[index].files[0]
-      };
+      return placeImagesRef.current[index].files[0];
+    });
+  };
+  const onChangeThumnail = (e: any) => {
+    courseInfo.places.map((place, index) => {
+      if (ThumbnailButtonRef.current[index] === undefined) {
+        return;
+      }
+      if (Number(e.target.name) - 1 === index) {
+        ThumbnailButtonRef.current[index].style.background = theme.color.mainColor;
+        ThumbnailButtonRef.current[index].value = 'true';
+      } else {
+        ThumbnailButtonRef.current[index].style.background = 'rgba(60, 60, 60, 0.5)';
+        ThumbnailButtonRef.current[index].value = 'false';
+      }
     });
   };
   const courseCreatehandler = () => {
@@ -118,47 +134,72 @@ const Course: NextPage = () => {
     } else {
       formCourseData.title = titleRef.current.value;
     }
-    // 추후 필터 구현되면 연결
-    ////
-    formCourseData.period = '당일';
-    formCourseData.themes = ['힐링', '가족여행'];
-    formCourseData.spots = ['음식점', '테마파크'];
-    ////
+    if (formCourseData.period === '') {
+      alert('기간을 설정해주세요!');
+      return;
+    }
+    if (formCourseData.themes.length === 0) {
+      alert('테마를 설정해주세요!');
+      return;
+    }
+    if (formCourseData.spots.length === 0) {
+      alert('장소를 설정해주세요!');
+      return;
+    }
+    if (courseInfo.places.length > ThumbnailButtonRef.current.length) {
+      alert('이미지를 전부 등록해주세요!');
+      return;
+    }
+    for (let i = 0; i < courseInfo.places.length; i++) {
+      if (textAreasRef.current[i].value === '') {
+        alert('장소 설명을 적어주세요!');
+        textAreasRef.current[i].focus();
+        return;
+      }
+    }
     formCourseData.places = placesFormDataSetter();
     const formData = new FormData();
-    setPlaceImages(placesImageDataSetter());
-    console.log(formCourseData);
-    formData.append('course', JSON.stringify(formCourseData));
-    const placesImageData: any = placesImageDataSetter();
-
+    const uploaderString = JSON.stringify(formCourseData);
+    formData.append(
+      'course',
+      new Blob([uploaderString], {
+        type: 'application/json'
+      })
+    );
+    const placesImageData: File[] = placesImageDataSetter();
     for (let i = 0; i < placesImageData.length; i++) {
       formData.append('images', placesImageData[i]);
     }
     const createCourse = async (formData: FormData) => {
-      const response = await CourseApi.create(formData);
-      console.log('코스 등록 성공!!', response);
-      // todo: response status 처리 연동 후 구현
-      /* await CourseApi.create(formData).then((res) => {
-        console.log(res);
-        switch (res.status) {
-          case 200:
+      await CourseApi.create(formData).then((res) => {
+        switch (res) {
+          case 201:
             alert('코스 생성이 완료되었습니다!');
+            // todo: 추후 상세 페이지로 바로 연결 예정
             router.push('/');
             break;
-          case 401:
+          case 400:
+            alert('잘못된 요청입니다. 메인 페이지로 이동합니다.');
+            router.push('/');
+            break;
+          case 500:
             alert('잘못된 요청입니다. 메인 페이지로 이동합니다.');
             router.push('/');
             break;
           default:
             break;
         }
-      }); */
+      });
     };
-    createCourse(formData);
+    if (window.confirm('코스를 등록하시겠어요?')) {
+      createCourse(formData);
+    }
   };
 
   const handleSelectTags = (data: SearchTagsValues) => {
-    console.log(data);
+    formCourseData.period = data.period !== null ? data.period : '';
+    formCourseData.themes = data.theme;
+    formCourseData.spots = data.spot;
   };
 
   return (
@@ -185,7 +226,12 @@ const Course: NextPage = () => {
                 isLastPlace={courseInfo.length === index + 1}
                 place={place}
                 textAreaRef={(el: HTMLTextAreaElement) => (textAreasRef.current[index] = el)}
+                isRecommendedRef={(el: HTMLButtonElement) => (isRecommendedRef.current[index] = el)}
                 placeImageRef={(el: HTMLElement) => (placeImagesRef.current[index] = el)}
+                ThumbnailButtonRef={(el: HTMLButtonElement) =>
+                  (ThumbnailButtonRef.current[index] = el)
+                }
+                onChangeThumnail={onChangeThumnail}
               >
                 {index + 1}
               </PlaceInformation>

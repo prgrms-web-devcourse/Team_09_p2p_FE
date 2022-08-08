@@ -33,3 +33,14 @@ body.modal-open {
   width: 100%;
   overflow-y: hidden;
 }
+
+.ellipsis {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+span {
+  line-height: 1.5;
+}

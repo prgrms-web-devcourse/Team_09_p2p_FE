@@ -34,7 +34,7 @@ const CourseItem = ({ course, grid = 3 }: CourseItemProps) => {
           </ThumbnailInfo>
         </ThumbnailWrapper>
         <CourseInfo className="courseInfo">
-          <Text block ellipsis>
+          <Text size={17} block ellipsis fontWeight={500}>
             {places.map((place, index) => (
               <React.Fragment key={place}>
                 {place}
@@ -42,7 +42,7 @@ const CourseItem = ({ course, grid = 3 }: CourseItemProps) => {
               </React.Fragment>
             ))}
           </Text>
-          <Text block style={{ marginTop: 4 }}>
+          <Text block style={{ marginTop: 4 }} ellipsis>
             {themes.map((item) => (
               <React.Fragment key={item}>#{item} </React.Fragment>
             ))}
