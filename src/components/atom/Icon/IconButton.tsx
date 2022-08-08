@@ -1,7 +1,8 @@
+import { MouseEvent } from 'react';
 import Icon, { IconProps } from '.';
 
 interface IconButtonProps extends IconProps {
-  onClick: () => void;
+  onClick?: (e: MouseEvent<HTMLButtonElement>) => void;
 }
 
 const IconButton = ({ name, size, rotate, block, onClick, ...props }: IconButtonProps) => {
