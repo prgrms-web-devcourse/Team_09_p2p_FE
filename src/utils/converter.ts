@@ -7,6 +7,10 @@ export const ObjectToQuery = (obj: any) => {
     .join('&')}`;
 };
 
+export const sliceDate = (data: string) => {
+  return data.substring(0, 10);
+};
+
 export function updateList<T>(list: T[], item: T): T[] {
   return [...list, item];
 }

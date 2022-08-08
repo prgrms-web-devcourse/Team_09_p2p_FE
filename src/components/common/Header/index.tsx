@@ -1,13 +1,10 @@
 import styled from '@emotion/styled';
-// import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
-import { useRecoilState } from 'recoil';
 import { PageContainer, Button, Link } from '~/components/atom';
 import Avatar from '~/components/atom/Avatar';
 import Logo from '~/components/atom/Logo';
 import { useUser } from '~/hooks/useUser';
-import { userState } from '~/recoil';
 import theme from '~/styles/theme';
 import SearchInput from '../SearchInput';
 
@@ -18,7 +15,6 @@ interface HeaderProps {
 const Header = ({ full }: HeaderProps) => {
   const { currentUser, isLoggedIn } = useUser();
 
-  console.log(currentUser, 'currentUser');
   const router = useRouter();
   const handleSearch = (keyword: string) => {
     const searchPath = `/search/${keyword}`;
@@ -71,11 +67,12 @@ const Header = ({ full }: HeaderProps) => {
               <Link href="/course/create">
                 <Button>코스등록</Button>
               </Link>
-              {!isLoggedIn ? (
+              {!isLoggedIn && !currentUser.isLoading && (
                 <Link href="/login">
                   <Button buttonType="borderPrimary">로그인</Button>
                 </Link>
-              ) : (
+              )}
+              {isLoggedIn && !currentUser.isLoading && (
                 <Link href={`/userinfo/${currentUser.user.id}`}>
                   <Avatar size={54} src={currentUser.user.profileImage} />
                 </Link>

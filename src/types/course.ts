@@ -1,3 +1,4 @@
+import { IPlace } from './place';
 import { Period, RegionAndAll, Spot, Theme } from '.';
 
 export interface ICourseItem {
@@ -12,6 +13,25 @@ export interface ICourseItem {
   isBookmarked: boolean;
   nickname: string;
   profileUrl: string;
+}
+
+export interface ICourseDetail {
+  id: number;
+  title: string;
+  thumbnail: string;
+  region: string;
+  period: string;
+  themes: string[];
+  spots: string[];
+  places: IPlace[];
+  likes: number;
+  isLiked: boolean;
+  isBookmarked: boolean;
+  nickname: string;
+  userId: number;
+  profileImage: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface CourseFilter {

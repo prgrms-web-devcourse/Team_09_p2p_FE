@@ -98,7 +98,7 @@ const CourseCreate: NextPage = () => {
         name: '송도해상케이블카 송도베이스테이션',
         address: '부산 서구 송도해변로 171',
         roadAddressName: '부산 서구 송도해변로 171',
-        category: '',
+        category: 'FD6',
         phoneNumber: '051-247-9900'
       },
       {
@@ -108,7 +108,7 @@ const CourseCreate: NextPage = () => {
         name: '광안리해수욕장',
         address: '부산 수영구 광안해변로 219',
         roadAddressName: '부산 수영구 광안해변로 219',
-        category: '',
+        category: 'FD6',
         phoneNumber: '051-610-4744'
       },
       {
@@ -118,7 +118,7 @@ const CourseCreate: NextPage = () => {
         name: '태종대유원지',
         address: '부산 영도구 동삼동 산 29-1',
         roadAddressName: '부산광역시 영도구 전망로 209',
-        category: '',
+        category: 'FD6',
         phoneNumber: '051-405-8745'
       }
     ]

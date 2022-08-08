@@ -63,4 +63,5 @@ const Styled = styled[tag]<Omit<TitleProps, 'children'>>`
     text-overflow: ellipsis;
     white-space: nowrap;
   `}
+  word-break: break-all;
 `;

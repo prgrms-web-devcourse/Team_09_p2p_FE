@@ -18,7 +18,7 @@ const Layout = ({ children, footer, full }: LayoutProps) => {
     if (token && currentUser.accessToken !== token) {
       updateUser(token);
     }
-  });
+  }, [currentUser.accessToken]);
 
   return (
     <div>
