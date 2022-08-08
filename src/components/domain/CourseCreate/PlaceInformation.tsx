@@ -98,7 +98,7 @@ const PlaceInformation = ({
               {place.name}
             </Text>
             <RecommendButton
-              id={'place_'.concat(children as string)}
+              id={`place_${children}`}
               onClick={handleRecommend}
               ref={isRecommendedRef}
               value={isRecommended.toString()}
