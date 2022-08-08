@@ -48,7 +48,8 @@ const Userinfo: NextPage = () => {
   const router = useRouter();
   const { currentUser } = useUser();
 
-  const isMyPage = Number(router.query.id) === currentUser.user.id;
+  const userId = Number(router.query.id);
+  const isMyPage = userId === currentUser.user.id;
 
   const onClickAction = (value: string) => {
     setActiveMenu(value);
@@ -71,6 +72,7 @@ const Userinfo: NextPage = () => {
           <Wrapper>
             <ProfileCard
               profileImage=""
+              userId={userId}
               nickname="Jinist"
               email="325days@naver.com"
               onClickAction={onClickAction}
