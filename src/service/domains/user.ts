@@ -42,8 +42,13 @@ class UserApi extends Api {
     return response;
   };
 
-  getUser = async () => {
+  getMyInfo = async () => {
     const response = await this.authInstance.get(`${this.path}`);
+    return response.data;
+  };
+
+  getUser = async (userId: number) => {
+    const response = await this.baseInstance.get(`${this.path}/${userId}`);
     return response.data;
   };
 }
