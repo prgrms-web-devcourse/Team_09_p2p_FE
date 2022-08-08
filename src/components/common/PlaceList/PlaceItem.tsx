@@ -47,7 +47,9 @@ const PlaceItem = ({ place, grid }: PlaceItemProps) => {
 
         <PlaceInfo>
           <InfoHead>
-            <Title size={16}>{title}</Title>
+            <Title size={16} color="dark" ellipsis>
+              {title}
+            </Title>
             <LikeCount count={likeCount} />
           </InfoHead>
           <Description>
