@@ -4,6 +4,10 @@ import BookmarkIcon from '../BookmarkIcon';
 import LikeCount from '../LikeCount';
 import { IPlaceItem } from '.';
 import theme from '~/styles/theme';
+import { BookmarkApi } from '~/service';
+import { useUser } from '~/hooks/useUser';
+import { useRouter } from 'next/router';
+import { MouseEvent, useState } from 'react';
 
 export type PlaceGrid = 3 | 4;
 interface PlaceItemProps {
@@ -12,8 +16,23 @@ interface PlaceItemProps {
 }
 
 const PlaceItem = ({ place, grid }: PlaceItemProps) => {
-  const { id, title, likeCount, usedCount, thumbnail } = place;
+  const { id, title, likeCount, usedCount, thumbnail, bookmarked } = place;
   const THUMBNAIL_URL = thumbnail ? thumbnail : '/assets/location/jeju.jpg';
+  const { isLoggedIn } = useUser();
+  const router = useRouter();
+  const [isBookmarked, setIsBookmarked] = useState(bookmarked);
+
+  const handleClickBookmark = async (e: MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    if (!isLoggedIn) {
+      router.push('/login');
+      return;
+    }
+    const result = await BookmarkApi.bookmarkPlace(Number(id));
+    setIsBookmarked(result.isBookmarked);
+  };
 
   return (
     <PlaceContainer grid={grid}>
@@ -23,7 +42,7 @@ const PlaceItem = ({ place, grid }: PlaceItemProps) => {
             className="placeImage"
             style={{ backgroundImage: `url(${THUMBNAIL_URL})` }}
           ></Thumbnail>
-          <BookmarkIcon bookmarked={place.bookmarked} />
+          <BookmarkIcon bookmarked={isBookmarked} onClick={handleClickBookmark} />
         </ThumbnailWrapper>
 
         <PlaceInfo>
