@@ -23,7 +23,7 @@ const PlaceItem = ({ place, grid }: PlaceItemProps) => {
             className="placeImage"
             style={{ backgroundImage: `url(${THUMBNAIL_URL})` }}
           ></Thumbnail>
-          <BookmarkIcon />
+          <BookmarkIcon bookmarked={place.bookmarked} />
         </ThumbnailWrapper>
 
         <PlaceInfo>
