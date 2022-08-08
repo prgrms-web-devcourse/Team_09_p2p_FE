@@ -1,11 +1,39 @@
 import styled from '@emotion/styled';
 import type { NextPage } from 'next';
 import Head from 'next/head';
-import React from 'react';
+import { useRouter } from 'next/router';
+import React, { useEffect } from 'react';
 import { Button, PageContainer, Text, Title } from '~/components/atom';
+import { useUser } from '~/hooks/useUser';
 import theme from '~/styles/theme';
 
 const UserinfoEdit: NextPage = () => {
+  const { currentUser } = useUser();
+  const router = useRouter();
+  const userId = router.query.id;
+
+  const getUserData = (userId: number) => {
+    // 유저데이터 불러오기
+  };
+
+  useEffect(() => {
+    if (typeof userId === 'string') {
+      console.log(currentUser.user.id, Number(userId));
+
+      if (!currentUser.isLoading && currentUser.user.id !== Number(userId)) {
+        alert('잘못된 요청입니다.');
+        router.push('/');
+        return;
+      }
+
+      getUserData(Number(userId));
+    }
+  }, [currentUser, userId, router]);
+
+  if (currentUser.user.id !== Number(userId)) {
+    return null;
+  }
+
   return (
     <React.Fragment>
       <Head>
