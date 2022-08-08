@@ -4,7 +4,7 @@ import { Text } from '~/components/atom';
 import theme from '~/styles/theme';
 import Textarea from '~/components/atom/Textarea';
 
-type PlaceType = {
+interface IPlace {
   id: number;
   lat: number;
   lng: number;
@@ -13,13 +13,16 @@ type PlaceType = {
   roadAddressName: string;
   category: string;
   phoneNumber: string;
-};
-interface PlaceInformation {
+}
+interface IPlaceInformation {
   children: ReactNode;
   isLastPlace: boolean;
-  place: PlaceType;
+  place: IPlace;
   textAreaRef: (el: HTMLTextAreaElement) => HTMLTextAreaElement;
+  isRecommendedRef: (el: HTMLButtonElement) => HTMLButtonElement;
+  ThumbnailButtonRef: (el: HTMLButtonElement) => HTMLButtonElement;
   placeImageRef: any;
+  onChangeThumnail: any;
 }
 
 const PlaceInformation = ({
@@ -27,10 +30,11 @@ const PlaceInformation = ({
   isLastPlace,
   place,
   textAreaRef,
-  placeImageRef
-}: PlaceInformation) => {
-  const [imgBase64, setImgBase64] = useState(''); // 파일 base64
-  const [imgFile, setImgFile] = useState(null); //파일
+  isRecommendedRef,
+  ThumbnailButtonRef,
+  placeImageRef,
+  onChangeThumnail
+}: IPlaceInformation) => {
   const [file, setFile] = useState('');
   const [previewUrl, setPreviewUrl] = useState('');
   const [isRecommended, setIsRecommended] = useState(false);
@@ -42,26 +46,8 @@ const PlaceInformation = ({
     } else {
       e.target.style = 'background-color: white';
     }
+    e.target.value = !isRecommended;
     setIsRecommended(!isRecommended);
-  };
-  // any는 추후 제거하겠습니다!
-  const handleChangeFile = (e: any) => {
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      // 2. 읽기가 완료되면 아래코드가 실행됩니다.
-      const base64 = reader.result;
-      console.log(base64);
-      if (base64) {
-        setImgBase64(base64.toString()); // 파일 base64 상태 업데이트
-        console.log('2');
-      }
-    };
-    if (e.target.files[0]) {
-      reader.readAsDataURL(e.target.files[0]); // 1. 파일을 읽어 버퍼에 저장합니다.
-      console.log('4');
-      setImgFile(e.target.files[0]); // 파일 상태 업데이트
-      console.log('5');
-    }
   };
   // any는 추후 제거하겠습니다!
   const handleFileOnChange = (e: any) => {
@@ -73,7 +59,7 @@ const PlaceInformation = ({
       setPreviewUrl(reader.result as SetStateAction<string>);
     };
     reader.readAsDataURL(file);
-    const { current } = imageRef as any;
+    const { current } = imageRef as unknown as MutableRefObject<HTMLElement>;
     if (current !== null) {
       current.style.display = 'none';
     }
@@ -81,12 +67,23 @@ const PlaceInformation = ({
   let profile_preview = null;
   if (file !== '') {
     profile_preview = (
-      // eslint-disable-next-line jsx-a11y/alt-text
-      <img
-        style={{ width: '830px', height: '500px', zIndex: '100', borderRadius: '8px' }}
-        className="profile_preview"
-        src={previewUrl}
-      ></img>
+      // eslint-disable-next-line jsx-a11y/alt-text, @next/next/no-img-element
+      <>
+        <img
+          style={{ width: '830px', height: '500px', zIndex: '100', borderRadius: '8px' }}
+          className="profile_preview"
+          src={previewUrl}
+        />
+        <ThumbnailButton
+          name={children?.toString()}
+          onClick={onChangeThumnail}
+          ref={ThumbnailButtonRef}
+          value={children === 1 ? 'true' : 'false'}
+          isFisrtPlace={children === 1 ? true : false}
+        >
+          대표
+        </ThumbnailButton>
+      </>
     );
   }
   const imageId = 'imgFile' + children;
@@ -100,7 +97,12 @@ const PlaceInformation = ({
             <Text size={'xl'} style={{ margin: '0 20px 0 40px' }}>
               {place.name}
             </Text>
-            <RecommendButton id={'place_'.concat(children as string)} onClick={handleRecommend}>
+            <RecommendButton
+              id={`place_${children}`}
+              onClick={handleRecommend}
+              ref={isRecommendedRef}
+              value={isRecommended.toString()}
+            >
               추천👍
             </RecommendButton>
           </NumberWrapper>
@@ -202,10 +204,10 @@ const ImageUploadWrapper = styled.div`
     height: 200px;
     border: 2px solid black;
     border-radius: 10px;
-    /* @include alignCenter(); */
     cursor: pointer;
     transition: 0.12s ease-in;
   }
+  position: relative;
 `;
 
 const FileUploadWrapper = styled.div`
@@ -227,6 +229,22 @@ const PlusImage = styled.img`
   vertical-align: middle;
   width: 32px;
   height: 32px;
+`;
+
+const ThumbnailButton = styled.button<{
+  isFisrtPlace: boolean;
+}>`
+  color: white;
+  font-size: 16px;
+  background: ${({ isFisrtPlace }) =>
+    isFisrtPlace ? theme.color.mainColor : 'rgba(60, 60, 60, 0.5)'};
+  position: absolute;
+  z-index: 101;
+  top: 20px;
+  right: 20px;
+  border-radius: 5px;
+  width: 60px;
+  height: 35px;
 `;
 
 const DescriptionWrapper = styled.div`

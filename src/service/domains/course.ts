@@ -35,9 +35,12 @@ class CourseApi extends Api {
 
   create = async (formData: FormData) => {
     try {
-      const response = await this.authInstance.post(`${this.path}/`, formData);
-      console.log(response);
-      return response.data;
+      const response = await this.authInstance.post(`${this.path}/`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      });
+      return response.status;
     } catch (e) {
       console.error(`코스 등록 오류: ${e}`);
     }
