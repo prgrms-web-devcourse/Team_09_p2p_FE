@@ -1,28 +1,27 @@
 import styled from '@emotion/styled';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Icon, Text } from '~/components/atom';
-import { CourseApi, LikesApi } from '~/service';
+import { BookmarkApi, LikeApi } from '~/service';
 import theme from '~/styles/theme';
+import { CourseOrPlace } from '~/types';
 
 interface DetailSidebarProps {
   likes?: number;
+  id: number;
   defaultLiked?: boolean;
   defaultBookmarked?: boolean;
   isLoggedIn?: boolean;
+  type: CourseOrPlace;
 }
-/*
-  TODO: 
-  1. 코스와 장소페이지의 처리가 다르게 되도록 구현
-  2. API 완성될 경우 실제 요청 보내도록 처리
-
-*/
 
 const DetailSidebar = ({
   likes = 0,
+  id,
   defaultLiked,
   defaultBookmarked,
-  isLoggedIn
+  isLoggedIn,
+  type
 }: DetailSidebarProps) => {
   const [isLiked, setIsLiked] = useState(defaultLiked);
   const [isBookmarked, setIsBookmarked] = useState(defaultBookmarked);
@@ -34,9 +33,10 @@ const DetailSidebar = ({
       router.push('/login');
       return;
     }
-    // const result = await LikesApi.likeCourse(id);
-    setIsLiked(!isLiked);
-    setTotalLikes(isLiked ? totalLikes - 1 : totalLikes + 1);
+
+    const result = await LikeApi.like(id, type);
+    setIsLiked(result.isLiked);
+    setTotalLikes((oldLikes) => (result.isLiked ? oldLikes + 1 : oldLikes - 1));
   };
 
   const handleClickBookmark = async () => {
@@ -44,9 +44,15 @@ const DetailSidebar = ({
       router.push('/login');
       return;
     }
-    // const result = await LikesApi.likeCourse(id);
-    setIsBookmarked(!isBookmarked);
+    const result = await BookmarkApi.bookmark(id, type);
+    setIsBookmarked(result.isBookmarked);
   };
+
+  useEffect(() => {
+    setIsLiked(defaultLiked);
+    setIsBookmarked(defaultBookmarked);
+    // 로그인 유저의 데이터로 변경되었을 때를 위해 default값 감지
+  }, [defaultLiked, defaultBookmarked]);
 
   return (
     <Container>

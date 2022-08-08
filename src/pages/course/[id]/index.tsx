@@ -25,9 +25,8 @@ const CourseDetail: NextPage = () => {
   */
   const { currentUser, isLoggedIn } = useUser();
   const [detailData, setDetailData] = useState<ICourseDetail | null>(null);
-  const [like, setLike] = useState<number>(0);
   const router = useRouter();
-  const courseId = router.query.id;
+  const courseId = Number(router.query.id);
 
   const getDetailInfo = async (courseId: number) => {
     if (isLoggedIn) {
@@ -38,7 +37,6 @@ const CourseDetail: NextPage = () => {
         return;
       }
       setDetailData(result);
-      setLike(result.likes);
     } else {
       const result = await CourseApi.read(courseId);
       if (!result) {
@@ -46,22 +44,19 @@ const CourseDetail: NextPage = () => {
         return;
       }
       setDetailData(result);
-      setLike(result.likes);
     }
   };
 
   useEffect(() => {
-    if (typeof courseId === 'string') {
-      if (!Number.isNaN(Number(courseId))) {
-        getDetailInfo(Number(courseId));
+    if (typeof router.query.id === 'string') {
+      if (!Number.isNaN(courseId)) {
+        getDetailInfo(courseId);
         return;
       }
 
       router.push('/');
-      return;
     }
-    // 의존성 추가 시 네트워크 요청 2번 함
-  }, [courseId, router]);
+  }, [courseId, isLoggedIn]);
 
   if (!detailData) {
     return null;
@@ -80,9 +75,9 @@ const CourseDetail: NextPage = () => {
           <CourseDetailHeader>
             <CourseTitle>
               <Title level={2} size="lg" fontWeight={700} block>
-                {detailData?.title}
+                {detailData.title}
               </Title>
-              {currentUser.user.id === detailData?.userId && (
+              {currentUser.user.id === detailData.userId && (
                 <HeaderButtons>
                   <button>수정</button>
                   <button>삭제</button>
@@ -91,11 +86,11 @@ const CourseDetail: NextPage = () => {
             </CourseTitle>
             <CourseDate>
               <Text color="gray">업로드한 날: {sliceDate(detailData.createdAt)}</Text>
-              <Text color="gray">마지막 수정한 날: {sliceDate(detailData?.updatedAt)}</Text>
+              <Text color="gray">마지막 수정한 날: {sliceDate(detailData.updatedAt)}</Text>
             </CourseDate>
 
             <Profile>
-              <Link href={`/userinfo/${detailData?.userId}`}>
+              <Link href={`/userinfo/${detailData.userId}`}>
                 <Avatar size={66} />
               </Link>
               <Text color="dark" fontWeight={500}>
@@ -106,11 +101,11 @@ const CourseDetail: NextPage = () => {
 
           <CourseDetails>
             <CourseOverview
-              themes={detailData?.themes}
-              period={detailData?.period}
-              region={detailData?.region}
-              courseCount={detailData?.places.length}
-              spots={detailData?.spots}
+              themes={detailData.themes}
+              period={detailData.period}
+              region={detailData.region}
+              courseCount={detailData.places.length}
+              spots={detailData.spots}
             />
 
             <TravelRoute>
@@ -123,16 +118,18 @@ const CourseDetail: NextPage = () => {
               <DetailTitle size="md" fontWeight={700}>
                 다녀온 코스
               </DetailTitle>
-              <CourseSlider places={detailData?.places} />
+              <CourseSlider places={detailData.places} />
             </TravelCourse>
-            <CourseDetailList places={detailData?.places} />
+            <CourseDetailList places={detailData.places} />
           </CourseDetails>
           <Comment />
           <DetailSidebar
-            likes={like}
-            defaultLiked={detailData?.isLiked}
-            defaultBookmarked={detailData?.isBookmarked}
+            likes={detailData.likes}
+            id={detailData.id}
+            defaultLiked={detailData.isLiked}
+            defaultBookmarked={detailData.isBookmarked}
             isLoggedIn={isLoggedIn}
+            type="course"
           />
         </PageContainer>
       </main>
