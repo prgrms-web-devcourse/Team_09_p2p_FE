@@ -2,31 +2,36 @@ import styled from '@emotion/styled';
 import type { NextPage } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, PageContainer, Text, Title } from '~/components/atom';
 import { useUser } from '~/hooks/useUser';
+import { UserApi } from '~/service';
 import theme from '~/styles/theme';
+import { isNumber } from '~/utils/converter';
 
 const UserinfoEdit: NextPage = () => {
   const { currentUser } = useUser();
   const router = useRouter();
   const userId = Number(router.query.id);
+  const [email, setEmail] = useState('');
 
-  const getUserData = (userId: number) => {
-    // 유저데이터 불러오기
+  const getUserData = async () => {
+    const userInfo = await UserApi.getUser();
+    setEmail(userInfo.email);
   };
 
   useEffect(() => {
-    if (typeof router.query.id === 'string') {
-      if (!currentUser.isLoading && currentUser.user.id !== userId) {
+    if (isNumber(userId)) {
+      if (currentUser.isLoading) return;
+
+      if (currentUser.user.id !== userId) {
         alert('잘못된 요청입니다.');
         router.push('/');
-        return;
       }
 
-      getUserData(Number(userId));
+      getUserData();
     }
-  }, [currentUser, userId, router]);
+  }, [currentUser]);
 
   if (currentUser.user.id !== userId) {
     return null;
@@ -49,9 +54,7 @@ const UserinfoEdit: NextPage = () => {
                 <FormTitle>
                   <Text>이메일</Text>
                 </FormTitle>
-                <FormGroup>
-                  <input type="email" name="email" />
-                </FormGroup>
+                <FormGroup>{email}</FormGroup>
               </FormItem>
               <FormItem>
                 <FormTitle>

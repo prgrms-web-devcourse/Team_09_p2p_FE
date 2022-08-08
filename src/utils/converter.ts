@@ -8,3 +8,7 @@ export const ObjectToQuery = (obj: any) => {
 export const sliceDate = (data: string) => {
   return data.substring(0, 10);
 };
+
+export const isNumber = (num: string | number) => {
+  return !Number.isNaN(Number(num));
+};
