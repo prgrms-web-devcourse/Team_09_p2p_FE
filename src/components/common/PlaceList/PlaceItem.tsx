@@ -17,7 +17,7 @@ interface PlaceItemProps {
 
 const PlaceItem = ({ place, grid }: PlaceItemProps) => {
   const { id, title, likeCount, usedCount, thumbnail, bookmarked } = place;
-  const THUMBNAIL_URL = thumbnail ? thumbnail : '/assets/location/jeju.jpg';
+  const THUMBNAIL_URL = thumbnail ? thumbnail : '';
   const { isLoggedIn } = useUser();
   const router = useRouter();
   const [isBookmarked, setIsBookmarked] = useState(bookmarked);
@@ -63,7 +63,7 @@ const PlaceItem = ({ place, grid }: PlaceItemProps) => {
 
 export default PlaceItem;
 
-const { fontGray } = theme.color;
+const { fontGray, backgroundGray } = theme.color;
 const PlaceContainer = styled.li<Pick<PlaceItemProps, 'grid'>>`
   width: ${({ grid }) => (grid === 3 ? '33.3%' : '25%')};
   padding: 0 10px 40px 10px;
@@ -93,6 +93,7 @@ const Thumbnail = styled.div`
   box-sizing: border-box;
   position: relative;
   background-size: cover;
+  background-color: ${backgroundGray};
   border-radius: 8px;
   position: relative;
   background-size: cover;
