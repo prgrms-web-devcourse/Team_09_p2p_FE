@@ -7,8 +7,8 @@ interface IconButtonProps extends IconProps {
 
 const IconButton = ({ name, size, rotate, block, onClick, ...props }: IconButtonProps) => {
   return (
-    <button onClick={onClick}>
-      <Icon name={name} size={size} rotate={rotate} block={block} {...props}></Icon>
+    <button onClick={onClick} {...props}>
+      <Icon name={name} size={size} rotate={rotate} block={block}></Icon>
     </button>
   );
 };
