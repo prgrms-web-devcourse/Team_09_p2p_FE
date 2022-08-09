@@ -20,3 +20,9 @@ export interface UserInfo {
   createdAt: string;
   updatedAt: string;
 }
+
+export interface UserPasswordFormValues {
+  oldPassword: string;
+  password: string;
+  passwordCheck: string;
+}

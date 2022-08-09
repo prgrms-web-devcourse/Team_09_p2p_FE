@@ -3,24 +3,34 @@ import type { NextPage } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
-import { Button, PageContainer, Text, Title } from '~/components/atom';
+import { PageContainer, Title } from '~/components/atom';
+import PasswordChangeForm from '~/components/domain/UserInfo/PasswordChangeForm';
 import { useUser } from '~/hooks/useUser';
 import theme from '~/styles/theme';
+import { UserPasswordFormValues } from '~/types/user';
 
 const UserinfoEdit: NextPage = () => {
   const { currentUser } = useUser();
   const router = useRouter();
   const userId = Number(router.query.id);
 
+  const handleSubmit = async (data: UserPasswordFormValues) => {
+    console.log(data);
+  };
+
   useEffect(() => {
+    if (currentUser.isLoading) {
+      return;
+    }
+
     if (typeof router.query.id === 'string') {
-      if (!currentUser.isLoading && currentUser.user.id !== userId) {
+      if (currentUser.user.id !== userId) {
         alert('잘못된 요청입니다.');
         router.push('/');
         return;
       }
     }
-  }, [currentUser, userId, router]);
+  }, [currentUser]);
 
   if (currentUser.user.id !== userId) {
     return null;
@@ -38,35 +48,7 @@ const UserinfoEdit: NextPage = () => {
         <PageContainer>
           <Container>
             <Title>비밀번호 변경</Title>
-            <Form>
-              <FormItem>
-                <FormTitle>
-                  <Text>현재 비밀번호</Text>
-                </FormTitle>
-                <FormGroup>
-                  <input type="password" name="password" />
-                </FormGroup>
-              </FormItem>
-              <FormItem>
-                <FormTitle>
-                  <Text>새 비밀번호</Text>
-                </FormTitle>
-                <FormGroup>
-                  <input type="password" name="newPassword" />
-                </FormGroup>
-              </FormItem>
-              <FormItem>
-                <FormTitle>
-                  <Text>새 비밀번호 확인</Text>
-                </FormTitle>
-                <FormGroup>
-                  <input type="password" name="newPasswordConfirm" />
-                </FormGroup>
-              </FormItem>
-              <Button size="md" width={195} style={{ marginLeft: 150 }}>
-                내 정보 수정
-              </Button>
-            </Form>
+            <PasswordChangeForm onSubmit={handleSubmit} />
           </Container>
         </PageContainer>
       </main>
