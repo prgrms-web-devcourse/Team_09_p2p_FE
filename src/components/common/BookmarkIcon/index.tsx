@@ -1,19 +1,27 @@
 import styled from '@emotion/styled';
+import { MouseEvent } from 'react';
 import { Icon } from '~/components/atom';
 
 interface BookmarkIconProps {
-  onClick?: () => void; // 필수로 변경할 예정
+  onClick?: (e: MouseEvent<HTMLButtonElement>) => void;
+  bookmarked: boolean;
 }
 
-const BookmarkIcon: React.FC<BookmarkIconProps> = ({ onClick }) => {
-  // TODO: 클릭 시 데이터에 따라 toggle 구현하기
-  return <StyledIcon name="bookmark" size={40} />;
+const BookmarkIcon = ({ onClick, bookmarked }: BookmarkIconProps) => {
+  return (
+    <StyledIcon
+      name={bookmarked ? 'bookmarkThumbActive' : 'bookmarkThumb'}
+      size={40}
+      onClick={onClick}
+    />
+  );
 };
 
 export default BookmarkIcon;
 
-const StyledIcon = styled(Icon)`
+const StyledIcon = styled(Icon.Button)`
   position: absolute;
   top: 14px;
   right: 14px;
+  z-index: 100;
 `;

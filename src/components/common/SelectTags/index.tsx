@@ -2,6 +2,7 @@ import styled from '@emotion/styled';
 import React, { CSSProperties, useEffect, useState } from 'react';
 import theme from '~/styles/theme';
 import { Period, SearchTagsValues, Spot, Theme } from '~/types';
+import { removeList, updateList } from '~/utils/converter';
 import PeriodTags from './PeriodTags';
 import SpotTags from './SpotTags';
 import ThemeTags from './ThemeTags';
@@ -26,36 +27,40 @@ const SelectTags = ({ style, onSelect, toInitializeTrigger }: SelectTagsProps) =
     initialize();
   }, [toInitializeTrigger]);
 
-  useEffect(() => {
-    onSelect({
-      period: selectedPeriod,
-      theme: selectedThemes,
-      spot: selectedSpots
-    });
-  }, [selectedPeriod, selectedThemes, selectedSpots, onSelect]);
-
   const handleSelectPeriod = (period: Period) => {
-    if (selectedPeriod === period) {
-      setSelectedPeriod(() => null);
-    } else {
-      setSelectedPeriod(() => period);
-    }
+    const isSame = selectedPeriod === period;
+
+    onSelect({
+      period: isSame ? null : period,
+      theme: [...selectedThemes],
+      spot: [...selectedSpots]
+    });
+
+    isSame ? setSelectedPeriod(null) : setSelectedPeriod(period);
   };
 
   const handleSelectThemes = (theme: Theme, isSelected: boolean) => {
-    if (!isSelected) {
-      setSelectedThemes((prev) => [...prev, theme]);
-    } else {
-      setSelectedThemes((prev) => prev.filter((prevTheme) => prevTheme !== theme));
-    }
+    onSelect({
+      period: selectedPeriod,
+      theme: isSelected ? removeList(selectedThemes, theme) : updateList(selectedThemes, theme),
+      spot: [...selectedSpots]
+    });
+
+    isSelected
+      ? setSelectedThemes(removeList(selectedThemes, theme))
+      : setSelectedThemes(updateList(selectedThemes, theme));
   };
 
   const handleSelectSpots = (spot: Spot, isSelected: boolean) => {
-    if (!isSelected) {
-      setSelectedSpots((prev) => [...prev, spot]);
-    } else {
-      setSelectedSpots((prev) => prev.filter((prevSpot) => prevSpot !== spot));
-    }
+    onSelect({
+      period: selectedPeriod,
+      theme: [...selectedThemes],
+      spot: isSelected ? removeList(selectedSpots, spot) : updateList(selectedSpots, spot)
+    });
+
+    isSelected
+      ? setSelectedSpots(removeList(selectedSpots, spot))
+      : setSelectedSpots(updateList(selectedSpots, spot));
   };
 
   return (

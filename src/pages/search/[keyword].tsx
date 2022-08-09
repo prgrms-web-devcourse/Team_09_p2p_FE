@@ -6,47 +6,58 @@ import React, { useEffect, useState } from 'react';
 import { PageContainer, Title } from '~/components/atom';
 import { SelectTags, SelectRegion, CourseList, SortFilter } from '~/components/common';
 import { CourseApi } from '~/service';
-import { RegionAndAll, SearchTagsValues } from '~/types';
-import { ICourseItem } from '~/types/course';
+import { Period, RegionAndAll, SearchTagsValues, Spot, Theme } from '~/types';
+import { CourseSearchParams, ICourseItem, SortType } from '~/types/course';
 
 const SearchedKeywordPage: NextPage = () => {
   const [loading, setLoading] = useState(true);
   const [courseList, setCourseList] = useState<ICourseItem[]>([]);
+  const [region, setRegion] = useState<RegionAndAll | null>(null);
+  const [period, setPeriod] = useState<Period | null>(null);
+  const [themes, setThemes] = useState<Theme[]>([]);
+  const [spots, setSpots] = useState<Spot[]>([]);
+  const [sorting, setSorting] = useState<SortType>('인기순');
   const isSearched = courseList.length !== 0;
   const {
     query: { keyword }
   } = useRouter();
 
-  const getCourseListByKeyword = async (keyword: string) => {
-    try {
-      const response = await CourseApi.getCourses({ keyword });
-      setCourseList(response.content);
-    } catch (e) {
-      console.error('리스트를 불러오지 못했어요.', e);
-    }
-  };
-
   const handleSelectRegion = async (region: RegionAndAll) => {
-    if (!isSearched) return;
-    console.log(region);
+    setRegion(region);
   };
 
   const handleSelectTags = async (data: SearchTagsValues) => {
-    if (!isSearched) return;
-    console.log(data);
+    const { period, theme, spot } = data;
+    setPeriod(period);
+    setThemes([...theme]);
+    setSpots([...spot]);
   };
 
-  const handleSort = async () => {
-    return;
+  const handleSort = async (sortType: SortType) => {
+    setSorting(sortType);
+  };
+
+  const searchCourse = async (params: CourseSearchParams) => {
+    try {
+      const response = await CourseApi.search(params);
+      setCourseList(response.content);
+    } catch (e) {
+      console.error('검색 필터링에 실패했어요.');
+    }
   };
 
   useEffect(() => {
     setLoading(true);
-    if (keyword && typeof keyword === 'string') {
-      getCourseListByKeyword(keyword);
-      setLoading(false);
-    }
-  }, [keyword]);
+    searchCourse({
+      keyword: keyword as string,
+      region,
+      period,
+      theme: [...themes],
+      spot: [...spots],
+      sorting
+    });
+    setLoading(false);
+  }, [keyword, region, period, themes, spots, sorting]);
 
   return (
     <React.Fragment>
@@ -78,12 +89,12 @@ const SearchedKeywordPage: NextPage = () => {
               </FilterList>
               {isSearched ? (
                 <>
-                  <SortFilter onSort={handleSort} />
+                  <SortFilter initialValue={sorting} onSort={handleSort} />
                   <CourseList courses={courseList} />
                 </>
               ) : (
                 <h1>
-                  <b>&ldquo;{keyword}&rdquo;에 해당하는 검색 결과가 없습니다.</b>
+                  <b>검색 결과가 없습니다.</b>
                 </h1>
               )}
             </>

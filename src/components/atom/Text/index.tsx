@@ -15,8 +15,6 @@ export interface TextProps {
   style?: CSSProperties;
 }
 
-let tag: 'span' | 'p' = 'span';
-
 const Text = ({
   children,
   size = 'sm',
@@ -25,44 +23,25 @@ const Text = ({
   ellipsis,
   paragraph,
   fontWeight,
+  style,
   ...props
 }: TextProps) => {
-  tag = paragraph ? 'p' : 'span';
+  const Tag = paragraph ? 'p' : 'span';
+
+  const fontStyle = {
+    fontSize: size && (typeof size === 'number' ? size + 'px' : FONT_SIZES[size] + 'px'),
+    color: color && (FONT_COLORS[color] || color),
+    fontWeight: fontWeight && fontWeight,
+    display: block ? 'block' : 'inline-block'
+  };
 
   return (
-    <StyledText
-      size={size}
-      color={color}
-      ellipsis={ellipsis}
-      fontWeight={fontWeight}
-      block={block}
-      {...props}
-    >
+    <Tag className={ellipsis ? 'ellipsis' : ''} style={{ ...fontStyle, ...style }} {...props}>
       {children}
-    </StyledText>
+    </Tag>
   );
 };
 
 Text.Button = TextButton;
 
 export default Text;
-
-const StyledText = styled[tag]<Omit<TextProps, 'children'>>`
-  font-size: ${({ size }) =>
-    size && (typeof size === 'number' ? size + 'px' : FONT_SIZES[size] + 'px')};
-
-  color: ${({ color }) => color && (FONT_COLORS[color] || color)};
-
-  display: ${({ block }) => (block ? 'block' : 'inline-block')};
-
-  ${({ ellipsis }) =>
-    ellipsis &&
-    `
-    display: block;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  `};
-
-  font-weight: ${({ fontWeight }) => fontWeight && fontWeight};
-`;

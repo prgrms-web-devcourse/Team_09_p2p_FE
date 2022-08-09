@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 import { CSSProperties, MouseEvent, ReactNode } from 'react';
 import theme from '~/styles/theme';
 
-type ButtonTypes = 'primary' | 'borderPrimary' | 'tag' | 'darkGray';
+type ButtonTypes = 'primary' | 'borderPrimary' | 'tag' | 'darkGray' | 'borderNone';
 type ButtonSizes = 'sm' | 'md' | 'lg';
 
 interface ButtonProps {
@@ -87,6 +87,15 @@ const buttonStyle: buttonStyleInterface = {
   darkGray: `
     color: #fff;
     background-color: #909090;
+
+  `,
+  borderNone: `
+    color: ${mainColor};
+    background-color: #fff;
+
+    &:hover {
+      background-color: #f6f9ff;
+    }
 
   `
 };

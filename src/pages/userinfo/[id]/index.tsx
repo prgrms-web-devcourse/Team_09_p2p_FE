@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 import type { NextPage } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { PageContainer } from '~/components/atom';
 import { CourseList, PlaceList } from '~/components/common';
 import MyBookmarks from '~/components/domain/UserInfo/MyBookmarks';
@@ -10,6 +10,7 @@ import MyComments from '~/components/domain/UserInfo/MyComments';
 import ProfileCard from '~/components/domain/UserInfo/ProfileCard';
 import Tab from '~/components/domain/UserInfo/Tab';
 import { useUser } from '~/hooks/useUser';
+import { UserApi } from '~/service';
 import { courseListData, placeListData } from '~/utils/dummydata';
 
 export type IComment = {
@@ -42,13 +43,35 @@ const courseCommentData = [
   }
 ];
 
+interface IBookmarkCounts {
+  total: number;
+  courseBookmark: number;
+  placeBookmark: number;
+}
+interface ICounts {
+  course: number;
+  comments: number;
+  bookmarks: IBookmarkCounts;
+}
+interface IUserInfo {
+  id: number;
+  nickname: string;
+  profileImage: string | null;
+  birth: string;
+  sex: string;
+  createdAt: string;
+  counts: ICounts;
+}
+
 const Userinfo: NextPage = () => {
   const [ActiveMenu, setActiveMenu] = useState('post');
   const [ActiveBookmark, setActiveBookmark] = useState('course');
+  const [userData, setUserData] = useState<IUserInfo | null>(null);
   const router = useRouter();
   const { currentUser } = useUser();
 
-  const isMyPage = Number(router.query.id) === currentUser.user.id;
+  const userId = Number(router.query.id);
+  const isMyPage = userId === currentUser.user.id;
 
   const onClickAction = (value: string) => {
     setActiveMenu(value);
@@ -58,6 +81,32 @@ const Userinfo: NextPage = () => {
     setActiveBookmark(value);
   };
 
+  const getUserData = async (userId: number) => {
+    const result = await UserApi.getUser(userId);
+    if (!result) {
+      alert('잘못된 요청입니다.');
+      router.push('/');
+      return;
+    }
+
+    setUserData(result);
+  };
+
+  useEffect(() => {
+    if (typeof router.query.id === 'string') {
+      if (Number.isNaN(userId)) {
+        alert('잘못된 요청입니다.');
+        router.push('/');
+        return;
+      }
+
+      getUserData(userId);
+    }
+  }, [userId, router]);
+
+  if (!userData) {
+    return null;
+  }
   return (
     <React.Fragment>
       <Head>
@@ -70,13 +119,14 @@ const Userinfo: NextPage = () => {
         <PageContainer>
           <Wrapper>
             <ProfileCard
-              profileImage=""
-              nickname="Jinist"
-              email="325days@naver.com"
+              profileImage={userData.profileImage}
+              userId={userData.id}
+              nickname={userData.nickname}
+              email={userData.birth}
               onClickAction={onClickAction}
-              postCount={1}
-              bookmarkCount={2}
-              commentCount={3}
+              postCount={userData.counts.course}
+              bookmarkCount={userData.counts.bookmarks.total}
+              commentCount={userData.counts.comments}
               isMyPage={isMyPage}
             />
             <ActionContent>

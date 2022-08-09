@@ -4,6 +4,10 @@ import BookmarkIcon from '../BookmarkIcon';
 import LikeCount from '../LikeCount';
 import { IPlaceItem } from '.';
 import theme from '~/styles/theme';
+import { BookmarkApi } from '~/service';
+import { useUser } from '~/hooks/useUser';
+import { useRouter } from 'next/router';
+import { MouseEvent, useState } from 'react';
 
 export type PlaceGrid = 3 | 4;
 interface PlaceItemProps {
@@ -12,8 +16,23 @@ interface PlaceItemProps {
 }
 
 const PlaceItem = ({ place, grid }: PlaceItemProps) => {
-  const { id, title, likeCount, usedCount, thumbnail } = place;
-  const THUMBNAIL_URL = thumbnail ? thumbnail : '/assets/location/jeju.jpg';
+  const { id, title, likeCount, usedCount, thumbnail, bookmarked } = place;
+  const THUMBNAIL_URL = thumbnail ? thumbnail : '';
+  const { isLoggedIn } = useUser();
+  const router = useRouter();
+  const [isBookmarked, setIsBookmarked] = useState(bookmarked);
+
+  const handleClickBookmark = async (e: MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    if (!isLoggedIn) {
+      router.push('/login');
+      return;
+    }
+    const result = await BookmarkApi.bookmarkPlace(Number(id));
+    setIsBookmarked(result.isBookmarked);
+  };
 
   return (
     <PlaceContainer grid={grid}>
@@ -23,12 +42,14 @@ const PlaceItem = ({ place, grid }: PlaceItemProps) => {
             className="placeImage"
             style={{ backgroundImage: `url(${THUMBNAIL_URL})` }}
           ></Thumbnail>
-          <BookmarkIcon />
+          <BookmarkIcon bookmarked={isBookmarked} onClick={handleClickBookmark} />
         </ThumbnailWrapper>
 
         <PlaceInfo>
           <InfoHead>
-            <Title size={16}>{title}</Title>
+            <Title size={16} color="dark" ellipsis>
+              {title}
+            </Title>
             <LikeCount count={likeCount} />
           </InfoHead>
           <Description>
@@ -44,7 +65,7 @@ const PlaceItem = ({ place, grid }: PlaceItemProps) => {
 
 export default PlaceItem;
 
-const { fontGray } = theme.color;
+const { fontGray, backgroundGray } = theme.color;
 const PlaceContainer = styled.li<Pick<PlaceItemProps, 'grid'>>`
   width: ${({ grid }) => (grid === 3 ? '33.3%' : '25%')};
   padding: 0 10px 40px 10px;
@@ -74,6 +95,7 @@ const Thumbnail = styled.div`
   box-sizing: border-box;
   position: relative;
   background-size: cover;
+  background-color: ${backgroundGray};
   border-radius: 8px;
   position: relative;
   background-size: cover;

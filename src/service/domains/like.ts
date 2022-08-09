@@ -1,6 +1,7 @@
 import Api from '~/service/core/Api';
+import { CourseOrPlace } from '~/types';
 
-class LikesApi extends Api {
+class LikeApi extends Api {
   private path = '/likes';
 
   likeCourse = async (courseId: number) => {
@@ -12,6 +13,17 @@ class LikesApi extends Api {
     const response = await this.authInstance.get(`${this.path}/places/${placeId}`);
     return response.data;
   };
+
+  like = async (id: number, type: CourseOrPlace) => {
+    switch (type) {
+      case 'course':
+        return await this.likeCourse(id);
+      case 'place':
+        return await this.likePlace(id);
+      default:
+        return;
+    }
+  };
 }
 
-export default new LikesApi();
+export default new LikeApi();
