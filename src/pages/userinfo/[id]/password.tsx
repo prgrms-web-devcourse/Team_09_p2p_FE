@@ -23,12 +23,15 @@ const UserinfoEdit: NextPage = () => {
       if (response.status === 200) {
         console.log('비밀번호 변경 성공');
         console.log(response);
+        // TODO- 비밀번호 변경 성공 시
+        // 1. 다시 로그인을 시킬 것인지 말 것인지
+        // 2. 페이징을 어떻게 할 것인지
         return;
       }
       console.error('비밀번호 변경에 실패했어요.');
     } catch (e: any) {
       const { response } = e;
-
+      // Api 에러 픽스 시 예외처리
       if (response.status === 400) {
         console.log('비밀번호가 틀렸어요.');
         console.log(response);
