@@ -29,8 +29,10 @@ const Comment = ({ id, type }: CommentProps) => {
     getComments();
   };
 
-  const onUpdate = async (commentId: number) => {
+  const onUpdate = async (commentId: number, value: string) => {
     console.log(commentId, 'click Update');
+    await CommentApi.updateComment(id, commentId, { comment: value }, type);
+    getComments();
   };
 
   useEffect(() => {
