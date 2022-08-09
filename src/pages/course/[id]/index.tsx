@@ -20,7 +20,6 @@ import { sliceDate } from '~/utils/converter';
 const CourseDetail: NextPage = () => {
   /* TODO
     1. 추천 아이콘 작업
-    2. 업로드, 수정 날짜 가공하여 적용
     3. 수정/삭제 버튼 구현
   */
   const { currentUser, isLoggedIn } = useUser();
@@ -31,18 +30,22 @@ const CourseDetail: NextPage = () => {
   const getDetailInfo = async (courseId: number) => {
     if (isLoggedIn) {
       const result = await CourseApi.authRead(courseId);
+
       if (!result) {
         // 임시로 값 없을 경우 처리
         router.push('/');
         return;
       }
+
       setDetailData(result);
     } else {
       const result = await CourseApi.read(courseId);
+
       if (!result) {
         router.push('/');
         return;
       }
+
       setDetailData(result);
     }
   };
@@ -94,7 +97,7 @@ const CourseDetail: NextPage = () => {
                 <Avatar size={66} />
               </Link>
               <Text color="dark" fontWeight={500}>
-                {detailData?.nickname}
+                {detailData.nickname}
               </Text>
             </Profile>
           </CourseDetailHeader>
@@ -122,7 +125,9 @@ const CourseDetail: NextPage = () => {
             </TravelCourse>
             <CourseDetailList places={detailData.places} />
           </CourseDetails>
-          <Comment />
+          {!Number.isNaN(courseId) && (
+            <Comment id={courseId} type="course" writerId={detailData.userId} />
+          )}
           <DetailSidebar
             likes={detailData.likes}
             id={detailData.id}

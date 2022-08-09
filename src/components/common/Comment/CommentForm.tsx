@@ -3,11 +3,17 @@ import { ChangeEvent, FormEvent, useState } from 'react';
 import { Button } from '~/components/atom';
 import theme from '~/styles/theme';
 
-const CommentForm = () => {
+interface CommentFormProps {
+  onSubmit: (value: string) => void;
+}
+
+const CommentForm = ({ onSubmit }: CommentFormProps) => {
   const [value, setValue] = useState('');
+
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    alert(value);
+    onSubmit(value);
+    setValue('');
   };
 
   const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
@@ -22,7 +28,9 @@ const CommentForm = () => {
         onChange={handleChange}
         value={value}
       />
-      <Button width={140}>등록</Button>
+      <Button width={140} type="submit" disabled={value.trim().length <= 1}>
+        등록
+      </Button>
     </StyledCommentForm>
   );
 };

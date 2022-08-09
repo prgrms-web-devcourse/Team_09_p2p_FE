@@ -1,54 +1,71 @@
 import styled from '@emotion/styled';
+import { useEffect, useState } from 'react';
 import { Text } from '~/components/atom';
+import { CommentApi } from '~/service';
+import { IComments } from '~/types/comment';
 import CommentForm from './CommentForm';
 import CommentItem from './CommentItem';
-import { IComment } from './types';
-
-const dummyComments = [
-  {
-    id: 3,
-    comment: '반갑습니다',
-    user: {
-      id: 2,
-      nickname: 'Jinist',
-      profileImage: ''
-    },
-    createdAt: '2022-02-22',
-    updatedAt: '',
-    isDeleted: false,
-    recomments: [
-      {
-        id: 4,
-        comment: '대댓글이에요',
-        user: {
-          id: 3,
-          nickname: 'Grew',
-          profileImage: ''
-        },
-        createdAt: '2022-02-22',
-        updatedAt: ''
-      }
-    ]
-  }
-];
 
 interface CommentProps {
-  comments?: IComment[];
+  id: number;
+  type: 'course' | 'place';
+  writerId?: number;
 }
 
-const Comment = ({ comments = dummyComments }: CommentProps) => {
+const Comment = ({ id, type, writerId }: CommentProps) => {
+  const [comments, setComments] = useState<IComments | null>(null);
+
+  const getComments = async () => {
+    const result = await CommentApi.getComments(id, type);
+    setComments(result);
+    console.log(result, 'result');
+  };
+
+  const onCreate = async (value: string) => {
+    await CommentApi.createComment(id, { comment: value }, type);
+    getComments();
+  };
+
+  const onDelete = async (commentId: number) => {
+    await CommentApi.deleteComment(id, commentId, type);
+    getComments();
+  };
+
+  const onEdit = async (commentId: number, value: string) => {
+    await CommentApi.updateComment(id, commentId, { comment: value }, type);
+    getComments();
+  };
+
+  const onCreateRecomment = async (commentId: number, value: string) => {
+    await CommentApi.createComment(id, { comment: value, rootCommentId: commentId }, type);
+    getComments();
+  };
+
+  useEffect(() => {
+    if (!Number.isNaN(id)) {
+      getComments();
+      return;
+    }
+  }, []);
+
+  if (!comments) {
+    return null;
+  }
   return (
     <CommentContainer>
       <Text size="xl" fontWeight={700}>
-        댓글 1개
+        댓글 {comments?.totalCount}개
       </Text>
-      <CommentForm />
+      <CommentForm onSubmit={onCreate} />
       <CommentList>
-        {comments.map((comment) => (
+        {comments.courseComments.map((comment) => (
           <CommentItem
             key={comment.id}
             comment={comment}
-            isRecomment={comment.recomments.length <= 0}
+            onDelete={onDelete}
+            onEdit={onEdit}
+            onCreateRecomment={onCreateRecomment}
+            writerId={writerId}
           />
         ))}
       </CommentList>

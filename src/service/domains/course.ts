@@ -113,6 +113,31 @@ class CourseApi extends Api {
       console.error(`코스 목록 조회 오류: ${e}`);
     } */
   };
+
+  getComments = async (courseId: number) => {
+    const response = await this.baseInstance.get(`${this.path}/${courseId}/comments`);
+    return response.data;
+  };
+
+  createComment = async (courseId: number, data: object) => {
+    const response = await this.authInstance.post(`${this.path}/${courseId}/comments`, data);
+    return response.data;
+  };
+
+  updateComment = async (courseId: number, commentId: number, data: object) => {
+    const response = await this.authInstance.put(
+      `${this.path}/${courseId}/comments/${commentId}`,
+      data
+    );
+    return response.data;
+  };
+
+  deleteComment = async (courseId: number, commentId: number) => {
+    const response = await this.authInstance.delete(
+      `${this.path}/${courseId}/comments/${commentId}`
+    );
+    return response.data;
+  };
 }
 
 export default new CourseApi();
