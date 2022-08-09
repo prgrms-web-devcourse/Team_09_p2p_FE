@@ -12,6 +12,7 @@ interface CommentItemProps {
   onEdit: (commentId: number, value: string) => void;
   onDelete: (commentId: number) => void;
   onCreateRecomment: (commentId: number, value: string) => void;
+  writerId?: number;
 }
 
 /* TODO:
@@ -20,7 +21,13 @@ interface CommentItemProps {
 4. 2022-02-22 -> ~일전/~주전 으로 변경하는게 좋을 듯
 */
 
-const CommentItem = ({ comment, onEdit, onDelete, onCreateRecomment }: CommentItemProps) => {
+const CommentItem = ({
+  comment,
+  onEdit,
+  onDelete,
+  onCreateRecomment,
+  writerId
+}: CommentItemProps) => {
   const [isOpenEditor, setIsOpenEditor] = useState(false);
   const [isOpenRecomment, setIsOpenRecomment] = useState(false);
   const isRecomment = comment.rootCommentId !== null;
@@ -52,11 +59,14 @@ const CommentItem = ({ comment, onEdit, onDelete, onCreateRecomment }: CommentIt
         {!isOpenEditor ? (
           <>
             <CommentContent>
-              <Link href={`/userinfo/${comment.user.id}`}>
-                <Text size="lg" block fontWeight={700}>
-                  {comment.user.nickName}
-                </Text>
-              </Link>
+              <div>
+                <Link href={`/userinfo/${comment.user.id}`}>
+                  <Text size="lg" fontWeight={700}>
+                    {comment.user?.nickname}
+                  </Text>
+                </Link>
+                {writerId === comment.user.id && <Writer>작성자</Writer>}
+              </div>
               <Text size="lg" block>
                 {comment.comment}
               </Text>
@@ -108,7 +118,7 @@ const CommentItem = ({ comment, onEdit, onDelete, onCreateRecomment }: CommentIt
 
 export default CommentItem;
 
-const { borderDarkGray } = theme.color;
+const { borderDarkGray, mainColor } = theme.color;
 
 const CommentContainer = styled.div<{ isRecomment?: boolean | null }>`
   display: flex;
@@ -143,4 +153,12 @@ const Buttons = styled.div`
   button {
     margin-left: 12px;
   }
+`;
+
+const Writer = styled.span`
+  border: 1px solid ${mainColor};
+  color: ${mainColor};
+  border-radius: 20px;
+  padding: 0 10px;
+  margin-left: 8px;
 `;

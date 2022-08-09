@@ -9,9 +9,10 @@ import CommentItem from './CommentItem';
 interface CommentProps {
   id: number;
   type: 'course' | 'place';
+  writerId?: number;
 }
 
-const Comment = ({ id, type }: CommentProps) => {
+const Comment = ({ id, type, writerId }: CommentProps) => {
   const [comments, setComments] = useState<IComments | null>(null);
 
   const getComments = async () => {
@@ -64,6 +65,7 @@ const Comment = ({ id, type }: CommentProps) => {
             onDelete={onDelete}
             onEdit={onEdit}
             onCreateRecomment={onCreateRecomment}
+            writerId={writerId}
           />
         ))}
       </CommentList>

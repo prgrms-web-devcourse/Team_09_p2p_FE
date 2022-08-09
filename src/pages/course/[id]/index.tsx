@@ -14,7 +14,6 @@ import CourseMap from '~/components/domain/Map/CourseMap';
 import { useUser } from '~/hooks/useUser';
 import { CourseApi } from '~/service';
 import theme from '~/styles/theme';
-import { IComments } from '~/types/comment';
 import { ICourseDetail } from '~/types/course';
 import { sliceDate } from '~/utils/converter';
 
@@ -25,7 +24,6 @@ const CourseDetail: NextPage = () => {
   */
   const { currentUser, isLoggedIn } = useUser();
   const [detailData, setDetailData] = useState<ICourseDetail | null>(null);
-  const [commentsData, setCommentsData] = useState<IComments | null>(null);
   const router = useRouter();
   const courseId = Number(router.query.id);
 
@@ -99,7 +97,7 @@ const CourseDetail: NextPage = () => {
                 <Avatar size={66} />
               </Link>
               <Text color="dark" fontWeight={500}>
-                {detailData?.nickname}
+                {detailData.nickname}
               </Text>
             </Profile>
           </CourseDetailHeader>
@@ -127,7 +125,9 @@ const CourseDetail: NextPage = () => {
             </TravelCourse>
             <CourseDetailList places={detailData.places} />
           </CourseDetails>
-          {!Number.isNaN(courseId) && <Comment id={courseId} type="course" />}
+          {!Number.isNaN(courseId) && (
+            <Comment id={courseId} type="course" writerId={detailData.userId} />
+          )}
           <DetailSidebar
             likes={detailData.likes}
             id={detailData.id}
