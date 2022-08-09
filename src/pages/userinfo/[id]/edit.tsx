@@ -39,7 +39,8 @@ const UserinfoEdit: NextPage = () => {
         // ConfirmModal...
       }
     } catch (e) {
-      console.error('정보 수정에 실패했어요.');
+      console.error('정보 수정에 실패했어요.', e);
+      // TODO 이후 status code에 따른 예외처리
     }
   };
 
