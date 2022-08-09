@@ -6,17 +6,14 @@ import { Button, Link, PageContainer, Image } from '~/components/atom';
 import { CourseList, PlaceList } from '~/components/common';
 import Layout from '~/components/common/Layout';
 import MainCategoryTitle from '~/components/domain/home/MainCategoryTitle';
-import { CourseApi } from '~/service';
+import { CourseApi, PlaceApi } from '~/service';
 import theme from '~/styles/theme';
 
 const HomePage = () => {
   const router = useRouter();
   const mainSearchInputRef = useRef<HTMLInputElement>(null);
-  // TODO :
-  /*
-    1. 메인페이지 기능 구현
-  */
   const [courseList, setCourseList] = useState([]);
+  const [placeList, setPlaceList] = useState([]);
   const COURSE_COUNT = 6;
   const PLACE_COUNT = 4;
 
@@ -25,6 +22,11 @@ const HomePage = () => {
     const result = await CourseApi.getCourses(filter);
     console.log('[Courses] :', result.content);
     setCourseList(result.content);
+  };
+
+  const getPlaceList = async () => {
+    const result = await PlaceApi.getPlaces({ size: PLACE_COUNT });
+    setPlaceList(result.content);
   };
 
   const handleSearch = (e: FormEvent) => {
@@ -39,6 +41,7 @@ const HomePage = () => {
 
   useEffect(() => {
     getCourseList();
+    getPlaceList();
   }, []);
 
   return (
@@ -82,7 +85,7 @@ const HomePage = () => {
               <Link href="/place">
                 <MainCategoryTitle name="추천 핫플레이스" />
               </Link>
-              <PlaceList />
+              <PlaceList places={placeList} />
             </CategoryArea>
           </PageContainer>
         </MainContent>

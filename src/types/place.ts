@@ -1,3 +1,5 @@
+import { SortType } from './course';
+
 export interface IPlaceItem {
   id: number;
   title: string;
@@ -19,4 +21,11 @@ export interface IPlace {
   imageUrl: string;
   isRecommended: boolean;
   isThumbnail: boolean;
+}
+
+export interface PlaceFilter {
+  keyword?: string;
+  page?: number;
+  size?: number;
+  sort?: SortType;
 }

@@ -29,7 +29,7 @@ class CourseApi extends Api {
       queryString = ObjectToQuery(filter);
     }
 
-    const response = await this.baseInstance.get(`${this.path}/${queryString}`);
+    const response = await this.authInstance.get(`${this.path}/${queryString}`);
     return response.data;
   };
 
