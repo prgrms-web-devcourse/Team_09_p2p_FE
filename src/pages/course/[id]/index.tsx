@@ -14,36 +14,48 @@ import CourseMap from '~/components/domain/Map/CourseMap';
 import { useUser } from '~/hooks/useUser';
 import { CourseApi } from '~/service';
 import theme from '~/styles/theme';
+import { IComments } from '~/types/comment';
 import { ICourseDetail } from '~/types/course';
 import { sliceDate } from '~/utils/converter';
 
 const CourseDetail: NextPage = () => {
   /* TODO
     1. 추천 아이콘 작업
-    2. 업로드, 수정 날짜 가공하여 적용
     3. 수정/삭제 버튼 구현
   */
   const { currentUser, isLoggedIn } = useUser();
   const [detailData, setDetailData] = useState<ICourseDetail | null>(null);
+  const [commentsData, setCommentsData] = useState<IComments | null>(null);
   const router = useRouter();
   const courseId = Number(router.query.id);
+
+  const getCourseComments = async (courseId: number) => {
+    const result = await CourseApi.getComments(courseId);
+    setCommentsData(result);
+  };
 
   const getDetailInfo = async (courseId: number) => {
     if (isLoggedIn) {
       const result = await CourseApi.authRead(courseId);
+
       if (!result) {
         // 임시로 값 없을 경우 처리
         router.push('/');
         return;
       }
+
       setDetailData(result);
+      getCourseComments(courseId);
     } else {
       const result = await CourseApi.read(courseId);
+
       if (!result) {
         router.push('/');
         return;
       }
+
       setDetailData(result);
+      getCourseComments(courseId);
     }
   };
 
@@ -122,7 +134,7 @@ const CourseDetail: NextPage = () => {
             </TravelCourse>
             <CourseDetailList places={detailData.places} />
           </CourseDetails>
-          <Comment />
+          {commentsData && <Comment comments={commentsData} />}
           <DetailSidebar
             likes={detailData.likes}
             id={detailData.id}

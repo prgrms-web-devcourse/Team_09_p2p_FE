@@ -2,11 +2,11 @@ import styled from '@emotion/styled';
 import { Link, Text } from '~/components/atom';
 import Avatar from '~/components/atom/Avatar';
 import theme from '~/styles/theme';
-import { IComment, IRecomment } from './types';
+import { IComment } from '~/types/comment';
+import { sliceDate } from '~/utils/converter';
 
 interface CommentItemProps {
-  comment?: IComment | IRecomment;
-  isRecomment?: boolean;
+  comment: IComment;
 }
 
 /* TODO:
@@ -15,37 +15,29 @@ interface CommentItemProps {
 4. 2022-02-22 -> ~일전/~주전 으로 변경하는게 좋을 듯
 */
 
-const CommentItem = ({ comment, isRecomment }: CommentItemProps) => {
+const CommentItem = ({ comment }: CommentItemProps) => {
+  const isRecomment = comment.rootCommentId !== null;
+
   return (
-    <>
-      {comment && (
-        <>
-          <CommentWrapper isRecomment={isRecomment}>
-            <Link href={`/userinfo/${comment.user.id}`}>
-              <Avatar size={66} src={comment.user.profileImage} />
-            </Link>
-            <CommentContent>
-              <Link href={`/userinfo/${comment.user.id}`}>
-                <Text size="lg" block fontWeight={700}>
-                  {comment.user.nickname}
-                </Text>
-              </Link>
-              <Text size="lg" block>
-                {comment.comment}
-              </Text>
-              <CommentInfo>
-                <Text color="gray">{comment.createdAt}</Text>
-                {!isRecomment && <Text color="gray">답글 작성</Text>}
-              </CommentInfo>
-            </CommentContent>
-          </CommentWrapper>
-          {'recomments' in comment &&
-            comment.recomments.map((recomment) => (
-              <CommentItem key={recomment.id} comment={recomment} isRecomment />
-            ))}
-        </>
-      )}
-    </>
+    <CommentWrapper isRecomment={isRecomment}>
+      <Link href={`/userinfo/${comment.user.id}`}>
+        <Avatar size={66} src={comment.user.profileImage} />
+      </Link>
+      <CommentContent>
+        <Link href={`/userinfo/${comment.user.id}`}>
+          <Text size="lg" block fontWeight={700}>
+            {comment.user.nickname}
+          </Text>
+        </Link>
+        <Text size="lg" block>
+          {comment.comment}
+        </Text>
+        <CommentInfo>
+          <Text color="gray">{sliceDate(comment.createdAt)}</Text>
+          {!isRecomment && <Text color="gray">답글 작성</Text>}
+        </CommentInfo>
+      </CommentContent>
+    </CommentWrapper>
   );
 };
 
@@ -53,7 +45,7 @@ export default CommentItem;
 
 const { borderDarkGray } = theme.color;
 
-const CommentWrapper = styled.div<Pick<CommentItemProps, 'isRecomment'>>`
+const CommentWrapper = styled.div<{ isRecomment: boolean | null }>`
   display: flex;
   padding: 20px 0;
   border-bottom: 1px solid ${borderDarkGray};
