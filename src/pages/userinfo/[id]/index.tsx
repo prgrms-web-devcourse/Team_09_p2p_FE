@@ -10,8 +10,9 @@ import MyComments from '~/components/domain/UserInfo/MyComments';
 import ProfileCard from '~/components/domain/UserInfo/ProfileCard';
 import Tab from '~/components/domain/UserInfo/Tab';
 import { useUser } from '~/hooks/useUser';
-import { UserApi } from '~/service';
+import { CourseApi, PlaceApi, UserApi } from '~/service';
 import { courseListData, placeListData } from '~/utils/dummydata';
+import type { UserInfoTab } from '~/components/domain/UserInfo/types';
 
 export type IComment = {
   id: number;
@@ -70,15 +71,37 @@ const Userinfo: NextPage = () => {
   const router = useRouter();
   const { currentUser } = useUser();
 
+  const [bookmarkData, setBookmarkData] = useState({
+    course: null,
+    places: null
+  });
+
   const userId = Number(router.query.id);
   const isMyPage = userId === currentUser.user.id;
 
-  const onClickAction = (value: string) => {
+  const onClickAction = (value: UserInfoTab) => {
+    console.log(value);
     setActiveMenu(value);
+
+    if (value === 'bookmark') {
+      onClickBookmarkTab('course');
+    }
   };
 
-  const onClickBookmarkTab = (value: string) => {
+  const onClickBookmarkTab = async (value: UserInfoTab) => {
     setActiveBookmark(value);
+
+    if (value === 'course' && bookmarkData.course === null) {
+      const result = await CourseApi.getBookmarked(userId);
+      setBookmarkData({ ...bookmarkData, course: result.content });
+      console.log(result.content);
+    }
+
+    if (value === 'place' && bookmarkData.places === null) {
+      const result = await PlaceApi.getBookmarked(userId);
+      setBookmarkData({ ...bookmarkData, places: result.content });
+      console.log(result.content);
+    }
   };
 
   const getUserData = async (userId: number) => {
@@ -137,8 +160,8 @@ const Userinfo: NextPage = () => {
                   </Tab.item>
                   <Tab.item title="북마크" value="bookmark">
                     <MyBookmarks
-                      courses={courseListData}
-                      places={placeListData}
+                      courses={bookmarkData.course}
+                      places={bookmarkData.places}
                       onActive={onClickBookmarkTab}
                       active={ActiveBookmark}
                     />

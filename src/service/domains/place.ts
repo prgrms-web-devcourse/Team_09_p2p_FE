@@ -40,6 +40,13 @@ class PlaceApi extends Api {
     console.log(response.data, 'response Data');
     return response.data;
   };
+
+  getBookmarked = async (userId: number) => {
+    const response = await this.authInstance.get(`${this.path}/bookmark`, {
+      params: { userId: userId }
+    });
+    return response.data;
+  };
 }
 
 export default new PlaceApi();

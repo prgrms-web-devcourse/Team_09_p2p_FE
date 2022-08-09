@@ -1,18 +1,19 @@
 import styled from '@emotion/styled';
 import { useRouter } from 'next/router';
-import { SetStateAction, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { Icon, Link, Text, Title } from '~/components/atom';
 import Avatar from '~/components/atom/Avatar';
 import ImageUpload from '~/components/common/ImageUpload';
 import { useUser } from '~/hooks/useUser';
 import { UserApi } from '~/service';
 import theme from '~/styles/theme';
+import { InfoTab } from '../types';
 
 interface ProfileCardProps {
   profileImage: string | null;
   nickname: string;
   email: string;
-  onClickAction: (value: string) => void;
+  onClickAction: (value: InfoTab) => void;
   postCount: number;
   bookmarkCount: number;
   commentCount: number;
@@ -85,7 +86,7 @@ const ProfileCard = ({
       <UserActions>
         <li>
           <Text>게시물</Text>
-          <Text.Button onClick={() => onClickAction('post')} color="main" fontWeight={700}>
+          <Text.Button onClick={() => onClickAction('course')} color="main" fontWeight={700}>
             {postCount}
           </Text.Button>
         </li>
