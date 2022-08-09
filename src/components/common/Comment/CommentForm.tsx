@@ -28,7 +28,7 @@ const CommentForm = ({ onSubmit }: CommentFormProps) => {
         onChange={handleChange}
         value={value}
       />
-      <Button width={140} type="submit">
+      <Button width={140} type="submit" disabled={value.trim().length <= 1}>
         등록
       </Button>
     </StyledCommentForm>

@@ -31,7 +31,9 @@ const CommentEditor = ({ onSubmit, onCancel, defaultValue }: CommitEditorProps) 
         <Button buttonType="borderNone" onClick={handleCancel}>
           취소
         </Button>
-        <Button onClick={handleSubmit}>등록</Button>
+        <Button onClick={handleSubmit} disabled={textValue.trim().length <= 1}>
+          등록
+        </Button>
       </EditButtons>
     </EditWrapper>
   );

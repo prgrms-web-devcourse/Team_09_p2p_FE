@@ -50,6 +50,11 @@ const CommentItem = ({
     setIsOpenRecomment(false);
   };
 
+  const handleDelete = () => {
+    if (confirm('삭제하시겠습니까?')) {
+      onDelete(comment.id);
+    }
+  };
   return (
     <>
       <CommentContainer isRecomment={isRecomment}>
@@ -67,7 +72,7 @@ const CommentItem = ({
                 </Link>
                 {writerId === comment.user.id && <Writer>작성자</Writer>}
               </div>
-              <Text size="lg" block>
+              <Text size="lg" block style={{ whiteSpace: 'pre-wrap' }}>
                 {comment.comment}
               </Text>
               <CommentInfo>
@@ -87,7 +92,7 @@ const CommentItem = ({
               <Text.Button color="gray" onClick={() => setIsOpenEditor(true)}>
                 수정
               </Text.Button>
-              <Text.Button color="gray" onClick={() => onDelete(comment.id)}>
+              <Text.Button color="gray" onClick={handleDelete}>
                 삭제
               </Text.Button>
             </Buttons>
