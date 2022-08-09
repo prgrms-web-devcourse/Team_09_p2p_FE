@@ -11,6 +11,7 @@ const Link = ({
   shallow,
   locale,
   children,
+  onClick,
   ...props
 }: LinkProps) => {
   return (
@@ -24,7 +25,7 @@ const Link = ({
       passHref
       {...props}
     >
-      <a>{children}</a>
+      <a onClick={onClick}>{children}</a>
     </NextLink>
   );
 };

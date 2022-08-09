@@ -1,7 +1,10 @@
 import styled from '@emotion/styled';
-import React from 'react';
+import { useRouter } from 'next/router';
+import React, { MouseEvent, useState } from 'react';
 import { Link, Text, Title } from '~/components/atom';
 import Avatar from '~/components/atom/Avatar';
+import { useUser } from '~/hooks/useUser';
+import { BookmarkApi } from '~/service';
 import theme from '~/styles/theme';
 import { ICourseItem } from '~/types/course';
 import BookmarkIcon from '../BookmarkIcon';
@@ -13,17 +16,46 @@ interface CourseItemProps {
 }
 
 const CourseItem = ({ course, grid = 3 }: CourseItemProps) => {
-  const { id, thumbnail, region, title, places, themes, likes, profileUrl, nickname } = course;
-  const COURSE_COUNT = course?.places.length;
+  const {
+    id,
+    thumbnail,
+    region,
+    title,
+    places,
+    themes,
+    likes,
+    profileUrl,
+    nickname,
+    isBookmarked: bookmarked
+  } = course;
 
-  const THUMBNAIL_URL = thumbnail ? thumbnail : '/assets/location/jeju.jpg';
+  const [isBookmarked, setIsBookmarked] = useState(bookmarked);
+  const { isLoggedIn } = useUser();
+  const router = useRouter();
+
+  const COURSE_COUNT = course.places.length;
+  const THUMBNAIL_URL = thumbnail ? thumbnail : '';
+
+  const handleClickBookmark = async (e: MouseEvent<HTMLButtonElement>) => {
+    console.log('클릭 북마크');
+    e.preventDefault();
+    e.stopPropagation();
+
+    if (!isLoggedIn) {
+      router.push('/login');
+      return;
+    }
+    const result = await BookmarkApi.bookmarkCourse(Number(id));
+    setIsBookmarked(result.isBookmarked);
+  };
+
   return (
     <ItemContainer grid={grid}>
       <Link href={`/course/${id}`}>
         <ThumbnailWrapper>
           <ThumbnailBackground></ThumbnailBackground>
           <Thumbnail className="courseImage" style={{ backgroundImage: `url(${THUMBNAIL_URL})` }} />
-          <BookmarkIcon />
+          <BookmarkIcon bookmarked={isBookmarked} onClick={handleClickBookmark} />
           <ThumbnailInfo>
             <Text size="xs">
               {region} · {COURSE_COUNT}코스

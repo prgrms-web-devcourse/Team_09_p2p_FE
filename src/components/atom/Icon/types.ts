@@ -1,6 +1,5 @@
 export const ICON_URLS = {
   heart: '/assets/icons/heart.svg',
-  bookmark: '/assets/icons/bookmark.svg',
   arrow: '/assets/icons/arrow.svg',
   arrowDown: '/assets/icons/arrow-down.svg',
   calendar: '/assets/icons/calendar.svg',
@@ -15,7 +14,9 @@ export const ICON_URLS = {
   close: '/assets/icons/close.svg',
   plus: '/assets/icons/plus.svg',
   pencil: '/assets/icons/pencil.svg',
-  comment: '/assets/icons/comment.svg'
+  comment: '/assets/icons/comment.svg',
+  bookmarkThumb: '/assets/icons/bookmark-thumb.svg',
+  bookmarkThumbActive: '/assets/icons/bookmark-thumb-active.svg'
 };
 
 export type IconName = keyof typeof ICON_URLS;

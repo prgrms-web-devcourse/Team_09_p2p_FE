@@ -3,7 +3,8 @@ import { MutableRefObject, ReactNode, SetStateAction, useRef, useState } from 'r
 import { Text } from '~/components/atom';
 import theme from '~/styles/theme';
 import Textarea from '~/components/atom/Textarea';
-
+import Image from 'next/image';
+import ImageUpload from '~/components/common/ImageUpload';
 interface IPlace {
   id: number;
   lat: number;
@@ -35,7 +36,7 @@ const PlaceInformation = ({
   placeImageRef,
   onChangeThumnail
 }: IPlaceInformation) => {
-  const [file, setFile] = useState('');
+  const [file, setFile] = useState<File | string>('');
   const [previewUrl, setPreviewUrl] = useState('');
   const [isRecommended, setIsRecommended] = useState(false);
   const imageRef = useRef(null);
@@ -49,16 +50,15 @@ const PlaceInformation = ({
     e.target.value = !isRecommended;
     setIsRecommended(!isRecommended);
   };
+
   // any는 추후 제거하겠습니다!
-  const handleFileOnChange = (e: any) => {
-    e.preventDefault();
+  const handleFileOnChange = (imageFile: File) => {
     const reader = new FileReader();
-    const file = e.target.files[0];
     reader.onloadend = () => {
-      setFile(file);
+      setFile(imageFile);
       setPreviewUrl(reader.result as SetStateAction<string>);
     };
-    reader.readAsDataURL(file);
+    reader.readAsDataURL(imageFile);
     const { current } = imageRef as unknown as MutableRefObject<HTMLElement>;
     if (current !== null) {
       current.style.display = 'none';
@@ -69,10 +69,11 @@ const PlaceInformation = ({
     profile_preview = (
       // eslint-disable-next-line jsx-a11y/alt-text, @next/next/no-img-element
       <>
-        <img
+        <Image
           style={{ width: '830px', height: '500px', zIndex: '100', borderRadius: '8px' }}
           className="profile_preview"
           src={previewUrl}
+          layout="fill"
         />
         <ThumbnailButton
           name={children?.toString()}
@@ -110,14 +111,10 @@ const PlaceInformation = ({
             {place.roadAddressName}
           </Text>
           <ImageUploadWrapper>
-            <input
-              type="file"
-              id={imageId}
-              name="imgFile"
-              accept="image/jpg,impge/png,image/jpeg,image/gif"
-              style={{ display: 'none' }}
-              onChange={handleFileOnChange}
-              ref={placeImageRef}
+            <ImageUpload
+              onImageUpload={handleFileOnChange}
+              imageRef={placeImageRef}
+              labelId={imageId}
             />
             <FileUploadWrapper ref={imageRef}>
               <label htmlFor={imageId}>
