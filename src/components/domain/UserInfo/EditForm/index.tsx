@@ -21,45 +21,17 @@ interface UserEditForm {
 const UserEditForm = ({ initialValues, onSubmit: onSubmitAction }: UserEditForm) => {
   const [nicknameError, setNicknameError] = useState('');
   const [isCheckedDuplicateNickname, setIsCheckedDuplicateNickname] = useState(false);
-  const { values, handleChange, handleSubmit, errors } = useFormik({
+  const { values, setValues, handleChange, handleSubmit, errors } = useFormik({
     initialValues,
     validationSchema: ValidationRules,
     onSubmit: (data: UserEditFormValues) => {
       if (!isCheckedDuplicateNickname) {
-        setNicknameError('닉네임 중복확인을 해주세요.');
+        setNicknameError('닉네임 중복체크를 해주세요.');
         return;
       }
       onSubmitAction && onSubmitAction(data);
     }
   });
-
-  const handleClickNicknameDuplicate = async () => {
-    try {
-      await UserApi.nicknameCheck({ nickname: values.nickname });
-      window.alert(`${values.nickname}는 사용가능한 닉네임입니다!`);
-      setIsCheckedDuplicateNickname(true);
-      setNicknameError('');
-    } catch (e) {
-      setNicknameError('이미 존재하는 닉네임이에요.');
-    }
-  };
-
-  const handleBlurNickname = () => {
-    if (errors.nickname) {
-      setNicknameError(errors.nickname);
-      return;
-    }
-    if (!isCheckedDuplicateNickname) {
-      setNicknameError('닉네임 중복체크를 해주세요.');
-      return;
-    }
-    setNicknameError(errors.nickname || '');
-  };
-
-  const handleChangeNickname = (e: ChangeEvent<HTMLInputElement>) => {
-    setIsCheckedDuplicateNickname(false);
-    handleChange(e);
-  };
 
   const nicknameButtonDisabled = useMemo(() => {
     if (initialValues.nickname === values.nickname) {
@@ -70,17 +42,35 @@ const UserEditForm = ({ initialValues, onSubmit: onSubmitAction }: UserEditForm)
   }, [values.nickname, errors.nickname, initialValues.nickname]);
 
   const submitButtonDisabled = useMemo(() => {
-    if (!isCheckedDuplicateNickname) {
-      return true;
-    }
-    if (nicknameError) {
-      return true;
-    }
     return (
       Object.values(values).some((value) => value.length === 0) ||
       Object.entries(errors).some((error) => !!error)
     );
-  }, [values, errors, isCheckedDuplicateNickname, nicknameError]);
+  }, [values, errors]);
+
+  const handleClickNicknameDuplicate = async () => {
+    try {
+      const response = await UserApi.nicknameCheck({ nickname: values.nickname });
+      if (response.status === 200) {
+        window.alert(`${values.nickname}는 사용가능한 닉네임입니다!`);
+        setIsCheckedDuplicateNickname(true);
+        setNicknameError('');
+        return;
+      }
+    } catch (e) {
+      setNicknameError('이미 존재하는 닉네임이에요.');
+    }
+  };
+
+  const handleBlurNickname = () => {
+    setValues({ ...values, nickname: values.nickname.trim() });
+    setNicknameError(errors.nickname || '');
+  };
+
+  const handleChangeNickname = (e: ChangeEvent<HTMLInputElement>) => {
+    setIsCheckedDuplicateNickname(false);
+    handleChange(e);
+  };
 
   return (
     <Form onSubmit={handleSubmit}>

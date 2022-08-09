@@ -17,7 +17,30 @@ const UserinfoEdit: NextPage = () => {
   const [initialValues, setInitialValues] = useState<UserEditFormValues | null>(null);
 
   const handleSubmit = async (data: UserEditFormValues) => {
-    console.log(data);
+    if (!initialValues) {
+      return;
+    }
+    const { nickname: prevNickname, birth: prevBirth, sex: prevSex } = initialValues;
+    const { nickname, birth, sex } = data;
+    if (prevNickname === nickname && prevBirth === birth && prevSex === sex) {
+      // 바로 이동시키거나
+      router.push(`/userinfo/${userId}`);
+      // 알림 모달을 띄우기
+      // ConfirmModal...
+      return;
+    }
+
+    try {
+      const response = await UserApi.edit({ nickname, birth, sex });
+      if (response.status === 200) {
+        // 바로 이동시키거나
+        router.push(`/userinfo/${userId}`);
+        // 알림 모달을 띄우기
+        // ConfirmModal...
+      }
+    } catch (e) {
+      console.error('정보 수정에 실패했어요.');
+    }
   };
 
   const getUserData = async () => {
