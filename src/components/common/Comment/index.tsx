@@ -14,22 +14,31 @@ interface CommentProps {
 const Comment = ({ id, type }: CommentProps) => {
   const [comments, setComments] = useState<IComments | null>(null);
 
-  const getComments = async (id: number) => {
+  const getComments = async () => {
     const result = await CommentApi.getComments(id, type);
     setComments(result);
   };
 
   const onSubmit = async (value: string) => {
     await CommentApi.createComment(id, { comment: value }, type);
-    getComments(id);
+    getComments();
+  };
+
+  const onDelete = async (commentId: number) => {
+    await CommentApi.deleteComment(id, commentId, type);
+    getComments();
+  };
+
+  const onUpdate = async (commentId: number) => {
+    console.log(commentId, 'click Update');
   };
 
   useEffect(() => {
     if (!Number.isNaN(id)) {
-      getComments(id);
+      getComments();
       return;
     }
-  }, [id]);
+  }, []);
 
   if (!comments) {
     return null;
@@ -42,7 +51,7 @@ const Comment = ({ id, type }: CommentProps) => {
       <CommentForm onSubmit={onSubmit} />
       <CommentList>
         {comments.courseComments.map((comment) => (
-          <CommentItem key={comment.id} comment={comment} />
+          <CommentItem key={comment.id} comment={comment} onDelete={onDelete} onUpdate={onUpdate} />
         ))}
       </CommentList>
     </CommentContainer>

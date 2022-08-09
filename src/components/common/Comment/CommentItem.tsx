@@ -7,6 +7,8 @@ import { sliceDate } from '~/utils/converter';
 
 interface CommentItemProps {
   comment: IComment;
+  onUpdate: (commentId: number) => void;
+  onDelete: (commentId: number) => void;
 }
 
 /* TODO:
@@ -15,8 +17,12 @@ interface CommentItemProps {
 4. 2022-02-22 -> ~일전/~주전 으로 변경하는게 좋을 듯
 */
 
-const CommentItem = ({ comment }: CommentItemProps) => {
+const CommentItem = ({ comment, onUpdate, onDelete }: CommentItemProps) => {
   const isRecomment = comment.rootCommentId !== null;
+
+  const handleClickEdit = (commentId: number) => {
+    onUpdate(commentId);
+  };
 
   return (
     <CommentWrapper isRecomment={isRecomment}>
@@ -26,7 +32,7 @@ const CommentItem = ({ comment }: CommentItemProps) => {
       <CommentContent>
         <Link href={`/userinfo/${comment.user.id}`}>
           <Text size="lg" block fontWeight={700}>
-            {comment.user.nickname}
+            {comment.user.nickName}
           </Text>
         </Link>
         <Text size="lg" block>
@@ -37,6 +43,10 @@ const CommentItem = ({ comment }: CommentItemProps) => {
           {!isRecomment && <Text color="gray">답글 작성</Text>}
         </CommentInfo>
       </CommentContent>
+      <Buttons>
+        <Text.Button onClick={() => handleClickEdit(comment.id)}>수정</Text.Button>
+        <Text.Button onClick={() => onDelete(comment.id)}>삭제</Text.Button>
+      </Buttons>
     </CommentWrapper>
   );
 };
@@ -66,4 +76,8 @@ const CommentInfo = styled.div`
   & > span {
     margin-right: 16px;
   }
+`;
+
+const Buttons = styled.div`
+  flex-shrink: 0;
 `;
