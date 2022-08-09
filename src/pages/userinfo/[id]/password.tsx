@@ -6,6 +6,7 @@ import React, { useEffect } from 'react';
 import { PageContainer, Title } from '~/components/atom';
 import PasswordChangeForm from '~/components/domain/UserInfo/PasswordChangeForm';
 import { useUser } from '~/hooks/useUser';
+import { UserApi } from '~/service';
 import theme from '~/styles/theme';
 import { UserPasswordFormValues } from '~/types/user';
 
@@ -15,22 +16,44 @@ const UserinfoEdit: NextPage = () => {
   const userId = Number(router.query.id);
 
   const handleSubmit = async (data: UserPasswordFormValues) => {
+    const { oldPassword, password: newPassword } = data;
     console.log(data);
+    try {
+      const response = await UserApi.changePassword({ oldPassword, newPassword });
+      if (response.status === 200) {
+        console.log('비밀번호 변경 성공');
+        console.log(response);
+        return;
+      }
+      console.error('비밀번호 변경에 실패했어요.');
+    } catch (e: any) {
+      const { response } = e;
+
+      if (response.status === 400) {
+        console.log('비밀번호가 틀렸어요.');
+        console.log(response);
+        return;
+      }
+
+      if (response.status === 409) {
+        console.log('동일한 비밀번호입니다.');
+        console.log(response);
+        return;
+      }
+
+      console.log(response);
+    }
   };
 
   useEffect(() => {
-    if (currentUser.isLoading) {
-      return;
-    }
-
     if (typeof router.query.id === 'string') {
-      if (currentUser.user.id !== userId) {
+      if (!currentUser.isLoading && currentUser.user.id !== userId) {
         alert('잘못된 요청입니다.');
         router.push('/');
         return;
       }
     }
-  }, [currentUser]);
+  }, [currentUser, router, userId]);
 
   if (currentUser.user.id !== userId) {
     return null;
