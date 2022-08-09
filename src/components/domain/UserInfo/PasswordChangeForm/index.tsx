@@ -20,7 +20,7 @@ const PasswordChangeForm = ({ onSubmit: onSubmitAction }: PasswordChangeFormProp
   const [passwordError, setPasswordError] = useState('');
   const [passwordCheckError, setPasswordCheckError] = useState('');
 
-  const { values, handleChange, handleSubmit, errors } = useFormik({
+  const { values, handleChange, handleSubmit, errors, touched } = useFormik({
     initialValues,
     validationSchema: ValidationRules,
     onSubmit: (data: UserPasswordFormValues) => {
@@ -28,8 +28,12 @@ const PasswordChangeForm = ({ onSubmit: onSubmitAction }: PasswordChangeFormProp
     }
   });
 
-  const handleBlur = () => {
+  const handleBlurPassword = () => {
     setPasswordError(errors.password || '');
+    values.passwordCheck && setPasswordCheckError(errors.passwordCheck || '');
+  };
+
+  const handleBlurPasswordCheck = () => {
     setPasswordCheckError(errors.passwordCheck || '');
   };
 
@@ -63,7 +67,7 @@ const PasswordChangeForm = ({ onSubmit: onSubmitAction }: PasswordChangeFormProp
           placeholder="새 비밀번호를 입력해주세요."
           value={values.password}
           onChange={handleChange}
-          onBlur={handleBlur}
+          onBlur={handleBlurPassword}
         />
       </Field>
       {passwordError && (
@@ -81,7 +85,7 @@ const PasswordChangeForm = ({ onSubmit: onSubmitAction }: PasswordChangeFormProp
           placeholder="새 비밀번호를 다시 입력해주세요."
           value={values.passwordCheck}
           onChange={handleChange}
-          onBlur={handleBlur}
+          onBlur={handleBlurPasswordCheck}
         />
       </Field>
       {passwordCheckError && (
