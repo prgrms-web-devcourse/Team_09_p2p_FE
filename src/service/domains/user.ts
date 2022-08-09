@@ -51,6 +51,15 @@ class UserApi extends Api {
     const response = await this.baseInstance.get(`${this.path}/${userId}`);
     return response.data;
   };
+
+  changeProfileImage = async (data: FormData) => {
+    const response = await this.authInstance.put(`${this.path}/profile`, data, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    });
+    return response;
+  };
 }
 
 export default new UserApi();

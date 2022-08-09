@@ -1,8 +1,11 @@
 import styled from '@emotion/styled';
 import { useRouter } from 'next/router';
+import { SetStateAction, useRef, useState } from 'react';
 import { Icon, Link, Text, Title } from '~/components/atom';
 import Avatar from '~/components/atom/Avatar';
+import ImageUpload from '~/components/common/ImageUpload';
 import { useUser } from '~/hooks/useUser';
+import { UserApi } from '~/service';
 import theme from '~/styles/theme';
 
 interface ProfileCardProps {
@@ -31,20 +34,47 @@ const ProfileCard = ({
   const { logout } = useUser();
   const router = useRouter();
 
+  const profileImageRef = useRef<HTMLInputElement>(null);
+  const labelRef = useRef<HTMLLabelElement>(null);
+  const [previewImage, setPreviewImage] = useState(profileImage);
+
   const onLogout = () => {
     logout();
     router.push('/');
   };
 
+  const handleFileOnChange = (imageFile: File) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(imageFile);
+    reader.onloadend = async () => {
+      const formData = new FormData();
+      formData.append('file', imageFile);
+
+      const result = await UserApi.changeProfileImage(formData);
+
+      if (result) {
+        setPreviewImage(reader.result as string);
+      }
+    };
+  };
+
+  const imageId = 'imgFile';
+
   return (
     <Container>
       <UserProfile>
         <ProfileImage>
-          <ProfileAvatar size={143} src={profileImage} />
+          <ProfileAvatar size={143} src={previewImage} />
+          <ImageUpload
+            onImageUpload={handleFileOnChange}
+            imageRef={profileImageRef}
+            labelId={imageId}
+          />
           {isMyPage && (
-            <EditButton>
-              <Icon size={16} name="pencil" block />
-            </EditButton>
+            <>
+              <EditLabel htmlFor={imageId} ref={labelRef}></EditLabel>
+              <EditButton size={16} name="pencil" block onClick={() => labelRef.current?.click()} />
+            </>
           )}
         </ProfileImage>
         <ProfileInfo>
@@ -125,7 +155,8 @@ const ProfileImage = styled.div`
   margin: 0 auto;
 `;
 
-const EditButton = styled.button`
+const EditLabel = styled.label``;
+const EditButton = styled(Icon.Button)`
   position: absolute;
   bottom: 0;
   right: 0;
