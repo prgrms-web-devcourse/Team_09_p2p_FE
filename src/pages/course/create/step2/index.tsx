@@ -12,29 +12,13 @@ import { SelectTags } from '~/components/common';
 import { useRouter } from 'next/router';
 import { CourseApi } from '~/service';
 import { SearchTagsValues } from '~/types';
-
+import { ICourseInfo } from '..';
 interface CourseType {
   id: number;
   latitude: string;
   longitude: string;
   name: string;
 }
-
-type PlaceType = {
-  id: number;
-  lat: number;
-  lng: number;
-  name: string;
-  address: string;
-  roadAddressName: string;
-  category: string;
-  phoneNumber: string;
-};
-
-type CourseInfoType = {
-  region: string;
-  places: PlaceType[];
-};
 
 type PlaceFormType = {
   kakaoMapId: string;
@@ -73,7 +57,8 @@ const Course: NextPage = () => {
   if (!courseQuery) {
     return null;
   }
-  const courseInfo: CourseInfoType = JSON.parse(courseQuery as string);
+  console.log(courseQuery);
+  const courseInfo: ICourseInfo = JSON.parse(courseQuery as string);
   const formCourseData = {} as CourseFormType;
   formCourseData.region = courseInfo.region;
 
