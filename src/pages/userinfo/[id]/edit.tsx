@@ -55,19 +55,15 @@ const UserinfoEdit: NextPage = () => {
   };
 
   useEffect(() => {
-    if (currentUser.isLoading) {
-      return;
-    }
-
     if (typeof router.query.id === 'string') {
-      if (currentUser.user.id !== userId) {
+      if (!currentUser.isLoading && currentUser.user.id !== userId) {
         alert('잘못된 요청입니다.');
         router.push('/');
         return;
       }
       getUserData();
     }
-  }, [currentUser]);
+  }, [currentUser, router, userId]);
 
   if (currentUser.user.id !== userId) {
     return null;
