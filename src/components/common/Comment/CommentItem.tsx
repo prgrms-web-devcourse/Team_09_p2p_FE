@@ -1,15 +1,17 @@
 import styled from '@emotion/styled';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { Button, Link, Text } from '~/components/atom';
 import Avatar from '~/components/atom/Avatar';
 import theme from '~/styles/theme';
 import { IComment } from '~/types/comment';
 import { sliceDate } from '~/utils/converter';
+import CommentEditor from './CommentEditor';
 
 interface CommentItemProps {
   comment: IComment;
-  onUpdate: (commentId: number, value: string) => void;
+  onEdit: (commentId: number, value: string) => void;
   onDelete: (commentId: number) => void;
+  onCreateRecomment: (commentId: number, value: string) => void;
 }
 
 /* TODO:
@@ -18,19 +20,27 @@ interface CommentItemProps {
 4. 2022-02-22 -> ~일전/~주전 으로 변경하는게 좋을 듯
 */
 
-const CommentItem = ({ comment, onUpdate, onDelete }: CommentItemProps) => {
+const CommentItem = ({ comment, onEdit, onDelete, onCreateRecomment }: CommentItemProps) => {
   const [isOpenEditor, setIsOpenEditor] = useState(false);
-  const [editText, setEditText] = useState(comment.comment);
+  const [isOpenRecomment, setIsOpenRecomment] = useState(false);
   const isRecomment = comment.rootCommentId !== null;
 
-  const handleClickEdit = async (commentId: number) => {
-    await onUpdate(commentId, editText);
+  const handleEditComment = async (value: string) => {
+    await onEdit(comment.id, value);
     setIsOpenEditor(false);
   };
 
-  const cancelEdit = () => {
+  const handleCancelEdit = () => {
     setIsOpenEditor(false);
-    setEditText(comment.comment);
+  };
+
+  const handleCreateRecomment = async (value: string) => {
+    await onCreateRecomment(comment.id, value);
+    setIsOpenRecomment(false);
+  };
+
+  const handleCancelRecomment = () => {
+    setIsOpenRecomment(false);
   };
 
   return (
@@ -51,47 +61,56 @@ const CommentItem = ({ comment, onUpdate, onDelete }: CommentItemProps) => {
                 {comment.comment}
               </Text>
               <CommentInfo>
-                <Text color="gray">{sliceDate(comment.createdAt)}</Text>
-                {!isRecomment && <Text color="gray">답글 작성</Text>}
+                {comment.createdAt && (
+                  <>
+                    <Text color="gray">{sliceDate(comment.createdAt)}</Text>
+                    {!isRecomment && (
+                      <Text.Button onClick={() => setIsOpenRecomment(true)} color="gray">
+                        답글 작성
+                      </Text.Button>
+                    )}
+                  </>
+                )}
               </CommentInfo>
             </CommentContent>
             <Buttons>
-              <Text.Button onClick={() => setIsOpenEditor(true)}>수정</Text.Button>
-              <Text.Button onClick={() => onDelete(comment.id)}>삭제</Text.Button>
+              <Text.Button color="gray" onClick={() => setIsOpenEditor(true)}>
+                수정
+              </Text.Button>
+              <Text.Button color="gray" onClick={() => onDelete(comment.id)}>
+                삭제
+              </Text.Button>
             </Buttons>
           </>
         ) : (
-          <>
-            <EditWrapper isRecomment={isRecomment}>
-              <CommentTextarea
-                value={editText}
-                onChange={(e) => setEditText(e.target.value)}
-              ></CommentTextarea>
-              <EditButtons>
-                <Button buttonType="borderPrimary" onClick={cancelEdit}>
-                  취소
-                </Button>
-                <Button
-                  onClick={() => {
-                    handleClickEdit(comment.id);
-                  }}
-                >
-                  수정
-                </Button>
-              </EditButtons>
-            </EditWrapper>
-          </>
+          <CommentEditor
+            onSubmit={handleEditComment}
+            onCancel={handleCancelEdit}
+            defaultValue={comment.comment}
+          />
         )}
       </CommentContainer>
+      {isOpenRecomment && (
+        <CommentContainer style={{ paddingLeft: 50 }}>
+          <Link href={`/userinfo/${comment.user.id}`}>
+            <Avatar size={66} src={comment.user.profileImage} />
+          </Link>
+          <CommentEditor
+            onSubmit={handleCreateRecomment}
+            onCancel={handleCancelRecomment}
+            defaultValue=""
+          />
+        </CommentContainer>
+      )}
     </>
   );
 };
 
 export default CommentItem;
 
-const { borderDarkGray, fontDarkBlack, fontGray } = theme.color;
+const { borderDarkGray } = theme.color;
 
-const CommentContainer = styled.div<{ isRecomment: boolean | null }>`
+const CommentContainer = styled.div<{ isRecomment?: boolean | null }>`
   display: flex;
   padding: 20px 0;
   border-bottom: 1px solid ${borderDarkGray};
@@ -99,12 +118,10 @@ const CommentContainer = styled.div<{ isRecomment: boolean | null }>`
   padding-left: ${({ isRecomment }) => isRecomment && '50px'};
 `;
 
-const EditWrapper = styled.div<{ isRecomment: boolean | null }>`
-  width: 100%;
-  padding-left: 18px;
-`;
-
 const CommentContent = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   margin-left: 18px;
   line-height: 1.5;
   flex-grow: 1;
@@ -123,30 +140,7 @@ const CommentInfo = styled.div`
 
 const Buttons = styled.div`
   flex-shrink: 0;
-`;
-
-const CommentTextarea = styled.textarea`
-  width: 100%;
-  border: 1px solid ${borderDarkGray};
-  color: ${fontDarkBlack};
-  border-radius: 8px;
-  outline: 0;
-  flex-grow: 1;
-  padding: 24px;
-  font-size: 20px;
-  margin-right: 20px;
-  resize: none;
-  overflow: hidden;
-  box-sizing: border-box;
-
-  &::placeholder {
-    color: ${fontGray};
+  button {
+    margin-left: 12px;
   }
-`;
-
-const EditButtons = styled.div`
-  display: flex;
-  justify-content: flex-end;
-  margin-top: 14px;
-  gap: 8px;
 `;

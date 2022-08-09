@@ -17,9 +17,10 @@ const Comment = ({ id, type }: CommentProps) => {
   const getComments = async () => {
     const result = await CommentApi.getComments(id, type);
     setComments(result);
+    console.log(result, 'result');
   };
 
-  const onSubmit = async (value: string) => {
+  const onCreate = async (value: string) => {
     await CommentApi.createComment(id, { comment: value }, type);
     getComments();
   };
@@ -29,9 +30,13 @@ const Comment = ({ id, type }: CommentProps) => {
     getComments();
   };
 
-  const onUpdate = async (commentId: number, value: string) => {
-    console.log(commentId, 'click Update');
+  const onEdit = async (commentId: number, value: string) => {
     await CommentApi.updateComment(id, commentId, { comment: value }, type);
+    getComments();
+  };
+
+  const onCreateRecomment = async (commentId: number, value: string) => {
+    await CommentApi.createComment(id, { comment: value, rootCommentId: commentId }, type);
     getComments();
   };
 
@@ -50,10 +55,16 @@ const Comment = ({ id, type }: CommentProps) => {
       <Text size="xl" fontWeight={700}>
         댓글 {comments?.totalCount}개
       </Text>
-      <CommentForm onSubmit={onSubmit} />
+      <CommentForm onSubmit={onCreate} />
       <CommentList>
         {comments.courseComments.map((comment) => (
-          <CommentItem key={comment.id} comment={comment} onDelete={onDelete} onUpdate={onUpdate} />
+          <CommentItem
+            key={comment.id}
+            comment={comment}
+            onDelete={onDelete}
+            onEdit={onEdit}
+            onCreateRecomment={onCreateRecomment}
+          />
         ))}
       </CommentList>
     </CommentContainer>
