@@ -29,11 +29,6 @@ const CourseDetail: NextPage = () => {
   const router = useRouter();
   const courseId = Number(router.query.id);
 
-  const getCourseComments = async (courseId: number) => {
-    const result = await CourseApi.getComments(courseId);
-    setCommentsData(result);
-  };
-
   const getDetailInfo = async (courseId: number) => {
     if (isLoggedIn) {
       const result = await CourseApi.authRead(courseId);
@@ -45,7 +40,6 @@ const CourseDetail: NextPage = () => {
       }
 
       setDetailData(result);
-      getCourseComments(courseId);
     } else {
       const result = await CourseApi.read(courseId);
 
@@ -55,7 +49,6 @@ const CourseDetail: NextPage = () => {
       }
 
       setDetailData(result);
-      getCourseComments(courseId);
     }
   };
 
@@ -134,7 +127,7 @@ const CourseDetail: NextPage = () => {
             </TravelCourse>
             <CourseDetailList places={detailData.places} />
           </CourseDetails>
-          {commentsData && <Comment comments={commentsData} />}
+          {!Number.isNaN(courseId) && <Comment id={courseId} type="course" />}
           <DetailSidebar
             likes={detailData.likes}
             id={detailData.id}
