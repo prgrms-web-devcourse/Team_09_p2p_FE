@@ -14,12 +14,7 @@ const UserinfoEdit: NextPage = () => {
   const { currentUser } = useUser();
   const router = useRouter();
   const userId = Number(router.query.id);
-  const [intialValues, setInitialValues] = useState<UserEditFormValues>({
-    email: '',
-    nickname: '',
-    sex: 'male',
-    birth: ''
-  });
+  const [initialValues, setInitialValues] = useState<UserEditFormValues | null>(null);
 
   const handleSubmit = async (data: UserEditFormValues) => {
     console.log(data);
@@ -28,12 +23,12 @@ const UserinfoEdit: NextPage = () => {
   const getUserData = async () => {
     const userInfo = await UserApi.getUser();
     const { email, nickname, sex, birth } = userInfo;
-    setInitialValues({
+    setInitialValues(() => ({
       email,
       nickname,
       sex,
       birth
-    });
+    }));
   };
 
   useEffect(() => {
@@ -65,7 +60,9 @@ const UserinfoEdit: NextPage = () => {
         <PageContainer>
           <Container>
             <Title>내 정보 수정</Title>
-            <UserEditForm initialValues={intialValues} onSubmit={handleSubmit} />
+            {initialValues && (
+              <UserEditForm initialValues={initialValues} onSubmit={handleSubmit} />
+            )}
           </Container>
         </PageContainer>
       </main>
