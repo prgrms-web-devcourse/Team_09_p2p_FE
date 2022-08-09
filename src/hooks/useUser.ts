@@ -19,7 +19,7 @@ export const useUser = () => {
   const updateUser = async (token: string) => {
     setCurrentUser({ ...currentUser, isLoading: true });
 
-    const response = await UserApi.getUser();
+    const response = await UserApi.getMyInfo();
     console.log(response, '★update User★');
     setCurrentUser({
       accessToken: token,
