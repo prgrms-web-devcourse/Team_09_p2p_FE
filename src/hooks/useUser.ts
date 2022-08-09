@@ -10,17 +10,25 @@ export const useUser = () => {
   const isLoggedIn = currentUser.accessToken !== null;
 
   const login = async (data: LoginValues) => {
+    setCurrentUser({ ...currentUser, isLoading: true });
     const response = await UserApi.login(data);
-    setCurrentUser(response);
+    setCurrentUser({ ...response, isLoading: false });
     WebStorage.setToken(response.accessToken);
   };
 
   const updateUser = async (token: string) => {
-    const response = await UserApi.getUser();
+    setCurrentUser({ ...currentUser, isLoading: true });
+
+    const response = await UserApi.getMyInfo();
     console.log(response, '★update User★');
     setCurrentUser({
       accessToken: token,
-      user: { id: response.id, nickname: response.nickname, profileImage: response.profileImage }
+      user: {
+        id: response.id,
+        nickname: response.nickname,
+        profileImage: response.profileImage
+      },
+      isLoading: false
     });
   };
 

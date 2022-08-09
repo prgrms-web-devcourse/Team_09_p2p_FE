@@ -1,20 +1,48 @@
 import styled from '@emotion/styled';
 import Head from 'next/head';
-import React, { ReactElement } from 'react';
+import { useRouter } from 'next/router';
+import React, { FormEvent, ReactElement, useEffect, useRef, useState } from 'react';
 import { Button, Link, PageContainer, Image } from '~/components/atom';
 import { CourseList, PlaceList } from '~/components/common';
 import Layout from '~/components/common/Layout';
 import MainCategoryTitle from '~/components/domain/home/MainCategoryTitle';
+import { CourseApi, PlaceApi } from '~/service';
 import theme from '~/styles/theme';
 
 const HomePage = () => {
-  // TODO :
-  /*
-    1. 메인페이지 기능 구현
-    2. footer 추가
-    3. hover시 애니메이션
-    4. 메인 상단에 이미지 넣기
-  */
+  const router = useRouter();
+  const mainSearchInputRef = useRef<HTMLInputElement>(null);
+  const [courseList, setCourseList] = useState([]);
+  const [placeList, setPlaceList] = useState([]);
+  const COURSE_COUNT = 6;
+  const PLACE_COUNT = 4;
+
+  const getCourseList = async () => {
+    const filter = { size: COURSE_COUNT };
+    const result = await CourseApi.getCourses(filter);
+    console.log('[Courses] :', result.content);
+    setCourseList(result.content);
+  };
+
+  const getPlaceList = async () => {
+    const result = await PlaceApi.getPlaces({ size: PLACE_COUNT });
+    setPlaceList(result.content);
+  };
+
+  const handleSearch = (e: FormEvent) => {
+    e.preventDefault();
+    if (mainSearchInputRef.current) {
+      const keyword = mainSearchInputRef.current.value;
+      if (keyword) {
+        router.push(`/search/${keyword}`);
+      }
+    }
+  };
+
+  useEffect(() => {
+    getCourseList();
+    getPlaceList();
+  }, []);
 
   return (
     <React.Fragment>
@@ -28,7 +56,13 @@ const HomePage = () => {
         <PageContainer>
           <SearchArea>
             <Image width={550} src="/assets/search-img.png" alt="여행할 땐 이곳저곳" />
-            <MainSearchInput type="text" placeholder="지역, 장소를 검색해보세요." />
+            <form onSubmit={handleSearch}>
+              <MainSearchInput
+                type="text"
+                placeholder="지역, 장소를 검색해보세요."
+                ref={mainSearchInputRef}
+              />
+            </form>
             <Tags>
               <Button buttonType="tag">#힐링</Button>
               <Button buttonType="tag">#이쁜카페</Button>
@@ -45,13 +79,13 @@ const HomePage = () => {
               <Link href="/course">
                 <MainCategoryTitle name="인기 여행코스" />
               </Link>
-              <CourseList />
+              <CourseList courses={courseList} />
             </CategoryArea>
             <CategoryArea>
               <Link href="/place">
                 <MainCategoryTitle name="추천 핫플레이스" />
               </Link>
-              <PlaceList />
+              <PlaceList places={placeList} />
             </CategoryArea>
           </PageContainer>
         </MainContent>

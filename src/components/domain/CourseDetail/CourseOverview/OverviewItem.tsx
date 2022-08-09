@@ -3,8 +3,8 @@ import { Icon, Text } from '~/components/atom';
 import { IconName } from '~/components/atom/Icon/types';
 
 interface OverViewItemProps {
-  title: string;
-  content: string;
+  title?: string;
+  content?: string;
   iconName: IconName;
 }
 

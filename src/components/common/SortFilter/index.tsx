@@ -1,33 +1,28 @@
 import styled from '@emotion/styled';
 import { useState } from 'react';
 import { Text } from '~/components/atom';
+import { sortOrder, SortType } from '~/types/course';
 
 interface SortFilterProps {
-  onSort?: (value: string) => void; // TODO: 더미데이터 테스트 시점에 필수로 변경
+  onSort?: (value: SortType) => void; // TODO: 더미데이터 테스트 시점에 필수로 변경
+  initialValue?: SortType;
 }
 
-// TODO: 정렬시 보내는 데이터와 맞게 수정 예정
-const CREATED_AT = 'createdAt';
-const POPULAR = 'popular';
+const defaultSortData = [{ value: sortOrder.DESC }, { value: sortOrder.POPULAR }];
 
-const defaultSortData = [
-  { name: '최신순', value: CREATED_AT },
-  { name: '인기순', value: POPULAR }
-];
+const SortFilter: React.FC<SortFilterProps> = ({ onSort, initialValue }) => {
+  const [isSelected, setIsSelected] = useState<SortType>(initialValue || sortOrder.DESC);
 
-const SortFilter: React.FC<SortFilterProps> = ({ onSort }) => {
-  const [isSelected, setIsSelected] = useState(CREATED_AT);
-
-  const handleClick = (value: string) => {
+  const handleClick = (value: SortType) => {
     setIsSelected(value);
     onSort && onSort(value);
   };
 
   return (
     <StyledSortFilter>
-      {defaultSortData.map(({ value, name }) => (
+      {defaultSortData.map(({ value }) => (
         <li key={value} onClick={() => handleClick(value)}>
-          <Text fontWeight={isSelected === value ? 600 : 400}>{name}</Text>
+          <Text fontWeight={isSelected === value ? 600 : 400}>{value}</Text>
         </li>
       ))}
     </StyledSortFilter>

@@ -1,7 +1,8 @@
 import styled from '@emotion/styled';
 import type { NextPage } from 'next';
 import Head from 'next/head';
-import React from 'react';
+import { useRouter } from 'next/router';
+import React, { useEffect, useState } from 'react';
 import { Link, PageContainer, Text, Title } from '~/components/atom';
 import Avatar from '~/components/atom/Avatar';
 import Comment from '~/components/common/Comment';
@@ -10,117 +11,60 @@ import CourseDetailList from '~/components/domain/CourseDetail/CourseDetailList'
 import CourseOverview from '~/components/domain/CourseDetail/CourseOverview';
 import CourseSlider from '~/components/domain/CourseSlider';
 import CourseMap from '~/components/domain/Map/CourseMap';
+import { useUser } from '~/hooks/useUser';
+import { CourseApi } from '~/service';
 import theme from '~/styles/theme';
-
-interface ICourseData {
-  id: number;
-  title: string;
-  thumbnail: string;
-  region: string;
-  period: string;
-  themes: string[];
-  spots: string[];
-  places: IPlace[];
-  likes: number;
-  isLiked: boolean;
-  isBookmarked: boolean;
-  nickname: string;
-  userId: number;
-  profileImage: string;
-  createdAt: string;
-  updatedAt: string;
-}
-
-export interface IPlace {
-  id: number;
-  name: string;
-  description: string;
-  address: string;
-  latitude: string;
-  longitude: string;
-  category: string;
-  phone: string;
-  recommended: boolean;
-}
-
-const courseData: ICourseData = {
-  id: 12,
-  title: '[1박 2일] 제주도 여행 추천!!!',
-  thumbnail: '',
-  region: '제주',
-  period: '당일',
-  themes: ['혼자여행', '데이트코스'],
-  spots: ['카페', '음식점'],
-  places: [
-    {
-      id: 1,
-      name: '인천공항',
-      description: '인천공항에 다녀왔어요',
-      address: '인천 중구 공항로 207 인천국제공항역',
-      latitude: '35.0768018',
-      longitude: '129.023402',
-      category: '',
-      phone: '',
-      recommended: false
-    },
-    {
-      id: 2,
-      name: '인천공항',
-      description: '인천공항에 다녀왔어요',
-      address: '인천 중구 공항로 207 인천국제공항역',
-      latitude: '35.1538826',
-      longitude: '129.118628',
-      category: '',
-      phone: '',
-      recommended: false
-    },
-    {
-      id: 3,
-      name: '인천공항',
-      description: '인천공항에 다녀왔어요',
-      address: '인천 중구 공항로 207 인천국제공항역',
-      latitude: '35.0554585',
-      longitude: '129.087973',
-      category: '',
-      phone: '',
-      recommended: true
-    }
-    // {
-    //   id: 4,
-    //   name: '인천공항',
-    //   description: '인천공항에 다녀왔어요',
-    //   address: '인천 중구 공항로 207 인천국제공항역',
-    //   latitude: '35.0553585',
-    //   longitude: '129.087783',
-    //   category: '',
-    //   phone: '',
-    //   recommended: false
-    // }
-  ],
-  likes: 12,
-  isLiked: false,
-  isBookmarked: false,
-  nickname: 'Jinist',
-  userId: 1,
-  profileImage: '',
-  createdAt: '',
-  updatedAt: ''
-};
-
-const courseMapData = courseData.places.map((place) => {
-  return {
-    placeId: place.id,
-    lat: Number(place.latitude),
-    lng: Number(place.longitude),
-    placeName: place.name
-  };
-});
+import { ICourseDetail } from '~/types/course';
+import { sliceDate } from '~/utils/converter';
 
 const CourseDetail: NextPage = () => {
   /* TODO
     1. 추천 아이콘 작업
-    2. 업로드, 수정 날짜 가공하여 적용
+    3. 수정/삭제 버튼 구현
   */
+  const { currentUser, isLoggedIn } = useUser();
+  const [detailData, setDetailData] = useState<ICourseDetail | null>(null);
+  const router = useRouter();
+  const courseId = Number(router.query.id);
+
+  const getDetailInfo = async (courseId: number) => {
+    if (isLoggedIn) {
+      const result = await CourseApi.authRead(courseId);
+
+      if (!result) {
+        // 임시로 값 없을 경우 처리
+        router.push('/');
+        return;
+      }
+
+      setDetailData(result);
+    } else {
+      const result = await CourseApi.read(courseId);
+
+      if (!result) {
+        router.push('/');
+        return;
+      }
+
+      setDetailData(result);
+    }
+  };
+
+  useEffect(() => {
+    if (typeof router.query.id === 'string') {
+      if (!Number.isNaN(courseId)) {
+        getDetailInfo(courseId);
+        return;
+      }
+
+      router.push('/');
+    }
+  }, [courseId, isLoggedIn]);
+
+  if (!detailData) {
+    return null;
+  }
+
   return (
     <React.Fragment>
       <Head>
@@ -134,54 +78,63 @@ const CourseDetail: NextPage = () => {
           <CourseDetailHeader>
             <CourseTitle>
               <Title level={2} size="lg" fontWeight={700} block>
-                {courseData.title}
+                {detailData.title}
               </Title>
-              <HeaderButtons>
-                <button>수정</button>
-                <button>삭제</button>
-              </HeaderButtons>
+              {currentUser.user.id === detailData.userId && (
+                <HeaderButtons>
+                  <button>수정</button>
+                  <button>삭제</button>
+                </HeaderButtons>
+              )}
             </CourseTitle>
-            <Text color="gray">
-              업로드 날짜: {courseData.createdAt} 수정된 날짜: {courseData.updatedAt}
-            </Text>
+            <CourseDate>
+              <Text color="gray">업로드한 날: {sliceDate(detailData.createdAt)}</Text>
+              <Text color="gray">마지막 수정한 날: {sliceDate(detailData.updatedAt)}</Text>
+            </CourseDate>
+
             <Profile>
-              <Link href={`/userinfo/${courseData.userId}`}>
+              <Link href={`/userinfo/${detailData.userId}`}>
                 <Avatar size={66} />
               </Link>
               <Text color="dark" fontWeight={500}>
-                {courseData.nickname}
+                {detailData.nickname}
               </Text>
             </Profile>
           </CourseDetailHeader>
 
           <CourseDetails>
             <CourseOverview
-              themes={courseData.themes}
-              period={courseData.period}
-              region={courseData.region}
-              courseCount={courseData.places.length}
-              spots={courseData.spots}
+              themes={detailData.themes}
+              period={detailData.period}
+              region={detailData.region}
+              courseCount={detailData.places.length}
+              spots={detailData.spots}
             />
 
             <TravelRoute>
               <DetailTitle size="md" fontWeight={700}>
                 여행경로
               </DetailTitle>
-              <CourseMap course={courseMapData} />
+              <CourseMap course={detailData.places} />
             </TravelRoute>
             <TravelCourse>
               <DetailTitle size="md" fontWeight={700}>
                 다녀온 코스
               </DetailTitle>
-              <CourseSlider places={courseData.places} />
+              <CourseSlider places={detailData.places} />
             </TravelCourse>
-            <CourseDetailList places={courseData.places} />
+            <CourseDetailList places={detailData.places} />
           </CourseDetails>
-          <Comment />
+          {!Number.isNaN(courseId) && (
+            <Comment id={courseId} type="course" writerId={detailData.userId} />
+          )}
           <DetailSidebar
-            likes={courseData.likes}
-            isLiked={courseData.isLiked}
-            isBookmarked={courseData.isBookmarked}
+            likes={detailData.likes}
+            id={detailData.id}
+            defaultLiked={detailData.isLiked}
+            defaultBookmarked={detailData.isBookmarked}
+            isLoggedIn={isLoggedIn}
+            type="course"
           />
         </PageContainer>
       </main>
@@ -201,6 +154,12 @@ const CourseTitle = styled.div`
   display: flex;
   justify-content: space-between;
   margin-bottom: 12px;
+`;
+
+const CourseDate = styled.div`
+  span {
+    margin-right: 14px;
+  }
 `;
 
 const HeaderButtons = styled.div`
