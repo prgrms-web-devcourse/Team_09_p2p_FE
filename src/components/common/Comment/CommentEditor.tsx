@@ -28,7 +28,7 @@ const CommentEditor = ({ onSubmit, onCancel, defaultValue }: CommitEditorProps) 
         onChange={(e) => setTextValue(e.target.value)}
       ></CommentTextarea>
       <EditButtons>
-        <Button buttonType="borderPrimary" onClick={handleCancel}>
+        <Button buttonType="borderNone" onClick={handleCancel}>
           취소
         </Button>
         <Button onClick={handleSubmit}>등록</Button>
@@ -62,6 +62,10 @@ const CommentTextarea = styled.textarea`
 
   &::placeholder {
     color: ${fontGray};
+  }
+
+  &:focus {
+    border: 1px solid #ababab;
   }
 `;
 

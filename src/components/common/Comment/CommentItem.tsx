@@ -112,7 +112,7 @@ const { borderDarkGray } = theme.color;
 
 const CommentContainer = styled.div<{ isRecomment?: boolean | null }>`
   display: flex;
-  padding: 20px 0;
+  padding: 24px 0;
   border-bottom: 1px solid ${borderDarkGray};
 
   padding-left: ${({ isRecomment }) => isRecomment && '50px'};
@@ -127,7 +127,7 @@ const CommentContent = styled.div`
   flex-grow: 1;
 
   & > span {
-    margin-bottom: 4px;
+    margin-top: 8px;
   }
 `;
 
