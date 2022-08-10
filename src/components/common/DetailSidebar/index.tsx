@@ -2,6 +2,7 @@ import styled from '@emotion/styled';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { Icon, Text } from '~/components/atom';
+import { useUser } from '~/hooks/useUser';
 import { BookmarkApi, LikeApi } from '~/service';
 import theme from '~/styles/theme';
 import { CourseOrPlace } from '~/types';
@@ -11,7 +12,6 @@ interface DetailSidebarProps {
   id: number;
   defaultLiked?: boolean;
   defaultBookmarked?: boolean;
-  isLoggedIn?: boolean;
   type: CourseOrPlace;
 }
 
@@ -20,9 +20,9 @@ const DetailSidebar = ({
   id,
   defaultLiked,
   defaultBookmarked,
-  isLoggedIn,
   type
 }: DetailSidebarProps) => {
+  const { isLoggedIn } = useUser();
   const [isLiked, setIsLiked] = useState(defaultLiked);
   const [isBookmarked, setIsBookmarked] = useState(defaultBookmarked);
   const [totalLikes, setTotalLikes] = useState(likes);
