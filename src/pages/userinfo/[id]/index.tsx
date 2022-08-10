@@ -52,20 +52,18 @@ const Userinfo: NextPage = () => {
   const isMyPage = userId === currentUser.user.id;
 
   const onClickAction = async (value: UserInfoTab) => {
-    console.log(value);
     setActiveMenu(value);
 
     if (value === 'bookmark') {
       onClickBookmarkTab('course');
     }
-    if (value === 'course') {
-      const result = await CommentApi.getCommentsAll(userId);
-      console.log('[내가 작성한 코스]', result);
+    if (value === 'course' && courseData === null) {
+      const result = await CourseApi.getUserCourses(userId); // 일단 전부 요청
+      setCourseData(result.content);
     }
 
-    if (value === 'comment') {
+    if (value === 'comment' && commentData === null) {
       const result = await CommentApi.getCommentsAll(userId); // 일단 전부 요청
-      console.log('[내가 작성한 댓글]', result);
       setCommentData(result.content);
     }
   };
@@ -93,6 +91,7 @@ const Userinfo: NextPage = () => {
     }
 
     setUserData(result);
+    onClickAction('course');
   };
 
   useEffect(() => {
@@ -135,8 +134,8 @@ const Userinfo: NextPage = () => {
             <ActionContent>
               <ul>
                 <Tab onActive={onClickAction} active={ActiveMenu}>
-                  <Tab.item title="게시물" value="post">
-                    <CourseList grid={2} courses={courseListData} />
+                  <Tab.item title="게시물" value="course">
+                    {courseData && <CourseList grid={2} courses={courseData} />}
                   </Tab.item>
                   <Tab.item title="북마크" value="bookmark">
                     <MyBookmarks
