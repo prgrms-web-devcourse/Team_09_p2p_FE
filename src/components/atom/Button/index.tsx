@@ -102,8 +102,8 @@ const buttonStyle: buttonStyleInterface = {
 
 const buttonSize: buttonStyleInterface = {
   sm: `
-    padding: 8px 20px;
-    font-size: 20px;
+    padding: 10px 20px;
+    font-size: 18px;
   `,
   md: `
     padding: 16px 22px;
@@ -111,7 +111,7 @@ const buttonSize: buttonStyleInterface = {
   `,
   lg: `
     padding: 20px 45px;
-    font-size: 24px;
+    font-size: 22px;
   `
 };
 
@@ -133,7 +133,7 @@ const StyledButton = styled.button<ButtonInterface>`
   font-size: ${({ fontSize }) => (fontSize ? `${fontSize}px` : '')};
 
   border-radius: 5px;
-  font-weight: 600;
+  font-weight: 500;
   transition: all 0.1s;
 
   &:disabled {
