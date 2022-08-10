@@ -10,39 +10,9 @@ import MyComments from '~/components/domain/UserInfo/MyComments';
 import ProfileCard from '~/components/domain/UserInfo/ProfileCard';
 import Tab from '~/components/domain/UserInfo/Tab';
 import { useUser } from '~/hooks/useUser';
-import { CourseApi, PlaceApi, UserApi } from '~/service';
-import { courseListData, placeListData } from '~/utils/dummydata';
+import { CommentApi, CourseApi, PlaceApi, UserApi } from '~/service';
+import { courseListData } from '~/utils/dummydata';
 import type { UserInfoTab } from '~/components/domain/UserInfo/types';
-
-export type IComment = {
-  id: number;
-  rootId: string;
-  comment: string;
-  createdAt: string;
-  updatedAt: string;
-  recommentCount: number;
-  content: {
-    id: number;
-    type: string; //ex) courses or places
-    title: string;
-  };
-};
-
-const courseCommentData = [
-  {
-    id: 1,
-    rootId: '2',
-    comment: '코스 구경 잘하고 갑니다~~ 따봉~~따봉따봉~',
-    createdAt: '2022-08-03',
-    updatedAt: '',
-    recommentCount: 3,
-    content: {
-      id: 3,
-      type: 'course', //ex) courses or places
-      title: '[1박 2일] 제주도 여행 추천'
-    }
-  }
-];
 
 interface IBookmarkCounts {
   total: number;
@@ -75,16 +45,28 @@ const Userinfo: NextPage = () => {
     course: null,
     places: null
   });
+  const [commentData, setCommentData] = useState(null);
+  const [courseData, setCourseData] = useState(null);
 
   const userId = Number(router.query.id);
   const isMyPage = userId === currentUser.user.id;
 
-  const onClickAction = (value: UserInfoTab) => {
+  const onClickAction = async (value: UserInfoTab) => {
     console.log(value);
     setActiveMenu(value);
 
     if (value === 'bookmark') {
       onClickBookmarkTab('course');
+    }
+    if (value === 'course') {
+      const result = await CommentApi.getCommentsAll(userId);
+      console.log('[내가 작성한 코스]', result);
+    }
+
+    if (value === 'comment') {
+      const result = await CommentApi.getCommentsAll(userId); // 일단 전부 요청
+      console.log('[내가 작성한 댓글]', result);
+      setCommentData(result.content);
     }
   };
 
@@ -94,13 +76,11 @@ const Userinfo: NextPage = () => {
     if (value === 'course' && bookmarkData.course === null) {
       const result = await CourseApi.getBookmarked(userId);
       setBookmarkData({ ...bookmarkData, course: result.content });
-      console.log(result.content);
     }
 
     if (value === 'place' && bookmarkData.places === null) {
       const result = await PlaceApi.getBookmarked(userId);
       setBookmarkData({ ...bookmarkData, places: result.content });
-      console.log(result.content);
     }
   };
 
@@ -168,7 +148,7 @@ const Userinfo: NextPage = () => {
                   </Tab.item>
                   {isMyPage && (
                     <Tab.item title="댓글" value="comment">
-                      <MyComments comments={courseCommentData} />
+                      <MyComments comments={commentData} />
                     </Tab.item>
                   )}
                 </Tab>

@@ -18,3 +18,19 @@ export interface IComments {
   totalCount: number;
   courseComments: IComment[] | [];
 }
+
+export interface IMyComment {
+  id: number;
+  rootId: string;
+  comment: string;
+  createdAt: string;
+  updatedAt: string;
+  rootCommentId: number;
+  subCommentCount: number;
+  userId: number;
+  content: {
+    id: number;
+    title: string;
+    type: string;
+  };
+}

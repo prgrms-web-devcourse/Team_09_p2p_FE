@@ -1,31 +1,39 @@
 import styled from '@emotion/styled';
-import { Icon, Text } from '~/components/atom';
-import { IComment } from '~/pages/userinfo/[id]';
+import { Icon, Link, Text } from '~/components/atom';
 import theme from '~/styles/theme';
+import { IMyComment } from '~/types/comment';
+import { sliceDate } from '~/utils/converter';
 
 interface MyComments {
-  comments: IComment[];
+  comments: IMyComment[] | null;
 }
 
 const MyComments = ({ comments }: MyComments) => {
+  if (!comments) {
+    return null;
+  }
   return (
     <div>
       {comments.map((comment) => (
         <Container key={comment.id}>
           <CommentContent>
-            <Text color="gray">`{comment.content.title}`에 남긴 댓글</Text>
+            <Link href={`/course/${comment.content.id}`}>
+              <Text color="gray">`{comment.content.title}`에 남긴 댓글</Text>
+            </Link>
             <Text size="lg" block>
-              {comment.comment}
+              <Link href={`/course/${comment.content.id}`}>{comment.comment}</Link>
             </Text>
           </CommentContent>
           <CommentContent>
             <Text color="gray" block>
-              {comment.createdAt}
+              {sliceDate(comment.createdAt)}
             </Text>
-            <CommentCount>
-              <Icon size={20} name="comment" />
-              <Text color="gray">12</Text>
-            </CommentCount>
+            <Link href={`/course/${comment.content.id}`}>
+              <CommentCount>
+                <Icon size={20} name="comment" />
+                <Text color="gray">{comment.subCommentCount}</Text>
+              </CommentCount>
+            </Link>
           </CommentContent>
         </Container>
       ))}
@@ -40,18 +48,22 @@ const Container = styled.div`
   display: flex;
   justify-content: space-between;
 
-  padding: 32px 0;
+  padding: 24px 16px;
   border-bottom: 1px solid ${borderGray};
 `;
 
 const CommentContent = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 8px;
 `;
 
 const CommentCount = styled.div`
   display: flex;
   align-items: center;
   justify-content: end;
+
+  i {
+    margin-right: 5px;
+  }
 `;
