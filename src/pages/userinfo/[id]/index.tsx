@@ -165,9 +165,11 @@ const Userinfo: NextPage = () => {
                       active={ActiveBookmark}
                     />
                   </Tab.item>
-                  <Tab.item title="댓글" value="comment">
-                    {commentData && <MyComments comments={commentData} />}
-                  </Tab.item>
+                  {isMyPage && (
+                    <Tab.item title="댓글" value="comment">
+                      {commentData && <MyComments comments={commentData} />}
+                    </Tab.item>
+                  )}
                 </Tab>
               </ul>
             </ActionContent>

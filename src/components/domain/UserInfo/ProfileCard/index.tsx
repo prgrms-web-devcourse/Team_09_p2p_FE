@@ -96,12 +96,14 @@ const ProfileCard = ({
             {bookmarkCount}
           </Text.Button>
         </li>
-        <li>
-          <Text>댓글</Text>
-          <Text.Button onClick={() => onClickAction('comment')} color="main" fontWeight={700}>
-            {commentCount}
-          </Text.Button>
-        </li>
+        {isMyPage && (
+          <li>
+            <Text>댓글</Text>
+            <Text.Button onClick={() => onClickAction('comment')} color="main" fontWeight={700}>
+              {commentCount}
+            </Text.Button>
+          </li>
+        )}
       </UserActions>
 
       {isMyPage && (
