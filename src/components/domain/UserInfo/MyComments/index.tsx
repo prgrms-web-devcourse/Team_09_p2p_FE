@@ -5,13 +5,10 @@ import { IMyComment } from '~/types/comment';
 import { sliceDate } from '~/utils/converter';
 
 interface MyComments {
-  comments: IMyComment[] | null;
+  comments: IMyComment[];
 }
 
 const MyComments = ({ comments }: MyComments) => {
-  if (!comments) {
-    return null;
-  }
   return (
     <div>
       {comments.map((comment) => (

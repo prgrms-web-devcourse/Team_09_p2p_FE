@@ -4,14 +4,13 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import { PageContainer } from '~/components/atom';
-import { CourseList, PlaceList } from '~/components/common';
+import { CourseList } from '~/components/common';
 import MyBookmarks from '~/components/domain/UserInfo/MyBookmarks';
 import MyComments from '~/components/domain/UserInfo/MyComments';
 import ProfileCard from '~/components/domain/UserInfo/ProfileCard';
 import Tab from '~/components/domain/UserInfo/Tab';
 import { useUser } from '~/hooks/useUser';
 import { CommentApi, CourseApi, PlaceApi, UserApi } from '~/service';
-import { courseListData } from '~/utils/dummydata';
 import type { UserInfoTab } from '~/components/domain/UserInfo/types';
 
 interface IBookmarkCounts {
@@ -90,12 +89,12 @@ const Userinfo: NextPage = () => {
   const onClickBookmarkTab = async (value: UserInfoTab) => {
     setActiveBookmark(value);
 
-    if (value === 'course' && bookmarkData.course === null) {
+    if (value === 'course' && !bookmarkData.course) {
       const result = await CourseApi.getBookmarked(userId);
       setBookmarkData({ ...bookmarkData, course: result.content });
     }
 
-    if (value === 'place' && bookmarkData.places === null) {
+    if (value === 'place' && !bookmarkData.places) {
       const result = await PlaceApi.getBookmarked(userId);
       setBookmarkData({ ...bookmarkData, places: result.content });
     }
@@ -166,11 +165,9 @@ const Userinfo: NextPage = () => {
                       active={ActiveBookmark}
                     />
                   </Tab.item>
-                  {isMyPage && (
-                    <Tab.item title="댓글" value="comment">
-                      <MyComments comments={commentData} />
-                    </Tab.item>
-                  )}
+                  <Tab.item title="댓글" value="comment">
+                    {commentData && <MyComments comments={commentData} />}
+                  </Tab.item>
                 </Tab>
               </ul>
             </ActionContent>
