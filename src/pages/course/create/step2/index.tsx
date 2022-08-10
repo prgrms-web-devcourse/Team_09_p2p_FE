@@ -32,11 +32,6 @@ interface IPlace {
   phoneNumber: string;
 }
 
-interface ICourseInfo {
-  region: string;
-  places: IPlace[];
-}
-
 interface IPlaceForm {
   kakaoMapId: string;
   name: string;
