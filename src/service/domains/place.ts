@@ -7,7 +7,7 @@ class PlaceApi extends Api {
 
   read = async (placeId: number) => {
     try {
-      const response = await this.baseInstance.get(`${this.path}/${placeId}`);
+      const response = await this.authInstance.get(`${this.path}/${placeId}`);
       return response.data;
     } catch (e) {
       console.error(`장소 상세 조회 오류: ${e}`);
