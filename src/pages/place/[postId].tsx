@@ -123,7 +123,7 @@ const PlaceDetailByPostId = ({ post }: Props) => {
           </Title>
           <CourseList courses={relevantCourses} />
           <HorizonDivideLine />
-          <Comment />
+          {/* <Comment /> */}
         </Container>
       </main>
     </React.Fragment>

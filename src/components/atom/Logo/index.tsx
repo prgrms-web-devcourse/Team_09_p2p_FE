@@ -9,7 +9,7 @@ interface LogoProps {
 const Logo = ({ width = 100, height = 30 }: LogoProps) => {
   return (
     <ImageWrapper width={width} height={height}>
-      <Image src="/assets/location/logo.png" alt="logo" layout="fill" objectFit="contain" />
+      <Image src="/assets/logo.png" alt="logo" layout="fill" objectFit="contain" />
     </ImageWrapper>
   );
 };

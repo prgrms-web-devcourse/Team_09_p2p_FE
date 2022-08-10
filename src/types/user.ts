@@ -21,6 +21,12 @@ export interface UserInfo {
   updatedAt: string;
 }
 
+export interface UserEdit {
+  nickname: string;
+  birth: string;
+  sex: 'male' | 'female';
+}
+
 export interface UserPasswordFormValues {
   oldPassword: string;
   password: string;

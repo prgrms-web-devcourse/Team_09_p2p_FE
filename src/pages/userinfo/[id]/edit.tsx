@@ -2,18 +2,50 @@ import styled from '@emotion/styled';
 import type { NextPage } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import React, { useEffect } from 'react';
-import { Button, PageContainer, Text, Title } from '~/components/atom';
+import React, { useEffect, useState } from 'react';
+import { PageContainer, Title } from '~/components/atom';
+import UserEditForm, { UserEditFormValues } from '~/components/domain/UserInfo/EditForm';
 import { useUser } from '~/hooks/useUser';
+import { UserApi } from '~/service';
 import theme from '~/styles/theme';
 
 const UserinfoEdit: NextPage = () => {
   const { currentUser } = useUser();
   const router = useRouter();
   const userId = Number(router.query.id);
+  const [initialValues, setInitialValues] = useState<UserEditFormValues | null>(null);
 
-  const getUserData = (userId: number) => {
-    // 유저데이터 불러오기
+  const handleSubmit = async (data: UserEditFormValues) => {
+    if (!initialValues) {
+      return;
+    }
+    const { nickname: prevNickname, birth: prevBirth, sex: prevSex } = initialValues;
+    const { nickname, birth, sex } = data;
+    if (prevNickname === nickname && prevBirth === birth && prevSex === sex) {
+      router.push(`/userinfo/${userId}`);
+      return;
+    }
+
+    try {
+      const response = await UserApi.edit({ nickname, birth, sex });
+      if (response.status === 200) {
+        router.push(`/userinfo/${userId}`);
+      }
+    } catch (e) {
+      // TODO 이후 status code에 따른 예외처리
+      console.error(e);
+    }
+  };
+
+  const getUserData = async () => {
+    const userInfo = await UserApi.getUser(userId);
+    const { email, nickname, sex, birth } = userInfo;
+    setInitialValues(() => ({
+      email,
+      nickname,
+      sex,
+      birth
+    }));
   };
 
   useEffect(() => {
@@ -23,10 +55,9 @@ const UserinfoEdit: NextPage = () => {
         router.push('/');
         return;
       }
-
-      getUserData(Number(userId));
+      getUserData();
     }
-  }, [currentUser, userId, router]);
+  }, [currentUser, router, userId]);
 
   if (currentUser.user.id !== userId) {
     return null;
@@ -44,43 +75,9 @@ const UserinfoEdit: NextPage = () => {
         <PageContainer>
           <Container>
             <Title>내 정보 수정</Title>
-            <Form>
-              <FormItem>
-                <FormTitle>
-                  <Text>이메일</Text>
-                </FormTitle>
-                <FormGroup>
-                  <input type="email" name="email" />
-                </FormGroup>
-              </FormItem>
-              <FormItem>
-                <FormTitle>
-                  <Text>닉네임</Text>
-                </FormTitle>
-                <FormGroup>
-                  <input type="text" name="nickname" />
-                </FormGroup>
-              </FormItem>
-              <FormItem>
-                <FormTitle>
-                  <Text>성별</Text>
-                </FormTitle>
-                <FormGroup>
-                  <input type="text" name="sex" />
-                </FormGroup>
-              </FormItem>
-              <FormItem>
-                <FormTitle>
-                  <Text>생년월일</Text>
-                </FormTitle>
-                <FormGroup>
-                  <input type="data" name="birth" />
-                </FormGroup>
-              </FormItem>
-              <Button size="md" width={195} style={{ marginLeft: 150 }}>
-                내 정보 수정
-              </Button>
-            </Form>
+            {initialValues && (
+              <UserEditForm initialValues={initialValues} onSubmit={handleSubmit} />
+            )}
           </Container>
         </PageContainer>
       </main>
@@ -97,19 +94,3 @@ const Container = styled.div`
   border: 1px solid ${borderGray};
   padding: 74px 76px;
 `;
-
-const Form = styled.div`
-  margin-top: 76px;
-`;
-
-const FormItem = styled.div`
-  display: flex;
-  height: 70px;
-`;
-
-const FormTitle = styled.div`
-  width: 150px;
-  font-weight: 500;
-`;
-
-const FormGroup = styled.div``;

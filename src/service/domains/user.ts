@@ -1,5 +1,6 @@
 import Api from '~/service/core/Api';
 import { LoginValues, SignupValues } from '~/types';
+import { UserEdit } from '~/types/user';
 
 interface UserInfo {
   id: number;
@@ -58,6 +59,11 @@ class UserApi extends Api {
         'Content-Type': 'multipart/form-data'
       }
     });
+    return response;
+  };
+
+  edit = async (bodyData: UserEdit) => {
+    const response = await this.authInstance.put(`${this.path}`, bodyData);
     return response;
   };
 
