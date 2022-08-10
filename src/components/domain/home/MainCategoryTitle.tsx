@@ -11,7 +11,7 @@ const MainCategoryTitle = ({ name }: MainCategoryTitleProps) => {
       <Title size="md" fontWeight={700}>
         {name}
       </Title>
-      <Icon name="arrow" size={25} />
+      <MoveIcon name="arrow" size={25} block />
     </Container>
   );
 };
@@ -20,4 +20,11 @@ export default MainCategoryTitle;
 
 const Container = styled.div`
   margin-bottom: 30px;
+  display: flex;
+  align-items: center;
+`;
+
+const MoveIcon = styled(Icon)`
+  margin-left: 6px;
+  margin-top: 2px;
 `;
