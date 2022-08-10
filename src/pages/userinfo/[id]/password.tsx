@@ -17,34 +17,26 @@ const UserinfoEdit: NextPage = () => {
 
   const handleSubmit = async (data: UserPasswordFormValues) => {
     const { oldPassword, password: newPassword } = data;
-    console.log(data);
     try {
       const response = await UserApi.changePassword({ oldPassword, newPassword });
       if (response.status === 200) {
-        console.log('비밀번호 변경 성공');
-        console.log(response);
-        // TODO- 비밀번호 변경 성공 시
-        // 1. 다시 로그인을 시킬 것인지 말 것인지
-        // 2. 페이징을 어떻게 할 것인지
+        // 다시 로그인 시키지 않고 유저 정보 페이지로 돌려보낸다.
+        window.alert('비밀번호 변경 성공!');
+        router.push(`/userinfo/${userId}`);
         return;
       }
-      console.error('비밀번호 변경에 실패했어요.');
     } catch (e: any) {
       const { response } = e;
-      // Api 에러 픽스 시 예외처리
       if (response.status === 400) {
-        console.log('비밀번호가 틀렸어요.');
-        console.log(response);
+        window.alert('현재 비밀번호가 올바르지 않습니다.');
         return;
       }
 
       if (response.status === 409) {
-        console.log('동일한 비밀번호입니다.');
-        console.log(response);
+        window.alert('동일한 비밀번호로는 변경할 수 없어요.');
         return;
       }
-
-      console.log(response);
+      console.error(e);
     }
   };
 
