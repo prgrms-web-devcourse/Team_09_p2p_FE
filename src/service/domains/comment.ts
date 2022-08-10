@@ -7,9 +7,9 @@ class CommentApi extends Api {
   getComments = async (id: number, type: CourseOrPlace) => {
     switch (type) {
       case 'course':
-        return await CourseApi.getComments(id);
+        return await CourseApi.getComments(id).then((res) => res.courseComments);
       case 'place':
-        return await PlaceApi.getComments(id);
+        return await PlaceApi.getComments(id).then((res) => res.placeComments);
       default:
         return;
     }
