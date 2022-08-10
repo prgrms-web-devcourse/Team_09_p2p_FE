@@ -8,17 +8,10 @@ interface EmailFieldProps {
   value: string;
   onChange: (e: ChangeEvent<HTMLInputElement>) => void;
   errors: string | undefined;
-  setInitDuplicateFn: () => void;
-  setDuplicateCheckFn: () => void;
+  checkDuplicate: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const EmailField: React.FC<EmailFieldProps> = ({
-  value,
-  onChange,
-  errors,
-  setInitDuplicateFn,
-  setDuplicateCheckFn
-}) => {
+const EmailField: React.FC<EmailFieldProps> = ({ value, onChange, errors, checkDuplicate }) => {
   const [error, setError] = useState(errors);
 
   const handleBlur = useCallback(() => {
@@ -27,10 +20,10 @@ const EmailField: React.FC<EmailFieldProps> = ({
 
   const handleChange = useCallback(
     (e: ChangeEvent<HTMLInputElement>) => {
-      setInitDuplicateFn();
+      checkDuplicate(false);
       onChange(e);
     },
-    [onChange, setInitDuplicateFn]
+    [onChange, checkDuplicate]
   );
 
   const disabled = useMemo(() => !!error || value.length === 0, [error, value]);
@@ -42,7 +35,7 @@ const EmailField: React.FC<EmailFieldProps> = ({
     try {
       await UserApi.emailCheck({ email: value });
       window.alert(`${value}는 사용가능한 메일입니다!`);
-      setDuplicateCheckFn();
+      checkDuplicate(true);
     } catch (e) {
       window.alert('이미 존재하는 메일이에요!');
     }

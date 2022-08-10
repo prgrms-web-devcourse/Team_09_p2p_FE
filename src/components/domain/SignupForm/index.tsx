@@ -31,35 +31,24 @@ const initialValues: SignupValues = {
 const SignupForm: React.FC<SignupFormProps> = ({ onSubmit: handleSubmitAction }) => {
   const [isCheckedDuplicateEmail, setIsCheckedDuplicateEmail] = useState(false);
   const [isCheckedDuplicateNickname, setIsCheckedDuplicateNickname] = useState(false);
-  const initDuplicatedEmail = useCallback(() => setIsCheckedDuplicateEmail(false), []);
-  const initDuplicatedNickname = useCallback(() => setIsCheckedDuplicateNickname(false), []);
-  const checkDuplicatedEmail = () => setIsCheckedDuplicateEmail(true);
-  const checkDuplicatedNickname = () => setIsCheckedDuplicateNickname(true);
 
-  const { values, handleChange, handleSubmit, errors } = useFormik({
+  const { values, handleChange, handleSubmit, errors, setErrors } = useFormik({
     initialValues,
     validationSchema: SignupValidationRules,
     onSubmit: (data: SignupValues) => {
-      if (!isCheckedDuplicateEmail) {
-        //TODO - ConfirmModal 사용하기
-        window.alert('이메일 중복확인을 해주세요.');
-        return;
-      }
-      if (!isCheckedDuplicateNickname) {
-        //TODO - ConfirmModal 사용하기
-        window.alert('닉네임 중복확인을 해주세요.');
-        return;
-      }
       handleSubmitAction && handleSubmitAction(data);
     }
   });
 
   const disabled = useMemo(() => {
+    if (!isCheckedDuplicateEmail || !isCheckedDuplicateNickname) {
+      return true;
+    }
     return (
       Object.values(values).some((value) => value.length === 0) ||
       Object.entries(errors).some((error) => !!error)
     );
-  }, [values, errors]);
+  }, [values, errors, isCheckedDuplicateEmail, isCheckedDuplicateNickname]);
 
   return (
     <Layout>
@@ -73,8 +62,7 @@ const SignupForm: React.FC<SignupFormProps> = ({ onSubmit: handleSubmitAction })
               value={values.email}
               onChange={handleChange}
               errors={errors.email}
-              setInitDuplicateFn={initDuplicatedEmail}
-              setDuplicateCheckFn={checkDuplicatedEmail}
+              checkDuplicate={setIsCheckedDuplicateEmail}
             />
             <PasswordField
               value={values.password}
@@ -90,8 +78,7 @@ const SignupForm: React.FC<SignupFormProps> = ({ onSubmit: handleSubmitAction })
               value={values.nickname}
               onChange={handleChange}
               errors={errors.nickname}
-              setInitDuplicateFn={initDuplicatedNickname}
-              setDuplicateCheckFn={checkDuplicatedNickname}
+              checkDuplicate={setIsCheckedDuplicateNickname}
             />
             <BirthField value={values.birth} onChange={handleChange} errors={errors.birth} />
             <SexField value={values.sex} onChange={handleChange} />

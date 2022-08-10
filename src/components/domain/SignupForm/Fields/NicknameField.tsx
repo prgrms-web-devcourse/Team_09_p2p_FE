@@ -8,16 +8,14 @@ interface NicknameFieldProps {
   value: string;
   onChange: (e: ChangeEvent<HTMLInputElement>) => void;
   errors: string | undefined;
-  setInitDuplicateFn: () => void;
-  setDuplicateCheckFn: () => void;
+  checkDuplicate: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const NicknameField: React.FC<NicknameFieldProps> = ({
   value,
   onChange,
   errors,
-  setInitDuplicateFn,
-  setDuplicateCheckFn
+  checkDuplicate
 }) => {
   const [error, setError] = useState(errors);
 
@@ -27,10 +25,10 @@ const NicknameField: React.FC<NicknameFieldProps> = ({
 
   const handleChange = useCallback(
     (e: ChangeEvent<HTMLInputElement>) => {
-      setInitDuplicateFn();
+      checkDuplicate(false);
       onChange(e);
     },
-    [onChange, setInitDuplicateFn]
+    [onChange, checkDuplicate]
   );
 
   const disabled = useMemo(() => !!error || value.length === 0, [error, value]);
@@ -42,7 +40,7 @@ const NicknameField: React.FC<NicknameFieldProps> = ({
     try {
       await UserApi.nicknameCheck({ nickname: value });
       window.alert(`${value}는 사용가능한 닉네임입니다!`);
-      setDuplicateCheckFn();
+      checkDuplicate(true);
     } catch (e) {
       window.alert('이미 존재하는 닉네임이에요!');
     }
@@ -52,7 +50,7 @@ const NicknameField: React.FC<NicknameFieldProps> = ({
     <Field>
       <Label htmlFor="nickname" text="닉네임" />
       <Text size="xs" color="gray">
-        2~8자 이내의 닉네임을 입력해주세요.
+        특수문자가 포함되지 않는 2~8자리로 설정해주세요.
       </Text>
       <StyledField>
         <Input
