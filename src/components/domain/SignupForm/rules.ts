@@ -43,6 +43,7 @@ export const SignupValidationRules: ObjectSchema<Assign<ObjectShape, SchemaInter
     nickname: string()
       .min(2, MESSAGE.nickname)
       .max(8, MESSAGE.nickname)
+      .matches(VALIDATION.nickname, MESSAGE.nickname)
       .required('닉네임을 입력해주세요.'),
     birth: string().matches(VALIDATION.birth, MESSAGE.birth).required('생년월일을 입력해주세요.'),
     sex: mixed().oneOf(['male', 'female']).required('성별을 선택해주세요.')

@@ -10,13 +10,15 @@ const Signup: NextPage = () => {
   const router = useRouter();
 
   const handleSubmit = async (data: SignupValues) => {
-    // TODO
-    // 회원가입 실패 시 로직 추가해야함
-    const response = await UserApi.signup(data);
-    if (response.nickname === data.nickname) {
-      if (window.confirm(`${response.nickname}님 환영합니다! 로그인하러 갈까요?`)) {
-        router.push('/login');
+    try {
+      const response = await UserApi.signup(data);
+      if (response.nickname === data.nickname) {
+        if (window.confirm(`${response.nickname}님 환영합니다! 로그인하러 갈까요?`)) {
+          router.push('/login');
+        }
       }
+    } catch (e) {
+      console.error('회원가입 실패', e);
     }
   };
 
