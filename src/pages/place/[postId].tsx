@@ -87,11 +87,14 @@ const PlaceDetailByPostId = ({ post }: Props) => {
 
       <main>
         <Container type="detail" style={{ position: 'relative' }}>
-          <DetailSidebar
-            likes={post.likeCount}
-            defaultLiked={post.liked}
-            defaultBookmarked={post.bookmarked}
-          />
+          {/* <DetailSidebar
+            likes={post.likes}
+            id={post.id}
+            defaultLiked={post.isLiked}
+            defaultBookmarked={post.isBookmarked}
+            isLoggedIn={isLoggedIn}
+            type="course"
+          /> */}
           <PostHeader>
             <Title level={1} size="lg" fontWeight={700} block>
               {post.name}
@@ -120,7 +123,7 @@ const PlaceDetailByPostId = ({ post }: Props) => {
           </Title>
           <CourseList courses={relevantCourses} />
           <HorizonDivideLine />
-          <Comment />
+          {/* <Comment /> */}
         </Container>
       </main>
     </React.Fragment>
