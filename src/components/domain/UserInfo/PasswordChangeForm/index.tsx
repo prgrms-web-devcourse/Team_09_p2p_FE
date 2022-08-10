@@ -20,7 +20,7 @@ const PasswordChangeForm = ({ onSubmit: onSubmitAction }: PasswordChangeFormProp
   const [passwordError, setPasswordError] = useState('');
   const [passwordCheckError, setPasswordCheckError] = useState('');
 
-  const { values, handleChange, handleSubmit, errors, touched } = useFormik({
+  const { values, handleChange, handleSubmit, errors } = useFormik({
     initialValues,
     validationSchema: ValidationRules,
     onSubmit: (data: UserPasswordFormValues) => {
