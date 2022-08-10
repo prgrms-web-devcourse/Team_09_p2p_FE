@@ -20,3 +20,9 @@ export interface UserInfo {
   createdAt: string;
   updatedAt: string;
 }
+
+export interface UserEdit {
+  nickname: string;
+  birth: string;
+  sex: 'male' | 'female';
+}
