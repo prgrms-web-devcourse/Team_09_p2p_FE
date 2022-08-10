@@ -66,6 +66,11 @@ class UserApi extends Api {
     const response = await this.authInstance.put(`${this.path}`, bodyData);
     return response;
   };
+
+  changePassword = async (bodyData: { oldPassword: string; newPassword: string }) => {
+    const response = await this.authInstance.put(`${this.path}/password`, bodyData);
+    return response;
+  };
 }
 
 export default new UserApi();

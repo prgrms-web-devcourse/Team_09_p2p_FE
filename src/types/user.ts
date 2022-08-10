@@ -26,3 +26,9 @@ export interface UserEdit {
   birth: string;
   sex: 'male' | 'female';
 }
+
+export interface UserPasswordFormValues {
+  oldPassword: string;
+  password: string;
+  passwordCheck: string;
+}
