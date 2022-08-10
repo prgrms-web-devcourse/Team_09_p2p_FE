@@ -34,7 +34,7 @@ const HomePage = () => {
     if (mainSearchInputRef.current) {
       const keyword = mainSearchInputRef.current.value;
       if (keyword) {
-        router.push(`/search/${keyword}`);
+        router.push(`/search?keyword=${keyword}`);
       }
     }
   };
@@ -64,7 +64,9 @@ const HomePage = () => {
               />
             </form>
             <Tags>
-              <Button buttonType="tag">#힐링</Button>
+              <Button buttonType="tag" onClick={() => router.push('/search?theme=힐링')}>
+                #힐링
+              </Button>
               <Button buttonType="tag">#이쁜카페</Button>
               <Button buttonType="tag">#드라이브</Button>
               <Button buttonType="tag">#맛집</Button>
