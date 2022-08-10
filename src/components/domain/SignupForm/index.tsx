@@ -1,8 +1,8 @@
 import styled from '@emotion/styled';
 import { useFormik } from 'formik';
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { Button, PageContainer, Title } from '~/components/atom';
-import { Form } from '~/components/common';
+import { ErrorMessage, Form } from '~/components/common';
 import theme from '~/styles/theme';
 import { SignupValues } from '~/types';
 import {
@@ -29,26 +29,28 @@ const initialValues: SignupValues = {
 };
 
 const SignupForm: React.FC<SignupFormProps> = ({ onSubmit: handleSubmitAction }) => {
+  const [errorMessage, setErrorMessage] = useState(false);
   const [isCheckedDuplicateEmail, setIsCheckedDuplicateEmail] = useState(false);
   const [isCheckedDuplicateNickname, setIsCheckedDuplicateNickname] = useState(false);
 
-  const { values, handleChange, handleSubmit, errors, setErrors } = useFormik({
+  const { values, handleChange, handleSubmit, errors } = useFormik<SignupValues>({
     initialValues,
     validationSchema: SignupValidationRules,
     onSubmit: (data: SignupValues) => {
+      if (!isCheckedDuplicateEmail || !isCheckedDuplicateNickname) {
+        setErrorMessage(true);
+        return;
+      }
       handleSubmitAction && handleSubmitAction(data);
     }
   });
 
   const disabled = useMemo(() => {
-    if (!isCheckedDuplicateEmail || !isCheckedDuplicateNickname) {
-      return true;
-    }
     return (
       Object.values(values).some((value) => value.length === 0) ||
       Object.entries(errors).some((error) => !!error)
     );
-  }, [values, errors, isCheckedDuplicateEmail, isCheckedDuplicateNickname]);
+  }, [values, errors]);
 
   return (
     <Layout>
@@ -64,6 +66,11 @@ const SignupForm: React.FC<SignupFormProps> = ({ onSubmit: handleSubmitAction })
               errors={errors.email}
               checkDuplicate={setIsCheckedDuplicateEmail}
             />
+            {errorMessage && !isCheckedDuplicateEmail && (
+              <DuplicatedError>
+                <ErrorMessage message="이메일 중복 검사를 해주세요." />
+              </DuplicatedError>
+            )}
             <PasswordField
               value={values.password}
               onChange={handleChange}
@@ -73,6 +80,7 @@ const SignupForm: React.FC<SignupFormProps> = ({ onSubmit: handleSubmitAction })
               value={values.passwordCheck}
               onChange={handleChange}
               errors={errors.passwordCheck}
+              password={values.password}
             />
             <NicknameField
               value={values.nickname}
@@ -80,6 +88,11 @@ const SignupForm: React.FC<SignupFormProps> = ({ onSubmit: handleSubmitAction })
               errors={errors.nickname}
               checkDuplicate={setIsCheckedDuplicateNickname}
             />
+            {errorMessage && !isCheckedDuplicateNickname && (
+              <DuplicatedError>
+                <ErrorMessage message="닉네임 중복 검사를 해주세요." />
+              </DuplicatedError>
+            )}
             <BirthField value={values.birth} onChange={handleChange} errors={errors.birth} />
             <SexField value={values.sex} onChange={handleChange} />
           </Fields>
@@ -111,4 +124,8 @@ const Fields = styled.div`
   display: flex;
   flex-direction: column;
   gap: 30px;
+`;
+
+const DuplicatedError = styled.div`
+  margin-top: -20px;
 `;
