@@ -7,7 +7,7 @@ import { AnyObject } from 'yup/lib/types';
 const MESSAGE = {
   password: '비밀번호는 영문, 숫자, 특수문자를 포함한 8~15자로 설정해주세요.',
   passwordCheck: '동일한 비밀번호가 아니에요.',
-  nickname: '닉네임은 특수문자가 포함되지 않는 2~8자리로 설정해주세요.',
+  nickname: '닉네임은 특수문자를 제외한 2~8자리로 설정해주세요.',
   birth: '올바른 생년월일을 입력해주세요.'
 };
 
