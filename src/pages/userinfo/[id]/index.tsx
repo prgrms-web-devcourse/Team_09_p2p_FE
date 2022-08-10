@@ -27,6 +27,7 @@ interface IUserInfo {
   id: number;
   nickname: string;
   profileImage: string | null;
+  email: string;
   birth: string;
   sex: string;
   createdAt: string;
@@ -144,7 +145,7 @@ const Userinfo: NextPage = () => {
               profileImage={userData.profileImage}
               userId={userData.id}
               nickname={userData.nickname}
-              email={userData.birth}
+              email={userData.email}
               onClickAction={onClickAction}
               postCount={userData.counts.course}
               bookmarkCount={userData.counts.bookmarks.total}
