@@ -16,7 +16,9 @@ export const ICON_URLS = {
   pencil: '/assets/icons/pencil.svg',
   comment: '/assets/icons/comment.svg',
   bookmarkThumb: '/assets/icons/bookmark-thumb.svg',
-  bookmarkThumbActive: '/assets/icons/bookmark-thumb-active.svg'
+  bookmarkThumbActive: '/assets/icons/bookmark-thumb-active.svg',
+  recommendActive: '/assets/icons/recommend-active.svg',
+  recommendInactive: '/assets/icons/recommend-inactive.svg'
 };
 
 export type IconName = keyof typeof ICON_URLS;
