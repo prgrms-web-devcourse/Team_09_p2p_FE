@@ -51,20 +51,39 @@ const Userinfo: NextPage = () => {
   const userId = Number(router.query.id);
   const isMyPage = userId === currentUser.user.id;
 
+  /*
+    TODO: 현재 탭 부분 데이터 요청시 등록된 값 전부 가져오는데
+    끊어서 가져와야 함
+  */
+
+  const replace = (query: UserInfoTab) => {
+    router.replace({ pathname: '/userinfo/[id]', query: { tab: query } }, `/userinfo/${userId}`);
+  };
+
   const onClickAction = async (value: UserInfoTab) => {
     setActiveMenu(value);
 
-    if (value === 'bookmark') {
-      onClickBookmarkTab('course');
-    }
-    if (value === 'course' && courseData === null) {
-      const result = await CourseApi.getUserCourses(userId); // 일단 전부 요청
-      setCourseData(result.content);
+    if (value === 'course') {
+      if (!courseData) {
+        const result = await CourseApi.getUserCourses(userId);
+        setCourseData(result.content);
+      }
+
+      replace('course');
     }
 
-    if (value === 'comment' && commentData === null) {
-      const result = await CommentApi.getCommentsAll(userId); // 일단 전부 요청
-      setCommentData(result.content);
+    if (value === 'bookmark') {
+      onClickBookmarkTab('course');
+      replace('bookmark');
+    }
+
+    if (value === 'comment') {
+      if (!commentData) {
+        const result = await CommentApi.getCommentsAll(userId);
+        setCommentData(result.content);
+      }
+
+      replace('comment');
     }
   };
 
@@ -91,7 +110,9 @@ const Userinfo: NextPage = () => {
     }
 
     setUserData(result);
-    onClickAction('course');
+
+    const tab = router.query.tab || 'course';
+    onClickAction(tab as UserInfoTab);
   };
 
   useEffect(() => {
@@ -104,7 +125,7 @@ const Userinfo: NextPage = () => {
 
       getUserData(userId);
     }
-  }, [userId, router]);
+  }, [userId]);
 
   if (!userData) {
     return null;
@@ -152,7 +173,6 @@ const Userinfo: NextPage = () => {
                   )}
                 </Tab>
               </ul>
-              <div></div>
             </ActionContent>
           </Wrapper>
         </PageContainer>
