@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 import { useRouter } from 'next/router';
 import React from 'react';
-import { PageContainer, Button, Link } from '~/components/atom';
+import { PageContainer, Button, Link, Image } from '~/components/atom';
 import Avatar from '~/components/atom/Avatar';
 import Logo from '~/components/atom/Logo';
 import { useUser } from '~/hooks/useUser';
@@ -28,6 +28,7 @@ const Header = ({ full }: HeaderProps) => {
           <LeftArea>
             <Link href="/">
               <Logo width={130} height={35} />
+              <Image src="/assets/location/logo.png" alt="이곳저곳" />
             </Link>
           </LeftArea>
           <Buttons>
