@@ -50,6 +50,14 @@ const CourseDetail: NextPage = () => {
     }
   };
 
+  const onDeleteCourse = async () => {
+    if (confirm('삭제하시겠습니까?')) {
+      await CourseApi.delete(courseId);
+    }
+
+    router.push('/');
+  };
+
   useEffect(() => {
     if (typeof router.query.id === 'string') {
       if (!Number.isNaN(courseId)) {
@@ -82,8 +90,10 @@ const CourseDetail: NextPage = () => {
               </Title>
               {currentUser.user.id === detailData.userId && (
                 <HeaderButtons>
-                  <button>수정</button>
-                  <button>삭제</button>
+                  <Link href={`/course/${courseId}/edit`}>수정</Link>
+                  <Text.Button color="gray" onClick={onDeleteCourse}>
+                    삭제
+                  </Text.Button>
                 </HeaderButtons>
               )}
             </CourseTitle>
@@ -163,8 +173,8 @@ const CourseDate = styled.div`
 `;
 
 const HeaderButtons = styled.div`
+  color: ${fontGray};
   button {
-    color: ${fontGray};
     font-size: 16px;
     margin-left: 8px;
   }

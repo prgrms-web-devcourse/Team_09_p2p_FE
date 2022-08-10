@@ -11,6 +11,35 @@ import PlusIcon from '~/components/domain/CourseCreate/SearchArea/PlusIcon';
 import Modal from '~/components/atom/Modal';
 import RegionSelect from '~/components/domain/CourseCreate/RegionSelect';
 import { useRouter } from 'next/router';
+import { SearchInput } from '~/components/common';
+import SearchMap from '~/components/domain/Map/SearchMap';
+
+export interface IPlace {
+  id: number;
+  lat: number;
+  lng: number;
+  name: string;
+  address: string;
+  roadAddressName: string;
+  category: string;
+  phoneNumber: string;
+}
+export interface ICourseInfo {
+  region: string;
+  places: IPlace[];
+}
+
+export interface ISelectedPlace {
+  id: number;
+  lat: number;
+  lng: number;
+  name: string;
+  address: string;
+  roadAddressName: string;
+  category: string;
+  phoneNumber: string;
+}
+
 interface Marker {
   position: {
     lat: number;
@@ -30,8 +59,10 @@ const CourseCreate: NextPage = () => {
   const [markers, setMarkers] = useState<Marker[]>([]);
   const [visible, setVisible] = useState(true);
   const [region, setRegion] = useState('서울');
+  const [selectedPlaces, setSelectedPlaces] = useState<ISelectedPlace[]>([]);
   const router = useRouter();
-
+  //const [queryData, setQueryData] = useState();
+  const queryData = {} as ICourseInfo;
   useEffect(() => {
     if (!map) return;
     console.log(kakao.maps);
@@ -88,6 +119,9 @@ const CourseCreate: NextPage = () => {
   const handleNextStep = () => {
     router.push('/course/create/step2');
   };
+  const handleSearch = (keyword: string) => {
+    console.log();
+  };
   const dummyCourse = {
     region: region,
     places: [
@@ -123,6 +157,26 @@ const CourseCreate: NextPage = () => {
       }
     ]
   };
+  const setPlaces = () => {
+    return selectedPlaces.map((selectedPlace) => {
+      return {
+        id: selectedPlace.id,
+        lat: selectedPlace.lat,
+        lng: selectedPlace.lng,
+        name: selectedPlace.name,
+        address: selectedPlace.address,
+        roadAddressName: selectedPlace.roadAddressName,
+        category: selectedPlace.category,
+        phoneNumber: selectedPlace.phoneNumber
+      };
+    });
+  };
+
+  const setCoureData = () => {
+    queryData.region = region;
+    queryData.places = setPlaces();
+    return JSON.stringify(queryData);
+  };
   return (
     <React.Fragment>
       <Head>
@@ -143,20 +197,30 @@ const CourseCreate: NextPage = () => {
                 {visible === false ? region : '서울'}
               </Text>
             </SelectedHeader>
-            <SelectedPlace>
-              <div style={{ margin: '20px 0px 0px 20px' }}>
-                <Text size="lg">인천공항</Text>
-                <CloseIcon />
-              </div>
-              <Text size="sm" color="gray" style={{ marginLeft: '20px' }}>
-                인천 중구 공항로 271 인천국제공항역
-              </Text>
-            </SelectedPlace>
+            <ScrollWrapper>
+              {selectedPlaces.map((selectedPlace, index) => {
+                return (
+                  <>
+                    <SelectedPlace>
+                      <div style={{ margin: '20px 0px 0px 20px' }}>
+                        <Text size="lg">{selectedPlace.name}</Text>
+                        <CloseIcon />
+                      </div>
+                      <Text size="sm" color="gray" style={{ marginLeft: '20px' }}>
+                        {selectedPlace.roadAddressName}
+                      </Text>
+                    </SelectedPlace>
+                  </>
+                );
+              })}
+            </ScrollWrapper>
             <Link
               href={{
                 pathname: '/course/create/step2',
-                query: { courseQuery: JSON.stringify(dummyCourse) }
+                /* query: { courseQuery: JSON.stringify(dummyCourse) } */
+                query: { courseQuery: setCoureData() }
               }}
+              onClick={setCoureData}
               // query string 안보여주기 위해 필요한데 type error때문에 주석처리
               /* as={`/course/create/step2`} */
             >
@@ -165,55 +229,12 @@ const CourseCreate: NextPage = () => {
               </Button>
             </Link>
           </SelectedArea>
-          {/* todo: 선택한 장소 정보를 받아와서 지도에서 해당 장소 랜더링 */}
           <MapArea>
-            <PlaceMap
-              placeId={10751028}
-              placeName="인천국제공항"
-              placeType=""
-              center={{ lat: 37.4795073, lng: 126.440877 }}
-              height="1000px"
-            />
+            <SearchMap
+              setSelectedPlaces={setSelectedPlaces}
+              selectedPlaces={selectedPlaces}
+            ></SearchMap>
           </MapArea>
-          <SearchArea>
-            <div className="landing-page__inner">
-              <div className="search-form-container">
-                <form className="search-form" onSubmit={submitKeyword}>
-                  <label htmlFor="place" className="form__label">
-                    {/* todo: SearchedPlace 구현 */}
-                  </label>
-                </form>
-              </div>
-            </div>
-            {/* todo: 제출한 검색어 넘기기 */}
-            {/* <Map searchKeyword={Keyword}/> */}
-            <div>
-              <SearchInput
-                type="text"
-                id="movie-title"
-                className="form__input"
-                name="place"
-                onChange={keywordChange}
-                onKeyUp={valueChecker}
-                placeholder="코스에 추가할 장소를 입력하세요"
-                required
-              />
-            </div>
-            <SearchedPlace>
-              <div style={{ margin: '20px 0px 0px 20px' }}>
-                <Text size="lg">인천공항</Text>
-                <PlusIcon />
-              </div>
-              <Text size="sm" color="gray" style={{ marginLeft: '20px' }}>
-                인천 중구 공항로 271 인천국제공항역
-              </Text>
-            </SearchedPlace>
-            {/* todo: 조회된 장소가 없을 경우 주소 검색 API 호출 */}
-            {/* <Button buttonType="primary" size="md" width={195} style={{ display: 'inline-block' }}>
-              장소등록하기
-            </Button>
-            <SearchAddress /> */}
-          </SearchArea>
         </CreateWrapper>
       </main>
     </React.Fragment>
@@ -231,8 +252,8 @@ const CreateWrapper = styled.div`
 `;
 
 const SelectedArea = styled.div`
-  width: 26%;
-  margin: 20px 20px 20px 20px;
+  width: 30%;
+  /* margin: 20px 20px 20px 20px; */
 `;
 
 const SelectedHeader = styled.div`
@@ -248,7 +269,8 @@ const SelectedPlace = styled.div`
   justify-content: flex-end;
   position: relative;
   padding: 35px 0px 13px 0px;
-  margin-bottom: 40px;
+  /* margin: 20px 20px 20px 20px; */
+  margin-bottom: 20px;
   gap: 20px;
   width: 100%;
   height: 45px;
@@ -257,8 +279,14 @@ const SelectedPlace = styled.div`
   border-radius: 8px;
 `;
 
+const ScrollWrapper = styled.div`
+  height: calc(85vh - 145px);
+  overflow-x: hidden;
+  overflow-y: auto;
+`;
+
 const MapArea = styled.div`
-  width: 50%;
+  width: 100%;
 `;
 
 const SearchArea = styled.div`
@@ -267,7 +295,7 @@ const SearchArea = styled.div`
   text-align: center;
 `;
 
-const SearchInput = styled.input`
+/* const SearchInput = styled.input`
   display: inline-block;
   width: 100%;
   height: 50px;
@@ -284,7 +312,7 @@ const SearchInput = styled.input`
   &::placeholder {
     color: ${mainColor};
   }
-`;
+`; */
 
 const SearchedPlace = styled.div`
   display: flex;
