@@ -8,7 +8,7 @@ interface EmailFieldProps {
   value: string;
   onChange: (e: ChangeEvent<HTMLInputElement>) => void;
   errors: string | undefined;
-  checkDuplicate: React.Dispatch<React.SetStateAction<boolean>>;
+  checkDuplicate?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const EmailField: React.FC<EmailFieldProps> = ({ value, onChange, errors, checkDuplicate }) => {
@@ -20,22 +20,21 @@ const EmailField: React.FC<EmailFieldProps> = ({ value, onChange, errors, checkD
 
   const handleChange = useCallback(
     (e: ChangeEvent<HTMLInputElement>) => {
-      checkDuplicate(false);
+      checkDuplicate && checkDuplicate(false);
       onChange(e);
     },
     [onChange, checkDuplicate]
   );
 
-  const disabled = useMemo(() => !!error || value.length === 0, [error, value]);
+  const disabled = useMemo(() => {
+    return !!error || value.length === 0;
+  }, [error, value]);
 
   const handleClickDuplicate = async () => {
-    if (disabled) {
-      return;
-    }
     try {
       await UserApi.emailCheck({ email: value });
       window.alert(`${value}는 사용가능한 메일입니다!`);
-      checkDuplicate(true);
+      checkDuplicate && checkDuplicate(true);
     } catch (e) {
       window.alert('이미 존재하는 메일이에요!');
     }
@@ -53,10 +52,10 @@ const EmailField: React.FC<EmailFieldProps> = ({ value, onChange, errors, checkD
         onChange={handleChange}
         onBlur={handleBlur}
       />
-      {error && <ErrorMessage message={error} />}
       <Button onClick={handleClickDuplicate} fontSize={FONT_SIZES.sm} disabled={disabled}>
         이메일 중복확인
       </Button>
+      {error && <ErrorMessage message={error} />}
     </Field>
   );
 };
