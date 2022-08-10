@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 import { Icon, Link, Text } from '~/components/atom';
 import theme from '~/styles/theme';
 import { IMyComment } from '~/types/comment';
-import { sliceDate } from '~/utils/converter';
+import { sliceDate, textEllipsis } from '~/utils/converter';
 
 interface MyComments {
   comments: IMyComment[];
@@ -15,11 +15,13 @@ const MyComments = ({ comments }: MyComments) => {
         <Container key={comment.id}>
           <CommentContent>
             <Link href={`/course/${comment.content.id}`}>
-              <Text color="gray">`{comment.content.title}`에 남긴 댓글</Text>
+              <Text color="gray">`{textEllipsis(comment.content.title, 14)}`에 남긴 댓글</Text>
             </Link>
-            <Text size="lg" block>
-              <Link href={`/course/${comment.content.id}`}>{comment.comment}</Link>
-            </Text>
+            <Link href={`/course/${comment.content.id}`}>
+              <Text size="lg" ellipsis block style={{ width: 500 }}>
+                {comment.comment}dddddddddddddddddddddddddddddddddddddddddddddddddddd
+              </Text>
+            </Link>
           </CommentContent>
           <CommentContent>
             <Text color="gray" block>
