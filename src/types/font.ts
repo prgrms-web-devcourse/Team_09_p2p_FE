@@ -1,6 +1,15 @@
 import theme from '~/styles/theme';
 
-const { mainColor, fontGray, fontDarkGray, fontDarkBlack, fontBlueGray, fontRed } = theme.color;
+const {
+  mainColor,
+  fontGray,
+  fontDarkGray,
+  fontDarkBlack,
+  fontBlueGray,
+  fontRed,
+  fontLightGray,
+  recommendColor
+} = theme.color;
 
 export const FONT_SIZES = {
   xs: 14,
@@ -22,11 +31,13 @@ export type TitleSizes = keyof typeof TITLE_SIZES;
 
 export const FONT_COLORS = {
   gray: fontGray,
+  lightGray: fontLightGray,
   darkGray: fontDarkGray,
   dark: fontDarkBlack,
   blueGray: fontBlueGray,
   main: mainColor,
-  red: fontRed
+  red: fontRed,
+  recommend: recommendColor
 };
 
 export type FontColors = keyof typeof FONT_COLORS;

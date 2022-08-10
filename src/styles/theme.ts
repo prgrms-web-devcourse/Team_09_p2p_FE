@@ -6,12 +6,14 @@ const theme = {
     backgroundDarkGray: '#D3D3D3',
     backgroundLightGray: '#F8F8F8',
     fontGray: '#909090',
+    fontLightGray: '#C3C3C3',
     fontDarkGray: '#515151',
     fontDarkBlack: '#2B2B2B',
     fontBlueGray: '#828C94',
     borderGray: '#EAEDEF',
     borderDarkGray: '#E1E1E1',
-    fontRed: '#ff3f3f'
+    fontRed: '#ff3f3f',
+    recommendColor: '#FF9B63'
   },
   shadow: {
     basicShadow: '0px 2px 4px 1px rgb (0 0 0 / 5%)'
