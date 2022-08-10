@@ -5,11 +5,12 @@ import { RequiredStringSchema } from 'yup/lib/string';
 import { AnyObject } from 'yup/lib/types';
 
 const MESSAGE = {
-  nickname: '닉네임은 2~8자리로 설정해주세요.',
+  nickname: '닉네임은 특수문자가 포함되지 않는 2~8자리로 설정해주세요.',
   birth: '올바른 생년월일을 입력해주세요.'
 };
 
 const VALIDATION = {
+  nickname: /^[가-힣|a-z|A-Z|\d]{2,8}$/,
   birth: /^\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$/g
 };
 
