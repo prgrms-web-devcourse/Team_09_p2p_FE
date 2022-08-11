@@ -2,10 +2,12 @@ import styled from '@emotion/styled';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
-import { Button, Icon, Image, PageContainer, Text, Title } from '~/components/atom';
+import { Button, Icon, Image, Link, PageContainer, Text, Title } from '~/components/atom';
 import { CourseList } from '~/components/common';
+import ArrowTitle from '~/components/common/ArrowTitle';
 import Comment from '~/components/common/Comment';
 import DetailSidebar from '~/components/common/DetailSidebar';
+import ImageViewer from '~/components/common/ImageViewer';
 import PlaceMap from '~/components/domain/Map/PlaceMap';
 import { useUser } from '~/hooks/useUser';
 import { CourseApi, PlaceApi } from '~/service';
@@ -156,22 +158,20 @@ const PlaceDetailByPostId = () => {
             <Title level={1} size="lg" fontWeight={700} block>
               {detailData.name}
             </Title>
+            <Text size="md" block color="gray">
+              {detailData.roadAddressName || detailData.addressName}
+            </Text>
           </PostHeader>
-          <Text block color="gray">
-            {detailData.addressName}
-          </Text>
-          <Text size="lg" block>
-            <b style={{ color: `${theme.color.mainColor}` }}>{detailData.usedCount}개의 여행코스</b>
+          <Description size="lg" block>
+            <Text color="main" size="lg" fontWeight={700}>
+              {detailData.usedCount}개의 여행코스
+            </Text>
             에 포함된 장소입니다.
-          </Text>
-          <Button
-            width="140px"
-            style={{ padding: '5px', fontWeight: '500' }}
-            onClick={() => setIsOpenMap(!isOpenMap)}
-          >
+          </Description>
+          <MapButton width="140px" size="sm" onClick={() => setIsOpenMap(!isOpenMap)}>
             지도보기{' '}
             {isOpenMap ? <Icon name="arrowDown" rotate={180} /> : <Icon name="arrowDown" />}
-          </Button>
+          </MapButton>
           {detailData && isOpenMap && (
             <PlaceMap
               placeId={detailData.id}
@@ -181,12 +181,15 @@ const PlaceDetailByPostId = () => {
             />
           )}
           <ContentContainer>
-            <Image src="/assets/location/jeju.jpg" alt="여행경로" />
+            <ImageViewer src={detailData.imageUrl} alt={detailData.name} />
           </ContentContainer>
-          <Title level={2} size="sm">
-            이 장소가 포함된 코스
-          </Title>
-          <CourseList courses={relevantCourses} />
+          <RelevantCourse>
+            <Link href="/">
+              {/* 검색 결과로 이동 시켜야함 */}
+              <ArrowTitle name="이 장소가 포함된 코스" size="sm" />
+            </Link>
+            <CourseList courses={relevantCourses} />
+          </RelevantCourse>
           <Comment id={detailData.id} type="place" />
           <HorizonDivideLine />
           <DetailSidebar
@@ -213,7 +216,8 @@ const Container = styled(PageContainer)`
 
 const PostHeader = styled.div`
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
+  gap: 6px;
 `;
 
 const ContentContainer = styled.section`
@@ -224,4 +228,18 @@ const HorizonDivideLine = styled.div`
   width: 100%;
   height: 1px;
   background-color: ${theme.color.backgroundDarkGray};
+`;
+
+const MapButton = styled(Button)`
+  margin-top: 4px;
+`;
+
+const RelevantCourse = styled.div`
+  margin-top: 30px;
+  padding: 50px 0;
+  border-top: 1px solid ${theme.color.borderGray};
+`;
+
+const Description = styled(Text)`
+  margin-top: 4px;
 `;
