@@ -52,13 +52,13 @@ const UserEditForm = ({ initialValues, onSubmit: onSubmitAction }: UserEditForm)
     try {
       const response = await UserApi.nicknameCheck({ nickname: values.nickname });
       if (response.status === 200) {
-        window.alert(`${values.nickname}는 사용가능한 닉네임입니다!`);
+        window.alert(`${values.nickname}는 사용가능한 닉네임입니다.`);
         setIsCheckedDuplicateNickname(true);
         setNicknameError('');
         return;
       }
     } catch (e) {
-      setNicknameError('이미 존재하는 닉네임이에요.');
+      setNicknameError('이미 존재하는 닉네임입니다.');
     }
   };
 
