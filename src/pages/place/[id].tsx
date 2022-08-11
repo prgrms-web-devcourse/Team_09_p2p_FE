@@ -6,6 +6,7 @@ import { Button, Icon, Image, PageContainer, Text, Title } from '~/components/at
 import { CourseList } from '~/components/common';
 import Comment from '~/components/common/Comment';
 import DetailSidebar from '~/components/common/DetailSidebar';
+import PlaceMap from '~/components/domain/Map/PlaceMap';
 import { useUser } from '~/hooks/useUser';
 import { CourseApi, PlaceApi } from '~/service';
 import theme from '~/styles/theme';
@@ -95,6 +96,7 @@ const PlaceDetailByPostId = () => {
   const [relevantCourses, setRelevantCourses] = useState([]);
   const { isLoggedIn } = useUser();
   const [detailData, setDetailData] = useState<PlacePost | null>(null);
+  const [isOpenMap, setIsOpenMap] = useState(false);
 
   const router = useRouter();
   const placeId = Number(router.query.id);
@@ -108,6 +110,7 @@ const PlaceDetailByPostId = () => {
         return;
       }
 
+      console.log(places);
       setDetailData(places);
     } else {
       const places = await PlaceApi.read(courseId);
@@ -161,9 +164,22 @@ const PlaceDetailByPostId = () => {
             <b style={{ color: `${theme.color.mainColor}` }}>{detailData.usedCount}개의 여행코스</b>
             에 포함된 장소입니다.
           </Text>
-          <Button width="140px" style={{ padding: '5px', fontWeight: '500' }}>
-            지도보기 <Icon name="arrowDown" />
+          <Button
+            width="140px"
+            style={{ padding: '5px', fontWeight: '500' }}
+            onClick={() => setIsOpenMap(!isOpenMap)}
+          >
+            지도보기{' '}
+            {isOpenMap ? <Icon name="arrowDown" rotate={180} /> : <Icon name="arrowDown" />}
           </Button>
+          {detailData && isOpenMap && (
+            <PlaceMap
+              placeId={detailData.id}
+              placeType={detailData.category}
+              placeName={detailData.name}
+              center={{ lat: Number(detailData.latitude), lng: Number(detailData.longitude) }}
+            />
+          )}
           <ContentContainer>
             <Image src="/assets/location/jeju.jpg" alt="여행경로" />
           </ContentContainer>
