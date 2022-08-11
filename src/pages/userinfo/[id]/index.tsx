@@ -56,7 +56,7 @@ const Userinfo: NextPage = () => {
     끊어서 가져와야 함
   */
 
-  const replace = (query: UserInfoTab) => {
+  const replaceRoute = (query: UserInfoTab) => {
     router.replace({ pathname: '/userinfo/[id]', query: { tab: query } }, `/userinfo/${userId}`);
   };
 
@@ -69,12 +69,12 @@ const Userinfo: NextPage = () => {
         setCourseData(result.content);
       }
 
-      replace('course');
+      replaceRoute('course');
     }
 
     if (value === 'bookmark') {
       onClickBookmarkTab('course');
-      replace('bookmark');
+      replaceRoute('bookmark');
     }
 
     if (value === 'comment') {
@@ -83,7 +83,7 @@ const Userinfo: NextPage = () => {
         setCommentData(result.content);
       }
 
-      replace('comment');
+      replaceRoute('comment');
     }
   };
 

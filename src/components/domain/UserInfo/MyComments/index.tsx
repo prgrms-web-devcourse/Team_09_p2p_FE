@@ -19,7 +19,7 @@ const MyComments = ({ comments }: MyComments) => {
             </Link>
             <Link href={`/course/${comment.content.id}`}>
               <Text size="lg" ellipsis block style={{ width: 500 }}>
-                {comment.comment}dddddddddddddddddddddddddddddddddddddddddddddddddddd
+                {comment.comment}
               </Text>
             </Link>
           </CommentContent>
