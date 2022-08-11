@@ -22,13 +22,13 @@ interface SearchMap {
 }
 
 let isAlreadyLoaded = false;
+let curMarkerObject: kakao.maps.Marker | null = null;
 const SearchMap = ({ setSelectedPlaces, selectedPlaces }: SearchMap) => {
   const [loaded, setLoaded] = useState(isAlreadyLoaded);
   const [mapObject, setMapObject] = useState<kakao.maps.Map>();
   const [searchedPlaces, setSearchedPlaces] = useState<ISelectedPlace[]>([]);
   const [kakaoDataArray, setKakaoDataArray] = useState<any>([]);
   const [curKeyword, setCurKeyword] = useState('');
-  let curMarkerObject: any = null;
   useEffect(() => {
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     return () => {};
@@ -49,7 +49,6 @@ const SearchMap = ({ setSelectedPlaces, selectedPlaces }: SearchMap) => {
     // 키워드 검색을 요청하는 함수
     const searchPlaces = () => {
       const keyword = curKeyword;
-
       if (!keyword.replace(/^\s+|\s+$/g, '')) {
         console.log('키워드를 입력해주세요!');
         return false;
@@ -72,17 +71,20 @@ const SearchMap = ({ setSelectedPlaces, selectedPlaces }: SearchMap) => {
 
       const searchPlaceCallback = async (data: any, status: any, pagination: any) => {
         if (status === kakao.maps.services.Status.OK) {
+          if (pagination.current > pagination.last) {
+            return;
+          }
           await setSearchedPlaces((selectedPlaces) => [
             ...selectedPlaces,
             ...selectedPlacesSetter(data)
           ]);
           await setKakaoDataArray((kakaoDataArray: any) => [...kakaoDataArray, ...data]);
         } else if (status === kakao.maps.services.Status.ZERO_RESULT) {
-          /* alert('검색 결과가 존재하지 않습니다.'); */
+          console.log('검색 결과가 존재하지 않습니다.');
           await console.log(pagination);
           return;
         } else if (status === kakao.maps.services.Status.ERROR) {
-          alert('검색 결과 중 오류가 발생했습니다.');
+          console.log('검색 결과 중 오류가 발생했습니다.');
           return;
         }
       };
@@ -134,13 +136,6 @@ const SearchMap = ({ setSelectedPlaces, selectedPlaces }: SearchMap) => {
       }
       paginationEl.appendChild(fragment);
     };
-
-    // 검색결과 목록의 자식 Element를 제거하는 함수
-    const removeAllChildNods = (el: HTMLElement) => {
-      while (el.hasChildNodes()) {
-        el.lastChild && el.removeChild(el.lastChild);
-      }
-    };
   }, [mapObject, curKeyword]);
   const hendleSearch = (curKeyword: string) => {
     setCurKeyword(curKeyword);
@@ -151,7 +146,7 @@ const SearchMap = ({ setSelectedPlaces, selectedPlaces }: SearchMap) => {
     }
     const markerImageSrc = markerImageSetter(place.category);
     const placePosition = new kakao.maps.LatLng(place.lat, place.lng);
-    const imageSize = new kakao.maps.Size(36, 37); // 마커 이미지의 크기
+    const imageSize = new kakao.maps.Size(36, 37);
     const markerImage = new kakao.maps.MarkerImage(markerImageSrc, imageSize);
     const selectedMarker = new kakao.maps.Marker({
       position: placePosition, // 마커의 위치
@@ -268,7 +263,8 @@ const SearchMap = ({ setSelectedPlaces, selectedPlaces }: SearchMap) => {
                             <PlusIcon onClick={() => addPlace(place)} />
                           </div>
                           <Text size="sm" color="gray" style={{ marginLeft: '20px' }}>
-                            {place.roadAddressName}
+                            {/* {place.roadAddressName} */}
+                            {place.address}
                           </Text>
                         </SearchedPlace>
                       </li>
@@ -308,7 +304,7 @@ const SearchedPlace = styled.div`
   margin-bottom: 20px;
   gap: 20px;
   width: 90%;
-  height: 45px;
+  height: 60px;
   border: 1px solid #f3f4f4;
   border-shadow: 0px 2px 6px rgba(0, 0, 0, 0.08);
   border-radius: 8px;
