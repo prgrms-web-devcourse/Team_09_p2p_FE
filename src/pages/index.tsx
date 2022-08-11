@@ -8,6 +8,8 @@ import Layout from '~/components/common/Layout';
 import MainCategoryTitle from '~/components/domain/home/MainCategoryTitle';
 import { CourseApi, PlaceApi } from '~/service';
 import theme from '~/styles/theme';
+import { Theme } from '~/types';
+import { TAGS_THEME } from '~/utils/constants';
 
 const HomePage = () => {
   const router = useRouter();
@@ -64,14 +66,15 @@ const HomePage = () => {
               />
             </form>
             <Tags>
-              <Button buttonType="tag" onClick={() => router.push('/search?theme=힐링')}>
-                #힐링
-              </Button>
-              <Button buttonType="tag">#이쁜카페</Button>
-              <Button buttonType="tag">#드라이브</Button>
-              <Button buttonType="tag">#맛집</Button>
-              <Button buttonType="tag">#가족여행</Button>
-              <Button buttonType="tag">#혼자여행</Button>
+              {TAGS_THEME.map((tag) => (
+                <Button
+                  key={tag}
+                  buttonType="tag"
+                  onClick={() => router.push(`/search?themes=${tag}`)}
+                >
+                  #{tag}
+                </Button>
+              ))}
             </Tags>
           </SearchArea>
         </PageContainer>
