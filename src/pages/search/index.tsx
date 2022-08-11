@@ -5,7 +5,7 @@ import React, { useEffect, useState } from 'react';
 import { PageContainer, Title } from '~/components/atom';
 import { SelectTags, SelectRegion, CourseList, SortFilter } from '~/components/common';
 import { CourseApi } from '~/service';
-import { RegionAndAll, SearchTagsValues } from '~/types';
+import { RegionAndAll, SearchTagsValues, Spot, Theme } from '~/types';
 import { CourseSearchParams, ICourseItem, SortType } from '~/types/course';
 import {
   correctedPeriod,
@@ -43,11 +43,19 @@ const SearchPage = ({ query }: { query: Record<string, string> }) => {
 
   const handleSelectTags = async (data: SearchTagsValues) => {
     const { period, themes, spots } = data;
+    const nextThemes = new Set([
+      ...(themes || []),
+      ...((query.themes && query.themes.split(',')) || [])
+    ]);
+    const nextSpots = new Set([
+      ...(spots || []),
+      ...((query.spots && query.spots.split(',')) || [])
+    ]);
     setQueries({
       ...queries,
       period,
-      themes,
-      spots
+      themes: [...nextThemes] as Theme[],
+      spots: [...nextSpots] as Spot[]
     });
   };
 
