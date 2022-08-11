@@ -24,7 +24,7 @@ const CourseItem = ({ course, grid = 3 }: CourseItemProps) => {
     places,
     themes,
     likes,
-    profileUrl,
+    profileImage,
     nickname,
     isBookmarked: bookmarked
   } = course;
@@ -82,7 +82,7 @@ const CourseItem = ({ course, grid = 3 }: CourseItemProps) => {
           <InfoFooter>
             <LikeCount count={likes} />
             <Profile>
-              <Avatar src={profileUrl} size={26} />
+              <Avatar src={profileImage} size={26} />
               <Text color="gray">{nickname}</Text>
             </Profile>
           </InfoFooter>

@@ -137,6 +137,18 @@ class CourseApi extends Api {
     );
     return response.data;
   };
+
+  getBookmarked = async (userId: number) => {
+    const response = await this.authInstance.get(`${this.path}/bookmark`, {
+      params: { userId: userId }
+    });
+    return response.data;
+  };
+
+  getUserCourses = async (userId: number) => {
+    const response = await this.authInstance.get(`${this.path}/users/${userId}`);
+    return response.data;
+  };
 }
 
 export default new CourseApi();
