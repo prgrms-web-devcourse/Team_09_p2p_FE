@@ -11,6 +11,7 @@ export const ICON_URLS = {
   heartInactive: '/assets/icons/heart-inactive.svg',
   share: '/assets/icons/share.svg',
   search: '/assets/icons/search.svg',
+  searchBlue: '/assets/icons/search-blue.svg',
   close: '/assets/icons/close.svg',
   plus: '/assets/icons/plus.svg',
   pencil: '/assets/icons/pencil.svg',

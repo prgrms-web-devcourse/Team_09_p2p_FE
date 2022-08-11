@@ -14,7 +14,7 @@ const theme = {
     fontRed: '#ff3f3f'
   },
   shadow: {
-    basicShadow: '0px 2px 4px 1px rgb (0 0 0 / 5%)'
+    basicShadow: '0px 2px 4px 1px rgb(0 0 0 / 5%)'
   }
 };
 
