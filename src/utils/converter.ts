@@ -61,7 +61,6 @@ const compareStringToList = (
       return undefined;
     }
   }
-  console.log(unknownList);
   return unknownList;
 };
 
