@@ -57,10 +57,11 @@ const compareStringToList = (
   }
 
   for (const string of unknownList) {
-    if (comparedList.find((correctString) => correctString === string)) {
+    if (!comparedList.find((correctString) => correctString === string)) {
       return undefined;
     }
   }
+  console.log(unknownList);
   return unknownList;
 };
 

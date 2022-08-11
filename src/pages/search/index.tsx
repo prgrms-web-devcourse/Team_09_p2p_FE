@@ -26,8 +26,8 @@ const SearchPage = ({ query }: { query: Record<string, string> }) => {
     keyword: query.keyword || '',
     period: (query.period && correctedPeriod(query.period)) || null,
     region: (query.region && correctedRegion(query.region)) || '전체보기',
-    themes: (query.themes && correctedThemes(query.theme)) || [],
-    spots: (query.spots && correctedSpots(query.spot)) || [],
+    themes: (query.themes && correctedThemes(query.themes)) || [],
+    spots: (query.spots && correctedSpots(query.spots)) || [],
     page: 0,
     size: 15,
     sorting: '인기순'
