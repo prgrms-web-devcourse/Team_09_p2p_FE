@@ -16,7 +16,7 @@ const theme = {
     recommendColor: '#FF9B63'
   },
   shadow: {
-    basicShadow: '0px 2px 4px 1px rgb (0 0 0 / 5%)'
+    basicShadow: '0px 2px 4px 1px rgb(0 0 0 / 5%)'
   }
 };
 
