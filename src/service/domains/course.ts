@@ -80,6 +80,7 @@ class CourseApi extends Api {
 
   search = async (params: CourseSearchParams) => {
     const queries = makeQueryString(params);
+    console.log(queries);
     try {
       const response = await this.baseInstance.get(`${this.path}${queries}`);
       if (response.status === 200 || response.status === 204) {
