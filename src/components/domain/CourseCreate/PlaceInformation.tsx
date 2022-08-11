@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { MutableRefObject, ReactNode, SetStateAction, useRef, useState } from 'react';
+import { MutableRefObject, ReactNode, SetStateAction, useCallback, useRef, useState } from 'react';
 import { Text } from '~/components/atom';
 import theme from '~/styles/theme';
 import Textarea from '~/components/atom/Textarea';
@@ -64,7 +64,20 @@ const PlaceInformation = ({
       current.style.display = 'none';
     }
   };
+  const onUploadImage = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files) {
+      return;
+    }
+    console.log(e.target.files[0].name);
+  }, []);
+  const onUploadImageButtonClick = useCallback(() => {
+    if (!placeImageRef.current) {
+      return;
+    }
+    placeImageRef.current.onclick();
+  }, []);
   let profile_preview = null;
+  const imageId = 'imgFile' + children;
   if (file !== '') {
     profile_preview = (
       // eslint-disable-next-line jsx-a11y/alt-text, @next/next/no-img-element
@@ -74,6 +87,7 @@ const PlaceInformation = ({
           className="profile_preview"
           src={previewUrl}
           layout="fill"
+          onClick={onUploadImageButtonClick}
         />
         <ThumbnailButton
           name={children?.toString()}
@@ -87,7 +101,6 @@ const PlaceInformation = ({
       </>
     );
   }
-  const imageId = 'imgFile' + children;
   return (
     <>
       <PlaceInformationWrapper>
@@ -116,8 +129,8 @@ const PlaceInformation = ({
               imageRef={placeImageRef}
               labelId={imageId}
             />
-            <FileUploadWrapper ref={imageRef}>
-              <label htmlFor={imageId}>
+            <FileUploadWrapper>
+              <label id="image-label" htmlFor={imageId} ref={imageRef}>
                 <SelectImage>
                   <PlusImage src="/assets/imageUpload.png" />
                 </SelectImage>
