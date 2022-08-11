@@ -1,19 +1,30 @@
 import styled from '@emotion/styled';
-import React, { Dispatch, MouseEvent, SetStateAction, useState } from 'react';
+import React, { Dispatch, MouseEvent, SetStateAction, useEffect, useState } from 'react';
 import { Button, Text } from '~/components/atom';
 import { REGIONS, FONT_COLORS } from '~/utils/constants';
 import { Region } from '~/types';
 import theme from '~/styles/theme';
 import CloseIcon from '~/components/domain/CourseCreate/SelectedArea/CloseIcon';
 import Router from 'next/router';
+import { ISelectedPlace } from '~/pages/course/create';
 
 interface RegionSelectProps {
   setRegion: Dispatch<SetStateAction<string>>;
   onClose?: () => void;
+  isModify?: boolean;
+  loadedRegion?: string;
+  setSelectedPlaces: Dispatch<SetStateAction<ISelectedPlace[]>>;
 }
-const RegionSelect = ({ setRegion, onClose }: RegionSelectProps) => {
+const RegionSelect = ({
+  setRegion,
+  onClose,
+  isModify,
+  loadedRegion,
+  setSelectedPlaces
+}: RegionSelectProps) => {
   const [beforeRegion, setBeforeRegion] = useState<HTMLButtonElement | null>(null);
   const [isSeleted, setIsSeleted] = useState(false);
+  const [selectedRegion, setSelectedRegion] = useState('');
   const regions: Region[] = [...REGIONS];
   const closeForm = () => {
     Router.back();
@@ -30,9 +41,24 @@ const RegionSelect = ({ setRegion, onClose }: RegionSelectProps) => {
       e.target.style.color = theme.color.mainColor;
       setRegion(e.target.innerText);
       setBeforeRegion(e.target);
+      setSelectedRegion(e.target.innerText);
     }
   };
   const completeSelect = () => {
+    if (isModify && loadedRegion !== selectedRegion) {
+      if (
+        window.confirm(
+          `이전 선택 지역 : ${loadedRegion}
+          
+이전에 선택한 지역과 다를 경우 장소 목록이 초기화됩니다.
+장소 목록을 초기화 하시겠습니까?`
+        )
+      ) {
+        setSelectedPlaces([]);
+      } else {
+        return;
+      }
+    }
     if (onClose && isSeleted) {
       onClose();
     }

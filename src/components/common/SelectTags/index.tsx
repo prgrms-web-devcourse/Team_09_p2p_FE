@@ -32,8 +32,8 @@ const SelectTags = ({ style, onSelect, toInitializeTrigger }: SelectTagsProps) =
 
     onSelect({
       period: isSame ? null : period,
-      theme: [...selectedThemes],
-      spot: [...selectedSpots]
+      themes: [...selectedThemes],
+      spots: [...selectedSpots]
     });
 
     isSame ? setSelectedPeriod(null) : setSelectedPeriod(period);
@@ -42,8 +42,8 @@ const SelectTags = ({ style, onSelect, toInitializeTrigger }: SelectTagsProps) =
   const handleSelectThemes = (theme: Theme, isSelected: boolean) => {
     onSelect({
       period: selectedPeriod,
-      theme: isSelected ? removeList(selectedThemes, theme) : updateList(selectedThemes, theme),
-      spot: [...selectedSpots]
+      themes: isSelected ? removeList(selectedThemes, theme) : updateList(selectedThemes, theme),
+      spots: [...selectedSpots]
     });
 
     isSelected
@@ -54,8 +54,8 @@ const SelectTags = ({ style, onSelect, toInitializeTrigger }: SelectTagsProps) =
   const handleSelectSpots = (spot: Spot, isSelected: boolean) => {
     onSelect({
       period: selectedPeriod,
-      theme: [...selectedThemes],
-      spot: isSelected ? removeList(selectedSpots, spot) : updateList(selectedSpots, spot)
+      themes: [...selectedThemes],
+      spots: isSelected ? removeList(selectedSpots, spot) : updateList(selectedSpots, spot)
     });
 
     isSelected

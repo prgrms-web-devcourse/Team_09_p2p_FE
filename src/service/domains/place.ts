@@ -5,6 +5,15 @@ import { ObjectToQuery } from '~/utils/converter';
 class PlaceApi extends Api {
   private path = '/places';
 
+  read = async (placeId: number) => {
+    try {
+      const response = await this.authInstance.get(`${this.path}/${placeId}`);
+      return response.data;
+    } catch (e) {
+      console.error(`장소 상세 조회 오류: ${e}`);
+    }
+  };
+
   getComments = async (placeId: number) => {
     const response = await this.baseInstance.get(`${this.path}/${placeId}/comments`);
     return response.data;
@@ -38,6 +47,13 @@ class PlaceApi extends Api {
 
     const response = await this.authInstance.get(`${this.path}/${queryString}`);
     console.log(response.data, 'response Data');
+    return response.data;
+  };
+
+  getBookmarked = async (userId: number) => {
+    const response = await this.authInstance.get(`${this.path}/bookmark`, {
+      params: { userId: userId }
+    });
     return response.data;
   };
 }

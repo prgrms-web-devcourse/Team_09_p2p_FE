@@ -24,12 +24,7 @@ class CourseApi extends Api {
   private path = '/courses';
 
   getCourses = async (filter?: CourseFilter) => {
-    let queryString = ''; // 일단 전체 조회 할 수 있도록 처리
-    if (filter !== undefined) {
-      queryString = ObjectToQuery(filter);
-    }
-
-    const response = await this.authInstance.get(`${this.path}/${queryString}`);
+    const response = await this.authInstance.get(`${this.path}`, { params: filter });
     return response.data;
   };
 
@@ -85,6 +80,7 @@ class CourseApi extends Api {
 
   search = async (params: CourseSearchParams) => {
     const queries = makeQueryString(params);
+    console.log(queries);
     try {
       const response = await this.baseInstance.get(`${this.path}${queries}`);
       if (response.status === 200 || response.status === 204) {
@@ -135,6 +131,18 @@ class CourseApi extends Api {
     const response = await this.authInstance.delete(
       `${this.path}/${courseId}/comments/${commentId}`
     );
+    return response.data;
+  };
+
+  getBookmarked = async (userId: number) => {
+    const response = await this.authInstance.get(`${this.path}/bookmark`, {
+      params: { userId: userId }
+    });
+    return response.data;
+  };
+
+  getUserCourses = async (userId: number) => {
+    const response = await this.authInstance.get(`${this.path}/users/${userId}`);
     return response.data;
   };
 }

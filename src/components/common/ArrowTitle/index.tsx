@@ -1,22 +1,23 @@
 import styled from '@emotion/styled';
 import { Icon, Title } from '~/components/atom';
 
-interface MainCategoryTitleProps {
+interface ArrowTitle {
   name: string;
+  size?: 'sm' | 'md';
 }
 
-const MainCategoryTitle = ({ name }: MainCategoryTitleProps) => {
+const ArrowTitle = ({ name, size = 'md' }: ArrowTitle) => {
   return (
     <Container>
-      <Title size="md" fontWeight={700}>
+      <Title size={size} fontWeight={700}>
         {name}
       </Title>
-      <MoveIcon name="arrow" size={25} block />
+      <MoveIcon name="arrow" size={size === 'md' ? 25 : 23} />
     </Container>
   );
 };
 
-export default MainCategoryTitle;
+export default ArrowTitle;
 
 const Container = styled.div`
   margin-bottom: 30px;

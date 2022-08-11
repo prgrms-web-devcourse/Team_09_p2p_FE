@@ -68,8 +68,8 @@ export type Spot = '카페' | '음식점' | '숙소' | '산' | '바다' | '테�
 
 export interface SearchTagsValues {
   period: Period | null;
-  theme: Theme[];
-  spot: Spot[];
+  themes: Theme[];
+  spots: Spot[];
 }
 
 export interface SearchCourseValues extends SearchTagsValues {

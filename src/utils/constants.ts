@@ -13,8 +13,8 @@ export const FONT_SIZES = {
 
 export const TITLE_SIZES = {
   sm: 24,
-  md: 32,
-  lg: 40
+  md: 28,
+  lg: 36
 };
 
 export const FONT_COLORS: { [key: string]: string } = {

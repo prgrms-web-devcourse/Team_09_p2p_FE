@@ -17,7 +17,7 @@ const Header = ({ full }: HeaderProps) => {
 
   const router = useRouter();
   const handleSearch = (keyword: string) => {
-    const searchPath = `/search/${keyword}`;
+    const searchPath = `/search?keyword=${keyword}`;
     router.push(searchPath);
   };
 
