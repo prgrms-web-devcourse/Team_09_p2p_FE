@@ -17,16 +17,49 @@ import { sortOrder, SortType } from '~/types/course';
 
 const Course: NextPage = () => {
   const [courseList, setCourseList] = useState([]);
+  const [page, setPage] = useState(0);
+  const [lastTarget, setLastTarget] = useState(null);
+  const [isLast, setIsLast] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const onIntersect: IntersectionObserverCallback = (entries, observer) => {
+    entries.forEach(async (entry) => {
+      if (entry.isIntersecting && !isLoading && !isLast) {
+        setIsLoading(true);
+
+        await getCourseList();
+        observer.unobserve(entry.target);
+        console.log('관찰');
+        setIsLoading(false);
+      }
+    });
+  };
 
   const getCourseList = async (sort?: SortType) => {
-    const result = await CourseApi.getCourses({ sorting: sort });
-    console.log('[Courses] :', result.content);
-    setCourseList(result.content);
+    const result = await CourseApi.getCourses({ page, size: 15 });
+    console.log(result, 'result');
+    if (result.last) {
+      setIsLast(true);
+    }
+
+    setCourseList(courseList.concat(result.content));
+    setPage((prev) => prev + 1);
   };
 
   useEffect(() => {
     getCourseList(sortOrder.DESC);
   }, []);
+
+  useEffect(() => {
+    let observer: IntersectionObserver;
+    console.log(lastTarget, 'ref');
+    if (lastTarget) {
+      observer = new IntersectionObserver(onIntersect, { threshold: 0 });
+
+      observer.observe(lastTarget);
+    }
+    return () => observer && observer.disconnect();
+  }, [lastTarget]);
 
   const handleSelectRegion = async (region: RegionAndAll) => {
     console.log('코스페이지', region);
@@ -51,7 +84,7 @@ const Course: NextPage = () => {
             <SelectTags style={{ marginTop: '24px' }} onSelect={handleSelectTags} />
           </FilterList>
           <SortFilter onSort={getCourseList} />
-          <CourseList courses={courseList} />
+          <CourseList courses={courseList} ref={setLastTarget} />
         </PageContainer>
       </main>
     </React.Fragment>
