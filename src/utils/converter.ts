@@ -13,6 +13,14 @@ export const sliceDate = (data: string) => {
   return data.substring(0, 10);
 };
 
+export const textEllipsis = (value: string, length: number) => {
+  if (value.length < length) {
+    return value;
+  }
+
+  return value.substring(0, length) + '...';
+};
+
 export function updateList<T>(list: T[], item: T): T[] {
   return [...list, item];
 }

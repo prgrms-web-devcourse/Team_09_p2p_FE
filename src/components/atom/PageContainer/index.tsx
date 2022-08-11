@@ -20,6 +20,6 @@ const PageContainer = ({ type = 'main', children, ...props }: PageContainer) => 
 export default PageContainer;
 
 const Container = styled.div<{ type: LayoutType }>`
-  width: ${({ type }) => (type === 'main' ? '1156px' : '940px')};
+  width: ${({ type }) => (type === 'main' ? '1156px' : '796px')};
   margin: 0 auto;
 `;

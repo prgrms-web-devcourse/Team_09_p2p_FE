@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import React, { FormEvent, ReactElement, useEffect, useRef, useState } from 'react';
-import { Button, Link, PageContainer, Image } from '~/components/atom';
+import { Button, Link, PageContainer, Image, Icon } from '~/components/atom';
 import { CourseList, PlaceList } from '~/components/common';
 import Layout from '~/components/common/Layout';
 import MainCategoryTitle from '~/components/domain/home/MainCategoryTitle';
@@ -58,13 +58,14 @@ const HomePage = () => {
         <PageContainer>
           <SearchArea>
             <Image width={550} src="/assets/search-img.png" alt="여행할 땐 이곳저곳" />
-            <form onSubmit={handleSearch}>
+            <MainSearchForm onSubmit={handleSearch}>
+              <SearchIcon name="searchBlue" size={30} />
               <MainSearchInput
                 type="text"
                 placeholder="지역, 장소를 검색해보세요."
                 ref={mainSearchInputRef}
               />
-            </form>
+            </MainSearchForm>
             <Tags>
               {TAGS_THEME.map((tag) => (
                 <Button
@@ -106,6 +107,7 @@ HomePage.getLayout = function getLayout(page: ReactElement) {
 };
 
 const { backgroundLightGray, mainColor } = theme.color;
+const { basicShadow } = theme.shadow;
 
 const SearchArea = styled.div`
   display: flex;
@@ -113,21 +115,40 @@ const SearchArea = styled.div`
   align-items: center;
   padding-top: 90px;
 `;
-const MainSearchInput = styled.input`
-  width: 690px;
-  height: 80px;
+
+const MainSearchForm = styled.div`
   margin-top: 20px;
-  padding: 24px;
+  box-shadow: ${basicShadow};
+  border-radius: 8px;
+  position: relative;
+`;
+
+const SearchIcon = styled(Icon)`
+  position: absolute;
+  top: 26px;
+  left: 22px;
+`;
+
+const MainSearchInput = styled.input`
+  width: 640px;
+  height: 80px;
+
+  padding: 20px 24px 20px 66px;
   font-size: 24px;
-  color: ${mainColor};
+  color: black;
   border: 1px solid ${mainColor};
   border-radius: 8px;
   background-color: #f1f7ff;
   box-sizing: border-box;
-  box-shadow: 0px 2px 4px 1px rgb(0 0 0 / 5%); // TODO :shadow 종류별로 파일 나누기
+  transition: box-shadow 0.1s;
 
   &::placeholder {
     color: ${mainColor};
+  }
+
+  &:focus {
+    outline: 0;
+    box-shadow: 0px 0px 0px 1px ${mainColor};
   }
 `;
 

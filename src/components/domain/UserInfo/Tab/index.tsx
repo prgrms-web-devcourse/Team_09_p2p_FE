@@ -1,10 +1,11 @@
 import styled from '@emotion/styled';
 import React, { ReactElement, ReactNode, useMemo } from 'react';
+import type { UserInfoTab } from '../types';
 import TabItem from './TabItem';
 
 interface TabProps {
   children: ReactNode;
-  onActive: (value: string) => void;
+  onActive: (value: UserInfoTab) => void;
   active?: string;
   type?: 'tab' | 'radio';
 }
