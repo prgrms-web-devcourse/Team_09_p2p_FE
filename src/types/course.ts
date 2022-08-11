@@ -12,7 +12,7 @@ export interface ICourseItem {
   likes: number;
   isBookmarked: boolean;
   nickname: string;
-  profileUrl: string;
+  profileImage: string;
 }
 
 export interface ICourseDetail {

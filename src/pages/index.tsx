@@ -5,7 +5,7 @@ import React, { FormEvent, ReactElement, useEffect, useRef, useState } from 'rea
 import { Button, Link, PageContainer, Image, Icon } from '~/components/atom';
 import { CourseList, PlaceList } from '~/components/common';
 import Layout from '~/components/common/Layout';
-import MainCategoryTitle from '~/components/domain/home/MainCategoryTitle';
+import ArrowTitle from '~/components/common/ArrowTitle';
 import { CourseApi, PlaceApi } from '~/service';
 import theme from '~/styles/theme';
 
@@ -78,13 +78,13 @@ const HomePage = () => {
           <PageContainer>
             <CategoryArea>
               <Link href="/course">
-                <MainCategoryTitle name="인기 여행코스" />
+                <ArrowTitle name="인기 여행코스" />
               </Link>
               <CourseList courses={courseList} />
             </CategoryArea>
             <CategoryArea>
               <Link href="/place">
-                <MainCategoryTitle name="추천 핫플레이스" />
+                <ArrowTitle name="추천 핫플레이스" />
               </Link>
               <PlaceList places={placeList} />
             </CategoryArea>

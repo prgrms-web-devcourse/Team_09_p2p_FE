@@ -20,6 +20,9 @@ export const ICON_URLS = {
   bookmarkThumbActive: '/assets/icons/bookmark-thumb-active.svg',
   recommendActive: '/assets/icons/recommend-active.svg',
   recommendInactive: '/assets/icons/recommend-inactive.svg'
+  thinArrow: '/assets/icons/thinArrow.svg',
+  thinArrowActive: '/assets/icons/thinArrow-active.svg',
+  thinArrowDisabled: '/assets/icons/thinArrow-disabled.svg'
 };
 
 export type IconName = keyof typeof ICON_URLS;
