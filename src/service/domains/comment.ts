@@ -4,6 +4,8 @@ import CourseApi from './course';
 import PlaceApi from './place';
 
 class CommentApi extends Api {
+  private path = '/comments';
+
   getComments = async (id: number, type: CourseOrPlace) => {
     switch (type) {
       case 'course':
@@ -47,6 +49,11 @@ class CommentApi extends Api {
       default:
         return;
     }
+  };
+
+  getCommentsAll = async (userId: number) => {
+    const response = await this.authInstance.get(`${this.path}?userId=${userId}`);
+    return response.data;
   };
 }
 
