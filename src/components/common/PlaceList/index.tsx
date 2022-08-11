@@ -1,5 +1,4 @@
 import styled from '@emotion/styled';
-import { placeListData } from '~/utils/dummydata';
 import PlaceItem, { PlaceGrid } from './PlaceItem';
 
 export interface IPlaceItem {
@@ -13,11 +12,11 @@ export interface IPlaceItem {
 }
 
 interface PlaceListProps {
-  places?: IPlaceItem[];
+  places: IPlaceItem[];
   grid?: PlaceGrid;
 }
 
-const PlaceList = ({ grid = 4, places = placeListData }: PlaceListProps) => {
+const PlaceList = ({ grid = 4, places }: PlaceListProps) => {
   return (
     <StyledPlaceList>
       {places.map((place, index) => (

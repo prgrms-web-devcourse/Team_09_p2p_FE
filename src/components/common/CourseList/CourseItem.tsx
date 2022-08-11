@@ -24,7 +24,7 @@ const CourseItem = ({ course, grid = 3 }: CourseItemProps) => {
     places,
     themes,
     likes,
-    profileUrl,
+    profileImage,
     nickname,
     isBookmarked: bookmarked
   } = course;
@@ -82,7 +82,7 @@ const CourseItem = ({ course, grid = 3 }: CourseItemProps) => {
           <InfoFooter>
             <LikeCount count={likes} />
             <Profile>
-              <Avatar src={profileUrl} size={26} />
+              <Avatar src={profileImage} size={26} />
               <Text color="gray">{nickname}</Text>
             </Profile>
           </InfoFooter>
@@ -96,8 +96,23 @@ export default CourseItem;
 
 const { borderGray, fontDarkGray, fontGray } = theme.color;
 
-const ItemContainer = styled.li<Pick<CourseItemProps, 'grid'>>`
-  width: ${({ grid }) => (grid === 3 ? '33.3%' : '50%')};
+const getGrid = (grid: number) => {
+  switch (grid) {
+    case 1:
+      return '100%';
+    case 2:
+      return '50%';
+    case 3:
+      return '33.3%';
+    case 4:
+      return '25%';
+    default:
+      return '33.3%';
+  }
+};
+
+const ItemContainer = styled.li<{ grid: number }>`
+  width: ${({ grid }) => getGrid(grid)};
   box-sizing: border-box;
   padding: 0 10px 46px 10px;
   overflow: hidden;

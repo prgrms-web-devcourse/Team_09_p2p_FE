@@ -2,70 +2,17 @@ import styled from '@emotion/styled';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
-import { Button, Icon, Image, Link, PageContainer, Text, Title } from '~/components/atom';
+import { Button, Icon, Link, PageContainer, Text, Title } from '~/components/atom';
 import { CourseList } from '~/components/common';
-import ArrowTitle from '~/components/common/ArrowTitle';
 import Comment from '~/components/common/Comment';
 import DetailSidebar from '~/components/common/DetailSidebar';
 import ImageViewer from '~/components/common/ImageViewer';
 import PlaceMap from '~/components/domain/Map/PlaceMap';
+import RelevantCourses from '~/components/domain/Place/RelevantCourses';
 import { useUser } from '~/hooks/useUser';
 import { CourseApi, PlaceApi } from '~/service';
 import theme from '~/styles/theme';
 import { PlacePost } from '~/types';
-
-// slide구현 시 사용할 더미데이터
-
-// const dummyData = [
-//   {
-//     id: 594,
-//     isBookmarked: false,
-//     likes: 1,
-//     nickname: '초코우유',
-//     period: '1~3일',
-//     places: ['그렙', '강남역 2호선', '구로디지털단지역 2호선'],
-//     profileImage:
-//       'https://devcourse-f-s3-storage.s3.ap-northeast-2.amazonaws.com/f19923746c1b4e9dbbc44a7713a9563c.jpg',
-//     region: '서울',
-//     spots: [],
-//     themes: ['가족여행'],
-//     thumbnail:
-//       'https://devcourse-f-s3-storage.s3.ap-northeast-2.amazonaws.com/a4ebe439693e454b8dd735f4812d39e3.jpg',
-//     title: '1무송이네 가는 길'
-//   },
-//   {
-//     id: 592,
-//     isBookmarked: false,
-//     likes: 1,
-//     nickname: '초코우유',
-//     period: '1~3일',
-//     places: ['그렙', '강남역 2호선', '구로디지털단지역 2호선'],
-//     profileImage:
-//       'https://devcourse-f-s3-storage.s3.ap-northeast-2.amazonaws.com/f19923746c1b4e9dbbc44a7713a9563c.jpg',
-//     region: '서울',
-//     spots: [],
-//     themes: ['가족여행'],
-//     thumbnail:
-//       'https://devcourse-f-s3-storage.s3.ap-northeast-2.amazonaws.com/a4ebe439693e454b8dd735f4812d39e3.jpg',
-//     title: '2무송이네 가는 길'
-//   },
-//   {
-//     id: 593,
-//     isBookmarked: false,
-//     likes: 1,
-//     nickname: '초코우유',
-//     period: '1~3일',
-//     places: ['그렙', '강남역 2호선', '구로디지털단지역 2호선'],
-//     profileImage:
-//       'https://devcourse-f-s3-storage.s3.ap-northeast-2.amazonaws.com/f19923746c1b4e9dbbc44a7713a9563c.jpg',
-//     region: '서울',
-//     spots: [],
-//     themes: ['가족여행'],
-//     thumbnail:
-//       'https://devcourse-f-s3-storage.s3.ap-northeast-2.amazonaws.com/a4ebe439693e454b8dd735f4812d39e3.jpg',
-//     title: '3무송이네 가는 길'
-//   }
-// ];
 
 // ssr로 변경할 때 사용
 // export const getServerSideProps = async (context: NextPageContext) => {
@@ -183,13 +130,16 @@ const PlaceDetailByPostId = () => {
           <ContentContainer>
             <ImageViewer src={detailData.imageUrl} alt={detailData.name} />
           </ContentContainer>
-          <RelevantCourse>
-            <Link href="/">
-              {/* 검색 결과로 이동 시켜야함 */}
-              <ArrowTitle name="이 장소가 포함된 코스" size="sm" />
-            </Link>
-            <CourseList courses={relevantCourses} />
-          </RelevantCourse>
+          <RelevantContainer>
+            {/* 검색 결과로 이동 시켜야함 */}
+            <RelevantHeader>
+              <Title size="sm">이 장소가 포함된 코스</Title>
+              <Link href="/">
+                <Text color="gray">전체보기</Text>
+              </Link>
+            </RelevantHeader>
+            <RelevantCourses courses={relevantCourses} />
+          </RelevantContainer>
           <Comment id={detailData.id} type="place" />
           <HorizonDivideLine />
           <DetailSidebar
@@ -234,10 +184,16 @@ const MapButton = styled(Button)`
   margin-top: 4px;
 `;
 
-const RelevantCourse = styled.div`
+const RelevantContainer = styled.div`
   margin-top: 30px;
   padding: 50px 0;
   border-top: 1px solid ${theme.color.borderGray};
+`;
+
+const RelevantHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 `;
 
 const Description = styled(Text)`
