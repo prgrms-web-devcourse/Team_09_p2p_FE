@@ -91,7 +91,7 @@ const { borderDarkGray } = theme.color;
 const Container = styled.div`
   position: absolute;
   top: -18px;
-  right: -100px;
+  right: -134px;
   bottom: 0;
   text-align: center;
 `;
