@@ -3,14 +3,42 @@ import type { NextPage } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
-import { Button, PageContainer, Text, Title } from '~/components/atom';
+import { PageContainer, Title } from '~/components/atom';
+import PasswordChangeForm from '~/components/domain/UserInfo/PasswordChangeForm';
 import { useUser } from '~/hooks/useUser';
+import { UserApi } from '~/service';
 import theme from '~/styles/theme';
+import { UserPasswordFormValues } from '~/types/user';
 
 const UserinfoEdit: NextPage = () => {
   const { currentUser } = useUser();
   const router = useRouter();
   const userId = Number(router.query.id);
+
+  const handleSubmit = async (data: UserPasswordFormValues) => {
+    const { oldPassword, password: newPassword } = data;
+    try {
+      const response = await UserApi.changePassword({ oldPassword, newPassword });
+      if (response.status === 200) {
+        // 다시 로그인 시키지 않고 유저 정보 페이지로 돌려보낸다.
+        window.alert('비밀번호 변경 성공!');
+        router.push(`/userinfo/${userId}`);
+        return;
+      }
+    } catch (e: any) {
+      const { response } = e;
+      if (response.status === 400) {
+        window.alert('현재 비밀번호가 올바르지 않습니다.');
+        return;
+      }
+
+      if (response.status === 409) {
+        window.alert('동일한 비밀번호로는 변경할 수 없어요.');
+        return;
+      }
+      console.error(e);
+    }
+  };
 
   useEffect(() => {
     if (typeof router.query.id === 'string') {
@@ -20,7 +48,7 @@ const UserinfoEdit: NextPage = () => {
         return;
       }
     }
-  }, [currentUser, userId, router]);
+  }, [currentUser, router, userId]);
 
   if (currentUser.user.id !== userId) {
     return null;
@@ -38,35 +66,7 @@ const UserinfoEdit: NextPage = () => {
         <PageContainer>
           <Container>
             <Title>비밀번호 변경</Title>
-            <Form>
-              <FormItem>
-                <FormTitle>
-                  <Text>현재 비밀번호</Text>
-                </FormTitle>
-                <FormGroup>
-                  <input type="password" name="password" />
-                </FormGroup>
-              </FormItem>
-              <FormItem>
-                <FormTitle>
-                  <Text>새 비밀번호</Text>
-                </FormTitle>
-                <FormGroup>
-                  <input type="password" name="newPassword" />
-                </FormGroup>
-              </FormItem>
-              <FormItem>
-                <FormTitle>
-                  <Text>새 비밀번호 확인</Text>
-                </FormTitle>
-                <FormGroup>
-                  <input type="password" name="newPasswordConfirm" />
-                </FormGroup>
-              </FormItem>
-              <Button size="md" width={195} style={{ marginLeft: 150 }}>
-                내 정보 수정
-              </Button>
-            </Form>
+            <PasswordChangeForm onSubmit={handleSubmit} />
           </Container>
         </PageContainer>
       </main>

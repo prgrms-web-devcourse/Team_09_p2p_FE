@@ -38,3 +38,7 @@ export const makeQueryString = (params: CourseSearchParams): string => {
     return queryString;
   }, '?');
 };
+
+export const isNumber = (num: string | number) => {
+  return !Number.isNaN(Number(num));
+};

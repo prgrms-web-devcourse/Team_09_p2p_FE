@@ -68,7 +68,7 @@ const CourseItem = ({ course, grid = 3 }: CourseItemProps) => {
         <CourseInfo className="courseInfo">
           <Text size={17} block ellipsis fontWeight={500}>
             {places.map((place, index) => (
-              <React.Fragment key={place}>
+              <React.Fragment key={index}>
                 {place}
                 {COURSE_COUNT - 1 !== index && ' → '}
               </React.Fragment>

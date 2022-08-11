@@ -32,6 +32,8 @@ const CommentItem = ({
   const [isOpenRecomment, setIsOpenRecomment] = useState(false);
   const isRecomment = comment.rootCommentId !== null;
 
+  const IS_UPDATED = comment.createdAt !== comment.updatedAt;
+
   const handleEditComment = async (value: string) => {
     await onEdit(comment.id, value);
     setIsOpenEditor(false);
@@ -78,7 +80,9 @@ const CommentItem = ({
               <CommentInfo>
                 {comment.createdAt && (
                   <>
-                    <Text color="gray">{sliceDate(comment.createdAt)}</Text>
+                    <Text color="gray">
+                      {sliceDate(comment.createdAt)} {IS_UPDATED && '(편집됨)'}
+                    </Text>
                     {!isRecomment && (
                       <Text.Button onClick={() => setIsOpenRecomment(true)} color="gray">
                         답글 작성

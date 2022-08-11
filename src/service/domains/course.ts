@@ -74,14 +74,13 @@ class CourseApi extends Api {
     } */
   };
 
-  delete = async (courseId: string) => {
-    /* try {
+  delete = async (courseId: number) => {
+    try {
       const response = await this.authInstance.delete(`${this.path}/${courseId}`);
-      console.log(response);
       return response.data;
     } catch (e) {
       console.error(`코스 삭제 에러: ${e}`);
-    } */
+    }
   };
 
   search = async (params: CourseSearchParams) => {

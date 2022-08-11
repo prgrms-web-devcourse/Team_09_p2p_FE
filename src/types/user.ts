@@ -20,3 +20,15 @@ export interface UserInfo {
   createdAt: string;
   updatedAt: string;
 }
+
+export interface UserEdit {
+  nickname: string;
+  birth: string;
+  sex: 'male' | 'female';
+}
+
+export interface UserPasswordFormValues {
+  oldPassword: string;
+  password: string;
+  passwordCheck: string;
+}

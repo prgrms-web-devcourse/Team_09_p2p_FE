@@ -12,6 +12,7 @@ import { SelectTags } from '~/components/common';
 import { useRouter } from 'next/router';
 import { CourseApi } from '~/service';
 import { SearchTagsValues } from '~/types';
+import { ICourseInfo } from '..';
 
 interface ICourse {
   id: number;
@@ -29,11 +30,6 @@ interface IPlace {
   roadAddressName: string;
   category: string;
   phoneNumber: string;
-}
-
-interface ICourseInfo {
-  region: string;
-  places: IPlace[];
 }
 
 interface IPlaceForm {
@@ -74,6 +70,7 @@ const Course: NextPage = () => {
   if (!courseQuery) {
     return null;
   }
+
   const courseInfo: ICourseInfo = JSON.parse(courseQuery as string);
   const formCourseData = {} as ICourseForm;
   formCourseData.region = courseInfo.region;
