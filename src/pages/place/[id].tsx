@@ -7,9 +7,62 @@ import { CourseList } from '~/components/common';
 import Comment from '~/components/common/Comment';
 import DetailSidebar from '~/components/common/DetailSidebar';
 import { useUser } from '~/hooks/useUser';
-import { PlaceApi } from '~/service';
+import { CourseApi, PlaceApi } from '~/service';
 import theme from '~/styles/theme';
 import { PlacePost } from '~/types';
+
+// slide구현 시 사용할 더미데이터
+
+// const dummyData = [
+//   {
+//     id: 594,
+//     isBookmarked: false,
+//     likes: 1,
+//     nickname: '초코우유',
+//     period: '1~3일',
+//     places: ['그렙', '강남역 2호선', '구로디지털단지역 2호선'],
+//     profileImage:
+//       'https://devcourse-f-s3-storage.s3.ap-northeast-2.amazonaws.com/f19923746c1b4e9dbbc44a7713a9563c.jpg',
+//     region: '서울',
+//     spots: [],
+//     themes: ['가족여행'],
+//     thumbnail:
+//       'https://devcourse-f-s3-storage.s3.ap-northeast-2.amazonaws.com/a4ebe439693e454b8dd735f4812d39e3.jpg',
+//     title: '1무송이네 가는 길'
+//   },
+//   {
+//     id: 592,
+//     isBookmarked: false,
+//     likes: 1,
+//     nickname: '초코우유',
+//     period: '1~3일',
+//     places: ['그렙', '강남역 2호선', '구로디지털단지역 2호선'],
+//     profileImage:
+//       'https://devcourse-f-s3-storage.s3.ap-northeast-2.amazonaws.com/f19923746c1b4e9dbbc44a7713a9563c.jpg',
+//     region: '서울',
+//     spots: [],
+//     themes: ['가족여행'],
+//     thumbnail:
+//       'https://devcourse-f-s3-storage.s3.ap-northeast-2.amazonaws.com/a4ebe439693e454b8dd735f4812d39e3.jpg',
+//     title: '2무송이네 가는 길'
+//   },
+//   {
+//     id: 593,
+//     isBookmarked: false,
+//     likes: 1,
+//     nickname: '초코우유',
+//     period: '1~3일',
+//     places: ['그렙', '강남역 2호선', '구로디지털단지역 2호선'],
+//     profileImage:
+//       'https://devcourse-f-s3-storage.s3.ap-northeast-2.amazonaws.com/f19923746c1b4e9dbbc44a7713a9563c.jpg',
+//     region: '서울',
+//     spots: [],
+//     themes: ['가족여행'],
+//     thumbnail:
+//       'https://devcourse-f-s3-storage.s3.ap-northeast-2.amazonaws.com/a4ebe439693e454b8dd735f4812d39e3.jpg',
+//     title: '3무송이네 가는 길'
+//   }
+// ];
 
 // ssr로 변경할 때 사용
 // export const getServerSideProps = async (context: NextPageContext) => {
@@ -48,26 +101,27 @@ const PlaceDetailByPostId = () => {
 
   const getDetailInfo = async (courseId: number) => {
     if (isLoggedIn) {
-      const result = await PlaceApi.read(placeId);
-      console.log(result, 'place');
+      const places = await PlaceApi.read(placeId);
 
-      if (!result) {
-        // 임시로 값 없을 경우 처리
+      if (!places) {
         router.push('/404');
         return;
       }
 
-      setDetailData(result);
+      setDetailData(places);
     } else {
-      const result = await PlaceApi.read(courseId);
+      const places = await PlaceApi.read(courseId);
 
-      if (!result) {
+      if (!places) {
         router.push('/');
         return;
       }
 
-      setDetailData(result);
+      setDetailData(places);
     }
+
+    const courses = await CourseApi.getCourses({ placeId, size: 3 });
+    setRelevantCourses(courses.content);
   };
 
   useEffect(() => {
@@ -116,7 +170,7 @@ const PlaceDetailByPostId = () => {
           <Title level={2} size="sm">
             이 장소가 포함된 코스
           </Title>
-          {/* <CourseList courses={relevantCourses} /> */}
+          <CourseList courses={relevantCourses} />
           <Comment id={detailData.id} type="place" />
           <HorizonDivideLine />
           <DetailSidebar
