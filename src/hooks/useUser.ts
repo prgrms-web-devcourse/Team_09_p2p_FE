@@ -19,11 +19,11 @@ export const useUser = () => {
   const isLoggedIn = currentUser.accessToken !== null;
 
   const login = async (data: LoginValues): Promise<ErrorConfirm> => {
-    setCurrentUser({ ...currentUser, isLoading: true });
+    setCurrentUser({ ...currentUser });
 
     try {
       const response = await UserApi.login(data);
-      setCurrentUser({ ...response, isLoading: false });
+      setCurrentUser({ ...response });
       WebStorage.setToken(response.accessToken);
 
       return {
@@ -32,7 +32,7 @@ export const useUser = () => {
       };
     } catch (error) {
       const e = error as SystemError;
-      setCurrentUser({ ...currentUser, isLoading: false });
+      setCurrentUser({ ...currentUser });
 
       let message = '';
 
@@ -52,7 +52,7 @@ export const useUser = () => {
   };
 
   const updateUser = async (token: string) => {
-    setCurrentUser({ ...currentUser, isLoading: true });
+    setCurrentUser({ ...currentUser });
 
     const response = await UserApi.getMyInfo();
     console.log(response, '★update User★');
@@ -62,8 +62,7 @@ export const useUser = () => {
         id: response.id,
         nickname: response.nickname,
         profileImage: response.profileImage
-      },
-      isLoading: false
+      }
     });
   };
 
