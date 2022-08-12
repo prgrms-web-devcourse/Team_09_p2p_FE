@@ -39,8 +39,8 @@ export interface CourseFilter {
   period?: string;
   keyword?: string;
   region?: string;
-  spot?: string;
-  theme?: string;
+  spots?: string;
+  themes?: string;
   sorting?: string;
   page?: number;
   size?: number;
@@ -56,10 +56,10 @@ export type SortType = typeof sortOrder[keyof typeof sortOrder];
 export type CourseSearchParams = {
   readonly placeId?: number;
   readonly keyword?: string;
-  readonly period: Period | null;
+  readonly period?: Period | null;
   readonly region?: RegionAndAll | null;
-  readonly spot?: Spot[];
-  readonly theme?: Theme[];
+  readonly spots?: Spot[];
+  readonly themes?: Theme[];
   readonly page?: number;
   readonly size?: number;
   readonly sorting: SortType;

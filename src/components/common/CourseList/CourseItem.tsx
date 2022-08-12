@@ -68,7 +68,7 @@ const CourseItem = forwardRef(({ course, grid = 3, index }: CourseItemProps, ref
               {region} · {COURSE_COUNT}코스
             </Text>
             <Title level={3} size={18} ellipsis>
-              {title}
+              {title} - {id}
             </Title>
           </ThumbnailInfo>
         </ThumbnailWrapper>
@@ -105,8 +105,23 @@ export default CourseItem;
 
 const { borderGray, fontDarkGray, fontGray } = theme.color;
 
-const ItemContainer = styled.li<{ grid?: number }>`
-  width: ${({ grid }) => (grid === 3 ? '33.3%' : '50%')};
+const getGrid = (grid: number) => {
+  switch (grid) {
+    case 1:
+      return '100%';
+    case 2:
+      return '50%';
+    case 3:
+      return '33.3%';
+    case 4:
+      return '25%';
+    default:
+      return '33.3%';
+  }
+};
+
+const ItemContainer = styled.li<{ grid: number }>`
+  width: ${({ grid }) => getGrid(grid)};
   box-sizing: border-box;
   padding: 0 10px 46px 10px;
   overflow: hidden;

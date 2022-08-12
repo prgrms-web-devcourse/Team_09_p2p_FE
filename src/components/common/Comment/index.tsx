@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 import { useEffect, useState } from 'react';
 import { Text } from '~/components/atom';
 import { CommentApi } from '~/service';
-import { IComments } from '~/types/comment';
+import { IComment } from '~/types/comment';
 import CommentForm from './CommentForm';
 import CommentItem from './CommentItem';
 
@@ -13,12 +13,11 @@ interface CommentProps {
 }
 
 const Comment = ({ id, type, writerId }: CommentProps) => {
-  const [comments, setComments] = useState<IComments | null>(null);
+  const [comments, setComments] = useState<IComment[] | null>(null);
 
   const getComments = async () => {
     const result = await CommentApi.getComments(id, type);
     setComments(result);
-    console.log(result, 'result');
   };
 
   const onCreate = async (value: string) => {
@@ -54,11 +53,11 @@ const Comment = ({ id, type, writerId }: CommentProps) => {
   return (
     <CommentContainer>
       <Text size="xl" fontWeight={700}>
-        댓글 {comments?.totalCount}개
+        댓글 {comments.length}개
       </Text>
       <CommentForm onSubmit={onCreate} />
       <CommentList>
-        {comments.courseComments.map((comment) => (
+        {comments.map((comment) => (
           <CommentItem
             key={comment.id}
             comment={comment}

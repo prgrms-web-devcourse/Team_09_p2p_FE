@@ -12,7 +12,7 @@ import { SelectTags } from '~/components/common';
 import { useRouter } from 'next/router';
 import { CourseApi } from '~/service';
 import { SearchTagsValues } from '~/types';
-import { ICourseInfo } from '..';
+import { ICourseInfo, ISelectedPlace } from '..';
 
 interface ICourse {
   id: number;
@@ -67,6 +67,7 @@ const Course: NextPage = () => {
   const isRecommendedRef = useRef([] as HTMLButtonElement[]);
   const placeImagesRef = useRef([] as any);
   const ThumbnailButtonRef = useRef([] as HTMLButtonElement[]);
+  const [selectedPlaces, setSelectedPlaces] = useState<ISelectedPlace[]>([]);
   if (!courseQuery) {
     return null;
   }
@@ -155,9 +156,9 @@ const Course: NextPage = () => {
       }
     }
     formCourseData.places = placesFormDataSetter();
-    const formData = new FormData();
+    const courseFormData = new FormData();
     const uploaderString = JSON.stringify(formCourseData);
-    formData.append(
+    courseFormData.append(
       'course',
       new Blob([uploaderString], {
         type: 'application/json'
@@ -165,10 +166,10 @@ const Course: NextPage = () => {
     );
     const placesImageData: File[] = placesImageDataSetter();
     for (let i = 0; i < placesImageData.length; i++) {
-      formData.append('images', placesImageData[i]);
+      courseFormData.append('images', placesImageData[i]);
     }
-    const createCourse = async (formData: FormData) => {
-      await CourseApi.create(formData).then((res) => {
+    const createCourse = async (courseFormData: FormData) => {
+      await CourseApi.create(courseFormData).then((res) => {
         switch (res) {
           case 201:
             alert('코스 생성이 완료되었습니다!');
@@ -187,16 +188,27 @@ const Course: NextPage = () => {
             break;
         }
       });
+      //await PlaceApi.create()
     };
     if (window.confirm('코스를 등록하시겠어요?')) {
-      createCourse(formData);
+      createCourse(courseFormData);
     }
+  };
+
+  const placeModifyhandler = () => {
+    router.push(
+      {
+        pathname: '/course/create/',
+        query: { requestPath: 'createStep2', courseQuery: courseQuery }
+      },
+      '/course/create/'
+    );
   };
 
   const handleSelectTags = (data: SearchTagsValues) => {
     formCourseData.period = data.period !== null ? data.period : '';
-    formCourseData.themes = data.theme;
-    formCourseData.spots = data.spot;
+    formCourseData.themes = data.themes;
+    formCourseData.spots = data.spots;
   };
 
   return (
@@ -235,8 +247,8 @@ const Course: NextPage = () => {
             ))}
           </PlacesWrapper>
           <SubmitWrapper>
-            <Button buttonType="darkGray" width={184} height={75} onClick={courseCreatehandler}>
-              코스 수정{/* 요건 아마 취소버튼으로 변경될거같네요 */}
+            <Button buttonType="darkGray" width={184} height={75} onClick={placeModifyhandler}>
+              장소 수정
             </Button>
             <Button buttonType="primary" width={184} height={75} onClick={courseCreatehandler}>
               코스 등록
