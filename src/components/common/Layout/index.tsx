@@ -20,6 +20,13 @@ const Layout = ({ children, footer, full }: LayoutProps) => {
     }
   }, [currentUser.accessToken]);
 
+  useEffect(() => {
+    const kakao = window.Kakao;
+    if (!kakao.isInitialized()) {
+      kakao.init(process.env.NEXT_PUBLIC_KAKAO_SHARE_KEY);
+    }
+  }, []);
+
   return (
     <div>
       <Header full={full} />
