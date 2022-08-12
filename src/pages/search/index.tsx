@@ -45,6 +45,16 @@ const SearchPage = ({ query }: { query: Record<string, string> }) => {
   });
   const [courseList, setCourseList] = useState<ICourseItem[]>([]);
 
+  const getCoursesByQuery = async () => {
+    try {
+      const response = await CourseApi.search(queries);
+      setCourseList(response.content);
+    } catch (e) {
+      console.error('검색 필터링에 실패했어요.', e);
+      setCourseList([]);
+    }
+  };
+
   const handleSelectRegion = async (region: RegionAndAll) => {
     setQueries({
       ...queries,
@@ -75,16 +85,6 @@ const SearchPage = ({ query }: { query: Record<string, string> }) => {
       ...queries,
       sorting
     });
-  };
-
-  const getCoursesByQuery = async () => {
-    try {
-      const response = await CourseApi.search(queries);
-      setCourseList(response.content);
-    } catch (e) {
-      console.error('검색 필터링에 실패했어요.', e);
-      setCourseList([]);
-    }
   };
 
   useEffect(() => {
