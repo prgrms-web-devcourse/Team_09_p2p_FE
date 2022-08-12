@@ -30,6 +30,7 @@ const CourseDetail: NextPage = () => {
   const getDetailInfo = async (courseId: number) => {
     if (isLoggedIn) {
       const result = await CourseApi.authRead(courseId);
+      console.log('로그인 데이터', result);
 
       if (!result) {
         // 임시로 값 없을 경우 처리

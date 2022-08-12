@@ -1,6 +1,8 @@
 export const ICON_URLS = {
   heart: '/assets/icons/heart.svg',
   arrow: '/assets/icons/arrow.svg',
+  arrowLeft: '/assets/icons/arrow-left.svg',
+  arrowRight: '/assets/icons/arrow-right.svg',
   arrowDown: '/assets/icons/arrow-down.svg',
   calendar: '/assets/icons/calendar.svg',
   marker: '/assets/icons/marker.svg',

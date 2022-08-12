@@ -38,6 +38,7 @@ const CourseSlider = ({ places }: CourseSliderProps) => {
 export default CourseSlider;
 
 const { borderDarkGray } = theme.color;
+const { basicShadow } = theme.shadow;
 
 export const StyledSlider = styled(Slider)`
   margin-top: 24px;
@@ -52,15 +53,28 @@ export const StyledSlider = styled(Slider)`
     background-color: white;
     border-radius: 50%;
     border: 1px solid ${borderDarkGray};
-    width: 55px;
-    height: 55px;
+    width: 50px;
+    height: 50px;
     z-index: 100;
-    background-image: url('/assets/icons/arrow.svg');
     background-repeat: no-repeat;
     background-position: center;
+    box-shadow: ${basicShadow};
+    transition: all 0.1s;
+
+    &:hover {
+      background-color: #f7f8f9;
+    }
+
+    &.slick-disabled {
+      display: none !important;
+    }
+  }
+
+  .slick-next {
+    background-image: url('/assets/icons/arrow-right.svg');
   }
   .slick-prev {
-    transform: translate(0, -50%) rotate(180deg);
+    background-image: url('/assets/icons/arrow-left.svg');
   }
 
   .slick-next:before,
