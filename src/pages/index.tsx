@@ -8,7 +8,6 @@ import Layout from '~/components/common/Layout';
 import ArrowTitle from '~/components/common/ArrowTitle';
 import { CourseApi, PlaceApi } from '~/service';
 import theme from '~/styles/theme';
-import { Theme } from '~/types';
 import { TAGS_THEME } from '~/utils/constants';
 
 const HomePage = () => {
@@ -20,21 +19,19 @@ const HomePage = () => {
   const PLACE_COUNT = 4;
 
   const getCourseList = async () => {
-    const filter = { size: COURSE_COUNT };
-    const result = await CourseApi.getCourses(filter);
-    console.log('[Courses] :', result.content);
+    const result = await CourseApi.getCourses({ size: COURSE_COUNT, sorting: '인기순' });
     setCourseList(result.content);
   };
 
   const getPlaceList = async () => {
-    const result = await PlaceApi.getPlaces({ size: PLACE_COUNT });
+    const result = await PlaceApi.getPlaces({ size: PLACE_COUNT, sorting: '인기순' });
     setPlaceList(result.content);
   };
 
   const handleSearch = (e: FormEvent) => {
     e.preventDefault();
     if (mainSearchInputRef.current) {
-      const keyword = mainSearchInputRef.current.value;
+      const keyword = mainSearchInputRef.current.value.trim();
       if (keyword) {
         router.push(`/search?keyword=${keyword}`);
       }
@@ -61,7 +58,8 @@ const HomePage = () => {
             <MainSearchForm onSubmit={handleSearch}>
               <SearchIcon name="searchBlue" size={30} />
               <MainSearchInput
-                type="text"
+                type="name"
+                name="main-search"
                 placeholder="지역, 장소를 검색해보세요."
                 ref={mainSearchInputRef}
               />
@@ -116,7 +114,7 @@ const SearchArea = styled.div`
   padding-top: 90px;
 `;
 
-const MainSearchForm = styled.div`
+const MainSearchForm = styled.form`
   margin-top: 20px;
   box-shadow: ${basicShadow};
   border-radius: 8px;

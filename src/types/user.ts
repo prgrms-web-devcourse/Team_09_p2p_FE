@@ -7,7 +7,6 @@ export interface User {
 export interface UserState {
   accessToken: string | null;
   user: User;
-  isLoading: boolean;
 }
 
 export interface UserInfo {
@@ -31,4 +30,9 @@ export interface UserPasswordFormValues {
   oldPassword: string;
   password: string;
   passwordCheck: string;
+}
+
+export interface ErrorConfirm {
+  isError: boolean;
+  message: string;
 }
