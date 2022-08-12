@@ -4,7 +4,7 @@ import theme from '~/styles/theme';
 
 interface CourseSliderItemProps {
   name: string;
-  id: number;
+  placeId: number;
   index: number;
   lastCount: number;
   imageUrl: string;
@@ -13,7 +13,7 @@ interface CourseSliderItemProps {
 const DOT_BG = 'url(/assets/dot-gray.png)';
 const LINE_BG = 'url(/assets/line-bluegray.png)';
 
-const CourseSliderItem = ({ name, id, index, lastCount, imageUrl }: CourseSliderItemProps) => {
+const CourseSliderItem = ({ name, placeId, index, lastCount, imageUrl }: CourseSliderItemProps) => {
   const IS_START = index === 0;
   const IS_END = index === lastCount - 1;
 
@@ -40,7 +40,7 @@ const CourseSliderItem = ({ name, id, index, lastCount, imageUrl }: CourseSlider
               {name}
             </Title>
           </TitleContainer>
-          <Link href={`/place/${id}`}>
+          <Link href={`/place/${placeId}`}>
             <Button buttonType="borderPrimary">장소정보보기</Button>
           </Link>
         </CardInfo>

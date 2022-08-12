@@ -25,7 +25,7 @@ const CourseSlider = ({ places }: CourseSliderProps) => {
         <CourseSliderItem
           key={place.id}
           name={place.name}
-          id={place.id}
+          placeId={place.placeId}
           index={index}
           lastCount={places.length}
           imageUrl={place.imageUrl}
