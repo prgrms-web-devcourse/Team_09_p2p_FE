@@ -18,7 +18,7 @@ interface SelectTagsProps {
 }
 
 const SelectTags = ({ style, onSelect, initialValues }: SelectTagsProps) => {
-  const initializeTrigger = useRef(initialValues?.initializeTrigger);
+  const initializeTriggerRef = useRef(initialValues?.initializeTrigger);
   const [selectedPeriod, setSelectedPeriod] = useState<Period | null>(
     initialValues ? initialValues.period : null
   );
@@ -66,7 +66,7 @@ const SelectTags = ({ style, onSelect, initialValues }: SelectTagsProps) => {
   };
 
   useEffect(() => {
-    if (initializeTrigger.current !== initialValues?.initializeTrigger) {
+    if (initializeTriggerRef.current !== initialValues?.initializeTrigger) {
       setSelectedPeriod(null);
       setSelectedThemes([]);
       setSelectedSpots([]);
