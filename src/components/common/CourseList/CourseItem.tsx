@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import { useRouter } from 'next/router';
-import React, { forwardRef, MouseEvent, useState } from 'react';
+import React, { forwardRef, LegacyRef, MouseEvent, useState } from 'react';
 import { Link, Text, Title } from '~/components/atom';
 import Avatar from '~/components/atom/Avatar';
 import { useUser } from '~/hooks/useUser';
@@ -13,10 +13,10 @@ import LikeCount from '../LikeCount';
 interface CourseItemProps {
   course: ICourseItem;
   grid?: number;
-  ref?: any;
+  index?: number;
 }
 
-const CourseItem = forwardRef(({ course, grid = 3 }: CourseItemProps, ref) => {
+const CourseItem = forwardRef(({ course, grid = 3, index }: CourseItemProps, ref) => {
   const {
     id,
     thumbnail,
@@ -51,8 +51,14 @@ const CourseItem = forwardRef(({ course, grid = 3 }: CourseItemProps, ref) => {
   };
 
   return (
-    <ItemContainer grid={grid} ref={ref}>
-      <Link href={`/course/${id}`}>
+    <ItemContainer grid={grid} ref={ref as LegacyRef<HTMLLIElement>}>
+      <a
+        onClick={() => {
+          router.replace({ pathname: router.pathname, query: { index } }, router.pathname);
+          router.push(`/course/${id}`);
+          console.log(router);
+        }}
+      >
         <ThumbnailWrapper>
           <ThumbnailBackground></ThumbnailBackground>
           <Thumbnail className="courseImage" style={{ backgroundImage: `url(${THUMBNAIL_URL})` }} />
@@ -88,7 +94,7 @@ const CourseItem = forwardRef(({ course, grid = 3 }: CourseItemProps, ref) => {
             </Profile>
           </InfoFooter>
         </CourseInfo>
-      </Link>
+      </a>
     </ItemContainer>
   );
 });
@@ -99,7 +105,7 @@ export default CourseItem;
 
 const { borderGray, fontDarkGray, fontGray } = theme.color;
 
-const ItemContainer = styled.li<Pick<CourseItemProps, 'grid'>>`
+const ItemContainer = styled.li<{ grid?: number }>`
   width: ${({ grid }) => (grid === 3 ? '33.3%' : '50%')};
   box-sizing: border-box;
   padding: 0 10px 46px 10px;

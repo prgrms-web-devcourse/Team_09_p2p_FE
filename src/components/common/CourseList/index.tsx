@@ -6,7 +6,6 @@ import CourseItem from './CourseItem';
 interface CourseListProps {
   courses: ICourseItem[];
   grid?: number;
-  ref?: any;
 }
 
 const CourseList = forwardRef(({ courses, grid = 3 }: CourseListProps, ref) => {
@@ -18,6 +17,7 @@ const CourseList = forwardRef(({ courses, grid = 3 }: CourseListProps, ref) => {
           grid={grid}
           key={course.id}
           ref={courses.length - 1 === index ? ref : null}
+          index={index}
         />
       ))}
     </StyledCourseList>
