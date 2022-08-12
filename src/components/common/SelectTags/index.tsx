@@ -7,26 +7,23 @@ import PeriodTags from './PeriodTags';
 import SpotTags from './SpotTags';
 import ThemeTags from './ThemeTags';
 
-type InitialValues = SearchTagsValues & {
-  initializeTrigger?: unknown;
-};
-
 interface SelectTagsProps {
   style?: CSSProperties;
   onSelect: (data: SearchTagsValues) => void;
-  initialValues?: InitialValues;
+  defaultValues?: SearchTagsValues;
+  initializeTrigger?: unknown;
 }
 
-const SelectTags = ({ style, onSelect, initialValues }: SelectTagsProps) => {
-  const initializeTriggerRef = useRef(initialValues?.initializeTrigger);
+const SelectTags = ({ style, onSelect, defaultValues, initializeTrigger }: SelectTagsProps) => {
+  const initializeTriggerRef = useRef(initializeTrigger);
   const [selectedPeriod, setSelectedPeriod] = useState<Period | null>(
-    initialValues ? initialValues.period : null
+    defaultValues ? defaultValues.period : null
   );
   const [selectedThemes, setSelectedThemes] = useState<Theme[]>(
-    initialValues ? [...initialValues.themes] : []
+    defaultValues ? defaultValues.themes : []
   );
   const [selectedSpots, setSelectedSpots] = useState<Spot[]>(
-    initialValues ? [...initialValues.spots] : []
+    defaultValues ? defaultValues.spots : []
   );
 
   const handleSelectPeriod = (period: Period) => {
@@ -66,12 +63,12 @@ const SelectTags = ({ style, onSelect, initialValues }: SelectTagsProps) => {
   };
 
   useEffect(() => {
-    if (initializeTriggerRef.current !== initialValues?.initializeTrigger) {
+    if (initializeTriggerRef.current !== initializeTrigger) {
       setSelectedPeriod(null);
       setSelectedThemes([]);
       setSelectedSpots([]);
     }
-  }, [initialValues?.initializeTrigger]);
+  }, [initializeTrigger]);
 
   return (
     <Container style={style}>

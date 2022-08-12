@@ -123,20 +123,18 @@ const SearchPage = ({ query }: { query: Record<string, string> }) => {
           <FilterList>
             <SelectRegion
               onSelect={handleSelectRegion}
-              initializeValues={{
-                initializeTrigger: queries.keyword,
-                region: queries.region
-              }}
+              defaultValues={queries.region}
+              initializeTrigger={queries.keyword}
             />
             <SelectTags
               style={{ marginTop: '20px' }}
               onSelect={handleSelectTags}
-              initialValues={{
-                initializeTrigger: queries.keyword,
+              defaultValues={{
                 period: queries.period,
                 themes: queries.themes,
                 spots: queries.spots
               }}
+              initializeTrigger={queries.keyword}
             />
           </FilterList>
           {courseList.length === 0 ? (

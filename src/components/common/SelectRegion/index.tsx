@@ -5,34 +5,33 @@ import { RegionAndAll } from '~/types';
 import { REGIONS } from '~/utils/constants';
 import RegionItem from './RegionItem';
 
-type InitializeValues = {
-  initializeTrigger?: unknown;
-  region: RegionAndAll;
-};
-
 interface SelectRegionProps {
   col?: number;
   onSelect: (region: RegionAndAll) => void;
-  initializeValues?: InitializeValues;
+  defaultValues?: RegionAndAll;
+  initializeTrigger?: unknown;
 }
 
 const regions: RegionAndAll[] = ['전체보기', ...REGIONS];
 
-const SelectRegion = ({ onSelect, col = 9, initializeValues }: SelectRegionProps) => {
-  const initializeTriggerRef = useRef(initializeValues?.region);
-  const [selectedValue, setSelectedValue] = useState(
-    initializeValues ? initializeValues.region : '전체보기'
-  );
+const SelectRegion = ({
+  onSelect,
+  col = 9,
+  defaultValues,
+  initializeTrigger
+}: SelectRegionProps) => {
+  const initializeTriggerRef = useRef(initializeTrigger);
+  const [selectedValue, setSelectedValue] = useState(defaultValues || '전체보기');
   const handleSelect = (region: RegionAndAll) => {
     setSelectedValue(region);
     onSelect && onSelect(region);
   };
 
   useEffect(() => {
-    if (initializeTriggerRef.current !== initializeValues?.region) {
+    if (initializeTriggerRef.current !== initializeTrigger) {
       setSelectedValue('전체보기');
     }
-  }, [initializeValues?.region]);
+  }, [initializeTrigger]);
 
   return (
     <GridContainer col={col}>
