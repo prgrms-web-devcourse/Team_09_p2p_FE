@@ -32,3 +32,8 @@ export interface UserPasswordFormValues {
   password: string;
   passwordCheck: string;
 }
+
+export interface ErrorConfirm {
+  isError: boolean;
+  message: string;
+}
