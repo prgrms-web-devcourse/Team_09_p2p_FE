@@ -23,6 +23,7 @@ import {
   makeQueryString
 } from '~/utils/converter';
 import { useRouter } from 'next/router';
+import { relative } from 'path';
 
 export const getServerSideProps = async (context: NextPageContext) => {
   const { query } = context;
@@ -61,6 +62,8 @@ const Course = ({ query }: { query: Record<string, string> }) => {
     sorting: '인기순'
   });
 
+  // const targetRef = useRef(null);
+
   // 이건 그대로 두기
   const onIntersect: IntersectionObserverCallback = (entries, observer) => {
     entries.forEach(async (entry) => {
@@ -82,9 +85,10 @@ const Course = ({ query }: { query: Record<string, string> }) => {
     if (router.query.index) {
       // 뒤로가기 시 index 코드
     } else {
-      console.log({ ...queries, ...filter, size: SIZE });
       const result = await CourseApi.search({ ...queries, page, size: SIZE });
+      console.log('요청', { ...queries, ...filter, size: SIZE });
       if (result.last) {
+        console.log('마지막 페이지 입니다.');
         setIsLast(true);
       }
       setCourseList(courseList.concat(result.content));
@@ -93,7 +97,6 @@ const Course = ({ query }: { query: Record<string, string> }) => {
   };
 
   useEffect(() => {
-    console.log(lastTarget);
     let observer: IntersectionObserver;
     if (lastTarget) {
       observer = new IntersectionObserver(onIntersect, { threshold: 0 });
@@ -101,8 +104,6 @@ const Course = ({ query }: { query: Record<string, string> }) => {
     }
     return () => observer && observer.disconnect();
   }, [lastTarget]);
-
-  //여기까지ㅍ ------------------------------------
 
   const replaceRoute = () => {
     router.replace(
@@ -121,6 +122,8 @@ const Course = ({ query }: { query: Record<string, string> }) => {
     try {
       const response = await CourseApi.search({ ...queries, size: SIZE });
       setCourseList(response.content);
+      console.log('요청', { ...queries, size: SIZE });
+      // setIsLast(false);
     } catch (e) {
       console.error('코스페이지에서 코스목록을 불러오는데 실패했어요.', e);
       setCourseList([]);
@@ -165,6 +168,8 @@ const Course = ({ query }: { query: Record<string, string> }) => {
   useEffect(() => {
     replaceRoute();
     getCoursesByQuery();
+    setIsLast(false);
+    setPage(0);
     // getCourseList({ page });
   }, [queries]);
 
@@ -182,7 +187,7 @@ const Course = ({ query }: { query: Record<string, string> }) => {
         <meta name="description" content="our travel course" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main>
+      <main style={{ position: 'relative' }}>
         <PageContainer>
           <CategoryTitle name="여행코스" />
           <FilterList>
