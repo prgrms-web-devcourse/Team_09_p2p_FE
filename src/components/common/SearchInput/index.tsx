@@ -13,8 +13,9 @@ const SearchInput = ({ onSearch, placeholder = '검색어를 입력해주세요.
 
   const handleSearch = async (e: FormEvent) => {
     e.preventDefault();
-    if (!keyword) return;
-    await onSearch(keyword);
+    const trimKeyword = keyword.trim();
+    if (!trimKeyword) return;
+    await onSearch(trimKeyword);
     setKeyword('');
   };
 

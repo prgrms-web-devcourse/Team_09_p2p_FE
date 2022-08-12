@@ -31,7 +31,7 @@ const HomePage = () => {
   const handleSearch = (e: FormEvent) => {
     e.preventDefault();
     if (mainSearchInputRef.current) {
-      const keyword = mainSearchInputRef.current.value;
+      const keyword = mainSearchInputRef.current.value.trim();
       if (keyword) {
         router.push(`/search?keyword=${keyword}`);
       }
@@ -58,7 +58,8 @@ const HomePage = () => {
             <MainSearchForm onSubmit={handleSearch}>
               <SearchIcon name="searchBlue" size={30} />
               <MainSearchInput
-                type="text"
+                type="name"
+                name="main-search"
                 placeholder="지역, 장소를 검색해보세요."
                 ref={mainSearchInputRef}
               />
@@ -113,7 +114,7 @@ const SearchArea = styled.div`
   padding-top: 90px;
 `;
 
-const MainSearchForm = styled.div`
+const MainSearchForm = styled.form`
   margin-top: 20px;
   box-shadow: ${basicShadow};
   border-radius: 8px;
