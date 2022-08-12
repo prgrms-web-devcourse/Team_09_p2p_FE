@@ -38,11 +38,6 @@ const SearchMap = ({ setSelectedPlaces, selectedPlaces }: SearchMap) => {
     if (mapObject === null || mapObject === undefined) {
       return;
     }
-    const mapOption = {
-      center: new kakao.maps.LatLng(37.566826, 126.9786567),
-      level: 3
-    };
-
     // 장소 검색 객체를 생성
     const ps = new kakao.maps.services.Places();
 
@@ -99,41 +94,6 @@ const SearchMap = ({ setSelectedPlaces, selectedPlaces }: SearchMap) => {
     };
     // 키워드로 장소를 검색합니다
     searchPlaces();
-
-    // 검색결과 목록 하단에 페이지번호를 표시는 함수(추후 개발을 위해 남겨뒀어요)
-    const displayPagination = (pagination: {
-      last: number;
-      current: number;
-      gotoPage: (arg0: number) => void;
-    }) => {
-      const paginationEl = document.getElementById('pagination') as HTMLElement;
-      const fragment = document.createDocumentFragment();
-      let i;
-
-      // 기존에 추가된 페이지번호를 삭제
-      while (paginationEl.hasChildNodes()) {
-        paginationEl.lastChild && paginationEl.removeChild(paginationEl.lastChild);
-      }
-
-      for (i = 1; i <= pagination.last; i++) {
-        const el = document.createElement('a') as HTMLAnchorElement;
-        el.href = '#';
-        el.innerHTML = i.toString();
-
-        if (i === pagination.current) {
-          el.className = 'on';
-        } else {
-          el.onclick = (function (i) {
-            return function () {
-              pagination.gotoPage(i);
-            };
-          })(i);
-        }
-
-        fragment.appendChild(el);
-      }
-      paginationEl.appendChild(fragment);
-    };
 
     // 검색결과 목록의 자식 Element를 제거하는 함수
     const removeAllChildNods = (el: HTMLElement) => {
