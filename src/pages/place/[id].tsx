@@ -1,9 +1,8 @@
 import styled from '@emotion/styled';
+import { NextPageContext } from 'next';
 import Head from 'next/head';
-import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import { Button, Icon, Link, PageContainer, Text, Title } from '~/components/atom';
-import { CourseList } from '~/components/common';
 import Comment from '~/components/common/Comment';
 import DetailSidebar from '~/components/common/DetailSidebar';
 import ImageViewer from '~/components/common/ImageViewer';
@@ -14,76 +13,52 @@ import { CourseApi, PlaceApi } from '~/service';
 import theme from '~/styles/theme';
 import { PlacePost } from '~/types';
 
-// ssr로 변경할 때 사용
-// export const getServerSideProps = async (context: NextPageContext) => {
-//   const { id } = context.query;
+export const getServerSideProps = async (context: NextPageContext) => {
+  const { id } = context.query;
 
-//   const placeId = Number(id);
-//   if (!placeId && !Number.isNaN(placeId)) {
-//     return {
-//       notFound: true
-//     };
-//   }
+  const placeId = Number(id);
+  if (!placeId && !Number.isNaN(placeId)) {
+    return {
+      notFound: true
+    };
+  }
 
-//   try {
-//     const place = await PlaceApi.read(placeId);
-//     return {
-//       props: { place }
-//     };
-//   } catch (e) {
-//     return {
-//       notFound: true
-//     };
-//   }
-// };
+  try {
+    const place = await PlaceApi.read(placeId);
+    return {
+      props: { place, placeId }
+    };
+  } catch (e) {
+    return {
+      notFound: true
+    };
+  }
+};
 
-// interface Props {
-//   place: PlacePost;
-// }
+interface Props {
+  place: PlacePost;
+  placeId: number;
+}
 
-const PlaceDetailByPostId = () => {
+const PlaceDetailByPostId = ({ place, placeId }: Props) => {
   const [relevantCourses, setRelevantCourses] = useState([]);
   const { isLoggedIn } = useUser();
-  const [detailData, setDetailData] = useState<PlacePost | null>(null);
+  const [detailData, setDetailData] = useState<PlacePost | null>(place);
   const [isOpenMap, setIsOpenMap] = useState(false);
 
-  const router = useRouter();
-  const placeId = Number(router.query.id);
+  const getDetailInfo = async () => {
+    const places = await PlaceApi.read(placeId);
 
-  const getDetailInfo = async (courseId: number) => {
-    if (isLoggedIn) {
-      const places = await PlaceApi.read(placeId);
-
-      if (!places) {
-        router.push('/404');
-        return;
-      }
-
-      console.log(places);
-      setDetailData(places);
-    } else {
-      const places = await PlaceApi.read(courseId);
-
-      if (!places) {
-        router.push('/');
-        return;
-      }
-
-      setDetailData(places);
-    }
+    setDetailData(places);
 
     const courses = await CourseApi.getCourses({ placeId, size: 3 });
     setRelevantCourses(courses.content);
   };
 
   useEffect(() => {
-    if (typeof router.query.id === 'string') {
-      if (!Number.isNaN(placeId)) {
-        getDetailInfo(placeId);
-        return;
-      }
-
-      router.push('/404');
+    if (isLoggedIn) {
+      // 로그인 상태일 경우 유저용 데이터 받아오기
+      getDetailInfo();
     }
   }, [placeId, isLoggedIn]);
 
