@@ -1,5 +1,6 @@
 import styled from '@emotion/styled';
 import { Image, Text, Title } from '~/components/atom';
+import Recommend from '~/components/common/Recommend';
 import { IPlace } from '~/types/place';
 
 interface CourseDetailList {
@@ -19,7 +20,7 @@ const CourseDetailList = ({ places }: CourseDetailList) => {
             <Title size="md" fontWeight={700}>
               {index + 1}. {place.name}
             </Title>
-            {place.isRecommended && <button>추천 아이콘</button>}
+            {place.isRecommended && <RecommendIcon active />}
           </CourseDetailTitle>
           <Address size="md" color="gray">
             {place.address}
@@ -43,17 +44,17 @@ export default CourseDetailList;
 const Container = styled.div`
   margin-top: 70px;
 `;
+
 const CourseDetailItem = styled.div`
   margin-bottom: 70px;
 `;
+
 const CourseDetailTitle = styled.div`
   display: flex;
   align-items: center;
   margin-bottom: 12px;
-  button {
-    margin-left: 8px;
-  }
 `;
+
 const CourseDescription = styled.div`
   margin-top: 37px;
   line-height: 1.7;
@@ -73,4 +74,9 @@ const ImageViewer = styled.div`
   border-radius: 8px;
   overflow: hidden;
   position: relative;
+`;
+
+const RecommendIcon = styled(Recommend)`
+  margin-left: 8px;
+  margin-top: 2px;
 `;

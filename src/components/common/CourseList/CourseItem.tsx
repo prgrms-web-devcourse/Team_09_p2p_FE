@@ -96,8 +96,23 @@ export default CourseItem;
 
 const { borderGray, fontDarkGray, fontGray } = theme.color;
 
-const ItemContainer = styled.li<Pick<CourseItemProps, 'grid'>>`
-  width: ${({ grid }) => (grid === 3 ? '33.3%' : '50%')};
+const getGrid = (grid: number) => {
+  switch (grid) {
+    case 1:
+      return '100%';
+    case 2:
+      return '50%';
+    case 3:
+      return '33.3%';
+    case 4:
+      return '25%';
+    default:
+      return '33.3%';
+  }
+};
+
+const ItemContainer = styled.li<{ grid: number }>`
+  width: ${({ grid }) => getGrid(grid)};
   box-sizing: border-box;
   padding: 0 10px 46px 10px;
   overflow: hidden;

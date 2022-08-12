@@ -10,14 +10,15 @@ import SearchInput from '../SearchInput';
 
 interface HeaderProps {
   full?: boolean;
+  isLoading?: boolean;
 }
 
-const Header = ({ full }: HeaderProps) => {
+const Header = ({ full, isLoading }: HeaderProps) => {
   const { currentUser, isLoggedIn } = useUser();
 
   const router = useRouter();
   const handleSearch = (keyword: string) => {
-    const searchPath = `/search/${keyword}`;
+    const searchPath = `/search?keyword=${keyword}`;
     router.push(searchPath);
   };
 
@@ -68,12 +69,12 @@ const Header = ({ full }: HeaderProps) => {
               <Link href="/course/create">
                 <Button>코스등록</Button>
               </Link>
-              {!isLoggedIn && !currentUser.isLoading && (
+              {!isLoggedIn && !isLoading && (
                 <Link href="/login">
                   <Button buttonType="borderPrimary">로그인</Button>
                 </Link>
               )}
-              {isLoggedIn && !currentUser.isLoading && (
+              {isLoggedIn && !isLoading && (
                 <Link href={`/userinfo/${currentUser.user.id}`}>
                   <Avatar size={54} src={currentUser.user.profileImage} />
                 </Link>

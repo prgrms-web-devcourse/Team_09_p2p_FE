@@ -36,13 +36,13 @@ const UserinfoEdit: NextPage = () => {
         window.alert('동일한 비밀번호로는 변경할 수 없어요.');
         return;
       }
-      console.error(e);
+      console.error('비밀번호 수정 실패', e);
     }
   };
 
   useEffect(() => {
     if (typeof router.query.id === 'string') {
-      if (!currentUser.isLoading && currentUser.user.id !== userId) {
+      if (currentUser.user.id !== userId) {
         alert('잘못된 요청입니다.');
         router.push('/');
         return;

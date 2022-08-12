@@ -20,9 +20,10 @@ const initialValues: LoginValues = {
 
 interface LoginFormProps {
   onSubmit: (data: LoginValues) => void;
+  errorMessage: string;
 }
 
-const LoginForm: React.FC<LoginFormProps> = ({ onSubmit: handleSubmitAction }) => {
+const LoginForm = ({ onSubmit: handleSubmitAction, errorMessage }: LoginFormProps) => {
   const { values, handleChange, handleSubmit } = useFormik({
     initialValues,
     onSubmit: (data: LoginValues) => {
@@ -59,6 +60,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSubmit: handleSubmitAction }) =
               value={values.password}
               onChange={handleChange}
             />
+            <Text color="red">{errorMessage}</Text>
             <Button type="submit" disabled={submittable}>
               로그인
             </Button>
