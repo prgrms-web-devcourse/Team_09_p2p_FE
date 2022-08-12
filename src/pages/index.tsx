@@ -8,7 +8,6 @@ import Layout from '~/components/common/Layout';
 import ArrowTitle from '~/components/common/ArrowTitle';
 import { CourseApi, PlaceApi } from '~/service';
 import theme from '~/styles/theme';
-import { Theme } from '~/types';
 import { TAGS_THEME } from '~/utils/constants';
 
 const HomePage = () => {
@@ -20,14 +19,12 @@ const HomePage = () => {
   const PLACE_COUNT = 4;
 
   const getCourseList = async () => {
-    const filter = { size: COURSE_COUNT };
-    const result = await CourseApi.getCourses(filter);
-    console.log('[Courses] :', result.content);
+    const result = await CourseApi.getCourses({ size: COURSE_COUNT, sorting: '인기순' });
     setCourseList(result.content);
   };
 
   const getPlaceList = async () => {
-    const result = await PlaceApi.getPlaces({ size: PLACE_COUNT });
+    const result = await PlaceApi.getPlaces({ size: PLACE_COUNT, sorting: '인기순' });
     setPlaceList(result.content);
   };
 

@@ -10,7 +10,6 @@ export const userState = atom<UserState>({
       id: null,
       nickname: null,
       profileImage: null
-    },
-    isLoading: false
+    }
   }
 });

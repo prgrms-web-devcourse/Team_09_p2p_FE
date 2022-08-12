@@ -1,4 +1,4 @@
-import { ReactNode, useEffect } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
 import { Header } from '~/components/common';
 import Footer from '~/components/common/Footer';
 import { useUser } from '~/hooks/useUser';
@@ -12,17 +12,23 @@ interface LayoutProps {
 
 const Layout = ({ children, footer, full }: LayoutProps) => {
   const { currentUser, updateUser } = useUser();
+  const [isLoading, setIsLoading] = useState(false);
 
+  const compareUser = async (token: string) => {
+    setIsLoading(true);
+    await updateUser(token);
+    setIsLoading(false);
+  };
   useEffect(() => {
     const token = WebStorage.getToken();
     if (token && currentUser.accessToken !== token) {
-      updateUser(token);
+      compareUser(token);
     }
   }, [currentUser.accessToken]);
 
   return (
     <div>
-      <Header full={full} />
+      <Header full={full} isLoading={isLoading} />
       {children}
       {footer && <Footer />}
     </div>
