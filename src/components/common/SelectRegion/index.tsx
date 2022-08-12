@@ -1,29 +1,38 @@
 import styled from '@emotion/styled';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import theme from '~/styles/theme';
 import { RegionAndAll } from '~/types';
 import { REGIONS } from '~/utils/constants';
 import RegionItem from './RegionItem';
 
+type InitializeValues = {
+  initializeTrigger?: unknown;
+  region: RegionAndAll;
+};
+
 interface SelectRegionProps {
   col?: number;
   onSelect: (region: RegionAndAll) => void;
-  toInitializeTrigger?: string | number | boolean | null | undefined;
+  initializeValues?: InitializeValues;
 }
 
 const regions: RegionAndAll[] = ['전체보기', ...REGIONS];
 
-const SelectRegion = ({ onSelect, col = 9, toInitializeTrigger }: SelectRegionProps) => {
-  const [selectedValue, setSelectedValue] = useState(regions[0]);
-  const initialize = () => setSelectedValue(regions[0]);
+const SelectRegion = ({ onSelect, col = 9, initializeValues }: SelectRegionProps) => {
+  const initializeTriggerRef = useRef(initializeValues?.region);
+  const [selectedValue, setSelectedValue] = useState(
+    initializeValues ? initializeValues.region : '전체보기'
+  );
   const handleSelect = (region: RegionAndAll) => {
     setSelectedValue(region);
     onSelect && onSelect(region);
   };
 
   useEffect(() => {
-    initialize();
-  }, [toInitializeTrigger]);
+    if (initializeTriggerRef.current !== initializeValues?.region) {
+      setSelectedValue('전체보기');
+    }
+  }, [initializeValues?.region]);
 
   return (
     <GridContainer col={col}>

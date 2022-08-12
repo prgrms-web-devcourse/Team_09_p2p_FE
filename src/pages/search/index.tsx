@@ -121,7 +121,13 @@ const SearchPage = ({ query }: { query: Record<string, string> }) => {
             )}
           </Title>
           <FilterList>
-            <SelectRegion onSelect={handleSelectRegion} toInitializeTrigger={queries.keyword} />
+            <SelectRegion
+              onSelect={handleSelectRegion}
+              initializeValues={{
+                initializeTrigger: queries.keyword,
+                region: queries.region
+              }}
+            />
             <SelectTags
               style={{ marginTop: '20px' }}
               onSelect={handleSelectTags}
