@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import React, { CSSProperties, useEffect, useState } from 'react';
+import React, { CSSProperties, useEffect, useRef, useState } from 'react';
 import theme from '~/styles/theme';
 import { Period, SearchTagsValues, Spot, Theme } from '~/types';
 import { removeList, updateList } from '~/utils/converter';
@@ -7,25 +7,27 @@ import PeriodTags from './PeriodTags';
 import SpotTags from './SpotTags';
 import ThemeTags from './ThemeTags';
 
+type InitialValues = SearchTagsValues & {
+  initializeTrigger?: unknown;
+};
+
 interface SelectTagsProps {
   style?: CSSProperties;
   onSelect: (data: SearchTagsValues) => void;
-  toInitializeTrigger?: string | number | boolean | null | undefined;
+  initialValues?: InitialValues;
 }
 
-const SelectTags = ({ style, onSelect, toInitializeTrigger }: SelectTagsProps) => {
-  const [selectedPeriod, setSelectedPeriod] = useState<Period | null>(null);
-  const [selectedThemes, setSelectedThemes] = useState<Theme[]>([]);
-  const [selectedSpots, setSelectedSpots] = useState<Spot[]>([]);
-  const initialize = () => {
-    setSelectedPeriod(null);
-    setSelectedThemes([]);
-    setSelectedSpots([]);
-  };
-
-  useEffect(() => {
-    initialize();
-  }, [toInitializeTrigger]);
+const SelectTags = ({ style, onSelect, initialValues }: SelectTagsProps) => {
+  const initializeTrigger = useRef(initialValues?.initializeTrigger);
+  const [selectedPeriod, setSelectedPeriod] = useState<Period | null>(
+    initialValues ? initialValues.period : null
+  );
+  const [selectedThemes, setSelectedThemes] = useState<Theme[]>(
+    initialValues ? [...initialValues.themes] : []
+  );
+  const [selectedSpots, setSelectedSpots] = useState<Spot[]>(
+    initialValues ? [...initialValues.spots] : []
+  );
 
   const handleSelectPeriod = (period: Period) => {
     const isSame = selectedPeriod === period;
@@ -62,6 +64,14 @@ const SelectTags = ({ style, onSelect, toInitializeTrigger }: SelectTagsProps) =
       ? setSelectedSpots(removeList(selectedSpots, spot))
       : setSelectedSpots(updateList(selectedSpots, spot));
   };
+
+  useEffect(() => {
+    if (initializeTrigger.current !== initialValues?.initializeTrigger) {
+      setSelectedPeriod(null);
+      setSelectedThemes([]);
+      setSelectedSpots([]);
+    }
+  }, [initialValues?.initializeTrigger]);
 
   return (
     <Container style={style}>

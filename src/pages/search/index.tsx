@@ -5,8 +5,8 @@ import React, { useEffect, useState } from 'react';
 import { PageContainer, Title } from '~/components/atom';
 import { SelectTags, SelectRegion, CourseList, SortFilter } from '~/components/common';
 import { CourseApi } from '~/service';
-import { RegionAndAll, SearchTagsValues, Spot, Theme } from '~/types';
-import { CourseSearchParams, ICourseItem, SortType } from '~/types/course';
+import { Period, RegionAndAll, SearchTagsValues, Spot, Theme } from '~/types';
+import { ICourseItem, SortType } from '~/types/course';
 import {
   correctedPeriod,
   correctedRegion,
@@ -21,8 +21,19 @@ export const getServerSideProps = async (context: NextPageContext) => {
   };
 };
 
+type QueryState = {
+  keyword: string;
+  period: Period | null;
+  region: RegionAndAll;
+  themes: Theme[];
+  spots: Spot[];
+  page: number;
+  size: number;
+  sorting: SortType;
+};
+
 const SearchPage = ({ query }: { query: Record<string, string> }) => {
-  const [queries, setQueries] = useState<CourseSearchParams>({
+  const [queries, setQueries] = useState<QueryState>({
     keyword: query.keyword || '',
     period: (query.period && correctedPeriod(query.period)) || null,
     region: (query.region && correctedRegion(query.region)) || '전체보기',
@@ -71,21 +82,20 @@ const SearchPage = ({ query }: { query: Record<string, string> }) => {
       const response = await CourseApi.search(queries);
       setCourseList(response.content);
     } catch (e) {
-      // "부산"을 검색하면 500에러가 나옴..
       console.error('검색 필터링에 실패했어요.', e);
       setCourseList([]);
     }
   };
 
   useEffect(() => {
-    setQueries({
-      ...queries,
+    setQueries((prevQueries) => ({
+      ...prevQueries,
       keyword: query.keyword || '',
       period: (query.period && correctedPeriod(query.period)) || null,
       region: (query.region && correctedRegion(query.region)) || '전체보기',
       themes: (query.themes && correctedThemes(query.themes)) || [],
       spots: (query.spots && correctedSpots(query.spots)) || []
-    });
+    }));
   }, [query]);
 
   useEffect(() => {
@@ -105,7 +115,7 @@ const SearchPage = ({ query }: { query: Record<string, string> }) => {
           <Title level={1} size="sm" style={{ margin: '30px 0' }}>
             {Object.keys(query).length !== 0 && (
               <>
-                &ldquo;{query.keyword || (query.themes && `#${query.themes}`)}
+                &ldquo;{query.keyword || (query.themes && `#${query.themes.split(',').join('#')}`)}
                 &rdquo; 에 대한 검색 결과입니다.
               </>
             )}
@@ -115,7 +125,12 @@ const SearchPage = ({ query }: { query: Record<string, string> }) => {
             <SelectTags
               style={{ marginTop: '20px' }}
               onSelect={handleSelectTags}
-              toInitializeTrigger={queries.keyword}
+              initialValues={{
+                initializeTrigger: queries.keyword,
+                period: queries.period,
+                themes: queries.themes,
+                spots: queries.spots
+              }}
             />
           </FilterList>
           {courseList.length === 0 ? (
