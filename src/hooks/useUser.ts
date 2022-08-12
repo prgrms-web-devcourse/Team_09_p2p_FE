@@ -1,5 +1,4 @@
 import { ErrorConfirm } from './../types/user';
-import { useState } from 'react';
 import { useRecoilState, useResetRecoilState } from 'recoil';
 import { userState } from '~/recoil';
 import { UserApi } from '~/service';
