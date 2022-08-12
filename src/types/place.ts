@@ -27,5 +27,5 @@ export interface PlaceFilter {
   keyword?: string;
   page?: number;
   size?: number;
-  sort?: SortType;
+  sorting?: SortType;
 }
