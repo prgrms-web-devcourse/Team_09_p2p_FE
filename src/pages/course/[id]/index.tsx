@@ -55,8 +55,8 @@ const CourseDetail: NextPage = () => {
     if (detailData) {
       return detailData.places.map((detail) => {
         return {
-          id: detail.id,
-          kakaoMapId: detail.kakaoMapId,
+          id: detail.placeId,
+          kakaoMapId: detail.id,
           name: detail.name,
           description: detail.description,
           addressName: detail.address,

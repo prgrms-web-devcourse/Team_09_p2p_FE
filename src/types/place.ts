@@ -12,7 +12,6 @@ export interface IPlaceItem {
 
 export interface IPlace {
   id: number;
-  kakaoMapId: number;
   name: string;
   description: string;
   address: string;
