@@ -13,6 +13,7 @@ import RegionSelect from '~/components/domain/CourseCreate/RegionSelect';
 import { useRouter } from 'next/router';
 import { SearchInput } from '~/components/common';
 import SearchMap from '~/components/domain/Map/SearchMap';
+import { IPlaceForm } from '~/types/place';
 
 export interface IPlace {
   id: number;
@@ -26,7 +27,7 @@ export interface IPlace {
 }
 export interface ICourseInfo {
   region: string;
-  places: IPlace[];
+  places: IPlaceForm[];
 }
 
 export interface ISelectedPlace {
@@ -160,15 +161,15 @@ const CourseCreate: NextPage = () => {
   const setPlaces = () => {
     return selectedPlaces.map((selectedPlace) => {
       return {
-        id: selectedPlace.id,
-        lat: selectedPlace.lat,
-        lng: selectedPlace.lng,
+        kakaoMapId: selectedPlace.id,
+        latitude: selectedPlace.lat,
+        longitude: selectedPlace.lng,
         name: selectedPlace.name,
-        address: selectedPlace.address,
+        addressName: selectedPlace.address,
         roadAddressName: selectedPlace.roadAddressName,
         category: selectedPlace.category,
         phoneNumber: selectedPlace.phoneNumber
-      };
+      } as unknown as IPlaceForm;
     });
   };
 

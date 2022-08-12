@@ -1,48 +1,24 @@
 import styled from '@emotion/styled';
 import type { NextPage } from 'next';
 import Head from 'next/head';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { Button, PageContainer } from '~/components/atom';
 import { CategoryTitle, CourseList, SortFilter } from '~/components/common';
 import CourseMap from '~/components/domain/Map/CourseMap';
 import theme from '~/styles/theme';
-import numbering from '~/../public/assets/numbering.png';
 import PlaceInformation from '~/components/domain/CourseCreate/PlaceInformation';
 import { SelectTags } from '~/components/common';
 import { useRouter } from 'next/router';
 import { CourseApi } from '~/service';
 import { SearchTagsValues } from '~/types';
 import { ICourseInfo } from '..';
+import { IPlaceForm } from '~/types/place';
 
-interface ICourse {
+interface ICourseMap {
   id: number;
   latitude: string;
   longitude: string;
   name: string;
-}
-
-interface IPlace {
-  id: number;
-  lat: number;
-  lng: number;
-  name: string;
-  address: string;
-  roadAddressName: string;
-  category: string;
-  phoneNumber: string;
-}
-
-interface IPlaceForm {
-  kakaoMapId: string;
-  name: string;
-  description: string;
-  addressName: string;
-  roadAddressName: string;
-  latitude: string;
-  longitude: string;
-  category: string;
-  phoneNumber: string;
-  isRecommended: boolean;
 }
 
 interface ICourseForm {
@@ -79,27 +55,27 @@ const Course: NextPage = () => {
 
   const courseMapData = courseInfo.places.map((place) => {
     return {
-      id: place.id,
-      latitude: place.lat,
-      longitude: place.lng,
+      id: place.kakaoMapId,
+      latitude: place.latitude,
+      longitude: place.longitude,
       name: place.name
-    } as unknown as ICourse;
+    } as unknown as ICourseMap;
   });
   const placesFormDataSetter = () => {
     return courseInfo.places.map((place, index) => {
       return {
-        kakaoMapId: place.id.toString(),
+        kakaoMapId: place.kakaoMapId,
         name: place.name,
         description: textAreasRef.current[index].value,
-        addressName: place.address,
+        addressName: place.addressName,
         roadAddressName: place.roadAddressName,
-        latitude: place.lat.toString(),
-        longitude: place.lng.toString(),
-        category: place.category !== '' ? place.category : 'FD6',
+        latitude: place.latitude.toString(),
+        longitude: place.longitude.toString(),
+        category: place.category !== '' ? place.category : 'DE',
         phoneNumber: place.phoneNumber,
         isRecommended: JSON.parse(isRecommendedRef.current[index].value),
         isThumbnail: JSON.parse(ThumbnailButtonRef.current[index].value)
-      };
+      } as IPlaceForm;
     });
   };
   const placesImageDataSetter = () => {
