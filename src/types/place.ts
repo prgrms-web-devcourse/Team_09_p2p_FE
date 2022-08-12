@@ -1,3 +1,4 @@
+import { Region } from '.';
 import { SortType } from './course';
 
 export interface IPlaceItem {
@@ -28,4 +29,12 @@ export interface PlaceFilter {
   page?: number;
   size?: number;
   sort?: SortType;
+}
+
+export interface PlaceSearchParams {
+  keyword?: string;
+  region?: Region;
+  page: number;
+  size: number;
+  sorting: '최신순' | '인기순';
 }

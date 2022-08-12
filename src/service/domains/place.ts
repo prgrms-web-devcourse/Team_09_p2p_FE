@@ -1,6 +1,6 @@
 import Api from '~/service/core/Api';
-import { PlaceFilter } from '~/types/place';
-import { ObjectToQuery } from '~/utils/converter';
+import { PlaceFilter, PlaceSearchParams } from '~/types/place';
+import { makeQueryString, ObjectToQuery } from '~/utils/converter';
 
 class PlaceApi extends Api {
   private path = '/places';
@@ -48,6 +48,20 @@ class PlaceApi extends Api {
     const response = await this.authInstance.get(`${this.path}/${queryString}`);
     console.log(response.data, 'response Data');
     return response.data;
+  };
+
+  search = async (params: PlaceSearchParams) => {
+    const queries = makeQueryString(params);
+    console.log(queries);
+    try {
+      const response = await this.authInstance.get(`${this.path}${queries}`);
+      if (response.status === 200 || response.status === 204) {
+        return response.data;
+      }
+      throw new Error(`코스 목록 조회 오류, 상태코드 : ${response.status}`);
+    } catch (e) {
+      console.error(`코스 목록 조회 오류: ${e}`);
+    }
   };
 
   getBookmarked = async (userId: number) => {
