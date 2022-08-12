@@ -33,7 +33,7 @@ const HomePage = () => {
   const handleSearch = (e: FormEvent) => {
     e.preventDefault();
     if (mainSearchInputRef.current) {
-      const keyword = mainSearchInputRef.current.value;
+      const keyword = mainSearchInputRef.current.value.trim();
       if (keyword) {
         router.push(`/search?keyword=${keyword}`);
       }
