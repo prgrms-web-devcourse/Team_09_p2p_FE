@@ -12,11 +12,14 @@ export interface IPlaceItem {
 
 export interface IPlace {
   id: number;
+  kakaoMapId: number;
   name: string;
   description: string;
   address: string;
+  roadAddress: string;
   latitude: string;
   longitude: string;
+  category: string;
   phoneNumber: string;
   imageUrl: string;
   isRecommended: boolean;
@@ -28,4 +31,20 @@ export interface PlaceFilter {
   page?: number;
   size?: number;
   sort?: SortType;
+}
+
+export interface IPlaceForm {
+  id: number;
+  kakaoMapId: number;
+  name: string;
+  description: string;
+  addressName: string;
+  roadAddressName: string;
+  latitude: string;
+  longitude: string;
+  category: string;
+  phoneNumber: string;
+  isRecommended: boolean;
+  isThumbnail: boolean;
+  imageUrl: string;
 }

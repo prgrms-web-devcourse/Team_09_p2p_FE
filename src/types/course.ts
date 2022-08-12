@@ -1,4 +1,4 @@
-import { IPlace } from './place';
+import { IPlace, IPlaceForm } from './place';
 import { Period, RegionAndAll, Spot, Theme } from '.';
 
 export interface ICourseItem {
@@ -44,6 +44,17 @@ export interface CourseFilter {
   sorting?: string;
   page?: number;
   size?: number;
+}
+
+export interface ICourseForm {
+  id: number;
+  title: string;
+  region: string;
+  period: string;
+  description: string;
+  themes: string[];
+  spots: string[];
+  places: IPlaceForm[];
 }
 
 export const sortOrder = {
