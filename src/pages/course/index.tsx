@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 import type { NextPage } from 'next';
 import Head from 'next/head';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { PageContainer } from '~/components/atom';
 import {
   CategoryTitle,
@@ -13,7 +13,8 @@ import {
 
 import { RegionAndAll, SearchTagsValues } from '~/types';
 import { CourseApi } from '~/service';
-import { sortOrder, SortType } from '~/types/course';
+import { useRouter } from 'next/router';
+import { CourseFilter } from '~/types/course';
 
 const Course: NextPage = () => {
   const [courseList, setCourseList] = useState([]);
@@ -22,40 +23,48 @@ const Course: NextPage = () => {
   const [isLast, setIsLast] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
+  const router = useRouter();
+  const SIZE = 15;
+
   const onIntersect: IntersectionObserverCallback = (entries, observer) => {
     entries.forEach(async (entry) => {
       if (entry.isIntersecting && !isLoading && !isLast) {
-        setIsLoading(true);
-
-        await getCourseList();
+        setPage((prev) => prev + 1);
         observer.unobserve(entry.target);
-        console.log('관찰');
-        setIsLoading(false);
+      }
+      if (isLast) {
+        observer.disconnect();
       }
     });
   };
 
-  const getCourseList = async (sort?: SortType) => {
-    const result = await CourseApi.getCourses({ page, size: 15 });
-    console.log(result, 'result');
-    if (result.last) {
-      setIsLast(true);
-    }
+  const getCourseList = async (filter: CourseFilter) => {
+    setIsLoading(true);
+    if (router.query.index) {
+      // 뒤로가기 시 index 코드
+    } else {
+      const result = await CourseApi.getCourses({ ...filter, size: SIZE });
+      console.log(router, 'router');
+      console.log(result, 'result');
+      if (result.last) {
+        setIsLast(true);
+      }
 
-    setCourseList(courseList.concat(result.content));
-    setPage((prev) => prev + 1);
+      setCourseList(courseList.concat(result.content));
+    }
+    setIsLoading(false);
   };
 
   useEffect(() => {
-    getCourseList(sortOrder.DESC);
-  }, []);
+    console.log(lastTarget, '★★★★★ref');
+    getCourseList({ page });
+  }, [page]);
 
   useEffect(() => {
+    console.log(lastTarget);
     let observer: IntersectionObserver;
-    console.log(lastTarget, 'ref');
     if (lastTarget) {
       observer = new IntersectionObserver(onIntersect, { threshold: 0 });
-
       observer.observe(lastTarget);
     }
     return () => observer && observer.disconnect();
