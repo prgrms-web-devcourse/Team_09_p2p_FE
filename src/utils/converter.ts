@@ -34,7 +34,7 @@ export const makeQueryString = (params: CourseSearchParams): string => {
     if (Array.isArray(value) && value.length > 0) {
       return queryString + `&${key}=${value.join(',')}`;
     }
-    if (value) {
+    if ((typeof value === 'number' && value >= 0) || value) {
       return queryString + `&${key}=${value}`;
     }
     return queryString;
