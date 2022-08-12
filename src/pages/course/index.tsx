@@ -53,7 +53,6 @@ const Course = ({ query }: { query: Record<string, string> }) => {
     sorting: '인기순'
   });
 
-  //
   const replaceRoute = () => {
     router.replace(
       {
