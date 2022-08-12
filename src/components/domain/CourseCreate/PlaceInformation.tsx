@@ -5,25 +5,22 @@ import theme from '~/styles/theme';
 import Textarea from '~/components/atom/Textarea';
 import Image from 'next/image';
 import ImageUpload from '~/components/common/ImageUpload';
-interface IPlace {
-  id: number;
-  lat: number;
-  lng: number;
-  name: string;
-  address: string;
-  roadAddressName: string;
-  category: string;
-  phoneNumber: string;
-}
+import { IPlaceForm } from '~/types/place';
+
 interface IPlaceInformation {
   children: ReactNode;
   isLastPlace: boolean;
-  place: IPlace;
+  place: IPlaceForm;
   textAreaRef: (el: HTMLTextAreaElement) => HTMLTextAreaElement;
   isRecommendedRef: (el: HTMLButtonElement) => HTMLButtonElement;
   ThumbnailButtonRef: (el: HTMLButtonElement) => HTMLButtonElement;
   placeImageRef: any;
   onChangeThumnail: any;
+  isModify?: boolean;
+  ModPropIsRecommended?: boolean;
+  ModPropIsThumbnail?: boolean;
+  ModPropWrittenDescription?: string;
+  ModPropUploadedImage?: string;
 }
 
 const PlaceInformation = ({
@@ -34,7 +31,12 @@ const PlaceInformation = ({
   isRecommendedRef,
   ThumbnailButtonRef,
   placeImageRef,
-  onChangeThumnail
+  onChangeThumnail,
+  isModify,
+  ModPropIsRecommended,
+  ModPropIsThumbnail,
+  ModPropWrittenDescription,
+  ModPropUploadedImage
 }: IPlaceInformation) => {
   const [file, setFile] = useState<File | string>('');
   const [previewUrl, setPreviewUrl] = useState('');
@@ -65,25 +67,59 @@ const PlaceInformation = ({
     }
   };
   let profile_preview = null;
-  if (file !== '') {
+  if (file !== '' /*  || isModify */) {
     profile_preview = (
       // eslint-disable-next-line jsx-a11y/alt-text, @next/next/no-img-element
       <>
-        <Image
-          style={{ width: '830px', height: '500px', zIndex: '100', borderRadius: '8px' }}
-          className="profile_preview"
-          src={previewUrl}
-          layout="fill"
-        />
-        <ThumbnailButton
-          name={children?.toString()}
-          onClick={onChangeThumnail}
-          ref={ThumbnailButtonRef}
-          value={children === 1 ? 'true' : 'false'}
-          isFisrtPlace={children === 1 ? true : false}
-        >
-          대표
-        </ThumbnailButton>
+        {file !== '' ? (
+          <Image
+            style={{
+              width: '830px',
+              height: '500px',
+              zIndex: '100',
+              borderRadius: '8px',
+              objectFit: 'contain'
+            }}
+            className="profile_preview"
+            src={previewUrl}
+            layout="fill"
+          />
+        ) : (
+          /* 이미지 URL로 파일을 못 잃어와 임시로 previewUrl 처리 */
+          <Image
+            style={{
+              width: '830px',
+              height: '500px',
+              zIndex: '100',
+              borderRadius: '8px',
+              objectFit: 'contain'
+            }}
+            className="profile_preview"
+            src={previewUrl as string}
+            layout="fill"
+          />
+        )}
+        {!isModify ? (
+          <ThumbnailButton
+            name={children?.toString()}
+            onClick={onChangeThumnail}
+            ref={ThumbnailButtonRef}
+            value={ModPropIsThumbnail === true ? 'true' : 'false'}
+            isSelectedThumbnail={ModPropIsThumbnail === true ? true : false}
+          >
+            대표
+          </ThumbnailButton>
+        ) : (
+          <ThumbnailButton
+            name={children?.toString()}
+            onClick={onChangeThumnail}
+            ref={ThumbnailButtonRef}
+            value={children === 1 ? 'true' : 'false'}
+            isSelectedThumbnail={children === 1 ? true : false}
+          >
+            대표
+          </ThumbnailButton>
+        )}
       </>
     );
   }
@@ -127,11 +163,13 @@ const PlaceInformation = ({
           </ImageUploadWrapper>
           <DescriptionWrapper>
             <Textarea
-              width={810}
+              width={660}
               height={200}
               placeholder={'장소에 대한 추억을 공유해주세요!☺️☺️'}
               textAreaRef={textAreaRef as unknown as MutableRefObject<HTMLTextAreaElement>}
-            ></Textarea>
+            >
+              {isModify ? ModPropWrittenDescription : null}
+            </Textarea>
           </DescriptionWrapper>
         </GuideLine>
       </PlaceInformationWrapper>
@@ -176,7 +214,7 @@ const NumberText = styled.p`
   text-align: center;
   position: absolute;
   top: 47%;
-  left: 3.2%;
+  left: 3.8%;
   transform: translate(-50%, -50%);
 `;
 
@@ -187,7 +225,7 @@ const RecommendButton = styled.button`
 `;
 
 const ImageUploadWrapper = styled.div`
-  width: 830px;
+  //width: 830px;
   height: 500px;
   margin: 30px 0 0 70px;
   border: 0px solid black;
@@ -229,12 +267,12 @@ const PlusImage = styled.img`
 `;
 
 const ThumbnailButton = styled.button<{
-  isFisrtPlace: boolean;
+  isSelectedThumbnail: boolean;
 }>`
   color: white;
   font-size: 16px;
-  background: ${({ isFisrtPlace }) =>
-    isFisrtPlace ? theme.color.mainColor : 'rgba(60, 60, 60, 0.5)'};
+  background: ${({ isSelectedThumbnail }) =>
+    isSelectedThumbnail ? theme.color.mainColor : 'rgba(60, 60, 60, 0.5)'};
   position: absolute;
   z-index: 101;
   top: 20px;
