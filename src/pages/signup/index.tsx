@@ -14,7 +14,7 @@ const Signup: NextPage = () => {
     try {
       const response = await UserApi.signup(data);
       if (response.nickname === data.nickname) {
-        Toast.show(`${response.nickname}님 환영합니다!`, 1500);
+        Toast.show(`${response.nickname}님 환영합니다! 로그인해주세요.`, 1500);
         router.push('/login');
       }
     } catch (e) {
