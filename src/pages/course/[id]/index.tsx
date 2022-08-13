@@ -19,9 +19,9 @@ import { sliceDate } from '~/utils/converter';
 
 export const getServerSideProps = async (context: NextPageContext) => {
   const { id } = context.query;
-
   const courseId = Number(id);
-  if (!courseId && !Number.isNaN(courseId)) {
+
+  if (Number.isNaN(courseId)) {
     return {
       notFound: true
     };
@@ -30,7 +30,7 @@ export const getServerSideProps = async (context: NextPageContext) => {
   try {
     const course = await CourseApi.read(courseId);
     return {
-      props: { course, courseId }
+      props: { course: course || null, courseId: courseId || null }
     };
   } catch (e) {
     return {
