@@ -2,6 +2,7 @@ import styled from '@emotion/styled';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { Icon, Text } from '~/components/atom';
+import KakaoButton from '~/components/domain/CourseDetail/KakaoButton';
 import { useUser } from '~/hooks/useUser';
 import { BookmarkApi, LikeApi } from '~/service';
 import theme from '~/styles/theme';
@@ -75,10 +76,7 @@ const DetailSidebar = ({
             <Icon name="bookmarkInactive" size={28} />
           )}
         </IconButton>
-
-        <IconButton>
-          <Icon name="share" size={28} />
-        </IconButton>
+        <KakaoButton />
       </Sticky>
     </Container>
   );
