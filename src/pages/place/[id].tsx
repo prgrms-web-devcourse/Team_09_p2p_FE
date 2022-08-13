@@ -51,7 +51,7 @@ const PlaceDetailByPostId = ({ place, placeId }: Props) => {
 
     setDetailData(places);
 
-    const courses = await CourseApi.getCourses({ placeId, size: 3 });
+    const courses = await CourseApi.getCourses({ placeId, size: 3, sorting: '인기순' });
     setRelevantCourses(courses.content);
   };
 
