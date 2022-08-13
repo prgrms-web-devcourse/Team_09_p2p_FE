@@ -4,6 +4,7 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import { PageContainer, Title } from '~/components/atom';
+import { Toast } from '~/components/common';
 import UserEditForm, { UserEditFormValues } from '~/components/domain/UserInfo/EditForm';
 import { useUser } from '~/hooks/useUser';
 import { UserApi } from '~/service';
@@ -22,6 +23,7 @@ const UserinfoEdit: NextPage = () => {
     const { nickname: prevNickname, birth: prevBirth, sex: prevSex } = initialValues;
     const { nickname, birth, sex } = data;
     if (prevNickname === nickname && prevBirth === birth && prevSex === sex) {
+      Toast.show('정보가 변경되었습니다.', 1000);
       router.push(`/userinfo/${userId}`);
       return;
     }
@@ -29,6 +31,7 @@ const UserinfoEdit: NextPage = () => {
     try {
       const response = await UserApi.edit({ nickname, birth, sex });
       if (response.status === 200) {
+        Toast.show('정보가 변경되었습니다.', 1000);
         router.push(`/userinfo/${userId}`);
       }
     } catch (e) {
