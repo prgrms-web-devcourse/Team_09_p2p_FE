@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 import type { NextPage } from 'next';
 import PlaceMap from '~/components/domain/Map/PlaceMap';
 import Head from 'next/head';
-import React, { useEffect, useState } from 'react';
+import React, { ReactElement, useEffect, useState } from 'react';
 import theme from '~/styles/theme';
 import Button from '~/components/atom/Button';
 import { Link, Icon, Text, Title } from '~/components/atom';
@@ -14,6 +14,7 @@ import { useRouter } from 'next/router';
 import { SearchInput } from '~/components/common';
 import SearchMap from '~/components/domain/Map/SearchMap';
 import { IPlaceForm } from '~/types/place';
+import Layout from '~/components/common/Layout';
 
 export interface IPlace {
   id: number;
@@ -47,7 +48,7 @@ interface Marker {
   };
   content: string;
 }
-const CourseCreate: NextPage = () => {
+const CourseCreate = () => {
   const router = useRouter();
   // 제출한 검색어 관리
   const [Keyword, setKeyword] = useState('');
@@ -217,6 +218,10 @@ const CourseCreate: NextPage = () => {
 };
 
 export default CourseCreate;
+
+CourseCreate.getLayout = function getLayout(page: ReactElement) {
+  return <Layout full>{page}</Layout>;
+};
 
 const { mainColor } = theme.color;
 
