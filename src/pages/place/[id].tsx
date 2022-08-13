@@ -12,6 +12,10 @@ import { useUser } from '~/hooks/useUser';
 import { CourseApi, PlaceApi } from '~/service';
 import theme from '~/styles/theme';
 import { PlacePost } from '~/types';
+import { ICourseItem } from '~/types/course';
+
+const COURSE_SORT = '인기순';
+const COURSE_SIZE = 9;
 
 export const getServerSideProps = async (context: NextPageContext) => {
   const { id } = context.query;
@@ -25,8 +29,13 @@ export const getServerSideProps = async (context: NextPageContext) => {
 
   try {
     const place = await PlaceApi.read(placeId);
+    const courses = await CourseApi.getCourses({
+      placeId,
+      size: COURSE_SIZE,
+      sorting: COURSE_SORT
+    });
     return {
-      props: { place, placeId }
+      props: { place, placeId, courses: courses.content }
     };
   } catch (e) {
     return {
@@ -38,10 +47,11 @@ export const getServerSideProps = async (context: NextPageContext) => {
 interface Props {
   place: PlacePost;
   placeId: number;
+  courses: ICourseItem[];
 }
 
-const PlaceDetailByPostId = ({ place, placeId }: Props) => {
-  const [relevantCourses, setRelevantCourses] = useState([]);
+const PlaceDetailByPostId = ({ place, placeId, courses }: Props) => {
+  const [relevantCourses, setRelevantCourses] = useState(courses || []);
   const { isLoggedIn } = useUser();
   const [detailData, setDetailData] = useState<PlacePost | null>(place);
   const [isOpenMap, setIsOpenMap] = useState(false);
@@ -51,7 +61,11 @@ const PlaceDetailByPostId = ({ place, placeId }: Props) => {
 
     setDetailData(places);
 
-    const courses = await CourseApi.getCourses({ placeId, size: 3 });
+    const courses = await CourseApi.getCourses({
+      placeId,
+      size: COURSE_SIZE,
+      sorting: COURSE_SORT
+    });
     setRelevantCourses(courses.content);
   };
 

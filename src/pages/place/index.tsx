@@ -30,13 +30,64 @@ const Place = ({ query }: { query: Record<string, string> }) => {
   const router = useRouter();
   const [placeList, setPlaceList] = useState([]);
   const { currentUser } = useUser();
+  const [isLoading, setIsLoading] = useState(false);
+  const [isLast, setIsLast] = useState(false);
+  const [page, setPage] = useState(0);
+  const [lastTarget, setLastTarget] = useState(null);
+
+  const SIZE = 16;
+
   const [queries, setQueries] = useState<QueryState>({
     period: (query.period && correctedPeriod(query.period)) || null,
     region: (query.region && correctedRegion(query.region)) || '전체보기',
     page: 0,
-    size: 16,
+    size: SIZE,
     sorting: '인기순'
   });
+
+  const onIntersect: IntersectionObserverCallback = (entries, observer) => {
+    entries.forEach(async (entry) => {
+      if (entry.isIntersecting && !isLoading && !isLast) {
+        console.log('관찰');
+        setPage((prev) => prev + 1);
+
+        observer.unobserve(entry.target);
+      }
+      if (isLast) {
+        observer.disconnect();
+      }
+    });
+  };
+
+  useEffect(() => {
+    let observer: IntersectionObserver;
+    if (lastTarget) {
+      observer = new IntersectionObserver(onIntersect, { threshold: 0 });
+      observer.observe(lastTarget);
+    }
+    return () => observer && observer.disconnect();
+  }, [lastTarget]);
+
+  const getPlaceList = async () => {
+    setIsLoading(true);
+    if (router.query.index) {
+      // 뒤로가기 시 index 코드
+    } else {
+      const result = await PlaceApi.search({
+        ...queries,
+        region: queries.region === '전체보기' ? undefined : queries.region,
+        page,
+        size: SIZE
+      });
+      console.log('요청', { ...queries, page, size: SIZE });
+      if (result.last) {
+        console.log('마지막 페이지 입니다.');
+        setIsLast(true);
+      }
+      setPlaceList(placeList.concat(result.content));
+    }
+    setIsLoading(false);
+  };
 
   const replaceRoute = () => {
     router.replace(
@@ -81,7 +132,16 @@ const Place = ({ query }: { query: Record<string, string> }) => {
   useEffect(() => {
     replaceRoute();
     getPlacesByQuery();
+    setIsLast(false);
+    setPage(0);
   }, [queries, currentUser.accessToken]);
+
+  useEffect(() => {
+    console.log(page, 'page!');
+    if (page !== 0) {
+      getPlaceList();
+    }
+  }, [page]);
 
   return (
     <React.Fragment>
@@ -98,7 +158,7 @@ const Place = ({ query }: { query: Record<string, string> }) => {
             <SelectRegion onSelect={handleSelectRegion} defaultValues={queries.region} />
           </FilterList>
           <SortFilter onSort={handleSort} initialValue={queries.sorting} />
-          <PlaceList places={placeList} />
+          <PlaceList places={placeList} ref={setLastTarget} />
         </PageContainer>
       </main>
     </React.Fragment>

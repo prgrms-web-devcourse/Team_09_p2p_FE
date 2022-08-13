@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import { useRouter } from 'next/router';
-import React, { MouseEvent, useState } from 'react';
+import React, { forwardRef, LegacyRef, MouseEvent, useState } from 'react';
 import { Link, Text, Title } from '~/components/atom';
 import Avatar from '~/components/atom/Avatar';
 import { useUser } from '~/hooks/useUser';
@@ -13,9 +13,10 @@ import LikeCount from '../LikeCount';
 interface CourseItemProps {
   course: ICourseItem;
   grid?: number;
+  index?: number;
 }
 
-const CourseItem = ({ course, grid = 3 }: CourseItemProps) => {
+const CourseItem = forwardRef(({ course, grid = 3, index }: CourseItemProps, ref) => {
   const {
     id,
     thumbnail,
@@ -50,7 +51,7 @@ const CourseItem = ({ course, grid = 3 }: CourseItemProps) => {
   };
 
   return (
-    <ItemContainer grid={grid}>
+    <ItemContainer grid={grid} ref={ref as LegacyRef<HTMLLIElement>}>
       <Link href={`/course/${id}`}>
         <ThumbnailWrapper>
           <ThumbnailBackground></ThumbnailBackground>
@@ -61,7 +62,7 @@ const CourseItem = ({ course, grid = 3 }: CourseItemProps) => {
               {region} · {COURSE_COUNT}코스
             </Text>
             <Title level={3} size={18} ellipsis>
-              {title}
+              {title} - {id}
             </Title>
           </ThumbnailInfo>
         </ThumbnailWrapper>
@@ -90,7 +91,9 @@ const CourseItem = ({ course, grid = 3 }: CourseItemProps) => {
       </Link>
     </ItemContainer>
   );
-};
+});
+
+CourseItem.displayName = 'CourseItem';
 
 export default CourseItem;
 

@@ -23,7 +23,7 @@ type CourseSearchBookmarked = {
 class CourseApi extends Api {
   private path = '/courses';
 
-  getCourses = async (filter?: CourseFilter) => {
+  getCourses = async (filter?: CourseSearchParams) => {
     const response = await this.authInstance.get(`${this.path}`, { params: filter });
     return response.data;
   };
