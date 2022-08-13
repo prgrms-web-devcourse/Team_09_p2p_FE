@@ -16,7 +16,7 @@ const BackgroundDim = ({
   children,
   onClose,
   closeDimActive = true,
-  dimOpacity = 0.2
+  dimOpacity = 0.1
 }: BackgroundDimProps) => {
   const ref = useClickAway<HTMLDivElement>(() => {
     if (closeDimActive && onClose) {
