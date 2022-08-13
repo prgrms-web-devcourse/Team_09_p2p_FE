@@ -53,7 +53,7 @@ const CourseMap = ({ course }: CourseMapProps) => {
   return (
     <>
       <Script
-        src={`https://dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_KAKAO_MAP_KEY}&autoload=false`}
+        src={`https://dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_KAKAO_MAP_KEY}&libraries=services&autoload=false`}
         onLoad={() => {
           kakao.maps.load(() => {
             isAlreadyLoaded = true;
