@@ -231,6 +231,7 @@ const SelectedHeader = styled.div`
   margin: 30px 0 20px 0;
   text-align: center;
   display: flex;
+  align-items: center;
 `;
 
 const SelectedPlace = styled.div`
