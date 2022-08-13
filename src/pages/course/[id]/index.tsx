@@ -14,7 +14,8 @@ import CourseMap from '~/components/domain/Map/CourseMap';
 import { useUser } from '~/hooks/useUser';
 import { CourseApi } from '~/service';
 import theme from '~/styles/theme';
-import { ICourseDetail } from '~/types/course';
+import { ICourseDetail, ICourseForm } from '~/types/course';
+import { IPlaceForm } from '~/types/place';
 import { sliceDate } from '~/utils/converter';
 
 const CourseDetail: NextPage = () => {
@@ -49,6 +50,44 @@ const CourseDetail: NextPage = () => {
 
       setDetailData(result);
     }
+  };
+
+  const setPlaceForm = () => {
+    if (detailData) {
+      return detailData.places.map((detail) => {
+        return {
+          id: detail.placeId,
+          kakaoMapId: detail.id,
+          name: detail.name,
+          description: detail.description,
+          addressName: detail.address,
+          roadAddressName: detail.roadAddress,
+          latitude: detail.latitude,
+          longitude: detail.longitude,
+          category: detail.category,
+          phoneNumber: detail.phoneNumber,
+          isRecommended: detail.isRecommended,
+          isThumbnail: detail.isThumbnail,
+          imageUrl: detail.imageUrl
+        } as unknown as IPlaceForm;
+      });
+    } else {
+      return {} as IPlaceForm[];
+    }
+  };
+
+  const setEditQuery = () => {
+    const queryData = {} as ICourseForm;
+    queryData.id = courseId;
+    if (detailData) {
+      queryData.title = detailData.title;
+      queryData.region = detailData.region;
+      queryData.period = detailData.period;
+      queryData.themes = detailData.themes;
+      queryData.spots = detailData.spots;
+      queryData.places = setPlaceForm();
+    }
+    return JSON.stringify(queryData);
   };
 
   const onDeleteCourse = async () => {
@@ -91,7 +130,15 @@ const CourseDetail: NextPage = () => {
               </Title>
               {currentUser.user.id === detailData.userId && (
                 <HeaderButtons>
-                  <Link href={`/course/${courseId}/edit`}>수정</Link>
+                  <Link
+                    href={{
+                      pathname: `/course/${courseId}/edit`,
+                      query: { courseQuery: setEditQuery() }
+                    }}
+                    /* as={`/course/${courseId}/edit`} */
+                  >
+                    수정
+                  </Link>
                   <Text.Button color="gray" onClick={onDeleteCourse}>
                     삭제
                   </Text.Button>
