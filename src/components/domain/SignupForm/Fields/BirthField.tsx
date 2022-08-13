@@ -20,6 +20,8 @@ const BirthField: React.FC<BirthFieldProps> = ({ value, onChange, errors }) => {
       <Label htmlFor="birth" text="생년월일" />
       <Input
         type="date"
+        min="1900-01-01"
+        max="2030-12-31"
         name="birth"
         placeholder="YYYY-MM-DD"
         required

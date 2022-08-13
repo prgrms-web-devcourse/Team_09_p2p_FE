@@ -13,3 +13,4 @@ export { default as ErrorMessage } from './Form/ErrorMessage';
 export { default as SearchInput } from './SearchInput';
 export { default as SelectRegion } from './SelectRegion';
 export { default as SelectTags } from './SelectTags';
+export { default as Toast } from './Toast';

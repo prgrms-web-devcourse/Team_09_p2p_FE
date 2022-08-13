@@ -27,6 +27,7 @@ const NicknameField: React.FC<NicknameFieldProps> = ({
     (e: ChangeEvent<HTMLInputElement>) => {
       checkDuplicate && checkDuplicate(false);
       onChange(e);
+      setError('');
     },
     [onChange, checkDuplicate]
   );
@@ -36,10 +37,10 @@ const NicknameField: React.FC<NicknameFieldProps> = ({
   const handleClickDuplicate = async () => {
     try {
       await UserApi.nicknameCheck({ nickname: value });
-      window.alert(`${value}는 사용가능한 닉네임입니다.`);
+      setError('');
       checkDuplicate && checkDuplicate(true);
     } catch (e) {
-      window.alert('이미 존재하는 닉네임입니다.');
+      setError('이미 존재하는 닉네임입니다.');
     }
   };
 
