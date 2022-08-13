@@ -51,67 +51,8 @@ const CourseEdit: NextPage = () => {
   }
   const courseInfo: ICourseForm = JSON.parse(courseQuery as string);
   console.log(courseInfo);
-  //const [title, setTitle] = useState(courseInfo ? courseInfo.title : '');
   const formCourseData = {} as ICourseForm;
-  /* const courseInfo = {
-    id: 645,
-    region: '대전',
-    title: '대전 코스',
-    period: '',
-    theme: [],
-    spot: [],
-    places: [
-      {
-        id: 1266228191,
-        lat: 35.0768018,
-        lng: 129.023402,
-        name: '송도해상케이블카 송도베이스테이션',
-        address: '부산 서구 송도해변로 171',
-        roadAddressName: '부산 서구 송도해변로 171',
-        category: 'FD6',
-        phoneNumber: '051-247-9900',
-        description: '111',
-        isRecommended: true,
-        isThumbnail: false,
-        imageUrl:
-          'https://devcourse-f-s3-storage.s3.ap-northeast-2.amazonaws.com/6edff328bb03450896b08f1f2ed37ee9.jpeg'
-      },
-      {
-        id: 8202423,
-        lat: 35.1538826,
-        lng: 129.118628,
-        name: '광안리해수욕장',
-        address: '부산 수영구 광안해변로 219',
-        roadAddressName: '부산 수영구 광안해변로 219',
-        category: 'FD6',
-        phoneNumber: '051-610-4744',
-        description: '222',
-        isRecommended: false,
-        isThumbnail: true,
-        imageUrl:
-          'https://devcourse-f-s3-storage.s3.ap-northeast-2.amazonaws.com/be121a283f60459a8a4cd5d9aab2ed4e.png'
-      },
-      {
-        id: 8111808,
-        lat: 35.0554585,
-        lng: 129.087973,
-        name: '태종대유원지',
-        address: '부산 영도구 동삼동 산 29-1',
-        roadAddressName: '부산광역시 영도구 전망로 209',
-        category: 'FD6',
-        phoneNumber: '051-405-8745',
-        description: '333',
-        isRecommended: true,
-        isThumbnail: false,
-        imageUrl:
-          'https://devcourse-f-s3-storage.s3.ap-northeast-2.amazonaws.com/db65798fd7ef44b4a332097848df8d10.png'
-      }
-    ]
-  }; */
   formCourseData.region = courseInfo.region;
-  formCourseData.description =
-    '인천은 하루에 돌아보기 좋은 관광지다. 구한말 외세의 세력이 밀려들던 곳도 이곳이고 그만큼 많은 애환과 흔적을 남겼다. 인천차이나타운만의 이국적 색깔과 중국과 한국이 믹스된 중국식 음식들과 바다, 어시장 그리고 혁신적인 인천대교의 웅장함까지 아주 즐거운 하루를 선사받을 것이다.';
-
   const courseMapData = courseInfo.places.map((place) => {
     return {
       id: place.kakaoMapId,
@@ -132,7 +73,7 @@ const CourseEdit: NextPage = () => {
         latitude: place.latitude.toString(),
         longitude: place.longitude.toString(),
         category: place.category !== '' ? place.category : 'DE',
-        phoneNumber: place.phoneNumber,
+        phoneNumber: place.phoneNumber !== '' ? place.phoneNumber : null,
         isRecommended: JSON.parse(isRecommendedRef.current[index].value),
         isThumbnail: JSON.parse(ThumbnailButtonRef.current[index].value)
       } as IPlaceForm;
