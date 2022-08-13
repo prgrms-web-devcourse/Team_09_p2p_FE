@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 import { useFormik } from 'formik';
 import React, { ChangeEvent, useMemo, useState } from 'react';
 import { Button, Input, Text } from '~/components/atom';
-import { ErrorMessage } from '~/components/common';
+import FieldMessage from '~/components/common/Form/FieldMessage';
 import { UserApi } from '~/service';
 import { ValidationRules } from './rules';
 
@@ -52,7 +52,6 @@ const UserEditForm = ({ initialValues, onSubmit: onSubmitAction }: UserEditForm)
     try {
       const response = await UserApi.nicknameCheck({ nickname: values.nickname });
       if (response.status === 200) {
-        window.alert(`${values.nickname}는 사용가능한 닉네임입니다.`);
         setIsCheckedDuplicateNickname(true);
         setNicknameError('');
         return;
@@ -98,7 +97,13 @@ const UserEditForm = ({ initialValues, onSubmit: onSubmitAction }: UserEditForm)
           중복확인
         </Button>
       </Field>
-      <Error>{nicknameError && <ErrorMessage message={nicknameError} />}</Error>
+      <Message>
+        {initialValues.nickname === values.nickname ? null : isCheckedDuplicateNickname ? (
+          <FieldMessage color="green" message="사용가능한 닉네임입니다." />
+        ) : (
+          nicknameError && <FieldMessage color="red" message={nicknameError} />
+        )}
+      </Message>
       <Field>
         <label htmlFor="sex">성별</label>
         <Options role="sex" aria-labelledby="sex">
@@ -136,7 +141,7 @@ const UserEditForm = ({ initialValues, onSubmit: onSubmitAction }: UserEditForm)
           autoComplete="off"
         />
       </Field>
-      <Error>{errors.birth && <ErrorMessage message={errors.birth} />}</Error>
+      <Message>{errors.birth && <FieldMessage color="red" message={errors.birth} />}</Message>
       <Button
         type="submit"
         size="md"
@@ -180,6 +185,6 @@ const Options = styled.div`
   }
 `;
 
-const Error = styled.div`
+const Message = styled.div`
   margin-left: 160px;
 `;
