@@ -18,8 +18,6 @@ interface PasswordChangeFormProps {
 
 const PasswordChangeForm = ({ onSubmit: onSubmitAction }: PasswordChangeFormProps) => {
   const [passwordError, setPasswordError] = useState('');
-  const [passwordCheckError, setPasswordCheckError] = useState('');
-
   const { values, handleChange, handleSubmit, errors } = useFormik({
     initialValues,
     validationSchema: ValidationRules,
@@ -30,13 +28,6 @@ const PasswordChangeForm = ({ onSubmit: onSubmitAction }: PasswordChangeFormProp
 
   const handleBlurPassword = () => {
     setPasswordError(errors.password || '');
-    if (values.passwordCheck) {
-      setPasswordCheckError(errors.passwordCheck || '');
-    }
-  };
-
-  const handleBlurPasswordCheck = () => {
-    setPasswordCheckError(errors.passwordCheck || '');
   };
 
   const submitButtonDisabled = useMemo(() => {
@@ -87,12 +78,11 @@ const PasswordChangeForm = ({ onSubmit: onSubmitAction }: PasswordChangeFormProp
           placeholder="새 비밀번호를 다시 입력해주세요."
           value={values.passwordCheck}
           onChange={handleChange}
-          onBlur={handleBlurPasswordCheck}
         />
       </Field>
-      {passwordCheckError && (
+      {values.passwordCheck && errors.passwordCheck && (
         <Error>
-          <ErrorMessage message={passwordCheckError} />
+          <ErrorMessage message={errors.passwordCheck} />
         </Error>
       )}
 
