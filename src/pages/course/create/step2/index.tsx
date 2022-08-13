@@ -35,10 +35,6 @@ const Course: NextPage = () => {
   const router = useRouter();
   const { courseQuery } = router.query;
   const titleRef = useRef<HTMLInputElement>(null as unknown as HTMLInputElement);
-  // todo: 필터 컴포넌트 호출 후 사용할 예정
-  /* const [period, setPeriod] = useState('');
-  const [themes, setThemes] = useState([]);
-  const [spots, setSpots] = useState([]); */
   const textAreasRef = useRef([] as HTMLTextAreaElement[]);
   const isRecommendedRef = useRef([] as HTMLButtonElement[]);
   const placeImagesRef = useRef([] as any);
@@ -69,8 +65,8 @@ const Course: NextPage = () => {
         roadAddressName: place.roadAddressName,
         latitude: place.latitude,
         longitude: place.longitude,
-        category: place.category !== '' ? place.category : 'FD6',
-        phoneNumber: place.phoneNumber,
+        category: place.category !== '' ? place.category : 'DE9',
+        phoneNumber: place.phoneNumber !== '' ? place.phoneNumber : null,
         isRecommended: JSON.parse(isRecommendedRef.current[index].value),
         isThumbnail: JSON.parse(ThumbnailButtonRef.current[index].value)
       } as IPlaceForm;
@@ -165,7 +161,6 @@ const Course: NextPage = () => {
             break;
         }
       });
-      //await PlaceApi.create()
     };
     if (window.confirm('코스를 등록하시겠어요?')) {
       createCourse(courseFormData);
