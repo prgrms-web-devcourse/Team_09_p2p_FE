@@ -1,7 +1,8 @@
 import styled from '@emotion/styled';
 import type { NextPageContext } from 'next';
 import Head from 'next/head';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
 import { PageContainer } from '~/components/atom';
 import {
   CategoryTitle,
@@ -13,8 +14,7 @@ import {
 
 import { Period, RegionAndAll, SearchTagsValues, Spot, Theme } from '~/types';
 import { CourseApi } from '~/service';
-import { CourseFilter } from '~/types/course';
-import { SortType } from '~/types/course';
+import { CourseFilter, SortType } from '~/types/course';
 import {
   correctedPeriod,
   correctedRegion,
@@ -22,8 +22,6 @@ import {
   correctedThemes,
   makeQueryString
 } from '~/utils/converter';
-import { useRouter } from 'next/router';
-import { relative } from 'path';
 
 export const getServerSideProps = async (context: NextPageContext) => {
   const { query } = context;
@@ -62,15 +60,11 @@ const Course = ({ query }: { query: Record<string, string> }) => {
     sorting: '인기순'
   });
 
-  // const targetRef = useRef(null);
-
-  // 이건 그대로 두기
   const onIntersect: IntersectionObserverCallback = (entries, observer) => {
     entries.forEach(async (entry) => {
       if (entry.isIntersecting && !isLoading && !isLast) {
         console.log('관찰');
         setPage((prev) => prev + 1);
-        // setQueries((prevQueries) => ({ ...prevQueries, page: prevQueries.page + 1 }));
 
         observer.unobserve(entry.target);
       }
@@ -123,7 +117,6 @@ const Course = ({ query }: { query: Record<string, string> }) => {
       const response = await CourseApi.search({ ...queries, size: SIZE });
       setCourseList(response.content);
       console.log('요청', { ...queries, size: SIZE });
-      // setIsLast(false);
     } catch (e) {
       console.error('코스페이지에서 코스목록을 불러오는데 실패했어요.', e);
       setCourseList([]);
@@ -136,7 +129,6 @@ const Course = ({ query }: { query: Record<string, string> }) => {
       region,
       page: 0
     }));
-    // setPage(0);
   };
 
   const handleSelectTags = async (data: SearchTagsValues) => {
@@ -149,7 +141,6 @@ const Course = ({ query }: { query: Record<string, string> }) => {
       spots,
       page: 0
     });
-    // setPage(0);
   };
 
   const handleSort = async (sorting: SortType) => {
@@ -157,20 +148,13 @@ const Course = ({ query }: { query: Record<string, string> }) => {
       ...queries,
       sorting
     });
-    // setPage(0);
   };
-
-  // useEffect(() => {
-  //   replaceRoute();
-  //   getCoursesByQuery();
-  // }, [queries]);
 
   useEffect(() => {
     replaceRoute();
     getCoursesByQuery();
     setIsLast(false);
     setPage(0);
-    // getCourseList({ page });
   }, [queries]);
 
   useEffect(() => {
