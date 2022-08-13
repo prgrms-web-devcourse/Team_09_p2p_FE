@@ -112,7 +112,7 @@ const PlaceInformation = ({
             layout="fill"
           />
         )}
-        {!isModify ? (
+        {isModify ? (
           <ThumbnailButton
             name={children?.toString()}
             onClick={onChangeThumnail}
