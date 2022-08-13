@@ -33,7 +33,7 @@ const UserinfoEdit: NextPage = () => {
       }
     } catch (e) {
       // TODO 이후 status code에 따른 예외처리
-      console.error(e);
+      console.error('회원정보 수정 실패', e);
     }
   };
 
@@ -50,7 +50,7 @@ const UserinfoEdit: NextPage = () => {
 
   useEffect(() => {
     if (typeof router.query.id === 'string') {
-      if (!currentUser.isLoading && currentUser.user.id !== userId) {
+      if (currentUser.user.id !== userId) {
         alert('잘못된 요청입니다.');
         router.push('/');
         return;

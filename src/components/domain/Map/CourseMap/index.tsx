@@ -91,13 +91,43 @@ const CourseMap = ({ course }: CourseMapProps) => {
                   }
                 }}
               ></MapMarker>
+              {/* <MapMarker
+                position={{ lat: Number(place.latitude), lng: Number(place.longitude) }}
+                image={{
+                  src: 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_number_blue.png',
+                  size: {
+                    // width: 64,
+                    // height: 69
+                    width: 64,
+                    height: 69
+                  },
+                  options: {
+                    spriteSize: {
+                      // width: 36,
+                      // height: 691
+                      width: 48,
+                      height: 921
+                    },
+                    spriteOrigin: {
+                      x: 10,
+                      y: index * 46 + 20
+                    },
+                    offset: {
+                      // x: 27,
+                      // y: 69
+                      x: 13,
+                      y: 37
+                    }
+                  }
+                }}
+              ></MapMarker> */}
               <CustomOverlayMap
                 position={{ lat: Number(place.latitude), lng: Number(place.longitude) }}
                 xAnchor={0}
-                yAnchor={1.1}
+                yAnchor={0.98}
                 clickable={true}
               >
-                <span>{index + 1}</span>
+                {index + 1}
                 <MarkerWithCustomOverlayStyle>
                   <a
                     href={`https://map.kakao.com/link/map/${place.id}`}
@@ -127,7 +157,7 @@ export default CourseMap;
 
 const MarkerWithCustomOverlayStyle = styled.div`
   right: 46%;
-  bottom: 80px;
+  bottom: 90px;
   position: relative;
   border-radius: 6px;
   border: 1px solid #ccc;
