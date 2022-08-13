@@ -7,7 +7,7 @@ import theme from '~/styles/theme';
 import { BookmarkApi } from '~/service';
 import { useUser } from '~/hooks/useUser';
 import { useRouter } from 'next/router';
-import { MouseEvent, useState } from 'react';
+import { forwardRef, LegacyRef, MouseEvent, useState } from 'react';
 
 export type PlaceGrid = 3 | 4;
 interface PlaceItemProps {
@@ -15,7 +15,7 @@ interface PlaceItemProps {
   grid: PlaceGrid;
 }
 
-const PlaceItem = ({ place, grid }: PlaceItemProps) => {
+const PlaceItem = forwardRef(({ place, grid }: PlaceItemProps, ref) => {
   const { id, title, likeCount, usedCount, thumbnail, bookmarked } = place;
   const THUMBNAIL_URL = thumbnail ? thumbnail : '';
   const { isLoggedIn } = useUser();
@@ -35,7 +35,7 @@ const PlaceItem = ({ place, grid }: PlaceItemProps) => {
   };
 
   return (
-    <PlaceContainer grid={grid}>
+    <PlaceContainer grid={grid} ref={ref as LegacyRef<HTMLLIElement>}>
       <Link href={`/place/${id}`}>
         <ThumbnailWrapper grid={grid}>
           <Thumbnail
@@ -61,7 +61,9 @@ const PlaceItem = ({ place, grid }: PlaceItemProps) => {
       </Link>
     </PlaceContainer>
   );
-};
+});
+
+PlaceItem.displayName = 'PlaceItem';
 
 export default PlaceItem;
 
