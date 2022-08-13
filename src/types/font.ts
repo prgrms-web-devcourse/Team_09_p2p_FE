@@ -37,7 +37,8 @@ export const FONT_COLORS = {
   blueGray: fontBlueGray,
   main: mainColor,
   red: fontRed,
-  recommend: recommendColor
+  recommend: recommendColor,
+  green: 'green'
 };
 
 export type FontColors = keyof typeof FONT_COLORS;
