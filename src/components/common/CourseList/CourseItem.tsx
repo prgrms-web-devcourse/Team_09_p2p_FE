@@ -52,13 +52,7 @@ const CourseItem = forwardRef(({ course, grid = 3, index }: CourseItemProps, ref
 
   return (
     <ItemContainer grid={grid} ref={ref as LegacyRef<HTMLLIElement>}>
-      <a
-        onClick={() => {
-          router.replace({ pathname: router.pathname, query: { index } }, router.pathname);
-          router.push(`/course/${id}`);
-          console.log(router);
-        }}
-      >
+      <Link href={`/course/${id}`}>
         <ThumbnailWrapper>
           <ThumbnailBackground></ThumbnailBackground>
           <Thumbnail className="courseImage" style={{ backgroundImage: `url(${THUMBNAIL_URL})` }} />
@@ -94,7 +88,7 @@ const CourseItem = forwardRef(({ course, grid = 3, index }: CourseItemProps, ref
             </Profile>
           </InfoFooter>
         </CourseInfo>
-      </a>
+      </Link>
     </ItemContainer>
   );
 });
