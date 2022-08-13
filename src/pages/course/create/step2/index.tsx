@@ -67,9 +67,9 @@ const Course: NextPage = () => {
         description: textAreasRef.current[index].value,
         addressName: place.addressName,
         roadAddressName: place.roadAddressName,
-        latitude: place.latitude.toString(),
-        longitude: place.longitude.toString(),
-        category: place.category !== '' ? place.category : 'DE',
+        latitude: place.latitude,
+        longitude: place.longitude,
+        category: place.category !== '' ? place.category : 'FD6',
         phoneNumber: place.phoneNumber,
         isRecommended: JSON.parse(isRecommendedRef.current[index].value),
         isThumbnail: JSON.parse(ThumbnailButtonRef.current[index].value)
@@ -143,6 +143,9 @@ const Course: NextPage = () => {
       courseFormData.append('images', placesImageData[i]);
     }
     const createCourse = async (courseFormData: FormData) => {
+      for (const [key, value] of courseFormData.entries()) {
+        console.log(key, value);
+      }
       await CourseApi.create(courseFormData).then((res) => {
         switch (res) {
           case 201:
@@ -215,6 +218,11 @@ const Course: NextPage = () => {
                   (ThumbnailButtonRef.current[index] = el)
                 }
                 onChangeThumnail={onChangeThumnail}
+                isModify={false}
+                ModPropIsRecommended={place.isRecommended}
+                ModPropIsThumbnail={place.isThumbnail}
+                ModPropWrittenDescription={place.description}
+                ModPropUploadedImage={place.imageUrl}
               >
                 {index + 1}
               </PlaceInformation>
