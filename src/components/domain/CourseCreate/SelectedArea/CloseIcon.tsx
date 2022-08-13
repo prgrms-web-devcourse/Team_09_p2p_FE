@@ -3,10 +3,11 @@ import { Icon } from '~/components/atom';
 
 interface CloseIconProps {
   onClick?: () => void;
+  size?: number;
 }
 
-const CloseIcon = ({ onClick }: CloseIconProps) => {
-  return <StyledIcon onClick={onClick as () => void} name="thinClose" size={50} />;
+const CloseIcon = ({ onClick, size = 50 }: CloseIconProps) => {
+  return <StyledIcon onClick={onClick as () => void} name="thinClose" size={size} />;
 };
 
 export default CloseIcon;
