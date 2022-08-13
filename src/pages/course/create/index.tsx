@@ -40,11 +40,6 @@ export interface ISelectedPlace {
   category: string;
   phoneNumber: string;
 }
-
-interface IRequestQuery {
-  requestPath: string;
-  places: ISelectedPlace[];
-}
 interface Marker {
   position: {
     lat: number;
@@ -61,7 +56,7 @@ const CourseCreate: NextPage = () => {
   const [markers, setMarkers] = useState<Marker[]>([]);
   const [visible, setVisible] = useState(true);
   const [region, setRegion] = useState('서울');
-  const [selectedPlaces, setSelectedPlaces] = useState<ISelectedPlace[]>([]);
+  const [selectedPlaces, setSelectedPlaces] = useState<IPlaceForm[]>([]);
   const [isModify, setIsModify] = useState(false);
   const [loadedRegion, setLoadedRegion] = useState('');
   //const [queryData, setQueryData] = useState();
@@ -69,17 +64,13 @@ const CourseCreate: NextPage = () => {
   useEffect(() => {
     if (router.query.hasOwnProperty('requestPath')) {
       const { courseQuery } = router.query;
-      //setSelectedPlaces(JSON.parse(placesInfo as string));
       if (courseQuery) {
         const courseInfo: ICourseInfo = JSON.parse(courseQuery as string);
         setSelectedPlaces(courseInfo.places);
         setRegion(courseInfo.region);
-        /* selectedRegion = courseInfo.region;
-        console.log(selectedRegion); */
         setLoadedRegion(courseInfo.region);
         setIsModify(true);
       }
-      //console.log(router);
     }
   }, []);
   const handleNextStep = () => {
@@ -127,10 +118,10 @@ const CourseCreate: NextPage = () => {
     return selectedPlaces.map((selectedPlace) => {
       return {
         kakaoMapId: selectedPlace.id,
-        latitude: selectedPlace.lat,
-        longitude: selectedPlace.lng,
+        latitude: selectedPlace.latitude,
+        longitude: selectedPlace.longitude,
         name: selectedPlace.name,
-        addressName: selectedPlace.address,
+        addressName: selectedPlace.addressName,
         roadAddressName: selectedPlace.roadAddressName,
         category: selectedPlace.category,
         phoneNumber: selectedPlace.phoneNumber
@@ -143,7 +134,7 @@ const CourseCreate: NextPage = () => {
     queryData.places = setPlaces();
     return JSON.stringify(queryData);
   };
-  const deletePlace = (deleteSelectedPlace: ISelectedPlace) => {
+  const deletePlace = (deleteSelectedPlace: IPlaceForm) => {
     setSelectedPlaces(
       selectedPlaces.filter((selectedPlace) => selectedPlace.id !== deleteSelectedPlace.id)
     );

@@ -51,9 +51,6 @@ const Course: NextPage = () => {
   const courseInfo: ICourseInfo = JSON.parse(courseQuery as string);
   const formCourseData = {} as ICourseForm;
   formCourseData.region = courseInfo.region;
-  formCourseData.description =
-    '인천은 하루에 돌아보기 좋은 관광지다. 구한말 외세의 세력이 밀려들던 곳도 이곳이고 그만큼 많은 애환과 흔적을 남겼다. 인천차이나타운만의 이국적 색깔과 중국과 한국이 믹스된 중국식 음식들과 바다, 어시장 그리고 혁신적인 인천대교의 웅장함까지 아주 즐거운 하루를 선사받을 것이다.';
-
   const courseMapData = courseInfo.places.map((place) => {
     return {
       id: place.kakaoMapId,
@@ -134,6 +131,7 @@ const Course: NextPage = () => {
     formCourseData.places = placesFormDataSetter();
     const courseFormData = new FormData();
     const uploaderString = JSON.stringify(formCourseData);
+    console.log(formCourseData);
     courseFormData.append(
       'course',
       new Blob([uploaderString], {

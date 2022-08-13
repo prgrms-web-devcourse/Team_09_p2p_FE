@@ -6,7 +6,7 @@ import { Link, Icon, Text } from '~/components/atom';
 import { SearchInput } from '~/components/common';
 import PlusIcon from '~/components/domain/CourseCreate/SearchArea/PlusIcon';
 import { MARKER_IMAGE_URLS } from 'src/utils/constants';
-import { ISelectedPlace } from '~/pages/course/create/index';
+import { IPlaceForm } from '~/types/place';
 
 interface placeType {
   place_name: string;
@@ -17,8 +17,8 @@ interface placeType {
 }
 
 interface SearchMap {
-  setSelectedPlaces: Dispatch<SetStateAction<ISelectedPlace[]>>;
-  selectedPlaces: ISelectedPlace[];
+  setSelectedPlaces: Dispatch<SetStateAction<IPlaceForm[]>>;
+  selectedPlaces: IPlaceForm[];
 }
 
 let isAlreadyLoaded = false;
@@ -26,7 +26,7 @@ let curMarkerObject: kakao.maps.Marker | null = null;
 const SearchMap = ({ setSelectedPlaces, selectedPlaces }: SearchMap) => {
   const [loaded, setLoaded] = useState(isAlreadyLoaded);
   const [mapObject, setMapObject] = useState<kakao.maps.Map>();
-  const [searchedPlaces, setSearchedPlaces] = useState<ISelectedPlace[]>([]);
+  const [searchedPlaces, setSearchedPlaces] = useState<IPlaceForm[]>([]);
   const [kakaoDataArray, setKakaoDataArray] = useState<any>([]);
   const [curKeyword, setCurKeyword] = useState('');
   useEffect(() => {
@@ -53,14 +53,14 @@ const SearchMap = ({ setSelectedPlaces, selectedPlaces }: SearchMap) => {
         return data.map((place) => {
           return {
             id: place.id,
-            lat: place.y,
-            lng: place.x,
+            latitude: place.y,
+            longitude: place.x,
             name: place.place_name,
-            address: place.address_name,
+            addressName: place.address_name,
             roadAddressName: place.road_address_name,
             category: place.category_group_code,
-            phoneNumber: place.hone
-          } as ISelectedPlace;
+            phoneNumber: place.phone
+          } as IPlaceForm;
         });
       };
 
@@ -105,7 +105,7 @@ const SearchMap = ({ setSelectedPlaces, selectedPlaces }: SearchMap) => {
       curMarkerObject.setMap(null);
     }
     const markerImageSrc = markerImageSetter(place.category);
-    const placePosition = new kakao.maps.LatLng(place.lat, place.lng);
+    const placePosition = new kakao.maps.LatLng(place.latitude, place.longitude);
     const imageSize = new kakao.maps.Size(36, 37);
     const markerImage = new kakao.maps.MarkerImage(markerImageSrc, imageSize);
     const selectedMarker = new kakao.maps.Marker({
@@ -162,7 +162,7 @@ const SearchMap = ({ setSelectedPlaces, selectedPlaces }: SearchMap) => {
         return MARKER_IMAGE_URLS.defaultPlace;
     }
   };
-  const addPlace = (place: ISelectedPlace) => {
+  const addPlace = (place: IPlaceForm) => {
     const isExist = selectedPlaces.indexOf(place);
     if (isExist !== -1) {
       alert('이미 추가된 장소입니다!');
@@ -224,7 +224,7 @@ const SearchMap = ({ setSelectedPlaces, selectedPlaces }: SearchMap) => {
                           </div>
                           <Text size="sm" color="gray" style={{ marginLeft: '20px' }}>
                             {/* {place.roadAddressName} */}
-                            {place.address}
+                            {place.addressName}
                           </Text>
                         </SearchedPlace>
                       </li>
