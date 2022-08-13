@@ -6,14 +6,14 @@ import { Region } from '~/types';
 import theme from '~/styles/theme';
 import CloseIcon from '~/components/domain/CourseCreate/SelectedArea/CloseIcon';
 import Router from 'next/router';
-import { ISelectedPlace } from '~/pages/course/create';
+import { IPlaceForm } from '~/types/place';
 
 interface RegionSelectProps {
   setRegion: Dispatch<SetStateAction<string>>;
   onClose?: () => void;
   isModify?: boolean;
   loadedRegion?: string;
-  setSelectedPlaces: Dispatch<SetStateAction<ISelectedPlace[]>>;
+  setSelectedPlaces: Dispatch<SetStateAction<IPlaceForm[]>>;
 }
 const RegionSelect = ({
   setRegion,

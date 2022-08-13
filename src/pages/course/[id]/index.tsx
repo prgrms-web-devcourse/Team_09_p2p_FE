@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import type { NextPage } from 'next';
+import type { NextPage, NextPageContext } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
@@ -14,41 +14,89 @@ import CourseMap from '~/components/domain/Map/CourseMap';
 import { useUser } from '~/hooks/useUser';
 import { CourseApi } from '~/service';
 import theme from '~/styles/theme';
-import { ICourseDetail } from '~/types/course';
+import { ICourseDetail, ICourseForm } from '~/types/course';
+import { IPlaceForm } from '~/types/place';
 import { sliceDate } from '~/utils/converter';
 
-const CourseDetail: NextPage = () => {
-  /* TODO
-    1. 추천 아이콘 작업
-    3. 수정/삭제 버튼 구현
-  */
-  const { currentUser, isLoggedIn } = useUser();
-  const [detailData, setDetailData] = useState<ICourseDetail | null>(null);
-  const router = useRouter();
-  const courseId = Number(router.query.id);
+export const getServerSideProps = async (context: NextPageContext) => {
+  const { id } = context.query;
+  const courseId = Number(id);
 
-  const getDetailInfo = async (courseId: number) => {
+  if (Number.isNaN(courseId)) {
+    return {
+      notFound: true
+    };
+  }
+
+  try {
+    const course = await CourseApi.read(courseId);
+    return {
+      props: { course: course || null, courseId: courseId || null }
+    };
+  } catch (e) {
+    return {
+      notFound: true
+    };
+  }
+};
+
+interface Props {
+  course: ICourseDetail;
+  courseId: number;
+}
+
+const CourseDetail = ({ course, courseId }: Props) => {
+  const { currentUser, isLoggedIn } = useUser();
+  const [detailData, setDetailData] = useState<ICourseDetail | null>(course);
+  const router = useRouter();
+
+  const getDetailInfo = async () => {
     if (isLoggedIn) {
       const result = await CourseApi.authRead(courseId);
       console.log('로그인 데이터', result);
 
-      if (!result) {
-        // 임시로 값 없을 경우 처리
-        router.push('/');
-        return;
+      if (result) {
+        setDetailData(result);
       }
-
-      setDetailData(result);
-    } else {
-      const result = await CourseApi.read(courseId);
-
-      if (!result) {
-        router.push('/');
-        return;
-      }
-
-      setDetailData(result);
     }
+  };
+
+  const setPlaceForm = () => {
+    if (detailData) {
+      return detailData.places.map((detail) => {
+        return {
+          id: detail.placeId,
+          kakaoMapId: detail.id,
+          name: detail.name,
+          description: detail.description,
+          addressName: detail.address,
+          roadAddressName: detail.roadAddress,
+          latitude: detail.latitude,
+          longitude: detail.longitude,
+          category: detail.category,
+          phoneNumber: detail.phoneNumber,
+          isRecommended: detail.isRecommended,
+          isThumbnail: detail.isThumbnail,
+          imageUrl: detail.imageUrl
+        } as unknown as IPlaceForm;
+      });
+    } else {
+      return {} as IPlaceForm[];
+    }
+  };
+
+  const setEditQuery = () => {
+    const queryData = {} as ICourseForm;
+    queryData.id = courseId;
+    if (detailData) {
+      queryData.title = detailData.title;
+      queryData.region = detailData.region;
+      queryData.period = detailData.period;
+      queryData.themes = detailData.themes;
+      queryData.spots = detailData.spots;
+      queryData.places = setPlaceForm();
+    }
+    return JSON.stringify(queryData);
   };
 
   const onDeleteCourse = async () => {
@@ -60,13 +108,8 @@ const CourseDetail: NextPage = () => {
   };
 
   useEffect(() => {
-    if (typeof router.query.id === 'string') {
-      if (!Number.isNaN(courseId)) {
-        getDetailInfo(courseId);
-        return;
-      }
-
-      router.push('/');
+    if (isLoggedIn) {
+      getDetailInfo();
     }
   }, [courseId, isLoggedIn]);
 
@@ -91,7 +134,15 @@ const CourseDetail: NextPage = () => {
               </Title>
               {currentUser.user.id === detailData.userId && (
                 <HeaderButtons>
-                  <Link href={`/course/${courseId}/edit`}>수정</Link>
+                  <Link
+                    href={{
+                      pathname: `/course/${courseId}/edit`,
+                      query: { courseQuery: setEditQuery() }
+                    }}
+                    /* as={`/course/${courseId}/edit`} */
+                  >
+                    수정
+                  </Link>
                   <Text.Button color="gray" onClick={onDeleteCourse}>
                     삭제
                   </Text.Button>
@@ -136,9 +187,7 @@ const CourseDetail: NextPage = () => {
             </TravelCourse>
             <CourseDetailList places={detailData.places} />
           </CourseDetails>
-          {!Number.isNaN(courseId) && (
-            <Comment id={courseId} type="course" writerId={detailData.userId} />
-          )}
+          {courseId && <Comment id={courseId} type="course" writerId={detailData.userId} />}
           <DetailSidebar
             likes={detailData.likes}
             id={detailData.id}

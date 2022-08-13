@@ -19,8 +19,8 @@ const COURSE_SIZE = 9;
 
 export const getServerSideProps = async (context: NextPageContext) => {
   const { id } = context.query;
-
   const placeId = Number(id);
+
   if (Number.isNaN(placeId)) {
     return {
       notFound: true

@@ -9,6 +9,12 @@ import { RecoilRoot } from 'recoil';
 export type NextPageWithLayout = NextPage & { getLayout?: (page: ReactElement) => ReactNode };
 type AppPropsWidthLayout = AppProps & { Component: NextPageWithLayout };
 
+declare global {
+  interface Window {
+    Kakao: any;
+  }
+}
+
 function MyApp({ Component, pageProps }: AppPropsWidthLayout) {
   const getLayout = Component.getLayout || ((page) => <Layout>{page}</Layout>);
 
