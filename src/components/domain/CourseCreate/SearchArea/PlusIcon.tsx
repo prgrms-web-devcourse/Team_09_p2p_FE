@@ -6,13 +6,14 @@ interface PlusIconProps {
 }
 
 const PlusIcon = ({ onClick }: PlusIconProps) => {
-  return <StyledIcon onClick={onClick as () => void} name="plus" size={12} />;
+  return <StyledIcon onClick={onClick as () => void} name="plus" size={16} />;
 };
 
 export default PlusIcon;
 
 const StyledIcon = styled(IconButton)`
-  position: absolute;
+  /* position: absolute; */
   top: 25px;
   right: 31px;
+  margin-left: 10px;
 `;

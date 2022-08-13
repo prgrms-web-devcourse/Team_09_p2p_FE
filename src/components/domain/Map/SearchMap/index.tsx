@@ -7,6 +7,7 @@ import { SearchInput } from '~/components/common';
 import PlusIcon from '~/components/domain/CourseCreate/SearchArea/PlusIcon';
 import { MARKER_IMAGE_URLS } from 'src/utils/constants';
 import { IPlaceForm } from '~/types/place';
+import theme from '~/styles/theme';
 
 interface placeType {
   place_name: string;
@@ -218,11 +219,11 @@ const SearchMap = ({ setSelectedPlaces, selectedPlaces }: SearchMap) => {
                         onMouseEnter={(e) => placeMouseEnter(e, place)}
                       >
                         <SearchedPlace>
-                          <div style={{ margin: '20px 0px 0px 20px' }}>
-                            <Text size="lg">{place.name}</Text>
+                          <SearchedHeader>
+                            <PlaceName>{place.name}</PlaceName>
                             <PlusIcon onClick={() => addPlace(place)} />
-                          </div>
-                          <Text size="sm" color="gray" style={{ marginLeft: '20px' }}>
+                          </SearchedHeader>
+                          <Text size="sm" color="gray" ellipsis>
                             {/* {place.roadAddressName} */}
                             {place.addressName}
                           </Text>
@@ -260,14 +261,38 @@ const SearchedPlace = styled.div`
   align-items: flex-start;
   justify-content: flex-end;
   position: relative;
-  padding: 35px 0px 13px 0px;
+  padding: 20px 20px;
+  box-sizing: border-box;
   margin-bottom: 20px;
-  gap: 20px;
   width: 90%;
-  height: 60px;
-  border: 1px solid #f3f4f4;
-  border-shadow: 0px 2px 6px rgba(0, 0, 0, 0.08);
+  text-align: left;
+  border: 1px solid ${theme.color.borderGray};
+  box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.08);
   border-radius: 8px;
+
+  &:hover {
+    border-color: #c9c9c9;
+  }
+`;
+
+const SearchedHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  align-items: center;
+  margin-bottom: 6px;
+`;
+
+const PlaceName = styled.span`
+  font-size: 20px;
+  font-weight: 500;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  word-break: break-word;
+
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
 `;
 
 const FlexGridWrapper = styled.div`
@@ -350,6 +375,7 @@ const SearchResult = styled.div`
     padding: 0.75rem;
     font-size: 0.9375rem;
     background-color: #ecf4f7;
+    padding-left: 20px;
     .result-keyword {
       margin-right: 0.25rem;
       font-weight: 700;

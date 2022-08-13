@@ -29,7 +29,6 @@ const Header = ({ full, isLoading }: HeaderProps) => {
           <LeftArea>
             <Link href="/">
               <Logo width={130} height={35} />
-              <Image src="/assets/location/logo.png" alt="이곳저곳" />
             </Link>
           </LeftArea>
           <Buttons>

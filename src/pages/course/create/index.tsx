@@ -2,10 +2,10 @@ import styled from '@emotion/styled';
 import type { NextPage } from 'next';
 import PlaceMap from '~/components/domain/Map/PlaceMap';
 import Head from 'next/head';
-import React, { useEffect, useState } from 'react';
+import React, { ReactElement, useEffect, useState } from 'react';
 import theme from '~/styles/theme';
 import Button from '~/components/atom/Button';
-import { Link, Icon, Text } from '~/components/atom';
+import { Link, Icon, Text, Title } from '~/components/atom';
 import CloseIcon from '~/components/domain/CourseCreate/SelectedArea/CloseIcon';
 import PlusIcon from '~/components/domain/CourseCreate/SearchArea/PlusIcon';
 import Modal from '~/components/atom/Modal';
@@ -14,6 +14,7 @@ import { useRouter } from 'next/router';
 import { SearchInput } from '~/components/common';
 import SearchMap from '~/components/domain/Map/SearchMap';
 import { IPlaceForm } from '~/types/place';
+import Layout from '~/components/common/Layout';
 
 export interface IPlace {
   id: number;
@@ -47,7 +48,7 @@ interface Marker {
   };
   content: string;
 }
-const CourseCreate: NextPage = () => {
+const CourseCreate = () => {
   const router = useRouter();
   // 제출한 검색어 관리
   const [Keyword, setKeyword] = useState('');
@@ -161,10 +162,10 @@ const CourseCreate: NextPage = () => {
           <SelectedArea>
             <SelectedHeader>
               <Icon name="arrow" size={25} rotate={180} />
-              <Text size={'xl'} style={{ marginLeft: '40%' }}>
+              <Title size="sm" style={{ marginLeft: '40%' }}>
                 {/* {visible === false ? region : '서울'} */}
                 {region}
-              </Text>
+              </Title>
             </SelectedHeader>
             <ScrollWrapper>
               {selectedPlaces.map((selectedPlace, index) => {
@@ -173,11 +174,15 @@ const CourseCreate: NextPage = () => {
                     <PlaceWrapper>
                       <PlaceIndex>{index + 1}</PlaceIndex>
                       <SelectedPlace>
-                        <div style={{ margin: '20px 0px 0px 20px' }}>
-                          <Text size="lg">{selectedPlace.name}</Text>
-                          <CloseIcon onClick={() => deletePlace(selectedPlace)} />
-                        </div>
-                        <Text size="sm" color="gray" style={{ marginLeft: '20px' }}>
+                        <PlaceHeader>
+                          <PlaceName>{selectedPlace.name}</PlaceName>
+                          <CloseButton
+                            name="close"
+                            size={14}
+                            onClick={() => deletePlace(selectedPlace)}
+                          />
+                        </PlaceHeader>
+                        <Text size="sm" color="gray">
                           {selectedPlace.roadAddressName}
                         </Text>
                       </SelectedPlace>
@@ -214,6 +219,10 @@ const CourseCreate: NextPage = () => {
 
 export default CourseCreate;
 
+CourseCreate.getLayout = function getLayout(page: ReactElement) {
+  return <Layout full>{page}</Layout>;
+};
+
 const { mainColor } = theme.color;
 
 const CreateWrapper = styled.div`
@@ -231,6 +240,7 @@ const SelectedHeader = styled.div`
   margin: 30px 0 20px 0;
   text-align: center;
   display: flex;
+  align-items: center;
 `;
 
 const SelectedPlace = styled.div`
@@ -239,15 +249,37 @@ const SelectedPlace = styled.div`
   align-items: flex-start;
   justify-content: flex-end;
   position: relative;
-  padding: 35px 0px 13px 0px;
-  margin: 10px 0px 10px 0px;
-  //margin-bottom: 20px;
-  gap: 20px;
-  width: 100%;
-  height: 60px;
-  border: 1px solid #f3f4f4;
-  border-shadow: 0px 2px 6px rgba(0, 0, 0, 0.08);
+  padding: 20px 20px;
+  box-sizing: border-box;
+  width: 90%;
+  text-align: left;
+  border: 1px solid ${theme.color.borderGray};
+  box-shadow: ${theme.shadow.basicShadow};
   border-radius: 8px;
+`;
+
+const PlaceHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  align-items: center;
+  margin-bottom: 6px;
+`;
+
+const CloseButton = styled(Icon.Button)`
+  margin-left: 20px;
+`;
+
+const PlaceName = styled.span`
+  font-size: 20px;
+  font-weight: 500;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  word-break: break-word;
+
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
 `;
 
 const ScrollWrapper = styled.div`
@@ -264,16 +296,18 @@ const PlaceWrapper = styled.div`
   display: flex;
   align-items: center;
   margin: 0px 0px 0px 0px;
+  margin-bottom: 20px;
 `;
 
 const PlaceIndex = styled.div`
-  width: 50px;
-  height: 50px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
   background-color: ${theme.color.mainColor};
   font-size: 20px;
   color: white;
   text-align: center;
-  line-height: 50px;
+  line-height: 40px;
   margin-right: 20px;
+  flex-shrink: 0;
 `;
