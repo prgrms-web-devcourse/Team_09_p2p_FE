@@ -1,19 +1,18 @@
 import styled from '@emotion/styled';
-import IconButton from '~/components/atom/Icon/IconButton';
-//import { IconButton } from '~/components/atom/Icon';
+import { Icon } from '~/components/atom';
 
 interface CloseIconProps {
   onClick?: () => void;
 }
 
 const CloseIcon = ({ onClick }: CloseIconProps) => {
-  return <StyledIcon onClick={onClick as () => void} name="close" size={12} />;
+  return <StyledIcon onClick={onClick as () => void} name="thinClose" size={50} />;
 };
 
 export default CloseIcon;
 
-const StyledIcon = styled(IconButton)`
+const StyledIcon = styled(Icon.Button)`
   position: absolute;
-  top: 25px;
-  right: 31px;
+  top: 30px;
+  right: 30px;
 `;

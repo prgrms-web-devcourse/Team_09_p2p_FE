@@ -15,6 +15,7 @@ export const ICON_URLS = {
   search: '/assets/icons/search.svg',
   searchBlue: '/assets/icons/search-blue.svg',
   close: '/assets/icons/close.svg',
+  thinClose: '/assets/icons/close-thin.svg',
   plus: '/assets/icons/plus.svg',
   pencil: '/assets/icons/pencil.svg',
   comment: '/assets/icons/comment.svg',
