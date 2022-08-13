@@ -240,8 +240,8 @@ const CourseEdit: NextPage = () => {
 
   const handleSelectTags = (data: SearchTagsValues) => {
     formCourseData.period = data.period !== null ? data.period : '';
-    formCourseData.themes = data.theme;
-    formCourseData.spots = data.spot;
+    formCourseData.themes = data.themes;
+    formCourseData.spots = data.spots;
   };
 
   return (
