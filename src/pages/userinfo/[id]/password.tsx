@@ -4,6 +4,7 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
 import { PageContainer, Title } from '~/components/atom';
+import { Toast } from '~/components/common';
 import PasswordChangeForm from '~/components/domain/UserInfo/PasswordChangeForm';
 import { useUser } from '~/hooks/useUser';
 import { UserApi } from '~/service';
@@ -20,20 +21,19 @@ const UserinfoEdit: NextPage = () => {
     try {
       const response = await UserApi.changePassword({ oldPassword, newPassword });
       if (response.status === 200) {
-        // 다시 로그인 시키지 않고 유저 정보 페이지로 돌려보낸다.
-        window.alert('비밀번호 변경 성공!');
+        Toast.show('비밀번호가 변경되었습니다.', 1000);
         router.push(`/userinfo/${userId}`);
         return;
       }
     } catch (e: any) {
       const { response } = e;
       if (response.status === 400) {
-        window.alert('현재 비밀번호가 올바르지 않습니다.');
+        Toast.show('현재 비밀번호가 올바르지 않습니다.', 1000);
         return;
       }
 
       if (response.status === 409) {
-        window.alert('동일한 비밀번호로는 변경할 수 없어요.');
+        Toast.show('현재 비밀번호와 다른 비밀번호로 변경해주세요.', 1000);
         return;
       }
       console.error('비밀번호 수정 실패', e);
