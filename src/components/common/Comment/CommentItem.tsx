@@ -2,6 +2,7 @@ import styled from '@emotion/styled';
 import { useCallback, useState } from 'react';
 import { Button, Link, Text } from '~/components/atom';
 import Avatar from '~/components/atom/Avatar';
+import { useUser } from '~/hooks/useUser';
 import theme from '~/styles/theme';
 import { IComment } from '~/types/comment';
 import { sliceDate } from '~/utils/converter';
@@ -31,6 +32,7 @@ const CommentItem = ({
   const [isOpenEditor, setIsOpenEditor] = useState(false);
   const [isOpenRecomment, setIsOpenRecomment] = useState(false);
   const isRecomment = comment.rootCommentId !== null;
+  const { currentUser } = useUser();
 
   const IS_UPDATED = comment.createdAt !== comment.updatedAt;
 
@@ -92,14 +94,16 @@ const CommentItem = ({
                 )}
               </CommentInfo>
             </CommentContent>
-            <Buttons>
-              <Text.Button color="gray" onClick={() => setIsOpenEditor(true)}>
-                수정
-              </Text.Button>
-              <Text.Button color="gray" onClick={handleDelete}>
-                삭제
-              </Text.Button>
-            </Buttons>
+            {currentUser.user.id === comment.user.id && (
+              <Buttons>
+                <Text.Button color="gray" onClick={() => setIsOpenEditor(true)}>
+                  수정
+                </Text.Button>
+                <Text.Button color="gray" onClick={handleDelete}>
+                  삭제
+                </Text.Button>
+              </Buttons>
+            )}
           </>
         ) : (
           <CommentEditor

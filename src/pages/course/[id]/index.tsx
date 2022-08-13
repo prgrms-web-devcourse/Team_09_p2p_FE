@@ -30,6 +30,7 @@ const CourseDetail: NextPage = () => {
   const getDetailInfo = async (courseId: number) => {
     if (isLoggedIn) {
       const result = await CourseApi.authRead(courseId);
+      console.log('로그인 데이터', result);
 
       if (!result) {
         // 임시로 값 없을 경우 처리
@@ -104,7 +105,7 @@ const CourseDetail: NextPage = () => {
 
             <Profile>
               <Link href={`/userinfo/${detailData.userId}`}>
-                <Avatar size={66} />
+                <Avatar size={55} src={detailData.profileImage} />
               </Link>
               <Text color="dark" fontWeight={500}>
                 {detailData.nickname}

@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import React, { CSSProperties, useEffect, useState } from 'react';
+import React, { CSSProperties, useEffect, useRef, useState } from 'react';
 import theme from '~/styles/theme';
 import { Period, SearchTagsValues, Spot, Theme } from '~/types';
 import { removeList, updateList } from '~/utils/converter';
@@ -10,22 +10,21 @@ import ThemeTags from './ThemeTags';
 interface SelectTagsProps {
   style?: CSSProperties;
   onSelect: (data: SearchTagsValues) => void;
-  toInitializeTrigger?: string | number | boolean | null | undefined;
+  defaultValues?: SearchTagsValues;
+  initializeTrigger?: unknown;
 }
 
-const SelectTags = ({ style, onSelect, toInitializeTrigger }: SelectTagsProps) => {
-  const [selectedPeriod, setSelectedPeriod] = useState<Period | null>(null);
-  const [selectedThemes, setSelectedThemes] = useState<Theme[]>([]);
-  const [selectedSpots, setSelectedSpots] = useState<Spot[]>([]);
-  const initialize = () => {
-    setSelectedPeriod(null);
-    setSelectedThemes([]);
-    setSelectedSpots([]);
-  };
-
-  useEffect(() => {
-    initialize();
-  }, [toInitializeTrigger]);
+const SelectTags = ({ style, onSelect, defaultValues, initializeTrigger }: SelectTagsProps) => {
+  const initializeTriggerRef = useRef(initializeTrigger);
+  const [selectedPeriod, setSelectedPeriod] = useState<Period | null>(
+    defaultValues ? defaultValues.period : null
+  );
+  const [selectedThemes, setSelectedThemes] = useState<Theme[]>(
+    defaultValues ? defaultValues.themes : []
+  );
+  const [selectedSpots, setSelectedSpots] = useState<Spot[]>(
+    defaultValues ? defaultValues.spots : []
+  );
 
   const handleSelectPeriod = (period: Period) => {
     const isSame = selectedPeriod === period;
@@ -62,6 +61,14 @@ const SelectTags = ({ style, onSelect, toInitializeTrigger }: SelectTagsProps) =
       ? setSelectedSpots(removeList(selectedSpots, spot))
       : setSelectedSpots(updateList(selectedSpots, spot));
   };
+
+  useEffect(() => {
+    if (initializeTriggerRef.current !== initializeTrigger) {
+      setSelectedPeriod(null);
+      setSelectedThemes([]);
+      setSelectedSpots([]);
+    }
+  }, [initializeTrigger]);
 
   return (
     <Container style={style}>
