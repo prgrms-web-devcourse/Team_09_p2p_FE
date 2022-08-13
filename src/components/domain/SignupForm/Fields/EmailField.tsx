@@ -22,6 +22,7 @@ const EmailField: React.FC<EmailFieldProps> = ({ value, onChange, errors, checkD
     (e: ChangeEvent<HTMLInputElement>) => {
       checkDuplicate && checkDuplicate(false);
       onChange(e);
+      setError('');
     },
     [onChange, checkDuplicate]
   );
@@ -33,10 +34,10 @@ const EmailField: React.FC<EmailFieldProps> = ({ value, onChange, errors, checkD
   const handleClickDuplicate = async () => {
     try {
       await UserApi.emailCheck({ email: value });
-      window.alert(`${value}는 사용가능한 메일입니다.`);
+      setError('');
       checkDuplicate && checkDuplicate(true);
     } catch (e) {
-      window.alert('이미 존재하는 메일입니다.');
+      setError('이미 존재하는 메일입니다.');
     }
   };
 

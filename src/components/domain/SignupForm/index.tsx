@@ -2,7 +2,8 @@ import styled from '@emotion/styled';
 import { useFormik } from 'formik';
 import React, { useMemo, useState } from 'react';
 import { Button, PageContainer, Title } from '~/components/atom';
-import { ErrorMessage, Form } from '~/components/common';
+import { Form } from '~/components/common';
+import FieldMessage from '~/components/common/Form/FieldMessage';
 import theme from '~/styles/theme';
 import { SignupValues } from '~/types';
 import {
@@ -66,10 +67,16 @@ const SignupForm: React.FC<SignupFormProps> = ({ onSubmit: handleSubmitAction })
               errors={errors.email}
               checkDuplicate={setIsCheckedDuplicateEmail}
             />
-            {errorMessage && !isCheckedDuplicateEmail && (
-              <DuplicatedError>
-                <ErrorMessage message="이메일 중복 검사를 해주세요." />
-              </DuplicatedError>
+            {isCheckedDuplicateEmail ? (
+              <Message>
+                <FieldMessage color="green" message="사용가능한 메일입니다." />
+              </Message>
+            ) : (
+              errorMessage && (
+                <Message>
+                  <FieldMessage color="red" message="이메일 중복 검사를 해주세요." />
+                </Message>
+              )
             )}
             <PasswordField
               value={values.password}
@@ -88,10 +95,16 @@ const SignupForm: React.FC<SignupFormProps> = ({ onSubmit: handleSubmitAction })
               errors={errors.nickname}
               checkDuplicate={setIsCheckedDuplicateNickname}
             />
-            {errorMessage && !isCheckedDuplicateNickname && (
-              <DuplicatedError>
-                <ErrorMessage message="닉네임 중복 검사를 해주세요." />
-              </DuplicatedError>
+            {isCheckedDuplicateNickname ? (
+              <Message>
+                <FieldMessage color="green" message="사용가능한 닉네임 입니다." />
+              </Message>
+            ) : (
+              errorMessage && (
+                <Message>
+                  <FieldMessage color="red" message="닉네임 중복 검사를 해주세요." />
+                </Message>
+              )
             )}
             <BirthField value={values.birth} onChange={handleChange} errors={errors.birth} />
             <SexField value={values.sex} onChange={handleChange} />
@@ -126,6 +139,6 @@ const Fields = styled.div`
   gap: 30px;
 `;
 
-const DuplicatedError = styled.div`
+const Message = styled.div`
   margin-top: -20px;
 `;

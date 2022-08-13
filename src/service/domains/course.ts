@@ -23,7 +23,7 @@ type CourseSearchBookmarked = {
 class CourseApi extends Api {
   private path = '/courses';
 
-  getCourses = async (filter?: CourseFilter) => {
+  getCourses = async (filter?: CourseSearchParams) => {
     const response = await this.authInstance.get(`${this.path}`, { params: filter });
     return response.data;
   };
@@ -59,14 +59,17 @@ class CourseApi extends Api {
     }
   };
 
-  update = async (formData: FormData) => {
-    /* try {
-      const response = await this.authInstance.put(this.path, formData);
-      console.log(response);
-      return response.data;
+  update = async (courseId: number, formData: FormData) => {
+    try {
+      const response = await this.authInstance.put(`${this.path}/${courseId}`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      });
+      return response.status;
     } catch (e) {
       console.error(`코스 수정 에러: ${e}`);
-    } */
+    }
   };
 
   delete = async (courseId: number) => {

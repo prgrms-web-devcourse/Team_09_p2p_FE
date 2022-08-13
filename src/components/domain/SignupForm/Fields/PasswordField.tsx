@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useCallback, useState } from 'react';
+import React, { ChangeEvent, KeyboardEvent, useCallback, useState } from 'react';
 import { Input, Label, Text } from '~/components/atom';
 import { ErrorMessage, Field } from '~/components/common';
 
@@ -10,10 +10,15 @@ interface PasswordFieldProps {
 
 const PasswordField: React.FC<PasswordFieldProps> = ({ value, onChange, errors }) => {
   const [error, setError] = useState(errors);
+  const [capsLockWarning, setCapsLockWarning] = useState(false);
 
   const handleBlur = useCallback(() => {
     setError(errors);
   }, [errors]);
+
+  const handleCheckCapsLock = (e: KeyboardEvent<HTMLInputElement>) => {
+    e.getModifierState('CapsLock') ? setCapsLockWarning(true) : setCapsLockWarning(false);
+  };
 
   return (
     <Field>
@@ -29,7 +34,9 @@ const PasswordField: React.FC<PasswordFieldProps> = ({ value, onChange, errors }
         value={value}
         onChange={onChange}
         onBlur={handleBlur}
+        onKeyUp={handleCheckCapsLock}
       />
+      {capsLockWarning && <ErrorMessage message="CapsLock이 켜져있어요." />}
       {error && <ErrorMessage message={error} />}
     </Field>
   );

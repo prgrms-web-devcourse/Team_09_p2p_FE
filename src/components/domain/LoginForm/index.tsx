@@ -1,11 +1,11 @@
 import Link from 'next/link';
-import React, { useMemo } from 'react';
+import React, { KeyboardEvent, useMemo, useState } from 'react';
 import { useFormik } from 'formik';
 import { SchemaOf, object, string } from 'yup';
 import styled from '@emotion/styled';
 import theme from '~/styles/theme';
 import { PageContainer, Logo, Input, Label, Button, Text } from '~/components/atom';
-import { Form } from '~/components/common';
+import { ErrorMessage, Form } from '~/components/common';
 import { LoginValues } from '~/types';
 
 const LoginValidationSchema: SchemaOf<LoginValues> = object().shape({
@@ -24,6 +24,7 @@ interface LoginFormProps {
 }
 
 const LoginForm = ({ onSubmit: handleSubmitAction, errorMessage }: LoginFormProps) => {
+  const [capsLockWarning, setCapsLockWarning] = useState(false);
   const { values, handleChange, handleSubmit } = useFormik({
     initialValues,
     onSubmit: (data: LoginValues) => {
@@ -31,6 +32,10 @@ const LoginForm = ({ onSubmit: handleSubmitAction, errorMessage }: LoginFormProp
     },
     validationSchema: LoginValidationSchema
   });
+
+  const handleCheckCapsLock = (e: KeyboardEvent<HTMLInputElement>) => {
+    e.getModifierState('CapsLock') ? setCapsLockWarning(true) : setCapsLockWarning(false);
+  };
 
   const submittable = useMemo(() => {
     return !Object.values(values).every((value) => value.length > 0);
@@ -59,7 +64,9 @@ const LoginForm = ({ onSubmit: handleSubmitAction, errorMessage }: LoginFormProp
               required
               value={values.password}
               onChange={handleChange}
+              onKeyUp={handleCheckCapsLock}
             />
+            {capsLockWarning && <ErrorMessage message="CapsLock이 켜져있어요." />}
             <Text color="red">{errorMessage}</Text>
             <Button type="submit" disabled={submittable}>
               로그인

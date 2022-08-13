@@ -13,6 +13,7 @@ import RegionSelect from '~/components/domain/CourseCreate/RegionSelect';
 import { useRouter } from 'next/router';
 import { SearchInput } from '~/components/common';
 import SearchMap from '~/components/domain/Map/SearchMap';
+import { IPlaceForm } from '~/types/place';
 
 export interface IPlace {
   id: number;
@@ -26,7 +27,7 @@ export interface IPlace {
 }
 export interface ICourseInfo {
   region: string;
-  places: IPlace[];
+  places: IPlaceForm[];
 }
 
 export interface ISelectedPlace {
@@ -38,11 +39,6 @@ export interface ISelectedPlace {
   roadAddressName: string;
   category: string;
   phoneNumber: string;
-}
-
-interface IRequestQuery {
-  requestPath: string;
-  places: ISelectedPlace[];
 }
 interface Marker {
   position: {
@@ -60,7 +56,7 @@ const CourseCreate: NextPage = () => {
   const [markers, setMarkers] = useState<Marker[]>([]);
   const [visible, setVisible] = useState(true);
   const [region, setRegion] = useState('서울');
-  const [selectedPlaces, setSelectedPlaces] = useState<ISelectedPlace[]>([]);
+  const [selectedPlaces, setSelectedPlaces] = useState<IPlaceForm[]>([]);
   const [isModify, setIsModify] = useState(false);
   const [loadedRegion, setLoadedRegion] = useState('');
   //const [queryData, setQueryData] = useState();
@@ -68,17 +64,13 @@ const CourseCreate: NextPage = () => {
   useEffect(() => {
     if (router.query.hasOwnProperty('requestPath')) {
       const { courseQuery } = router.query;
-      //setSelectedPlaces(JSON.parse(placesInfo as string));
       if (courseQuery) {
         const courseInfo: ICourseInfo = JSON.parse(courseQuery as string);
         setSelectedPlaces(courseInfo.places);
         setRegion(courseInfo.region);
-        /* selectedRegion = courseInfo.region;
-        console.log(selectedRegion); */
         setLoadedRegion(courseInfo.region);
         setIsModify(true);
       }
-      //console.log(router);
     }
   }, []);
   const handleNextStep = () => {
@@ -125,15 +117,15 @@ const CourseCreate: NextPage = () => {
   const setPlaces = () => {
     return selectedPlaces.map((selectedPlace) => {
       return {
-        id: selectedPlace.id,
-        lat: selectedPlace.lat,
-        lng: selectedPlace.lng,
+        kakaoMapId: selectedPlace.id,
+        latitude: selectedPlace.latitude,
+        longitude: selectedPlace.longitude,
         name: selectedPlace.name,
-        address: selectedPlace.address,
+        addressName: selectedPlace.addressName,
         roadAddressName: selectedPlace.roadAddressName,
         category: selectedPlace.category,
         phoneNumber: selectedPlace.phoneNumber
-      };
+      } as unknown as IPlaceForm;
     });
   };
 
@@ -142,7 +134,7 @@ const CourseCreate: NextPage = () => {
     queryData.places = setPlaces();
     return JSON.stringify(queryData);
   };
-  const deletePlace = (deleteSelectedPlace: ISelectedPlace) => {
+  const deletePlace = (deleteSelectedPlace: IPlaceForm) => {
     setSelectedPlaces(
       selectedPlaces.filter((selectedPlace) => selectedPlace.id !== deleteSelectedPlace.id)
     );

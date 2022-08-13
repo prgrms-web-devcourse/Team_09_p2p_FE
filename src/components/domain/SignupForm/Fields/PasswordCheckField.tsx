@@ -22,7 +22,7 @@ const PasswordCheckField: React.FC<PasswordCheckFieldProps> = ({
   }, [errors]);
 
   useEffect(() => {
-    if (value && password !== value) {
+    if (value) {
       setError(errors);
     }
   }, [password, errors, value]);

@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+import { forwardRef } from 'react';
 import PlaceItem, { PlaceGrid } from './PlaceItem';
 
 export interface IPlaceItem {
@@ -16,15 +17,22 @@ interface PlaceListProps {
   grid?: PlaceGrid;
 }
 
-const PlaceList = ({ grid = 4, places }: PlaceListProps) => {
+const PlaceList = forwardRef(({ grid = 4, places }: PlaceListProps, ref) => {
   return (
     <StyledPlaceList>
       {places.map((place, index) => (
-        <PlaceItem key={index} grid={grid} place={place} />
+        <PlaceItem
+          key={index}
+          grid={grid}
+          place={place}
+          ref={places.length - 1 === index ? ref : null}
+        />
       ))}
     </StyledPlaceList>
   );
-};
+});
+
+PlaceList.displayName = 'PlaceList';
 
 export default PlaceList;
 

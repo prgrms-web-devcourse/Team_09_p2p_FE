@@ -10,6 +10,7 @@ class MainDocument extends Document {
     return (
       <Html>
         <Head />
+        <script defer src="https://developers.kakao.com/sdk/js/kakao.min.js"></script>
         <body>
           <Main />
           <NextScript />

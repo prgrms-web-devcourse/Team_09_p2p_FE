@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import { useRef, useState } from 'react';
 import { Icon, Link, Text, Title } from '~/components/atom';
 import Avatar from '~/components/atom/Avatar';
+import { Toast } from '~/components/common';
 import ImageUpload from '~/components/common/ImageUpload';
 import { useUser } from '~/hooks/useUser';
 import { UserApi } from '~/service';
@@ -40,6 +41,7 @@ const ProfileCard = ({
   const [previewImage, setPreviewImage] = useState(profileImage);
 
   const onLogout = () => {
+    Toast.show('로그아웃 되었습니다.', 1000);
     logout();
     router.push('/');
   };
