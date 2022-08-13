@@ -15,9 +15,9 @@ import { PlacePost } from '~/types';
 
 export const getServerSideProps = async (context: NextPageContext) => {
   const { id } = context.query;
-
   const placeId = Number(id);
-  if (!placeId && !Number.isNaN(placeId)) {
+
+  if (Number.isNaN(placeId)) {
     return {
       notFound: true
     };

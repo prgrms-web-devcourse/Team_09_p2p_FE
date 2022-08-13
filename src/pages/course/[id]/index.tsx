@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import type { NextPage } from 'next';
+import type { NextPage, NextPageContext } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
@@ -18,37 +18,46 @@ import { ICourseDetail, ICourseForm } from '~/types/course';
 import { IPlaceForm } from '~/types/place';
 import { sliceDate } from '~/utils/converter';
 
-const CourseDetail: NextPage = () => {
-  /* TODO
-    1. 추천 아이콘 작업
-    3. 수정/삭제 버튼 구현
-  */
-  const { currentUser, isLoggedIn } = useUser();
-  const [detailData, setDetailData] = useState<ICourseDetail | null>(null);
-  const router = useRouter();
-  const courseId = Number(router.query.id);
+export const getServerSideProps = async (context: NextPageContext) => {
+  const { id } = context.query;
+  const courseId = Number(id);
 
-  const getDetailInfo = async (courseId: number) => {
+  if (Number.isNaN(courseId)) {
+    return {
+      notFound: true
+    };
+  }
+
+  try {
+    const course = await CourseApi.read(courseId);
+    return {
+      props: { course: course || null, courseId: courseId || null }
+    };
+  } catch (e) {
+    return {
+      notFound: true
+    };
+  }
+};
+
+interface Props {
+  course: ICourseDetail;
+  courseId: number;
+}
+
+const CourseDetail = ({ course, courseId }: Props) => {
+  const { currentUser, isLoggedIn } = useUser();
+  const [detailData, setDetailData] = useState<ICourseDetail | null>(course);
+  const router = useRouter();
+
+  const getDetailInfo = async () => {
     if (isLoggedIn) {
       const result = await CourseApi.authRead(courseId);
       console.log('로그인 데이터', result);
 
-      if (!result) {
-        // 임시로 값 없을 경우 처리
-        router.push('/');
-        return;
+      if (result) {
+        setDetailData(result);
       }
-
-      setDetailData(result);
-    } else {
-      const result = await CourseApi.read(courseId);
-
-      if (!result) {
-        router.push('/');
-        return;
-      }
-
-      setDetailData(result);
     }
   };
 
@@ -99,13 +108,8 @@ const CourseDetail: NextPage = () => {
   };
 
   useEffect(() => {
-    if (typeof router.query.id === 'string') {
-      if (!Number.isNaN(courseId)) {
-        getDetailInfo(courseId);
-        return;
-      }
-
-      router.push('/');
+    if (isLoggedIn) {
+      getDetailInfo();
     }
   }, [courseId, isLoggedIn]);
 
@@ -183,9 +187,7 @@ const CourseDetail: NextPage = () => {
             </TravelCourse>
             <CourseDetailList places={detailData.places} />
           </CourseDetails>
-          {!Number.isNaN(courseId) && (
-            <Comment id={courseId} type="course" writerId={detailData.userId} />
-          )}
+          {courseId && <Comment id={courseId} type="course" writerId={detailData.userId} />}
           <DetailSidebar
             likes={detailData.likes}
             id={detailData.id}

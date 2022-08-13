@@ -40,12 +40,7 @@ class PlaceApi extends Api {
   };
 
   getPlaces = async (filter?: PlaceFilter) => {
-    let queryString = '';
-    if (filter !== undefined) {
-      queryString = ObjectToQuery(filter);
-    }
-
-    const response = await this.authInstance.get(`${this.path}/${queryString}`);
+    const response = await this.authInstance.get(`${this.path}`, { params: filter });
     console.log(response.data, 'response Data');
     return response.data;
   };

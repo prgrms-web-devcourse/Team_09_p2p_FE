@@ -9,22 +9,47 @@ import ArrowTitle from '~/components/common/ArrowTitle';
 import { CourseApi, PlaceApi } from '~/service';
 import theme from '~/styles/theme';
 import { TAGS_THEME } from '~/utils/constants';
+import { IPlaceItem } from '~/types/place';
+import { ICourseItem } from '~/types/course';
+import { useUser } from '~/hooks/useUser';
 
-const HomePage = () => {
+const COURSE_COUNT = 6;
+const PLACE_COUNT = 4;
+const SORT = '인기순';
+
+export const getServerSideProps = async () => {
+  try {
+    const courses = await CourseApi.getCourses({ size: COURSE_COUNT, sorting: SORT });
+    const places = await PlaceApi.getPlaces({ size: PLACE_COUNT, sorting: SORT });
+    return {
+      props: { courses: courses.content, places: places.content }
+    };
+  } catch (e) {
+    return {
+      props: { places: null, courses: null }
+    };
+  }
+};
+
+interface Props {
+  places?: IPlaceItem[];
+  courses?: ICourseItem[];
+}
+
+const HomePage = ({ places, courses }: Props) => {
   const router = useRouter();
   const mainSearchInputRef = useRef<HTMLInputElement>(null);
-  const [courseList, setCourseList] = useState([]);
-  const [placeList, setPlaceList] = useState([]);
-  const COURSE_COUNT = 6;
-  const PLACE_COUNT = 4;
+  const [courseList, setCourseList] = useState(courses || []);
+  const [placeList, setPlaceList] = useState(places || []);
+  const { isLoggedIn } = useUser();
 
   const getCourseList = async () => {
-    const result = await CourseApi.getCourses({ size: COURSE_COUNT, sorting: '인기순' });
+    const result = await CourseApi.getCourses({ size: COURSE_COUNT, sorting: SORT });
     setCourseList(result.content);
   };
 
   const getPlaceList = async () => {
-    const result = await PlaceApi.getPlaces({ size: PLACE_COUNT, sorting: '인기순' });
+    const result = await PlaceApi.getPlaces({ size: PLACE_COUNT, sorting: SORT });
     setPlaceList(result.content);
   };
 
@@ -39,9 +64,11 @@ const HomePage = () => {
   };
 
   useEffect(() => {
-    getCourseList();
-    getPlaceList();
-  }, []);
+    if (isLoggedIn) {
+      getCourseList();
+      getPlaceList();
+    }
+  }, [isLoggedIn]);
 
   return (
     <React.Fragment>
