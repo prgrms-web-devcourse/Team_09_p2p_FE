@@ -1,14 +1,9 @@
 import styled from '@emotion/styled';
-import React, { ReactNode, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useClickAway } from '~/hooks';
+import { ModalProps } from '.';
 
-export interface BackgroundDimProps {
-  visible: boolean;
-  children: ReactNode;
-  onClose?: () => void;
-  closeDimActive?: boolean;
-  dimOpacity?: number;
-}
+type BackgroundDimProps = ModalProps;
 
 const blockTabKey = (e: KeyboardEvent): void => {
   if (e.key === 'Tab') {
@@ -21,7 +16,7 @@ const BackgroundDim = ({
   children,
   onClose,
   closeDimActive = true,
-  dimOpacity = 0.5
+  dimOpacity = 0.2
 }: BackgroundDimProps) => {
   const ref = useClickAway<HTMLDivElement>(() => {
     if (closeDimActive && onClose) {
@@ -30,15 +25,17 @@ const BackgroundDim = ({
   });
 
   useEffect(() => {
-    document.body.classList.add('modal-open');
-    document.addEventListener('keydown', blockTabKey);
-    document.addEventListener('keyup', blockTabKey);
+    if (visible) {
+      document.body.classList.add('modal-open');
+      document.addEventListener('keydown', blockTabKey);
+      document.addEventListener('keyup', blockTabKey);
+    }
     return () => {
       document.body.classList.remove('modal-open');
       document.removeEventListener('keydown', blockTabKey);
       document.removeEventListener('keyup', blockTabKey);
     };
-  }, []);
+  }, [visible]);
   return (
     <Background visible={visible} dimOpacity={dimOpacity}>
       <Inner ref={ref}>{children}</Inner>

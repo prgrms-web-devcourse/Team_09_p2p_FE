@@ -1,9 +1,15 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 import Portal from './Portal';
-import BackgroundDim, { BackgroundDimProps } from './BackgroundDim';
+import BackgroundDim from './BackgroundDim';
 import styled from '@emotion/styled';
 
-type ModalProps = BackgroundDimProps;
+export interface ModalProps {
+  visible: boolean;
+  children: ReactNode;
+  onClose?: () => void;
+  closeDimActive?: boolean;
+  dimOpacity?: number;
+}
 
 const Modal = ({ ...props }: ModalProps) => {
   return (
