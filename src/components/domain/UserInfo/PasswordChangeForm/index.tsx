@@ -30,7 +30,9 @@ const PasswordChangeForm = ({ onSubmit: onSubmitAction }: PasswordChangeFormProp
 
   const handleBlurPassword = () => {
     setPasswordError(errors.password || '');
-    values.passwordCheck && setPasswordCheckError(errors.passwordCheck || '');
+    if (values.passwordCheck) {
+      setPasswordCheckError(errors.passwordCheck || '');
+    }
   };
 
   const handleBlurPasswordCheck = () => {
