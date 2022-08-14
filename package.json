@@ -11,6 +11,7 @@
   "dependencies": {
     "@emotion/react": "^11.9.3",
     "@emotion/styled": "^11.9.3",
+    "@lottiefiles/lottie-player": "^1.5.7",
     "axios": "^0.27.2",
     "browser-image-compression": "^2.0.0",
     "formik": "^2.2.9",
