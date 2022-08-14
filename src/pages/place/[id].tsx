@@ -82,6 +82,9 @@ const PlaceDetailByPostId = ({ place, placeId, courses }: Props) => {
 
   return (
     <React.Fragment>
+      <Head>
+        <title>{place.name} | 이곳저곳</title>
+      </Head>
       <main>
         <Container type="detail" style={{ position: 'relative' }}>
           <PostHeader>

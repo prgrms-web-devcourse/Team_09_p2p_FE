@@ -119,6 +119,9 @@ const CourseDetail = ({ course, courseId }: Props) => {
 
   return (
     <React.Fragment>
+      <Head>
+        <title>{course.title} | 이곳저곳</title>
+      </Head>
       <main>
         <PageContainer type="detail" style={{ position: 'relative' }}>
           <CourseDetailHeader>
