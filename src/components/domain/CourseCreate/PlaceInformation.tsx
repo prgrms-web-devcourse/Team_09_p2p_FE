@@ -73,7 +73,6 @@ const PlaceInformation = ({
       return;
     }
 
-    console.log(imageFile.size);
     if (imageFile.size > 1024 * 1024 * MAX_MB) {
       alert(`${MAX_MB}MB 이하 파일만 등록해 주세요!`);
       return;
@@ -86,7 +85,6 @@ const PlaceInformation = ({
     if (imageFile.size > 1024 * 1024) {
       imageFile = (await CompressImage(imageFile)) as File;
     }
-    console.log(imageFile.size);
     reader.onloadend = () => {
       setFile(imageFile);
       setPreviewUrl(reader.result as SetStateAction<string>);
