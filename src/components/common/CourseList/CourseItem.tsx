@@ -62,7 +62,7 @@ const CourseItem = forwardRef(({ course, grid = 3, index }: CourseItemProps, ref
               {region} · {COURSE_COUNT}코스
             </Text>
             <Title level={3} size={18} ellipsis>
-              {title} - {id}
+              {title}
             </Title>
           </ThumbnailInfo>
         </ThumbnailWrapper>
