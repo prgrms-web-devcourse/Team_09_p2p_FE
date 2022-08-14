@@ -193,7 +193,7 @@ const Course: NextPage = () => {
           <TitleInputWrapper>
             <TitleInput placeholder="코스의 제목을 입력해주세요" ref={titleRef} />
             <TitleUnderLine />
-            <SelectTags style={{ marginTop: '10px' }} onSelect={handleSelectTags} />
+            <SelectTags style={{ marginTop: '14px' }} onSelect={handleSelectTags} />
           </TitleInputWrapper>
           <PlacesWrapper>
             {courseInfo.places.map((place, index, courseInfo) => (
@@ -240,7 +240,7 @@ const TitleInputWrapper = styled.div`
   background-color: #fff;
   border-radius: 2px;
   box-sizing: border-box;
-  height: 350px;
+  padding-bottom: 42px;
   width: 100%;
   text-align: center;
 `;
@@ -253,21 +253,23 @@ const TitleInput = styled.input`
   font-family: 'Arvo';
   font-size: 32px;
   height: 50px;
-  padding: 10px 0px;
-
+  padding: 10px 0px 20px;
+  font-weight: 700;
+  /* 이 부분이 폰트적용이 안되어서 임시로 이렇게 넣음 */
+  font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu,
+    Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
   width: 100%;
 
   &:focus {
     outline: none;
-    ::-webkit-input-placeholder {
-      color: dodgerblue;
-    }
+
     + span {
       transform: scale(1);
     }
   }
   ::-webkit-input-placeholder {
     color: ${theme.color.fontGray};
+    font-weight: 500;
   }
 `;
 

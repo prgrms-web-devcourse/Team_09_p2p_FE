@@ -153,7 +153,7 @@ const Userinfo: NextPage = () => {
               isMyPage={isMyPage}
             />
             <ActionContent>
-              <ul>
+              <TabContainer>
                 <Tab onActive={onClickAction} active={ActiveMenu}>
                   <Tab.item title="게시물" value="course">
                     {courseData && <CourseList grid={2} courses={courseData} />}
@@ -172,7 +172,7 @@ const Userinfo: NextPage = () => {
                     </Tab.item>
                   )}
                 </Tab>
-              </ul>
+              </TabContainer>
             </ActionContent>
           </Wrapper>
         </PageContainer>
@@ -189,4 +189,8 @@ const Wrapper = styled.div`
 `;
 const ActionContent = styled.div`
   padding-left: 400px;
+`;
+
+const TabContainer = styled.ul`
+  margin-bottom: 100px;
 `;

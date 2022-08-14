@@ -85,9 +85,9 @@ const Container = styled.div`
   box-sizing: border-box;
   background-color: ${theme.color.mainBackground};
   border-radius: 8px;
-  padding: 25px 45px;
+  padding: 35px 45px;
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 18px;
   color: ${theme.color.fontDarkBlack};
 `;
