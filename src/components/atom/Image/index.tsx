@@ -1,6 +1,5 @@
 import styled from '@emotion/styled';
 import NextImage, { ImageProps as NextImageProps } from 'next/image';
-import { useState } from 'react';
 
 interface ImageProps {
   width?: number | string;

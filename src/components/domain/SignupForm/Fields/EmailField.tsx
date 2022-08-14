@@ -53,7 +53,7 @@ const EmailField: React.FC<EmailFieldProps> = ({ value, onChange, errors, checkD
         onChange={handleChange}
         onBlur={handleBlur}
       />
-      <Button onClick={handleClickDuplicate} fontSize={FONT_SIZES.sm} disabled={disabled}>
+      <Button size="md" onClick={handleClickDuplicate} fontSize={FONT_SIZES.sm} disabled={disabled}>
         이메일 중복확인
       </Button>
       {error && <ErrorMessage message={error} />}

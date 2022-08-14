@@ -151,7 +151,7 @@ const Place = ({ query }: { query: Record<string, string> }) => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main>
+      <main className="content">
         <PageContainer>
           <CategoryTitle name="추천장소" />
           <FilterList>

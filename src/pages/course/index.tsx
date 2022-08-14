@@ -171,7 +171,7 @@ const Course = ({ query }: { query: Record<string, string> }) => {
         <meta name="description" content="our travel course" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main style={{ position: 'relative' }}>
+      <main className="content" style={{ position: 'relative' }}>
         <PageContainer>
           <CategoryTitle name="여행코스" />
           <FilterList>

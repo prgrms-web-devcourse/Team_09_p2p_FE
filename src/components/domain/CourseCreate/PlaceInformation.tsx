@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import { MutableRefObject, ReactNode, SetStateAction, useCallback, useRef, useState } from 'react';
-import { Text } from '~/components/atom';
+import { Text, Title } from '~/components/atom';
 import theme from '~/styles/theme';
 import Textarea from '~/components/atom/Textarea';
 import { Image } from '~/components/atom';
@@ -101,21 +101,23 @@ const PlaceInformation = ({
         {file !== '' ? (
           <Image
             height={500}
-            cover={false}
+            cover
             className="profile_preview"
             src={previewUrl}
-            style={{ backgroundColor: 'black', cursor: 'pointer' }}
+            style={{ cursor: 'pointer', borderRadius: 8 }}
             onClick={() => imageLabelRef.current?.click()}
+            alt="미리보기 이미지"
           />
         ) : (
           /* 이미지 URL로 파일을 못 잃어와 임시로 previewUrl 처리 */
           <Image
             height={500}
-            cover={false}
+            cover
             className="profile_preview"
             src={ModPropUploadedImage as string}
-            style={{ backgroundColor: 'black', cursor: 'pointer' }}
+            style={{ cursor: 'pointer', borderRadius: 8 }}
             onClick={() => imageLabelRef.current?.click()}
+            alt="미리보기 이미지"
           />
         )}
         {isModify ? (
@@ -149,9 +151,9 @@ const PlaceInformation = ({
           <NumberWrapper>
             <NumberText>{children}</NumberText>
             <NumberImage src="/assets/numbering.png" />
-            <Text size={'xl'} style={{ margin: '0 20px 0 40px' }}>
+            <Title size="md" style={{ margin: '0 10px 4px 40px' }}>
               {place.name}
-            </Text>
+            </Title>
             <RecommendButton
               onClick={handleRecommend}
               ref={isRecommendedRef}
@@ -177,14 +179,12 @@ const PlaceInformation = ({
             {profile_preview}
           </ImageUploadWrapper>
           <DescriptionWrapper>
-            <Textarea
-              width={660}
-              height={200}
+            <DescriptionTextArea
               placeholder={'장소에 대한 추억을 공유해주세요!☺️☺️'}
-              textAreaRef={textAreaRef as unknown as MutableRefObject<HTMLTextAreaElement>}
+              ref={textAreaRef as unknown as MutableRefObject<HTMLTextAreaElement>}
             >
               {isModify ? ModPropWrittenDescription : null}
-            </Textarea>
+            </DescriptionTextArea>
           </DescriptionWrapper>
         </GuideLine>
       </PlaceInformationWrapper>
@@ -224,6 +224,7 @@ const NumberImage = styled.img`
 const NumberText = styled.p`
   color: white;
   font-size: 24px;
+  font-weight: 700;
   padding: 10px 20px;
   border-radius: 10px;
   text-align: center;
@@ -261,6 +262,7 @@ const ImageUploadWrapper = styled.div`
   height: 500px;
   margin: 30px 0 0 70px;
   border: 0px solid black;
+  border-radius: 8px;
   background-color: ${theme.color.backgroundGray};
   display: grid;
   align-items: center;
@@ -305,4 +307,18 @@ const ThumbnailButton = styled.button<{
 
 const DescriptionWrapper = styled.div`
   margin: 20px 0 0 70px;
+`;
+
+const DescriptionTextArea = styled.textarea`
+  width: 100%;
+  height: 200px;
+  font-size: 18px;
+  border-color: ${theme.color.borderDarkGray};
+  outline-color: ${theme.color.mainColor};
+  outline-width: thin;
+  border-radius: 10px;
+  padding: 24px;
+  line-height: 1.5;
+  resize: none;
+  box-sizing: border-box;
 `;

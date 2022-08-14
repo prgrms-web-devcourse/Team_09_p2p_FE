@@ -29,11 +29,10 @@ const StyledTag = styled.li<{ isSelected: boolean }>`
   border: 1px solid
     ${({ isSelected }) => (isSelected ? theme.color.mainColor : theme.color.mainBackground)};
   border-radius: 20px;
-  padding: 6px 15px;
+  padding: 7px 15px;
   color: ${({ isSelected }) => (isSelected ? theme.color.mainColor : theme.color.fontDarkGray)};
   cursor: pointer;
   :hover {
-    border: 1px solid ${theme.color.mainColor};
     color: ${theme.color.mainColor};
   }
 `;
