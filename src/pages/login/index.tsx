@@ -24,8 +24,6 @@ const Login: NextPage = () => {
     <React.Fragment>
       <Head>
         <title>로그인 | 이곳저곳</title>
-        <meta name="description" content="login" />
-        <link rel="icon" href="/favicon.ico" />
       </Head>
 
       <main>

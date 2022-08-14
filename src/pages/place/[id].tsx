@@ -82,12 +82,6 @@ const PlaceDetailByPostId = ({ place, placeId, courses }: Props) => {
 
   return (
     <React.Fragment>
-      <Head>
-        <title>여행할 땐 | 이곳저곳</title>
-        <meta name="description" content="place detail" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
       <main>
         <Container type="detail" style={{ position: 'relative' }}>
           <PostHeader>
