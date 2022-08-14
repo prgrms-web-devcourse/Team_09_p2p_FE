@@ -7,6 +7,8 @@ import { Image } from '~/components/atom';
 import ImageUpload from '~/components/common/ImageUpload';
 import { IPlaceForm } from '~/types/place';
 import Recommend from '~/components/common/Recommend';
+import imageCompression from 'browser-image-compression';
+import heic2any from 'heic2any';
 
 interface IPlaceInformation {
   children: ReactNode;
@@ -49,9 +51,40 @@ const PlaceInformation = ({
     setIsRecommended(!isRecommended);
   };
 
+  const CompressImage = async (fileSrc: File) => {
+    const options = {
+      maxSizeMB: 1,
+      maxWidthOrHeight: 1920,
+      useWebWorker: true
+    };
+    try {
+      return await imageCompression(fileSrc, options);
+    } catch (error) {
+      alert(error);
+    }
+  };
+
   // any는 추후 제거하겠습니다!
-  const handleFileOnChange = (imageFile: File) => {
+  const handleFileOnChange = async (imageFile: File) => {
     const reader = new FileReader();
+    const MAX_MB = 10;
+
+    if (!imageFile) {
+      return;
+    }
+
+    if (imageFile.size > 1024 * 1024 * MAX_MB) {
+      alert(`${MAX_MB}MB 이하 파일만 등록해 주세요!`);
+      return;
+    }
+
+    /* if (/\.(heic)$/i.test(imageFile.name)) {
+      imageFile = await heic2any({ blob: imageFile, toType: 'image/jpeg' });
+    } */
+
+    if (imageFile.size > 1024 * 1024) {
+      imageFile = (await CompressImage(imageFile)) as File;
+    }
     reader.onloadend = () => {
       setFile(imageFile);
       setPreviewUrl(reader.result as SetStateAction<string>);
