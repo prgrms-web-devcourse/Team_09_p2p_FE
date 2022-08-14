@@ -18,7 +18,7 @@ const Recommend = ({ active, ...props }: RecommendProps) => {
 
 export default Recommend;
 
-const { mainColor, borderDarkGray } = theme.color;
+const { mainColor, borderDarkGray, backgroundGray, borderGray } = theme.color;
 
 const IconContainer = styled.div<RecommendProps>`
   border: 1px solid ${({ active }) => (active ? mainColor : borderDarkGray)};
