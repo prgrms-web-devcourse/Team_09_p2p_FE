@@ -109,7 +109,13 @@ const SignupForm: React.FC<SignupFormProps> = ({ onSubmit: handleSubmitAction })
             <BirthField value={values.birth} onChange={handleChange} errors={errors.birth} />
             <SexField value={values.sex} onChange={handleChange} />
           </Fields>
-          <Button type="submit" style={{ margin: '0 auto' }} disabled={disabled}>
+          <Button
+            size="md"
+            width={195}
+            type="submit"
+            style={{ margin: '0 auto' }}
+            disabled={disabled}
+          >
             회원가입
           </Button>
         </Form>
@@ -133,7 +139,7 @@ const Container = styled.div`
 `;
 
 const Fields = styled.div`
-  margin: 20px 0px;
+  margin: 20px 0px 50px;
   display: flex;
   flex-direction: column;
   gap: 30px;

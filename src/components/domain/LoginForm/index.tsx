@@ -68,7 +68,7 @@ const LoginForm = ({ onSubmit: handleSubmitAction, errorMessage }: LoginFormProp
             />
             {capsLockWarning && <ErrorMessage message="CapsLock이 켜져있어요." />}
             <Text color="red">{errorMessage}</Text>
-            <Button type="submit" disabled={submittable}>
+            <Button size="md" type="submit" disabled={submittable}>
               로그인
             </Button>
           </Form>
