@@ -1,9 +1,10 @@
 import type { NextPageContext } from 'next';
 import Head from 'next/head';
+import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import { PageContainer } from '~/components/atom';
 import { CategoryTitle, CourseList, SortFilter } from '~/components/common';
-import { CourseApi } from '~/service';
+import { CourseApi, PlaceApi } from '~/service';
 import { SortType } from '~/types/course';
 import { isNumber } from '~/utils/converter';
 
@@ -31,10 +32,12 @@ const CourseSearch = ({ placeId }: Props) => {
   const [lastTarget, setLastTarget] = useState(null);
   const [isLast, setIsLast] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [placeName, setPlaceName] = useState('');
 
   const [sorting, setSorting] = useState<SortType>('인기순');
 
   const SIZE = 15;
+  const router = useRouter();
 
   const onIntersect: IntersectionObserverCallback = (entries, observer) => {
     entries.forEach(async (entry) => {
@@ -49,6 +52,16 @@ const CourseSearch = ({ placeId }: Props) => {
         observer.disconnect();
       }
     });
+  };
+
+  const getPageInfo = async () => {
+    try {
+      const result = await PlaceApi.read(placeId);
+      setPlaceName(result.name);
+      await getCourseList({ page: 0, sorting: sorting });
+    } catch (e) {
+      router.push('/404');
+    }
   };
 
   const getCourseList = async (filter: { page: number; sorting: SortType }) => {
@@ -81,7 +94,7 @@ const CourseSearch = ({ placeId }: Props) => {
   }, [lastTarget]);
 
   useEffect(() => {
-    getCourseList({ page: 0, sorting: sorting });
+    getPageInfo();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -99,7 +112,7 @@ const CourseSearch = ({ placeId }: Props) => {
       </Head>
       <main style={{ position: 'relative' }}>
         <PageContainer>
-          <CategoryTitle name={`해당 장소가 포함된 코스 입니다.`} />
+          <CategoryTitle name={`#${placeName}`} />
 
           <SortFilter initialValue={sorting} onSort={handleSort} />
           <CourseList courses={courseList} ref={setLastTarget} />
