@@ -66,7 +66,7 @@ const CourseDetail = ({ course, courseId }: Props) => {
       return detailData.places.map((detail) => {
         return {
           id: detail.placeId,
-          kakaoMapId: detail.id,
+          kakaoMapId: detail.kakaoMapId,
           name: detail.name,
           description: detail.description,
           addressName: detail.address,
