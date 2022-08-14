@@ -39,7 +39,7 @@ class Toast {
     }
   }
 
-  show(message: string, duration = 2000) {
+  show(message: string, duration = 1500) {
     if (this.createToast) {
       this.createToast(message, duration);
     }

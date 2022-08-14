@@ -1,4 +1,5 @@
 import React, { RefObject } from 'react';
+import Toast from '../Toast';
 
 interface IImageUpload {
   onImageUpload: (file: File) => void;
@@ -15,7 +16,7 @@ const ImageUpload = ({ onImageUpload, imageRef, labelId }: IImageUpload) => {
 
     const firstFile = e.target.files[0];
     if (!isImageFile(firstFile)) {
-      alert('이미지 파일이 아닙니다');
+      Toast.show('이미지 파일이 아닙니다.');
 
       e.target.value = '';
       return;

@@ -3,7 +3,7 @@ import Script from 'next/script';
 import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { Map, MapMarker, CustomOverlayMap } from 'react-kakao-maps-sdk';
 import { Link, Icon, Text } from '~/components/atom';
-import { SearchInput } from '~/components/common';
+import { SearchInput, Toast } from '~/components/common';
 import PlusIcon from '~/components/domain/CourseCreate/SearchArea/PlusIcon';
 import { MARKER_IMAGE_URLS } from 'src/utils/constants';
 import { IPlaceForm } from '~/types/place';
@@ -166,7 +166,7 @@ const SearchMap = ({ setSelectedPlaces, selectedPlaces }: SearchMap) => {
   const addPlace = (place: IPlaceForm) => {
     const isExist = selectedPlaces.indexOf(place);
     if (isExist !== -1) {
-      alert('이미 추가된 장소입니다!');
+      Toast.show('이미 추가된 장소입니다!');
       return;
     }
     setSelectedPlaces((selectedPlace: any) => [...selectedPlace, place]);

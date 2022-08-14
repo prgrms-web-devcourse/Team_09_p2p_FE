@@ -3,7 +3,7 @@ import type { NextPage } from 'next';
 import Head from 'next/head';
 import React, { useEffect, useRef, useState } from 'react';
 import { Button, PageContainer } from '~/components/atom';
-import { CategoryTitle, CourseList, SortFilter } from '~/components/common';
+import { CategoryTitle, CourseList, SortFilter, Toast } from '~/components/common';
 import CourseMap from '~/components/domain/Map/CourseMap';
 import theme from '~/styles/theme';
 import numbering from '~/../public/assets/numbering.png';
@@ -100,7 +100,7 @@ const CourseEdit: NextPage = () => {
   };
   const courseUpdatehandler = () => {
     if (titleRef.current.value === '') {
-      alert('코스 제목을 입력해주세요!');
+      Toast.show('코스 제목을 입력해주세요!');
       if (titleRef.current !== null) {
         titleRef.current.focus();
       }
@@ -109,24 +109,24 @@ const CourseEdit: NextPage = () => {
       formCourseData.title = titleRef.current.value;
     }
     if (formCourseData.period === '') {
-      alert('기간을 설정해주세요!');
+      Toast.show('기간을 설정해주세요!');
       return;
     }
     if (formCourseData.themes.length === 0) {
-      alert('테마를 설정해주세요!');
+      Toast.show('테마를 설정해주세요!');
       return;
     }
     if (formCourseData.spots.length === 0) {
-      alert('장소를 설정해주세요!');
+      Toast.show('장소를 설정해주세요!');
       return;
     }
     if (courseInfo.places.length > ThumbnailButtonRef.current.length) {
-      alert('이미지를 전부 등록해주세요!');
+      Toast.show('이미지를 전부 등록해주세요!');
       return;
     }
     for (let i = 0; i < courseInfo.places.length; i++) {
       if (textAreasRef.current[i].value === '') {
-        alert('장소 설명을 적어주세요!');
+        Toast.show('장소 설명을 적어주세요!');
         textAreasRef.current[i].focus();
         return;
       }
@@ -148,15 +148,15 @@ const CourseEdit: NextPage = () => {
       await CourseApi.update(courseInfo.id, formData).then((res) => {
         switch (res) {
           case 201:
-            alert('코스 수정이 완료되었습니다!');
+            Toast.show('코스 수정이 완료되었습니다!');
             router.push(`/course/${courseInfo.id}`);
             break;
           case 400:
-            alert('잘못된 요청입니다. 메인 페이지로 이동합니다.');
+            Toast.show('잘못된 요청입니다. 메인 페이지로 이동합니다.');
             router.push('/');
             break;
           case 500:
-            alert('잘못된 요청입니다. 메인 페이지로 이동합니다.');
+            Toast.show('잘못된 요청입니다. 메인 페이지로 이동합니다.');
             router.push('/');
             break;
           default:
