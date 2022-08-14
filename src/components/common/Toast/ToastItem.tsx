@@ -36,7 +36,6 @@ export default ToastItem;
 const Container = styled.div`
   position: relative;
   display: flex;
-  width: 300px;
   height: 70px;
   padding: 0 20px;
   justify-content: center;

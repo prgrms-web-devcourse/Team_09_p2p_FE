@@ -23,6 +23,8 @@ class Toast {
       } else {
         this.portal = document.createElement('div');
         this.portal.id = this.portalId;
+        this.portal.style.display = 'flex';
+        this.portal.style.justifyContent = 'center';
         document.body.appendChild(this.portal);
       }
 
@@ -38,7 +40,9 @@ class Toast {
   }
 
   show(message: string, duration = 2000) {
-    this.createToast!(message, duration);
+    if (this.createToast) {
+      this.createToast(message, duration);
+    }
   }
 }
 
