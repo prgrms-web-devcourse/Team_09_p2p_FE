@@ -28,12 +28,17 @@ const SearchMap = ({ setSelectedPlaces, selectedPlaces }: SearchMap) => {
   const [loaded, setLoaded] = useState(isAlreadyLoaded);
   const [mapObject, setMapObject] = useState<kakao.maps.Map>();
   const [searchedPlaces, setSearchedPlaces] = useState<IPlaceForm[]>([]);
-  const [kakaoDataArray, setKakaoDataArray] = useState<any>([]);
   const [curKeyword, setCurKeyword] = useState('');
+  const [isSearched, setIsSearched] = useState(true);
   useEffect(() => {
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     return () => {};
   }, []);
+  useEffect(() => {
+    if (!isSearched) {
+      alert('장소 검색 결과가 없습니다!');
+    }
+  }, [isSearched]);
   // 검색어가 바뀔 때마다 재렌더링되도록 useEffect 사용
   useEffect(() => {
     if (mapObject === null || mapObject === undefined) {
@@ -70,14 +75,10 @@ const SearchMap = ({ setSelectedPlaces, selectedPlaces }: SearchMap) => {
           if (pagination.current > pagination.last) {
             return;
           }
-          await setSearchedPlaces((selectedPlaces) => [
-            ...selectedPlaces,
-            ...selectedPlacesSetter(data)
-          ]);
-          await setKakaoDataArray((kakaoDataArray: any) => [...kakaoDataArray, ...data]);
+          setSearchedPlaces((selectedPlaces) => [...selectedPlaces, ...selectedPlacesSetter(data)]);
         } else if (status === kakao.maps.services.Status.ZERO_RESULT) {
           console.log('검색 결과가 존재하지 않습니다.');
-          await console.log(pagination);
+          setIsSearched(false);
           return;
         } else if (status === kakao.maps.services.Status.ERROR) {
           console.log('검색 결과 중 오류가 발생했습니다.');
@@ -89,11 +90,12 @@ const SearchMap = ({ setSelectedPlaces, selectedPlaces }: SearchMap) => {
       // 15개씩 3개의 페이지 data 요청
       setSearchedPlaces([]);
       const syncSearch = async () => {
-        ps.keywordSearch(keyword, await searchPlaceCallback, { page: 1 });
-        ps.keywordSearch(keyword, await searchPlaceCallback, { page: 2 });
-        ps.keywordSearch(keyword, await searchPlaceCallback, { page: 3 });
+        ps.keywordSearch(keyword, searchPlaceCallback, { page: 1 });
+        ps.keywordSearch(keyword, searchPlaceCallback, { page: 2 });
+        ps.keywordSearch(keyword, searchPlaceCallback, { page: 3 });
       };
       syncSearch();
+      setIsSearched(true);
     };
     // 키워드로 장소를 검색합니다
     searchPlaces();
