@@ -45,9 +45,9 @@ const PlaceItem = forwardRef(({ place, grid }: PlaceItemProps, ref) => {
           <BookmarkIcon bookmarked={isBookmarked} onClick={handleClickBookmark} />
         </ThumbnailWrapper>
 
-        <PlaceInfo>
+        <PlaceInfo className="placeInfo">
           <InfoHead>
-            <Title size={16} color="dark" ellipsis>
+            <Title size={16} ellipsis>
               {title}
             </Title>
             <LikeCount count={likeCount} />
@@ -72,13 +72,15 @@ const PlaceContainer = styled.li<Pick<PlaceItemProps, 'grid'>>`
   width: ${({ grid }) => (grid === 3 ? '33.3%' : '25%')};
   padding: 0 10px 40px 10px;
   box-sizing: border-box;
-  cursor: pointer;
 
   &:hover .placeImage {
     transform: scale(1.05);
   }
-  &:hover .placeImage {
+  &:hover .placeInfo {
     color: ${fontGray};
+  }
+  a {
+    cursor: pointer;
   }
 `;
 
@@ -106,6 +108,7 @@ const Thumbnail = styled.div`
 
 const PlaceInfo = styled.div`
   padding: 12px 8px;
+  transition: color 0.2s;
 `;
 
 const InfoHead = styled.div`
