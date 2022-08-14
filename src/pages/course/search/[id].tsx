@@ -25,7 +25,7 @@ interface Props {
   placeId: number;
 }
 
-const Course = ({ placeId }: Props) => {
+const CourseSearch = ({ placeId }: Props) => {
   const [courseList, setCourseList] = useState([]);
   const [page, setPage] = useState(0);
   const [lastTarget, setLastTarget] = useState(null);
@@ -81,7 +81,6 @@ const Course = ({ placeId }: Props) => {
   }, [lastTarget]);
 
   useEffect(() => {
-    console.log(page, 'page!'); // 처음 들어왔을 때 요청
     getCourseList({ page: 0, sorting: sorting });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -110,4 +109,4 @@ const Course = ({ placeId }: Props) => {
   );
 };
 
-export default Course;
+export default CourseSearch;

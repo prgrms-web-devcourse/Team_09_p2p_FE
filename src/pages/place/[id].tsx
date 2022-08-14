@@ -123,7 +123,7 @@ const PlaceDetailByPostId = ({ place, placeId, courses }: Props) => {
             {/* 검색 결과로 이동 시켜야함 */}
             <RelevantHeader>
               <Title size="sm">이 장소가 포함된 코스</Title>
-              <Link href="/">
+              <Link href={`/course/search/${placeId}`}>
                 <Text color="gray">전체보기</Text>
               </Link>
             </RelevantHeader>
