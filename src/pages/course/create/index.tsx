@@ -10,6 +10,7 @@ import { useRouter } from 'next/router';
 import SearchMap from '~/components/domain/Map/SearchMap';
 import { IPlaceForm } from '~/types/place';
 import Layout from '~/components/common/Layout';
+import { Toast } from '~/components/common';
 
 export interface IPlace {
   id: number;
@@ -83,7 +84,7 @@ const CourseCreate = () => {
   const handleNextStep = () => {
     console.log(selectedPlaces.length);
     if (selectedPlaces.length < 2) {
-      alert('장소를 두 군데 이상 추가해주세요!');
+      Toast.show('장소를 두 군데 이상 추가해주세요!');
       return;
     }
     router.push(
@@ -158,7 +159,8 @@ const CourseCreate = () => {
             <SearchMap
               setSelectedPlaces={setSelectedPlaces}
               selectedPlaces={selectedPlaces}
-            ></SearchMap>
+              selectedRegion={selectedRegion}
+            />
           </MapArea>
         </CreateWrapper>
       </main>
