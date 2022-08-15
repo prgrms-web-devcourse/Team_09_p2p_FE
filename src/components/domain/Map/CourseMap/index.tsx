@@ -4,6 +4,7 @@ import markerIcon from 'public/assets/place/course.png';
 import Script from 'next/script';
 import styled from '@emotion/styled';
 import { IPlace } from '~/types/place';
+import { MARKER_IMAGE_URLS } from 'src/utils/constants';
 
 interface CourseType {
   id: number;
@@ -78,7 +79,7 @@ const CourseMap = ({ course }: CourseMapProps) => {
               <MapMarker
                 position={{ lat: Number(place.latitude), lng: Number(place.longitude) }}
                 image={{
-                  src: markerIcon.src,
+                  src: MARKER_IMAGE_URLS.defaultPlace,
                   size: {
                     width: 64,
                     height: 69
@@ -90,7 +91,8 @@ const CourseMap = ({ course }: CourseMapProps) => {
                     }
                   }
                 }}
-              ></MapMarker>
+              />
+              {/* 추후 스프라이트 이미지 적용 시 사용 */}
               {/* <MapMarker
                 position={{ lat: Number(place.latitude), lng: Number(place.longitude) }}
                 image={{
@@ -124,10 +126,10 @@ const CourseMap = ({ course }: CourseMapProps) => {
               <CustomOverlayMap
                 position={{ lat: Number(place.latitude), lng: Number(place.longitude) }}
                 xAnchor={0}
-                yAnchor={0.98}
+                yAnchor={1}
                 clickable={true}
               >
-                {index + 1}
+                {/* {index + 1} */}
                 <MarkerWithCustomOverlayStyle>
                   <a
                     href={`https://map.kakao.com/link/map/${place.id}`}
