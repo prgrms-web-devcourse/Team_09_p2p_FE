@@ -54,16 +54,27 @@ export const useUser = () => {
   const updateUser = async (token: string) => {
     setCurrentUser({ ...currentUser });
 
-    const response = await UserApi.getMyInfo();
-    console.log(response, '★update User★');
-    setCurrentUser({
-      accessToken: token,
-      user: {
-        id: response.id,
-        nickname: response.nickname,
-        profileImage: response.profileImage
-      }
-    });
+    try {
+      const response = await UserApi.getMyInfo();
+      setCurrentUser({
+        accessToken: token,
+        user: {
+          id: response.id,
+          nickname: response.nickname,
+          profileImage: response.profileImage
+        }
+      });
+    } catch (e) {
+      WebStorage.removeToken();
+      setCurrentUser({
+        accessToken: null,
+        user: {
+          id: null,
+          nickname: null,
+          profileImage: null
+        }
+      });
+    }
   };
 
   const logout = async () => {
