@@ -47,7 +47,6 @@ const Course = ({ query }: { query: Record<string, string> }) => {
   const [lastTarget, setLastTarget] = useState(null);
   const [isLast, setIsLast] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const { isLoggedIn } = useUser();
 
   const router = useRouter();
   const SIZE = 15;
@@ -107,7 +106,8 @@ const Course = ({ query }: { query: Record<string, string> }) => {
         pathname: '/course',
         query: { ...queries, themes: queries.themes.join(','), spots: queries.spots.join(',') }
       },
-      `/course${makeQueryString(queries)}`,
+      // `/course${makeQueryString(queries)}`,
+      '/course',
       {
         scroll: false
       }
