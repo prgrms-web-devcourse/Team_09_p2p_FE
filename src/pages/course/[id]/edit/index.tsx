@@ -1,21 +1,29 @@
 import styled from '@emotion/styled';
 import type { NextPage } from 'next';
 import Head from 'next/head';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { Button, PageContainer } from '~/components/atom';
-import { CategoryTitle, CourseList, SortFilter, Toast } from '~/components/common';
 import CourseMap from '~/components/domain/Map/CourseMap';
 import theme from '~/styles/theme';
-import numbering from '~/../public/assets/numbering.png';
 import PlaceInformation from '~/components/domain/CourseCreate/PlaceInformation';
-import { SelectTags } from '~/components/common';
+import { SelectTags, Toast } from '~/components/common';
 import { useRouter } from 'next/router';
 import { CourseApi } from '~/service';
-import { SearchTagsValues } from '~/types';
-import { IPlace, IPlaceForm } from '~/types/place';
+import { Period, RegionAndAll, SearchTagsValues, Spot, Theme } from '~/types';
+import { IPlaceForm } from '~/types/place';
 import { ICourseForm } from '~/types/course';
-//import { ICourseInfo } from '..';
+import {
+  correctedPeriod,
+  correctedRegion,
+  correctedSpots,
+  correctedThemes
+} from '~/utils/converter';
 
+export async function getServerSideProps() {
+  return {
+    props: {}
+  };
+}
 interface ICourseMap {
   id: number;
   latitude: string;
@@ -23,36 +31,36 @@ interface ICourseMap {
   name: string;
 }
 
-/* export interface IPlaceForm {
-  kakaoMapId: number;
-  name: string;
-  description: string;
-  addressName: string;
-  roadAddressName: string;
-  latitude: string;
-  longitude: string;
-  category: string;
-  phoneNumber: string;
-  isRecommended: boolean;
-  isThumbnail: boolean;
-  imageUrl: string;
-} */
+type QueryState = {
+  keyword: string;
+  period: Period | null;
+  region: RegionAndAll;
+  themes: Theme[];
+  spots: Spot[];
+  page: number;
+  size: number;
+};
 
 const CourseEdit: NextPage = () => {
   const router = useRouter();
   const { courseQuery } = router.query;
+  const courseInfo: ICourseForm = JSON.parse(courseQuery as string);
+  const [title, setTitle] = useState(courseInfo.title);
   const titleRef = useRef<HTMLInputElement>(null as unknown as HTMLInputElement);
   const textAreasRef = useRef([] as HTMLTextAreaElement[]);
   const isRecommendedRef = useRef([] as HTMLButtonElement[]);
   const placeImagesRef = useRef([] as any);
   const ThumbnailButtonRef = useRef([] as HTMLButtonElement[]);
-  if (!courseQuery) {
-    return null;
-  }
-  const courseInfo: ICourseForm = JSON.parse(courseQuery as string);
-  console.log(courseInfo);
+  const [queries, setQueries] = useState<QueryState>({
+    keyword: '',
+    period: (courseInfo.period && correctedPeriod(courseInfo.period)) || null,
+    region: (courseInfo.region && correctedRegion(courseInfo.region)) || '전체보기',
+    themes: (courseInfo.themes && correctedThemes(courseInfo.themes.toString())) || [],
+    spots: (courseInfo.spots && correctedSpots(courseInfo.spots.toString())) || [],
+    page: 0,
+    size: 15
+  });
   const formCourseData = {} as ICourseForm;
-  formCourseData.region = courseInfo.region;
   const courseMapData = courseInfo.places.map((place) => {
     return {
       id: place.kakaoMapId,
@@ -75,7 +83,8 @@ const CourseEdit: NextPage = () => {
         category: place.category !== '' ? place.category : 'DE',
         phoneNumber: place.phoneNumber !== '' ? place.phoneNumber : null,
         isRecommended: JSON.parse(isRecommendedRef.current[index].value),
-        isThumbnail: JSON.parse(ThumbnailButtonRef.current[index].value)
+        isThumbnail: JSON.parse(ThumbnailButtonRef.current[index].value),
+        imageUrl: !placeImagesRef.current[index].files[0] ? place.imageUrl : null
       } as IPlaceForm;
     });
   };
@@ -108,15 +117,15 @@ const CourseEdit: NextPage = () => {
     } else {
       formCourseData.title = titleRef.current.value;
     }
-    if (formCourseData.period === '') {
+    if (!queries.period) {
       Toast.show('기간을 설정해주세요!');
       return;
     }
-    if (formCourseData.themes.length === 0) {
+    if (!queries.themes) {
       Toast.show('테마를 설정해주세요!');
       return;
     }
-    if (formCourseData.spots.length === 0) {
+    if (!queries.spots) {
       Toast.show('장소를 설정해주세요!');
       return;
     }
@@ -131,7 +140,11 @@ const CourseEdit: NextPage = () => {
         return;
       }
     }
+    formCourseData.region = courseInfo.region;
     formCourseData.places = placesFormDataSetter();
+    formCourseData.period = queries.period;
+    formCourseData.themes = queries.themes;
+    formCourseData.spots = queries.spots;
     const formData = new FormData();
     const uploaderString = JSON.stringify(formCourseData);
     formData.append(
@@ -142,7 +155,7 @@ const CourseEdit: NextPage = () => {
     );
     const placesImageData: File[] = placesImageDataSetter();
     for (let i = 0; i < placesImageData.length; i++) {
-      formData.append('images', placesImageData[i]);
+      formData.append('images', placesImageData[i] ? placesImageData[i] : new Blob());
     }
     const updateCourse = async (formData: FormData) => {
       await CourseApi.update(courseInfo.id, formData).then((res) => {
@@ -180,9 +193,17 @@ const CourseEdit: NextPage = () => {
   };
 
   const handleSelectTags = (data: SearchTagsValues) => {
-    formCourseData.period = data.period !== null ? data.period : '';
-    formCourseData.themes = data.themes;
-    formCourseData.spots = data.spots;
+    //formCourseData.period = data.period !== null ? data.period : '';
+    //formCourseData.themes = data.themes;
+    //formCourseData.spots = data.spots;
+    const { period, themes, spots } = data;
+    setQueries({
+      ...queries,
+      period,
+      themes,
+      spots,
+      page: 0
+    });
   };
 
   return (
@@ -198,9 +219,22 @@ const CourseEdit: NextPage = () => {
             <CourseMap course={courseMapData} />
           </MapWrapper>
           <TitleInputWrapper>
-            <TitleInput placeholder="코스의 제목을 입력해주세요" ref={titleRef} />
+            <TitleInput
+              placeholder="코스의 제목을 입력해주세요"
+              ref={titleRef}
+              onChange={(e) => setTitle(e.target.value)}
+              value={title}
+            />
             <TitleUnderLine />
-            <SelectTags style={{ marginTop: '10px' }} onSelect={handleSelectTags} />
+            <SelectTags
+              style={{ marginTop: '10px' }}
+              onSelect={handleSelectTags}
+              defaultValues={{
+                period: courseInfo.period as Period,
+                themes: courseInfo.themes as Theme[],
+                spots: courseInfo.spots as Spot[]
+              }}
+            />
           </TitleInputWrapper>
           <PlacesWrapper>
             {courseInfo.places.map((place, index, courseInfo) => (

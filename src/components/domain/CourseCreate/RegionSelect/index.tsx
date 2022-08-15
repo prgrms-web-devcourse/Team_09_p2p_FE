@@ -9,18 +9,22 @@ import Router from 'next/router';
 import { IPlaceForm } from '~/types/place';
 
 interface RegionSelectProps {
-  setRegion: Dispatch<SetStateAction<string>>;
-  onClose?: () => void;
-  isModify?: boolean;
+  onClose: () => void;
+  isModify: boolean;
+  setIsModify: Dispatch<SetStateAction<boolean>>;
   loadedRegion?: string;
   setSelectedPlaces: Dispatch<SetStateAction<IPlaceForm[]>>;
+  setLoadedRegion?: Dispatch<SetStateAction<string>>;
+  selectedPlacesLength: number;
 }
 const RegionSelect = ({
-  setRegion,
   onClose,
   isModify,
+  setIsModify,
   loadedRegion,
-  setSelectedPlaces
+  setSelectedPlaces,
+  setLoadedRegion,
+  selectedPlacesLength
 }: RegionSelectProps) => {
   const [beforeRegion, setBeforeRegion] = useState<HTMLButtonElement | null>(null);
   const [isSelected, setIsSelected] = useState(false);
@@ -28,7 +32,7 @@ const RegionSelect = ({
   const regions: Region[] = [...REGIONS];
 
   const closeForm = () => {
-    Router.back();
+    onClose();
   };
   const regionSelectHandler = (e: MouseEvent<HTMLButtonElement>) => {
     setIsSelected(true);
@@ -37,18 +41,15 @@ const RegionSelect = ({
     }
     if (e.target instanceof HTMLButtonElement) {
       e.target.classList.add('select');
-      setRegion(e.target.innerText);
       setBeforeRegion(e.target);
       setSelectedRegion(e.target.innerText);
     }
   };
   const completeSelect = () => {
-    if (isModify && loadedRegion !== selectedRegion) {
+    if (isModify && loadedRegion !== selectedRegion && selectedPlacesLength > 0) {
       if (
         window.confirm(
-          `이전 선택 지역 : ${loadedRegion}
-          
-이전에 선택한 지역과 다를 경우 장소 목록이 초기화됩니다.
+          `이전에 선택한 지역과 다를 경우 장소 목록이 초기화됩니다.
 장소 목록을 초기화 하시겠습니까?`
         )
       ) {
@@ -57,7 +58,11 @@ const RegionSelect = ({
         return;
       }
     }
-    if (onClose && isSelected) {
+    if (isSelected) {
+      if (setLoadedRegion) {
+        setLoadedRegion(selectedRegion);
+      }
+      setIsModify(true);
       onClose();
     }
   };
