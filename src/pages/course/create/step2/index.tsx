@@ -3,7 +3,7 @@ import type { NextPage } from 'next';
 import Head from 'next/head';
 import React, { useRef, useState } from 'react';
 import { Button, PageContainer } from '~/components/atom';
-import { CategoryTitle, CourseList, SortFilter } from '~/components/common';
+import { CategoryTitle, CourseList, SortFilter, Toast } from '~/components/common';
 import CourseMap from '~/components/domain/Map/CourseMap';
 import theme from '~/styles/theme';
 import PlaceInformation from '~/components/domain/CourseCreate/PlaceInformation';
@@ -93,7 +93,7 @@ const Course: NextPage = () => {
   };
   const courseCreatehandler = () => {
     if (titleRef.current.value === '') {
-      alert('코스 제목을 입력해주세요!');
+      Toast.show('코스 제목을 입력해주세요!');
       if (titleRef.current !== null) {
         titleRef.current.focus();
       }
@@ -102,24 +102,24 @@ const Course: NextPage = () => {
       formCourseData.title = titleRef.current.value;
     }
     if (formCourseData.period === '') {
-      alert('기간을 설정해주세요!');
+      Toast.show('기간을 설정해주세요!');
       return;
     }
     if (formCourseData.themes.length === 0) {
-      alert('테마를 설정해주세요!');
+      Toast.show('테마를 설정해주세요!');
       return;
     }
     if (formCourseData.spots.length === 0) {
-      alert('장소를 설정해주세요!');
+      Toast.show('장소를 설정해주세요!');
       return;
     }
     if (courseInfo.places.length > ThumbnailButtonRef.current.length) {
-      alert('이미지를 전부 등록해주세요!');
+      Toast.show('이미지를 전부 등록해주세요!');
       return;
     }
     for (let i = 0; i < courseInfo.places.length; i++) {
       if (textAreasRef.current[i].value === '') {
-        alert('장소 설명을 적어주세요!');
+        Toast.show('장소 설명을 적어주세요!');
         textAreasRef.current[i].focus();
         return;
       }
@@ -145,16 +145,16 @@ const Course: NextPage = () => {
       await CourseApi.create(courseFormData).then((res) => {
         switch (res) {
           case 201:
-            alert('코스 생성이 완료되었습니다!');
+            Toast.show('코스 생성이 완료되었습니다!');
             // todo: 추후 상세 페이지로 바로 연결 예정
             router.push('/');
             break;
           case 400:
-            alert('잘못된 요청입니다. 메인 페이지로 이동합니다.');
+            Toast.show('잘못된 요청입니다. 메인 페이지로 이동합니다.');
             router.push('/');
             break;
           case 500:
-            alert('잘못된 요청입니다. 메인 페이지로 이동합니다.');
+            Toast.show('잘못된 요청입니다. 메인 페이지로 이동합니다.');
             router.push('/');
             break;
           default:
@@ -198,7 +198,7 @@ const Course: NextPage = () => {
           <TitleInputWrapper>
             <TitleInput placeholder="코스의 제목을 입력해주세요" ref={titleRef} />
             <TitleUnderLine />
-            <SelectTags style={{ marginTop: '10px' }} onSelect={handleSelectTags} />
+            <SelectTags style={{ marginTop: '14px' }} onSelect={handleSelectTags} />
           </TitleInputWrapper>
           <PlacesWrapper>
             {courseInfo.places.map((place, index, courseInfo) => (
@@ -245,7 +245,7 @@ const TitleInputWrapper = styled.div`
   background-color: #fff;
   border-radius: 2px;
   box-sizing: border-box;
-  height: 350px;
+  padding-bottom: 42px;
   width: 100%;
   text-align: center;
 `;
@@ -258,21 +258,23 @@ const TitleInput = styled.input`
   font-family: 'Arvo';
   font-size: 32px;
   height: 50px;
-  padding: 10px 0px;
-
+  padding: 10px 0px 20px;
+  font-weight: 700;
+  /* 이 부분이 폰트적용이 안되어서 임시로 이렇게 넣음 */
+  font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu,
+    Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
   width: 100%;
 
   &:focus {
     outline: none;
-    ::-webkit-input-placeholder {
-      color: dodgerblue;
-    }
+
     + span {
       transform: scale(1);
     }
   }
   ::-webkit-input-placeholder {
     color: ${theme.color.fontGray};
+    font-weight: 500;
   }
 `;
 

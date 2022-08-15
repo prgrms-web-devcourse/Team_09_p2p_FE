@@ -109,7 +109,7 @@ const CourseEdit: NextPage = () => {
   };
   const courseUpdatehandler = () => {
     if (titleRef.current.value === '') {
-      alert('코스 제목을 입력해주세요!');
+      Toast.show('코스 제목을 입력해주세요!');
       if (titleRef.current !== null) {
         titleRef.current.focus();
       }
@@ -118,24 +118,24 @@ const CourseEdit: NextPage = () => {
       formCourseData.title = titleRef.current.value;
     }
     if (!queries.period) {
-      alert('기간을 설정해주세요!');
+      Toast.show('기간을 설정해주세요!');
       return;
     }
     if (!queries.themes) {
-      alert('테마를 설정해주세요!');
+      Toast.show('테마를 설정해주세요!');
       return;
     }
     if (!queries.spots) {
-      alert('장소를 설정해주세요!');
+      Toast.show('장소를 설정해주세요!');
       return;
     }
     if (courseInfo.places.length > ThumbnailButtonRef.current.length) {
-      alert('이미지를 전부 등록해주세요!');
+      Toast.show('이미지를 전부 등록해주세요!');
       return;
     }
     for (let i = 0; i < courseInfo.places.length; i++) {
       if (textAreasRef.current[i].value === '') {
-        alert('장소 설명을 적어주세요!');
+        Toast.show('장소 설명을 적어주세요!');
         textAreasRef.current[i].focus();
         return;
       }
@@ -161,15 +161,15 @@ const CourseEdit: NextPage = () => {
       await CourseApi.update(courseInfo.id, formData).then((res) => {
         switch (res) {
           case 201:
-            alert('코스 수정이 완료되었습니다!');
+            Toast.show('코스 수정이 완료되었습니다!');
             router.push(`/course/${courseInfo.id}`);
             break;
           case 400:
-            alert('잘못된 요청입니다. 메인 페이지로 이동합니다.');
+            Toast.show('잘못된 요청입니다. 메인 페이지로 이동합니다.');
             router.push('/');
             break;
           case 500:
-            alert('잘못된 요청입니다. 메인 페이지로 이동합니다.');
+            Toast.show('잘못된 요청입니다. 메인 페이지로 이동합니다.');
             router.push('/');
             break;
           default:

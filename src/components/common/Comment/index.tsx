@@ -1,10 +1,11 @@
 import styled from '@emotion/styled';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Text } from '~/components/atom';
 import { CommentApi } from '~/service';
 import { IComment } from '~/types/comment';
 import CommentForm from './CommentForm';
 import CommentItem from './CommentItem';
+import ConfirmModal from '../ConfirmModal';
 
 interface CommentProps {
   id: number;
@@ -13,7 +14,13 @@ interface CommentProps {
 }
 
 const Comment = ({ id, type, writerId }: CommentProps) => {
+  const [modalVisible, setModalVisible] = useState(false);
   const [comments, setComments] = useState<IComment[] | null>(null);
+  const deleteTargetCommentIdRef = useRef<number | undefined>();
+  const closeModal = () => {
+    setModalVisible(false);
+    deleteTargetCommentIdRef.current = undefined;
+  };
 
   const getComments = async () => {
     const result = await CommentApi.getComments(id, type);
@@ -25,9 +32,19 @@ const Comment = ({ id, type, writerId }: CommentProps) => {
     getComments();
   };
 
-  const onDelete = async (commentId: number) => {
-    await CommentApi.deleteComment(id, commentId, type);
-    getComments();
+  const onDeleteConfirm = async () => {
+    if (deleteTargetCommentIdRef.current) {
+      const commentId = deleteTargetCommentIdRef.current;
+      await CommentApi.deleteComment(id, commentId, type);
+      getComments();
+      deleteTargetCommentIdRef.current = undefined;
+      closeModal();
+    }
+  };
+
+  const onDelete = (commentId: number) => {
+    setModalVisible(true);
+    deleteTargetCommentIdRef.current = commentId;
   };
 
   const onEdit = async (commentId: number, value: string) => {
@@ -51,24 +68,33 @@ const Comment = ({ id, type, writerId }: CommentProps) => {
     return null;
   }
   return (
-    <CommentContainer>
-      <Text size="xl" fontWeight={700}>
-        댓글 {comments.length}개
-      </Text>
-      <CommentForm onSubmit={onCreate} />
-      <CommentList>
-        {comments.map((comment) => (
-          <CommentItem
-            key={comment.id}
-            comment={comment}
-            onDelete={onDelete}
-            onEdit={onEdit}
-            onCreateRecomment={onCreateRecomment}
-            writerId={writerId}
-          />
-        ))}
-      </CommentList>
-    </CommentContainer>
+    <>
+      <CommentContainer>
+        <Text size="xl" fontWeight={700}>
+          댓글 {comments.length}개
+        </Text>
+        <CommentForm onSubmit={onCreate} />
+        <CommentList>
+          {comments.map((comment) => (
+            <CommentItem
+              key={comment.id}
+              comment={comment}
+              onDelete={onDelete}
+              onEdit={onEdit}
+              onCreateRecomment={onCreateRecomment}
+              writerId={writerId}
+            />
+          ))}
+        </CommentList>
+      </CommentContainer>
+      <ConfirmModal
+        visible={modalVisible}
+        onClose={closeModal}
+        onConfirm={onDeleteConfirm}
+        message="댓글 삭제"
+        subMessage="댓글을 정말 삭제하시겠습니까?"
+      />
+    </>
   );
 };
 

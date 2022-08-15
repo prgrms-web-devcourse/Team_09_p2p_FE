@@ -42,7 +42,5 @@ export default ToastManager;
 const Container = styled.div`
   position: fixed;
   top: 10px;
-  left: 50%;
-  margin-left: -150px;
   z-index: 1500;
 `;
