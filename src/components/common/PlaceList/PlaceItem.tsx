@@ -17,7 +17,7 @@ interface PlaceItemProps {
 
 const PlaceItem = forwardRef(({ place, grid }: PlaceItemProps, ref) => {
   const { id, title, likeCount, usedCount, thumbnail, bookmarked } = place;
-  const THUMBNAIL_URL = thumbnail ? thumbnail : '';
+  const THUMBNAIL_URL = thumbnail ? thumbnail : '/assets/images/image-not-found.png';
   const { isLoggedIn } = useUser();
   const router = useRouter();
   const [isBookmarked, setIsBookmarked] = useState(bookmarked);
