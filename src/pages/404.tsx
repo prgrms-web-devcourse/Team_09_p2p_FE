@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import React, { useRef } from 'react';
-import { Button, Text } from '~/components/atom';
+import { Button, Text, Title } from '~/components/atom';
 
 const Custom404: NextPage = () => {
   const router = useRouter();
@@ -22,7 +22,7 @@ const Custom404: NextPage = () => {
         style={{ marginTop: '80px', width: '100%', height: '400px' }}
       />
       <Container>
-        <Text size="lg">요청하신 페이지를 찾을 수 없습니다.</Text>
+        <Title>요청하신 페이지를 찾을 수 없습니다.</Title>
         <Text size="sm">존재하지 않는 페이지이거나 삭제된 페이지입니다.</Text>
         <Button onClick={() => router.push('/')}>홈으로 이동</Button>
       </Container>
