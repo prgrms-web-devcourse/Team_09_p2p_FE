@@ -6,6 +6,8 @@ import { IComment } from '~/types/comment';
 import CommentForm from './CommentForm';
 import CommentItem from './CommentItem';
 import ConfirmModal from '../ConfirmModal';
+import { useUser } from '~/hooks/useUser';
+import { useRouter } from 'next/router';
 
 interface CommentProps {
   id: number;
@@ -14,9 +16,17 @@ interface CommentProps {
 }
 
 const Comment = ({ id, type, writerId }: CommentProps) => {
+  const { isLoggedIn } = useUser();
+  const router = useRouter();
   const [modalVisible, setModalVisible] = useState(false);
   const [comments, setComments] = useState<IComment[] | null>(null);
   const deleteTargetCommentIdRef = useRef<number | undefined>();
+
+  const handleGoLogin = () => {
+    setModalVisible(false);
+    router.push('/login');
+  };
+
   const closeModal = () => {
     setModalVisible(false);
     deleteTargetCommentIdRef.current = undefined;
@@ -28,6 +38,10 @@ const Comment = ({ id, type, writerId }: CommentProps) => {
   };
 
   const onCreate = async (value: string) => {
+    if (!isLoggedIn) {
+      setModalVisible(true);
+      return;
+    }
     await CommentApi.createComment(id, { comment: value }, type);
     getComments();
   };
@@ -53,6 +67,10 @@ const Comment = ({ id, type, writerId }: CommentProps) => {
   };
 
   const onCreateRecomment = async (commentId: number, value: string) => {
+    if (!isLoggedIn) {
+      setModalVisible(true);
+      return;
+    }
     await CommentApi.createComment(id, { comment: value, rootCommentId: commentId }, type);
     getComments();
   };
@@ -87,13 +105,23 @@ const Comment = ({ id, type, writerId }: CommentProps) => {
           ))}
         </CommentList>
       </CommentContainer>
-      <ConfirmModal
-        visible={modalVisible}
-        onClose={closeModal}
-        onConfirm={onDeleteConfirm}
-        message="댓글 삭제"
-        subMessage="댓글을 정말 삭제하시겠습니까?"
-      />
+      {isLoggedIn ? (
+        <ConfirmModal
+          visible={modalVisible}
+          onClose={closeModal}
+          onConfirm={onDeleteConfirm}
+          message="댓글 삭제"
+          subMessage="댓글을 정말 삭제하시겠습니까?"
+        />
+      ) : (
+        <ConfirmModal
+          visible={modalVisible}
+          onClose={closeModal}
+          onConfirm={handleGoLogin}
+          message="로그인이 필요한 서비스입니다."
+          subMessage="로그인 페이지로 이동할까요?"
+        />
+      )}
     </>
   );
 };
