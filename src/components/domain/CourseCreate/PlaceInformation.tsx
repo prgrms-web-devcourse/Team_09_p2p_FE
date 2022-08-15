@@ -95,11 +95,12 @@ const PlaceInformation = ({
 
   let profile_preview = null;
   const imageId = 'imgFile' + children;
-  if (file !== '' /*  || isModify */) {
+  if (file !== '' || isModify) {
     profile_preview = (
       // eslint-disable-next-line jsx-a11y/alt-text, @next/next/no-img-element
       <>
         {file !== '' ? (
+          // eslint-disable-next-line jsx-a11y/alt-text
           <Image
             height={500}
             cover
@@ -110,7 +111,7 @@ const PlaceInformation = ({
             alt="미리보기 이미지"
           />
         ) : (
-          /* 이미지 URL로 파일을 못 잃어와 임시로 previewUrl 처리 */
+          // eslint-disable-next-line jsx-a11y/alt-text
           <Image
             height={500}
             cover
@@ -235,21 +236,7 @@ const NumberText = styled.p`
   transform: translate(-50%, -50%);
 `;
 
-/* const RecommendButton = styled.button`
-  border: 1px solid ${theme.color.mainColor};
-  border-radius: 20px;
-  padding: 5px 15px 5px 15px;
-`; */
-
 const RecommendButton = styled.button`
-  -ms-user-select: none;
-  -moz-user-select: -moz-none;
-  -khtml-user-select: none;
-  -webkit-user-select: none;
-  user-select: none;
-`;
-
-const RecommendWrapper = styled.div`
   -ms-user-select: none;
   -moz-user-select: -moz-none;
   -khtml-user-select: none;
