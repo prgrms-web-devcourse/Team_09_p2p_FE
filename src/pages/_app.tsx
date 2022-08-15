@@ -5,6 +5,7 @@ import type { NextPage } from 'next';
 import Layout from '~/components/common/Layout';
 import { ReactElement, ReactNode } from 'react';
 import { RecoilRoot } from 'recoil';
+import AppHead from '~/components/domain/AppHead';
 
 export type NextPageWithLayout = NextPage & { getLayout?: (page: ReactElement) => ReactNode };
 type AppPropsWidthLayout = AppProps & { Component: NextPageWithLayout };
@@ -18,7 +19,12 @@ declare global {
 function MyApp({ Component, pageProps }: AppPropsWidthLayout) {
   const getLayout = Component.getLayout || ((page) => <Layout>{page}</Layout>);
 
-  return <RecoilRoot>{getLayout(<Component {...pageProps} />)}</RecoilRoot>;
+  return (
+    <>
+      <AppHead />
+      <RecoilRoot>{getLayout(<Component {...pageProps} />)}</RecoilRoot>
+    </>
+  );
 }
 
 export default MyApp;

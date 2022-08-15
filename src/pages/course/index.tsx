@@ -166,12 +166,7 @@ const Course = ({ query }: { query: Record<string, string> }) => {
 
   return (
     <React.Fragment>
-      <Head>
-        <title>우리의 여행코스 | 이곳저곳</title>
-        <meta name="description" content="our travel course" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-      <main className="content" style={{ position: 'relative' }}>
+      <main style={{ position: 'relative' }}>
         <PageContainer>
           <CategoryTitle name="여행코스" />
           <FilterList>

@@ -25,9 +25,7 @@ const Signup: NextPage = () => {
   return (
     <React.Fragment>
       <Head>
-        <title>여행할 땐 | 이곳저곳</title>
-        <meta name="description" content="sign-up" />
-        <link rel="icon" href="/favicon.ico" />
+        <title>회원가입 | 이곳저곳</title>
       </Head>
 
       <main>

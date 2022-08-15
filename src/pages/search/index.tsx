@@ -104,12 +104,6 @@ const SearchPage = ({ query }: { query: Record<string, string> }) => {
 
   return (
     <React.Fragment>
-      <Head>
-        <title>여행할 땐 | 이곳저곳</title>
-        <meta name="description" content="searched course" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
       <main>
         <PageContainer>
           <Title level={1} size="sm" style={{ margin: '30px 0' }}>
