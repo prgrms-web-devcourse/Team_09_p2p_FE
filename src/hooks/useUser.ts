@@ -77,6 +77,13 @@ export const useUser = () => {
     }
   };
 
+  const updateProfile = async (profileImage: string) => {
+    setCurrentUser({
+      ...currentUser,
+      user: { ...currentUser.user, profileImage }
+    });
+  };
+
   const logout = async () => {
     WebStorage.removeToken();
     resetUser();
@@ -87,6 +94,7 @@ export const useUser = () => {
     isLoggedIn,
     login,
     logout,
-    updateUser
+    updateUser,
+    updateProfile
   };
 };
