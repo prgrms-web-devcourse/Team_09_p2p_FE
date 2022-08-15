@@ -171,6 +171,7 @@ const Thumbnail = styled.div`
   justify-content: flex-end;
   box-sizing: border-box;
   background-size: cover;
+  background-position: center;
   transition: transform 0.2s;
 `;
 

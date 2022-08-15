@@ -99,6 +99,7 @@ const Thumbnail = styled.div`
   box-sizing: border-box;
   position: relative;
   background-size: cover;
+  background-position: center;
   background-color: ${backgroundGray};
   border-radius: 8px;
   position: relative;
