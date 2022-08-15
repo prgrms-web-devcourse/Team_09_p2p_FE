@@ -9,6 +9,7 @@ interface MyComments {
 }
 
 const MyComments = ({ comments }: MyComments) => {
+  console.log(comments);
   return (
     <div>
       {comments.map((comment) => (
@@ -29,8 +30,12 @@ const MyComments = ({ comments }: MyComments) => {
             </Text>
             <Link href={`/course/${comment.content.id}`}>
               <CommentCount>
-                <Icon size={20} name="comment" />
-                <Text color="gray">{comment.subCommentCount}</Text>
+                {!comment.rootCommentId && (
+                  <>
+                    <Icon size={20} name="comment" />
+                    <Text color="gray">{comment.subCommentCount}</Text>
+                  </>
+                )}
               </CommentCount>
             </Link>
           </CommentContent>
