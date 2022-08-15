@@ -7,6 +7,7 @@ import { useUser } from '~/hooks/useUser';
 import { BookmarkApi, LikeApi } from '~/service';
 import theme from '~/styles/theme';
 import { CourseOrPlace } from '~/types';
+import ConfirmModal from '../ConfirmModal';
 
 interface DetailSidebarProps {
   likes?: number;
@@ -24,14 +25,20 @@ const DetailSidebar = ({
   type
 }: DetailSidebarProps) => {
   const { isLoggedIn } = useUser();
+  const [modalVisible, setModalVisible] = useState(false);
   const [isLiked, setIsLiked] = useState(defaultLiked);
   const [isBookmarked, setIsBookmarked] = useState(defaultBookmarked);
   const [totalLikes, setTotalLikes] = useState(likes);
   const router = useRouter();
 
+  const handleGoLogin = () => {
+    setModalVisible(false);
+    router.push('/login');
+  };
+
   const handleClickLike = async () => {
     if (!isLoggedIn) {
-      router.push('/login');
+      setModalVisible(true);
       return;
     }
 
@@ -42,7 +49,7 @@ const DetailSidebar = ({
 
   const handleClickBookmark = async () => {
     if (!isLoggedIn) {
-      router.push('/login');
+      setModalVisible(true);
       return;
     }
     const result = await BookmarkApi.bookmark(id, type);
@@ -78,6 +85,13 @@ const DetailSidebar = ({
         </IconButton>
         <KakaoButton />
       </Sticky>
+      <ConfirmModal
+        visible={modalVisible}
+        onClose={() => setModalVisible(false)}
+        onConfirm={handleGoLogin}
+        message="로그인이 필요한 서비스입니다."
+        subMessage="로그인 페이지로 이동할까요?"
+      />
     </Container>
   );
 };

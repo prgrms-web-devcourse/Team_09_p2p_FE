@@ -1,11 +1,12 @@
 import styled from '@emotion/styled';
 import { useRouter } from 'next/router';
-import React from 'react';
+import React, { useState } from 'react';
 import { PageContainer, Button, Link, Image } from '~/components/atom';
 import Avatar from '~/components/atom/Avatar';
 import Logo from '~/components/atom/Logo';
 import { useUser } from '~/hooks/useUser';
 import theme from '~/styles/theme';
+import ConfirmModal from '../ConfirmModal';
 import SearchInput from '../SearchInput';
 
 interface HeaderProps {
@@ -15,17 +16,22 @@ interface HeaderProps {
 
 const Header = ({ full, isLoading }: HeaderProps) => {
   const { currentUser, isLoggedIn } = useUser();
-
+  const [modalVisible, setModalVisible] = useState(false);
   const router = useRouter();
+
+  const handleGoLogin = () => {
+    setModalVisible(false);
+    router.push('/login');
+  };
+
   const handleSearch = (keyword: string) => {
     const searchPath = `/search?keyword=${keyword}`;
     router.push(searchPath);
   };
 
   const onClickCreate = () => {
-    console.log(isLoggedIn);
     if (!isLoggedIn) {
-      router.push('/login');
+      setModalVisible(true);
       return;
     }
 
@@ -53,44 +59,52 @@ const Header = ({ full, isLoading }: HeaderProps) => {
     );
   } else {
     return (
-      <HeaderContainer>
-        <PageContainer>
-          <Inner>
-            <LeftArea>
-              <Link href="/">
-                <Logo width={130} height={35} />
-              </Link>
-              <Category>
-                <li>
-                  <Link href="/course">여행코스</Link>
-                </li>
-                <li>
-                  <Link href="/place">추천장소</Link>
-                </li>
-              </Category>
-            </LeftArea>
-
-            <InputContainer>
-              <SearchInput onSearch={handleSearch} placeholder="지역, 장소를 검색해보세요" />
-            </InputContainer>
-
-            <Buttons>
-              <Button onClick={onClickCreate}>코스등록</Button>
-
-              {!isLoggedIn && !isLoading && (
-                <Link href="/login">
-                  <Button buttonType="borderPrimary">로그인</Button>
+      <>
+        <ConfirmModal
+          visible={modalVisible}
+          onClose={() => setModalVisible(false)}
+          onConfirm={handleGoLogin}
+          message="로그인이 필요한 서비스입니다."
+          subMessage="로그인 페이지로 이동할까요?"
+        />
+        <HeaderContainer>
+          <PageContainer>
+            <Inner>
+              <LeftArea>
+                <Link href="/">
+                  <Logo width={130} height={35} />
                 </Link>
-              )}
-              {isLoggedIn && !isLoading && (
-                <Link href={`/userinfo/${currentUser.user.id}`}>
-                  <Avatar size={54} src={currentUser.user.profileImage} />
-                </Link>
-              )}
-            </Buttons>
-          </Inner>
-        </PageContainer>
-      </HeaderContainer>
+                <Category>
+                  <li>
+                    <Link href="/course">여행코스</Link>
+                  </li>
+                  <li>
+                    <Link href="/place">추천장소</Link>
+                  </li>
+                </Category>
+              </LeftArea>
+
+              <InputContainer>
+                <SearchInput onSearch={handleSearch} placeholder="지역, 장소를 검색해보세요" />
+              </InputContainer>
+
+              <Buttons>
+                <Button onClick={onClickCreate}>코스등록</Button>
+                {!isLoggedIn && !isLoading && (
+                  <Link href="/login">
+                    <Button buttonType="borderPrimary">로그인</Button>
+                  </Link>
+                )}
+                {isLoggedIn && !isLoading && (
+                  <Link href={`/userinfo/${currentUser.user.id}`}>
+                    <Avatar size={54} src={currentUser.user.profileImage} />
+                  </Link>
+                )}
+              </Buttons>
+            </Inner>
+          </PageContainer>
+        </HeaderContainer>
+      </>
     );
   }
 };

@@ -83,11 +83,8 @@ const PlaceDetailByPostId = ({ place, placeId, courses }: Props) => {
   return (
     <React.Fragment>
       <Head>
-        <title>여행할 땐 | 이곳저곳</title>
-        <meta name="description" content="place detail" />
-        <link rel="icon" href="/favicon.ico" />
+        <title>{place.name} | 이곳저곳</title>
       </Head>
-
       <main>
         <Container type="detail" style={{ position: 'relative' }}>
           <PostHeader>
@@ -123,7 +120,7 @@ const PlaceDetailByPostId = ({ place, placeId, courses }: Props) => {
             {/* 검색 결과로 이동 시켜야함 */}
             <RelevantHeader>
               <Title size="sm">이 장소가 포함된 코스</Title>
-              <Link href="/">
+              <Link href={`/course/search/${placeId}`}>
                 <Text color="gray">전체보기</Text>
               </Link>
             </RelevantHeader>
