@@ -5,6 +5,7 @@ import React, {
   LegacyRef,
   MouseEvent,
   SetStateAction,
+  useEffect,
   useState
 } from 'react';
 import { Link, Text, Title } from '~/components/atom';
@@ -44,7 +45,6 @@ const CourseItem = forwardRef(({ course, grid = 3, index, onModal }: CourseItemP
   const THUMBNAIL_URL = thumbnail ? thumbnail : '';
 
   const handleClickBookmark = async (e: MouseEvent<HTMLButtonElement>) => {
-    console.log('클릭 북마크');
     e.preventDefault();
     e.stopPropagation();
 
@@ -55,6 +55,10 @@ const CourseItem = forwardRef(({ course, grid = 3, index, onModal }: CourseItemP
     const result = await BookmarkApi.bookmarkCourse(Number(id));
     setIsBookmarked(result.isBookmarked);
   };
+
+  useEffect(() => {
+    setIsBookmarked(bookmarked);
+  }, [bookmarked]);
 
   return (
     <ItemContainer grid={grid} ref={ref as LegacyRef<HTMLLIElement>}>
