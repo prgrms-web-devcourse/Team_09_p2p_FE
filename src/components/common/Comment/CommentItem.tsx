@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
-import { useCallback, useState } from 'react';
-import { Button, Link, Text } from '~/components/atom';
+import { useState } from 'react';
+import { Link, Text } from '~/components/atom';
 import Avatar from '~/components/atom/Avatar';
 import { useUser } from '~/hooks/useUser';
 import theme from '~/styles/theme';
@@ -55,10 +55,9 @@ const CommentItem = ({
   };
 
   const handleDelete = () => {
-    if (confirm('삭제하시겠습니까?')) {
-      onDelete(comment.id);
-    }
+    onDelete(comment.id);
   };
+
   return (
     <>
       <CommentContainer isRecomment={isRecomment}>

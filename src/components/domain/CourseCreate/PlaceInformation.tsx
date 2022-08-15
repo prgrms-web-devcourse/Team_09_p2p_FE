@@ -9,6 +9,7 @@ import { IPlaceForm } from '~/types/place';
 import Recommend from '~/components/common/Recommend';
 import imageCompression from 'browser-image-compression';
 import heic2any from 'heic2any';
+import { Toast } from '~/components/common';
 
 interface IPlaceInformation {
   children: ReactNode;
@@ -74,7 +75,7 @@ const PlaceInformation = ({
     }
 
     if (imageFile.size > 1024 * 1024 * MAX_MB) {
-      alert(`${MAX_MB}MB 이하 파일만 등록해 주세요!`);
+      Toast.show(`${MAX_MB}MB 이하 파일만 등록해 주세요!`);
       return;
     }
 
