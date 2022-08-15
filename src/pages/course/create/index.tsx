@@ -78,7 +78,9 @@ const CourseCreate = () => {
   };
   const deletePlace = (deleteSelectedPlace: IPlaceForm) => {
     setSelectedPlaces(
-      selectedPlaces.filter((selectedPlace) => selectedPlace.id !== deleteSelectedPlace.id)
+      selectedPlaces.filter(
+        (selectedPlace) => selectedPlace.kakaoMapId !== deleteSelectedPlace.kakaoMapId
+      )
     );
   };
   const handleNextStep = () => {
