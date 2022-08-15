@@ -1,45 +1,81 @@
 import styled from '@emotion/styled';
 import Script from 'next/script';
 import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
-import { Map, MapMarker, CustomOverlayMap } from 'react-kakao-maps-sdk';
-import { Link, Icon, Text } from '~/components/atom';
+import { Map, MapMarker, Polyline } from 'react-kakao-maps-sdk';
+import { Text } from '~/components/atom';
 import { SearchInput, Toast } from '~/components/common';
 import PlusIcon from '~/components/domain/CourseCreate/SearchArea/PlusIcon';
-import { MARKER_IMAGE_URLS } from 'src/utils/constants';
+import { MARKER_IMAGE_URLS, REGION_BOUNDARY } from 'src/utils/constants';
 import { IPlaceForm } from '~/types/place';
 import theme from '~/styles/theme';
-
-interface placeType {
-  place_name: string;
-  road_address_name: string;
-  address_name: string;
-  phone: string;
-  place_url: string;
-}
 
 interface SearchMap {
   setSelectedPlaces: Dispatch<SetStateAction<IPlaceForm[]>>;
   selectedPlaces: IPlaceForm[];
+  selectedRegion: string;
+}
+interface IPolyLineCourse {
+  placeId: number;
+  lat: number;
+  lng: number;
+  placeName: string;
 }
 
 let isAlreadyLoaded = false;
 let curMarkerObject: kakao.maps.Marker | null = null;
-const SearchMap = ({ setSelectedPlaces, selectedPlaces }: SearchMap) => {
+const SearchMap = ({ setSelectedPlaces, selectedPlaces, selectedRegion }: SearchMap) => {
   const [loaded, setLoaded] = useState(isAlreadyLoaded);
   const [mapObject, setMapObject] = useState<kakao.maps.Map>();
   const [searchedPlaces, setSearchedPlaces] = useState<IPlaceForm[]>([]);
   const [curKeyword, setCurKeyword] = useState('');
   const [isSearched, setIsSearched] = useState(true);
+  const [polyLineCourse, setPolyLineCourse] = useState<IPolyLineCourse[]>();
   useEffect(() => {
     // eslint-disable-next-line @typescript-eslint/no-empty-function
-    return () => {};
+    return () => {
+      if (loaded) {
+        const bounds = new kakao.maps.LatLngBounds();
+        selectedPlaces.forEach((place) => {
+          bounds.extend(new kakao.maps.LatLng(Number(place.latitude), Number(place.longitude)));
+        });
+        const map = mapObject;
+        console.log(selectedPlaces);
+        console.log(map);
+        if (map) {
+          map.setBounds(bounds);
+        }
+      }
+    };
   }, []);
   useEffect(() => {
     if (!isSearched) {
-      alert('장소 검색 결과가 없습니다!');
+      Toast.show('장소 검색 결과가 없습니다!');
     }
   }, [isSearched]);
-  // 검색어가 바뀔 때마다 재렌더링되도록 useEffect 사용
+  useEffect(() => {
+    if (loaded) {
+      if (selectedPlaces.length === 0) {
+        return;
+      }
+      const drawPloyLine = selectedPlaces.map((place) => {
+        return {
+          placeId: place.id,
+          lat: Number(place.latitude),
+          lng: Number(place.longitude),
+          placeName: place.name
+        } as IPolyLineCourse;
+      });
+      setPolyLineCourse(drawPloyLine);
+      const bounds = new kakao.maps.LatLngBounds();
+      selectedPlaces.forEach((place) => {
+        bounds.extend(new kakao.maps.LatLng(Number(place.latitude), Number(place.longitude)));
+      });
+      const map = mapObject;
+      if (map) {
+        map.setBounds(bounds);
+      }
+    }
+  }, [selectedPlaces, mapObject]);
   useEffect(() => {
     if (mapObject === null || mapObject === undefined) {
       return;
@@ -90,9 +126,18 @@ const SearchMap = ({ setSelectedPlaces, selectedPlaces }: SearchMap) => {
       // 15개씩 3개의 페이지 data 요청
       setSearchedPlaces([]);
       const syncSearch = async () => {
-        ps.keywordSearch(keyword, searchPlaceCallback, { page: 1 });
-        ps.keywordSearch(keyword, searchPlaceCallback, { page: 2 });
-        ps.keywordSearch(keyword, searchPlaceCallback, { page: 3 });
+        const sw = new kakao.maps.LatLng(
+          REGION_BOUNDARY[selectedRegion].sw.lat,
+          REGION_BOUNDARY[selectedRegion].sw.lng
+        );
+        const ne = new kakao.maps.LatLng(
+          REGION_BOUNDARY[selectedRegion].ne.lat,
+          REGION_BOUNDARY[selectedRegion].ne.lng
+        );
+        const bounds = new kakao.maps.LatLngBounds(sw, ne);
+        ps.keywordSearch(keyword, searchPlaceCallback, { page: 1, bounds: bounds });
+        ps.keywordSearch(keyword, searchPlaceCallback, { page: 2, bounds: bounds });
+        ps.keywordSearch(keyword, searchPlaceCallback, { page: 3, bounds: bounds });
       };
       syncSearch();
       setIsSearched(true);
@@ -109,10 +154,10 @@ const SearchMap = ({ setSelectedPlaces, selectedPlaces }: SearchMap) => {
     }
     const markerImageSrc = markerImageSetter(place.category);
     const placePosition = new kakao.maps.LatLng(place.latitude, place.longitude);
-    const imageSize = new kakao.maps.Size(36, 37);
+    const imageSize = new kakao.maps.Size(48, 48);
     const markerImage = new kakao.maps.MarkerImage(markerImageSrc, imageSize);
     const selectedMarker = new kakao.maps.Marker({
-      position: placePosition, // 마커의 위치
+      position: placePosition,
       image: markerImage
     });
     curMarkerObject = selectedMarker;
@@ -171,6 +216,9 @@ const SearchMap = ({ setSelectedPlaces, selectedPlaces }: SearchMap) => {
       Toast.show('이미 추가된 장소입니다!');
       return;
     }
+    if (curMarkerObject !== null) {
+      curMarkerObject.setMap(null);
+    }
     setSelectedPlaces((selectedPlace: any) => [...selectedPlace, place]);
   };
   return (
@@ -189,7 +237,7 @@ const SearchMap = ({ setSelectedPlaces, selectedPlaces }: SearchMap) => {
         <SearchMapWrapper className="ddddd">
           <FlexGridWrapper>
             <MapWrapper>
-              <Map // 로드뷰를 표시할 Container
+              <Map
                 center={{
                   lat: 37.566826,
                   lng: 126.9786567
@@ -200,7 +248,30 @@ const SearchMap = ({ setSelectedPlaces, selectedPlaces }: SearchMap) => {
                 }}
                 level={3}
                 onCreate={setMapObject}
-              />
+              >
+                {selectedPlaces.map((place, index) => (
+                  <MapMarker
+                    key={index}
+                    position={{ lat: Number(place.latitude), lng: Number(place.longitude) }}
+                    image={{
+                      src: MARKER_IMAGE_URLS.defaultPlace,
+                      size: {
+                        width: 48,
+                        height: 48
+                      }
+                    }}
+                  />
+                ))}
+                {polyLineCourse ? (
+                  <Polyline
+                    path={polyLineCourse}
+                    strokeWeight={5}
+                    strokeColor={'#FF5F5F'}
+                    strokeOpacity={0.9}
+                    strokeStyle={'solid'}
+                  />
+                ) : null}
+              </Map>
             </MapWrapper>
             <SearchResult id="search-result">
               <p className="result-text">
