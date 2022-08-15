@@ -6,7 +6,7 @@ import { Button, PageContainer } from '~/components/atom';
 import CourseMap from '~/components/domain/Map/CourseMap';
 import theme from '~/styles/theme';
 import PlaceInformation from '~/components/domain/CourseCreate/PlaceInformation';
-import { SelectTags } from '~/components/common';
+import { SelectTags, Toast } from '~/components/common';
 import { useRouter } from 'next/router';
 import { CourseApi } from '~/service';
 import { Period, RegionAndAll, SearchTagsValues, Spot, Theme } from '~/types';
