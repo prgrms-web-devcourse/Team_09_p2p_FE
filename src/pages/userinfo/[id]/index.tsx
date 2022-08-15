@@ -4,7 +4,7 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import { PageContainer } from '~/components/atom';
-import { CourseList } from '~/components/common';
+import { CourseList, Toast } from '~/components/common';
 import MyBookmarks from '~/components/domain/UserInfo/MyBookmarks';
 import MyComments from '~/components/domain/UserInfo/MyComments';
 import ProfileCard from '~/components/domain/UserInfo/ProfileCard';
@@ -104,7 +104,7 @@ const Userinfo: NextPage = () => {
   const getUserData = async (userId: number) => {
     const result = await UserApi.getUser(userId);
     if (!result) {
-      alert('잘못된 요청입니다.');
+      Toast.show('잘못된 요청입니다.');
       router.push('/');
       return;
     }
@@ -118,7 +118,7 @@ const Userinfo: NextPage = () => {
   useEffect(() => {
     if (typeof router.query.id === 'string') {
       if (Number.isNaN(userId)) {
-        alert('잘못된 요청입니다.');
+        Toast.show('잘못된 요청입니다.');
         router.push('/');
         return;
       }
@@ -153,7 +153,7 @@ const Userinfo: NextPage = () => {
               isMyPage={isMyPage}
             />
             <ActionContent>
-              <ul>
+              <TabContainer>
                 <Tab onActive={onClickAction} active={ActiveMenu}>
                   <Tab.item title="게시물" value="course">
                     {courseData && <CourseList grid={2} courses={courseData} />}
@@ -172,7 +172,7 @@ const Userinfo: NextPage = () => {
                     </Tab.item>
                   )}
                 </Tab>
-              </ul>
+              </TabContainer>
             </ActionContent>
           </Wrapper>
         </PageContainer>
@@ -189,4 +189,8 @@ const Wrapper = styled.div`
 `;
 const ActionContent = styled.div`
   padding-left: 400px;
+`;
+
+const TabContainer = styled.ul`
+  margin-bottom: 100px;
 `;

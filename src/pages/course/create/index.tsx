@@ -1,19 +1,15 @@
 import styled from '@emotion/styled';
-import type { NextPage } from 'next';
-import PlaceMap from '~/components/domain/Map/PlaceMap';
 import Head from 'next/head';
-import React, { useEffect, useState } from 'react';
+import React, { ReactElement, useEffect, useState } from 'react';
 import theme from '~/styles/theme';
 import Button from '~/components/atom/Button';
-import { Link, Icon, Text } from '~/components/atom';
-import CloseIcon from '~/components/domain/CourseCreate/SelectedArea/CloseIcon';
-import PlusIcon from '~/components/domain/CourseCreate/SearchArea/PlusIcon';
+import { Icon, Text, Title } from '~/components/atom';
 import Modal from '~/components/atom/Modal';
 import RegionSelect from '~/components/domain/CourseCreate/RegionSelect';
 import { useRouter } from 'next/router';
-import { SearchInput } from '~/components/common';
 import SearchMap from '~/components/domain/Map/SearchMap';
 import { IPlaceForm } from '~/types/place';
+import Layout from '~/components/common/Layout';
 
 export interface IPlace {
   id: number;
@@ -40,26 +36,13 @@ export interface ISelectedPlace {
   category: string;
   phoneNumber: string;
 }
-interface Marker {
-  position: {
-    lat: number;
-    lng: number;
-  };
-  content: string;
-}
-const CourseCreate: NextPage = () => {
+
+const CourseCreate = () => {
   const router = useRouter();
-  // 제출한 검색어 관리
-  const [Keyword, setKeyword] = useState('');
-  const [Value, setValue] = useState('');
-  const [map, setMap] = useState<kakao.maps.Map>();
-  const [markers, setMarkers] = useState<Marker[]>([]);
   const [visible, setVisible] = useState(true);
-  const [region, setRegion] = useState('서울');
   const [selectedPlaces, setSelectedPlaces] = useState<IPlaceForm[]>([]);
   const [isModify, setIsModify] = useState(false);
-  const [loadedRegion, setLoadedRegion] = useState('');
-  //const [queryData, setQueryData] = useState();
+  const [selectedRegion, setSelectedRegion] = useState('서울');
   const queryData = {} as ICourseInfo;
   useEffect(() => {
     if (router.query.hasOwnProperty('requestPath')) {
@@ -67,53 +50,11 @@ const CourseCreate: NextPage = () => {
       if (courseQuery) {
         const courseInfo: ICourseInfo = JSON.parse(courseQuery as string);
         setSelectedPlaces(courseInfo.places);
-        setRegion(courseInfo.region);
-        setLoadedRegion(courseInfo.region);
+        setSelectedRegion(courseInfo.region);
         setIsModify(true);
       }
     }
   }, []);
-  const handleNextStep = () => {
-    router.push('/course/create/step2');
-  };
-  const handleSearch = (keyword: string) => {
-    console.log();
-  };
-  const dummyCourse = {
-    region: region,
-    places: [
-      {
-        id: 1266228191,
-        lat: 35.0768018,
-        lng: 129.023402,
-        name: '송도해상케이블카 송도베이스테이션',
-        address: '부산 서구 송도해변로 171',
-        roadAddressName: '부산 서구 송도해변로 171',
-        category: 'FD6',
-        phoneNumber: '051-247-9900'
-      },
-      {
-        id: 8202423,
-        lat: 35.1538826,
-        lng: 129.118628,
-        name: '광안리해수욕장',
-        address: '부산 수영구 광안해변로 219',
-        roadAddressName: '부산 수영구 광안해변로 219',
-        category: 'FD6',
-        phoneNumber: '051-610-4744'
-      },
-      {
-        id: 8111808,
-        lat: 35.0554585,
-        lng: 129.087973,
-        name: '태종대유원지',
-        address: '부산 영도구 동삼동 산 29-1',
-        roadAddressName: '부산광역시 영도구 전망로 209',
-        category: 'FD6',
-        phoneNumber: '051-405-8745'
-      }
-    ]
-  };
   const setPlaces = () => {
     return selectedPlaces.map((selectedPlace) => {
       return {
@@ -130,13 +71,27 @@ const CourseCreate: NextPage = () => {
   };
 
   const setCoureData = () => {
-    queryData.region = region;
+    queryData.region = selectedRegion;
     queryData.places = setPlaces();
     return JSON.stringify(queryData);
   };
   const deletePlace = (deleteSelectedPlace: IPlaceForm) => {
     setSelectedPlaces(
       selectedPlaces.filter((selectedPlace) => selectedPlace.id !== deleteSelectedPlace.id)
+    );
+  };
+  const handleNextStep = () => {
+    console.log(selectedPlaces.length);
+    if (selectedPlaces.length < 2) {
+      alert('장소를 두 군데 이상 추가해주세요!');
+      return;
+    }
+    router.push(
+      {
+        pathname: '/course/create/step2',
+        query: { requestPath: 'createStep1', courseQuery: setCoureData() }
+      },
+      '/course/create/step2'
     );
   };
   return (
@@ -150,21 +105,26 @@ const CourseCreate: NextPage = () => {
       <main style={{ height: '100%', overflow: 'hidden' }}>
         <Modal visible={visible} onClose={() => setVisible(visible)}>
           <RegionSelect
-            setRegion={setRegion}
             onClose={() => setVisible(false)}
             isModify={isModify}
-            loadedRegion={loadedRegion}
+            setIsModify={setIsModify}
+            loadedRegion={selectedRegion}
             setSelectedPlaces={setSelectedPlaces}
+            setLoadedRegion={setSelectedRegion}
+            selectedPlacesLength={selectedPlaces.length}
           />
         </Modal>
         <CreateWrapper className="landing-page">
           <SelectedArea>
             <SelectedHeader>
-              <Icon name="arrow" size={25} rotate={180} />
-              <Text size={'xl'} style={{ marginLeft: '40%' }}>
+              <div>
+                <Icon.Button name="arrow" size={25} rotate={180} onClick={() => setVisible(true)} />
+              </div>
+              {/* <Icon name="arrow" size={25} rotate={180} /> */}
+              <Title size="sm" style={{ marginLeft: '40%' }}>
                 {/* {visible === false ? region : '서울'} */}
-                {region}
-              </Text>
+                {selectedRegion}
+              </Title>
             </SelectedHeader>
             <ScrollWrapper>
               {selectedPlaces.map((selectedPlace, index) => {
@@ -173,11 +133,15 @@ const CourseCreate: NextPage = () => {
                     <PlaceWrapper>
                       <PlaceIndex>{index + 1}</PlaceIndex>
                       <SelectedPlace>
-                        <div style={{ margin: '20px 0px 0px 20px' }}>
-                          <Text size="lg">{selectedPlace.name}</Text>
-                          <CloseIcon onClick={() => deletePlace(selectedPlace)} />
-                        </div>
-                        <Text size="sm" color="gray" style={{ marginLeft: '20px' }}>
+                        <PlaceHeader>
+                          <PlaceName>{selectedPlace.name}</PlaceName>
+                          <CloseButton
+                            name="close"
+                            size={14}
+                            onClick={() => deletePlace(selectedPlace)}
+                          />
+                        </PlaceHeader>
+                        <Text size="sm" color="gray">
                           {selectedPlace.roadAddressName}
                         </Text>
                       </SelectedPlace>
@@ -186,19 +150,9 @@ const CourseCreate: NextPage = () => {
                 );
               })}
             </ScrollWrapper>
-            <Link
-              href={{
-                pathname: '/course/create/step2',
-                /* query: { courseQuery: JSON.stringify(dummyCourse) } */
-                query: { courseQuery: setCoureData() }
-              }}
-              /* as={`/course/create/step2`} */
-              // query string 안보여주기 위해 필요한데 type error때문에 주석처리
-            >
-              <Button buttonType="primary" size="lg" width="100%">
-                코스 지정 완료
-              </Button>
-            </Link>
+            <Button buttonType="primary" size="lg" width="100%" onClick={handleNextStep}>
+              코스 지정 완료
+            </Button>
           </SelectedArea>
           <MapArea>
             <SearchMap
@@ -214,7 +168,9 @@ const CourseCreate: NextPage = () => {
 
 export default CourseCreate;
 
-const { mainColor } = theme.color;
+CourseCreate.getLayout = function getLayout(page: ReactElement) {
+  return <Layout full>{page}</Layout>;
+};
 
 const CreateWrapper = styled.div`
   display: flex;
@@ -231,6 +187,7 @@ const SelectedHeader = styled.div`
   margin: 30px 0 20px 0;
   text-align: center;
   display: flex;
+  align-items: end;
 `;
 
 const SelectedPlace = styled.div`
@@ -239,15 +196,37 @@ const SelectedPlace = styled.div`
   align-items: flex-start;
   justify-content: flex-end;
   position: relative;
-  padding: 35px 0px 13px 0px;
-  margin: 10px 0px 10px 0px;
-  //margin-bottom: 20px;
-  gap: 20px;
-  width: 100%;
-  height: 60px;
-  border: 1px solid #f3f4f4;
-  border-shadow: 0px 2px 6px rgba(0, 0, 0, 0.08);
+  padding: 20px 20px;
+  box-sizing: border-box;
+  width: 90%;
+  text-align: left;
+  border: 1px solid ${theme.color.borderGray};
+  box-shadow: ${theme.shadow.basicShadow};
   border-radius: 8px;
+`;
+
+const PlaceHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  align-items: center;
+  margin-bottom: 6px;
+`;
+
+const CloseButton = styled(Icon.Button)`
+  margin-left: 20px;
+`;
+
+const PlaceName = styled.span`
+  font-size: 20px;
+  font-weight: 500;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  word-break: break-word;
+
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
 `;
 
 const ScrollWrapper = styled.div`
@@ -264,16 +243,18 @@ const PlaceWrapper = styled.div`
   display: flex;
   align-items: center;
   margin: 0px 0px 0px 0px;
+  margin-bottom: 20px;
 `;
 
 const PlaceIndex = styled.div`
-  width: 50px;
-  height: 50px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
   background-color: ${theme.color.mainColor};
   font-size: 20px;
   color: white;
   text-align: center;
-  line-height: 50px;
+  line-height: 40px;
   margin-right: 20px;
+  flex-shrink: 0;
 `;

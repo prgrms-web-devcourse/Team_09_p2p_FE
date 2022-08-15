@@ -11,8 +11,11 @@
   "dependencies": {
     "@emotion/react": "^11.9.3",
     "@emotion/styled": "^11.9.3",
+    "@lottiefiles/lottie-player": "^1.5.7",
     "axios": "^0.27.2",
+    "browser-image-compression": "^2.0.0",
     "formik": "^2.2.9",
+    "heic2any": "^0.0.3",
     "next": "12.2.2",
     "react": "18.2.0",
     "react-daum-postcode": "^3.1.1",

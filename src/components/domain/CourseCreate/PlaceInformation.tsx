@@ -1,11 +1,15 @@
 import styled from '@emotion/styled';
 import { MutableRefObject, ReactNode, SetStateAction, useCallback, useRef, useState } from 'react';
-import { Text } from '~/components/atom';
+import { Text, Title } from '~/components/atom';
 import theme from '~/styles/theme';
 import Textarea from '~/components/atom/Textarea';
-import Image from 'next/image';
+import { Image } from '~/components/atom';
 import ImageUpload from '~/components/common/ImageUpload';
 import { IPlaceForm } from '~/types/place';
+import Recommend from '~/components/common/Recommend';
+import imageCompression from 'browser-image-compression';
+import heic2any from 'heic2any';
+import { Toast } from '~/components/common';
 
 interface IPlaceInformation {
   children: ReactNode;
@@ -40,76 +44,82 @@ const PlaceInformation = ({
 }: IPlaceInformation) => {
   const [file, setFile] = useState<File | string>('');
   const [previewUrl, setPreviewUrl] = useState('');
-  const [isRecommended, setIsRecommended] = useState(false);
-  const imageRef = useRef(null);
+  const [isRecommended, setIsRecommended] = useState(isModify ? ModPropIsRecommended : false);
+  const imageLabelRef = useRef<HTMLLabelElement>(null);
   // any는 추후 제거하겠습니다!
   const handleRecommend = (e: any) => {
-    if (!isRecommended) {
-      e.target.style = 'background-color: skyblue';
-    } else {
-      e.target.style = 'background-color: white';
-    }
     e.target.value = !isRecommended;
     setIsRecommended(!isRecommended);
   };
 
+  const CompressImage = async (fileSrc: File) => {
+    const options = {
+      maxSizeMB: 1,
+      maxWidthOrHeight: 1920,
+      useWebWorker: true
+    };
+    try {
+      return await imageCompression(fileSrc, options);
+    } catch (error) {
+      alert(error);
+    }
+  };
+
   // any는 추후 제거하겠습니다!
-  const handleFileOnChange = (imageFile: File) => {
+  const handleFileOnChange = async (imageFile: File) => {
     const reader = new FileReader();
+    const MAX_MB = 10;
+
+    if (!imageFile) {
+      return;
+    }
+
+    if (imageFile.size > 1024 * 1024 * MAX_MB) {
+      Toast.show(`${MAX_MB}MB 이하 파일만 등록해 주세요!`);
+      return;
+    }
+
+    /* if (/\.(heic)$/i.test(imageFile.name)) {
+      imageFile = await heic2any({ blob: imageFile, toType: 'image/jpeg' });
+    } */
+
+    if (imageFile.size > 1024 * 1024) {
+      imageFile = (await CompressImage(imageFile)) as File;
+    }
     reader.onloadend = () => {
       setFile(imageFile);
       setPreviewUrl(reader.result as SetStateAction<string>);
     };
     reader.readAsDataURL(imageFile);
-    const { current } = imageRef as unknown as MutableRefObject<HTMLElement>;
-    if (current !== null) {
-      current.style.display = 'none';
-    }
   };
-  const onUploadImage = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    if (!e.target.files) {
-      return;
-    }
-    console.log(e.target.files[0].name);
-  }, []);
-  const onUploadImageButtonClick = useCallback(() => {
-    if (!placeImageRef.current) {
-      return;
-    }
-    placeImageRef.current.onclick();
-  }, []);
+
   let profile_preview = null;
   const imageId = 'imgFile' + children;
-  if (file !== '' /*  || isModify */) {
+  if (file !== '' || isModify) {
     profile_preview = (
       // eslint-disable-next-line jsx-a11y/alt-text, @next/next/no-img-element
       <>
         {file !== '' ? (
+          // eslint-disable-next-line jsx-a11y/alt-text
           <Image
-            style={{
-              width: '830px',
-              height: '500px',
-              zIndex: '100',
-              borderRadius: '8px',
-              objectFit: 'contain'
-            }}
+            height={500}
+            cover
             className="profile_preview"
             src={previewUrl}
-            layout="fill"
+            style={{ cursor: 'pointer', borderRadius: 8 }}
+            onClick={() => imageLabelRef.current?.click()}
+            alt="미리보기 이미지"
           />
         ) : (
-          /* 이미지 URL로 파일을 못 잃어와 임시로 previewUrl 처리 */
+          // eslint-disable-next-line jsx-a11y/alt-text
           <Image
-            style={{
-              width: '830px',
-              height: '500px',
-              zIndex: '100',
-              borderRadius: '8px',
-              objectFit: 'contain'
-            }}
+            height={500}
+            cover
             className="profile_preview"
-            src={previewUrl as string}
-            layout="fill"
+            src={ModPropUploadedImage as string}
+            style={{ cursor: 'pointer', borderRadius: 8 }}
+            onClick={() => imageLabelRef.current?.click()}
+            alt="미리보기 이미지"
           />
         )}
         {isModify ? (
@@ -143,16 +153,15 @@ const PlaceInformation = ({
           <NumberWrapper>
             <NumberText>{children}</NumberText>
             <NumberImage src="/assets/numbering.png" />
-            <Text size={'xl'} style={{ margin: '0 20px 0 40px' }}>
+            <Title size="md" style={{ margin: '0 10px 4px 40px' }}>
               {place.name}
-            </Text>
+            </Title>
             <RecommendButton
-              id={`place_${children}`}
               onClick={handleRecommend}
               ref={isRecommendedRef}
-              value={isRecommended.toString()}
+              value={isRecommended?.toString()}
             >
-              추천👍
+              {isRecommended ? <Recommend active /> : <Recommend />}
             </RecommendButton>
           </NumberWrapper>
           <Text color="gray" size={'md'} style={{ marginLeft: '70px' }}>
@@ -165,23 +174,19 @@ const PlaceInformation = ({
               labelId={imageId}
             />
             <FileUploadWrapper>
-              <label id="image-label" htmlFor={imageId} ref={imageRef}>
-                <SelectImage>
-                  <PlusImage src="/assets/imageUpload.png" />
-                </SelectImage>
+              <label id="image-label" htmlFor={imageId} ref={imageLabelRef}>
+                <PlusImage src="/assets/imageUpload.png" />
               </label>
             </FileUploadWrapper>
             {profile_preview}
           </ImageUploadWrapper>
           <DescriptionWrapper>
-            <Textarea
-              width={660}
-              height={200}
+            <DescriptionTextArea
               placeholder={'장소에 대한 추억을 공유해주세요!☺️☺️'}
-              textAreaRef={textAreaRef as unknown as MutableRefObject<HTMLTextAreaElement>}
+              ref={textAreaRef as unknown as MutableRefObject<HTMLTextAreaElement>}
             >
               {isModify ? ModPropWrittenDescription : null}
-            </Textarea>
+            </DescriptionTextArea>
           </DescriptionWrapper>
         </GuideLine>
       </PlaceInformationWrapper>
@@ -221,6 +226,7 @@ const NumberImage = styled.img`
 const NumberText = styled.p`
   color: white;
   font-size: 24px;
+  font-weight: 700;
   padding: 10px 20px;
   border-radius: 10px;
   text-align: center;
@@ -231,16 +237,20 @@ const NumberText = styled.p`
 `;
 
 const RecommendButton = styled.button`
-  border: 1px solid ${theme.color.mainColor};
-  border-radius: 20px;
-  padding: 5px 15px 5px 15px;
+  -ms-user-select: none;
+  -moz-user-select: -moz-none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  user-select: none;
 `;
 
 const ImageUploadWrapper = styled.div`
   //width: 830px;
+  position: relative;
   height: 500px;
   margin: 30px 0 0 70px;
   border: 0px solid black;
+  border-radius: 8px;
   background-color: ${theme.color.backgroundGray};
   display: grid;
   align-items: center;
@@ -254,28 +264,17 @@ const ImageUploadWrapper = styled.div`
     cursor: pointer;
     transition: 0.12s ease-in;
   }
-  position: relative;
 `;
 
 const FileUploadWrapper = styled.div`
   width: 100%;
-`;
-
-const SelectImage = styled.div`
-  width: 100px;
-  height: 100px;
-  background-color: ${theme.color.backgroundDarkGray};
-  border-radius: 8px;
-  margin: auto;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  position: absolute;
+  top: 40%;
 `;
 
 const PlusImage = styled.img`
   vertical-align: middle;
-  width: 32px;
-  height: 32px;
+  cursor: pointer;
 `;
 
 const ThumbnailButton = styled.button<{
@@ -296,4 +295,18 @@ const ThumbnailButton = styled.button<{
 
 const DescriptionWrapper = styled.div`
   margin: 20px 0 0 70px;
+`;
+
+const DescriptionTextArea = styled.textarea`
+  width: 100%;
+  height: 200px;
+  font-size: 18px;
+  border-color: ${theme.color.borderDarkGray};
+  outline-color: ${theme.color.mainColor};
+  outline-width: thin;
+  border-radius: 10px;
+  padding: 24px;
+  line-height: 1.5;
+  resize: none;
+  box-sizing: border-box;
 `;

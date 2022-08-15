@@ -6,6 +6,7 @@ import React, { useEffect, useState } from 'react';
 import { Link, PageContainer, Text, Title } from '~/components/atom';
 import Avatar from '~/components/atom/Avatar';
 import Comment from '~/components/common/Comment';
+import ConfirmModal from '~/components/common/ConfirmModal';
 import DetailSidebar from '~/components/common/DetailSidebar';
 import CourseDetailList from '~/components/domain/CourseDetail/CourseDetailList';
 import CourseOverview from '~/components/domain/CourseDetail/CourseOverview';
@@ -46,6 +47,7 @@ interface Props {
 }
 
 const CourseDetail = ({ course, courseId }: Props) => {
+  const [modalVisible, setModalVisible] = useState(false);
   const { currentUser, isLoggedIn } = useUser();
   const [detailData, setDetailData] = useState<ICourseDetail | null>(course);
   const router = useRouter();
@@ -66,7 +68,7 @@ const CourseDetail = ({ course, courseId }: Props) => {
       return detailData.places.map((detail) => {
         return {
           id: detail.placeId,
-          kakaoMapId: detail.id,
+          kakaoMapId: detail.kakaoMapId,
           name: detail.name,
           description: detail.description,
           addressName: detail.address,
@@ -100,10 +102,7 @@ const CourseDetail = ({ course, courseId }: Props) => {
   };
 
   const onDeleteCourse = async () => {
-    if (confirm('삭제하시겠습니까?')) {
-      await CourseApi.delete(courseId);
-    }
-
+    await CourseApi.delete(courseId);
     router.push('/');
   };
 
@@ -143,7 +142,7 @@ const CourseDetail = ({ course, courseId }: Props) => {
                   >
                     수정
                   </Link>
-                  <Text.Button color="gray" onClick={onDeleteCourse}>
+                  <Text.Button color="gray" onClick={() => setModalVisible(true)}>
                     삭제
                   </Text.Button>
                 </HeaderButtons>
@@ -196,6 +195,13 @@ const CourseDetail = ({ course, courseId }: Props) => {
             type="course"
           />
         </PageContainer>
+        <ConfirmModal
+          visible={modalVisible}
+          onClose={() => setModalVisible(false)}
+          onConfirm={onDeleteCourse}
+          message="게시물 삭제"
+          subMessage="게시물을 정말 삭제하시겠습니까?"
+        />
       </main>
     </React.Fragment>
   );

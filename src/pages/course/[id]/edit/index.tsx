@@ -1,21 +1,29 @@
 import styled from '@emotion/styled';
 import type { NextPage } from 'next';
 import Head from 'next/head';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { Button, PageContainer } from '~/components/atom';
-import { CategoryTitle, CourseList, SortFilter } from '~/components/common';
 import CourseMap from '~/components/domain/Map/CourseMap';
 import theme from '~/styles/theme';
-import numbering from '~/../public/assets/numbering.png';
 import PlaceInformation from '~/components/domain/CourseCreate/PlaceInformation';
-import { SelectTags } from '~/components/common';
+import { SelectTags, Toast } from '~/components/common';
 import { useRouter } from 'next/router';
 import { CourseApi } from '~/service';
-import { SearchTagsValues } from '~/types';
-import { IPlace, IPlaceForm } from '~/types/place';
+import { Period, RegionAndAll, SearchTagsValues, Spot, Theme } from '~/types';
+import { IPlaceForm } from '~/types/place';
 import { ICourseForm } from '~/types/course';
-//import { ICourseInfo } from '..';
+import {
+  correctedPeriod,
+  correctedRegion,
+  correctedSpots,
+  correctedThemes
+} from '~/utils/converter';
 
+export async function getServerSideProps() {
+  return {
+    props: {}
+  };
+}
 interface ICourseMap {
   id: number;
   latitude: string;
@@ -23,95 +31,36 @@ interface ICourseMap {
   name: string;
 }
 
-/* export interface IPlaceForm {
-  kakaoMapId: number;
-  name: string;
-  description: string;
-  addressName: string;
-  roadAddressName: string;
-  latitude: string;
-  longitude: string;
-  category: string;
-  phoneNumber: string;
-  isRecommended: boolean;
-  isThumbnail: boolean;
-  imageUrl: string;
-} */
+type QueryState = {
+  keyword: string;
+  period: Period | null;
+  region: RegionAndAll;
+  themes: Theme[];
+  spots: Spot[];
+  page: number;
+  size: number;
+};
 
 const CourseEdit: NextPage = () => {
   const router = useRouter();
   const { courseQuery } = router.query;
+  const courseInfo: ICourseForm = JSON.parse(courseQuery as string);
+  const [title, setTitle] = useState(courseInfo.title);
   const titleRef = useRef<HTMLInputElement>(null as unknown as HTMLInputElement);
   const textAreasRef = useRef([] as HTMLTextAreaElement[]);
   const isRecommendedRef = useRef([] as HTMLButtonElement[]);
   const placeImagesRef = useRef([] as any);
   const ThumbnailButtonRef = useRef([] as HTMLButtonElement[]);
-  if (!courseQuery) {
-    return null;
-  }
-  const courseInfo: ICourseForm = JSON.parse(courseQuery as string);
-  console.log(courseInfo);
-  //const [title, setTitle] = useState(courseInfo ? courseInfo.title : '');
+  const [queries, setQueries] = useState<QueryState>({
+    keyword: '',
+    period: (courseInfo.period && correctedPeriod(courseInfo.period)) || null,
+    region: (courseInfo.region && correctedRegion(courseInfo.region)) || '전체보기',
+    themes: (courseInfo.themes && correctedThemes(courseInfo.themes.toString())) || [],
+    spots: (courseInfo.spots && correctedSpots(courseInfo.spots.toString())) || [],
+    page: 0,
+    size: 15
+  });
   const formCourseData = {} as ICourseForm;
-  /* const courseInfo = {
-    id: 645,
-    region: '대전',
-    title: '대전 코스',
-    period: '',
-    theme: [],
-    spot: [],
-    places: [
-      {
-        id: 1266228191,
-        lat: 35.0768018,
-        lng: 129.023402,
-        name: '송도해상케이블카 송도베이스테이션',
-        address: '부산 서구 송도해변로 171',
-        roadAddressName: '부산 서구 송도해변로 171',
-        category: 'FD6',
-        phoneNumber: '051-247-9900',
-        description: '111',
-        isRecommended: true,
-        isThumbnail: false,
-        imageUrl:
-          'https://devcourse-f-s3-storage.s3.ap-northeast-2.amazonaws.com/6edff328bb03450896b08f1f2ed37ee9.jpeg'
-      },
-      {
-        id: 8202423,
-        lat: 35.1538826,
-        lng: 129.118628,
-        name: '광안리해수욕장',
-        address: '부산 수영구 광안해변로 219',
-        roadAddressName: '부산 수영구 광안해변로 219',
-        category: 'FD6',
-        phoneNumber: '051-610-4744',
-        description: '222',
-        isRecommended: false,
-        isThumbnail: true,
-        imageUrl:
-          'https://devcourse-f-s3-storage.s3.ap-northeast-2.amazonaws.com/be121a283f60459a8a4cd5d9aab2ed4e.png'
-      },
-      {
-        id: 8111808,
-        lat: 35.0554585,
-        lng: 129.087973,
-        name: '태종대유원지',
-        address: '부산 영도구 동삼동 산 29-1',
-        roadAddressName: '부산광역시 영도구 전망로 209',
-        category: 'FD6',
-        phoneNumber: '051-405-8745',
-        description: '333',
-        isRecommended: true,
-        isThumbnail: false,
-        imageUrl:
-          'https://devcourse-f-s3-storage.s3.ap-northeast-2.amazonaws.com/db65798fd7ef44b4a332097848df8d10.png'
-      }
-    ]
-  }; */
-  formCourseData.region = courseInfo.region;
-  formCourseData.description =
-    '인천은 하루에 돌아보기 좋은 관광지다. 구한말 외세의 세력이 밀려들던 곳도 이곳이고 그만큼 많은 애환과 흔적을 남겼다. 인천차이나타운만의 이국적 색깔과 중국과 한국이 믹스된 중국식 음식들과 바다, 어시장 그리고 혁신적인 인천대교의 웅장함까지 아주 즐거운 하루를 선사받을 것이다.';
-
   const courseMapData = courseInfo.places.map((place) => {
     return {
       id: place.kakaoMapId,
@@ -132,9 +81,10 @@ const CourseEdit: NextPage = () => {
         latitude: place.latitude.toString(),
         longitude: place.longitude.toString(),
         category: place.category !== '' ? place.category : 'DE',
-        phoneNumber: place.phoneNumber,
+        phoneNumber: place.phoneNumber !== '' ? place.phoneNumber : null,
         isRecommended: JSON.parse(isRecommendedRef.current[index].value),
-        isThumbnail: JSON.parse(ThumbnailButtonRef.current[index].value)
+        isThumbnail: JSON.parse(ThumbnailButtonRef.current[index].value),
+        imageUrl: !placeImagesRef.current[index].files[0] ? place.imageUrl : null
       } as IPlaceForm;
     });
   };
@@ -159,7 +109,7 @@ const CourseEdit: NextPage = () => {
   };
   const courseUpdatehandler = () => {
     if (titleRef.current.value === '') {
-      alert('코스 제목을 입력해주세요!');
+      Toast.show('코스 제목을 입력해주세요!');
       if (titleRef.current !== null) {
         titleRef.current.focus();
       }
@@ -167,30 +117,34 @@ const CourseEdit: NextPage = () => {
     } else {
       formCourseData.title = titleRef.current.value;
     }
-    if (formCourseData.period === '') {
-      alert('기간을 설정해주세요!');
+    if (!queries.period) {
+      Toast.show('기간을 설정해주세요!');
       return;
     }
-    if (formCourseData.themes.length === 0) {
-      alert('테마를 설정해주세요!');
+    if (!queries.themes) {
+      Toast.show('테마를 설정해주세요!');
       return;
     }
-    if (formCourseData.spots.length === 0) {
-      alert('장소를 설정해주세요!');
+    if (!queries.spots) {
+      Toast.show('장소를 설정해주세요!');
       return;
     }
     if (courseInfo.places.length > ThumbnailButtonRef.current.length) {
-      alert('이미지를 전부 등록해주세요!');
+      Toast.show('이미지를 전부 등록해주세요!');
       return;
     }
     for (let i = 0; i < courseInfo.places.length; i++) {
       if (textAreasRef.current[i].value === '') {
-        alert('장소 설명을 적어주세요!');
+        Toast.show('장소 설명을 적어주세요!');
         textAreasRef.current[i].focus();
         return;
       }
     }
+    formCourseData.region = courseInfo.region;
     formCourseData.places = placesFormDataSetter();
+    formCourseData.period = queries.period;
+    formCourseData.themes = queries.themes;
+    formCourseData.spots = queries.spots;
     const formData = new FormData();
     const uploaderString = JSON.stringify(formCourseData);
     formData.append(
@@ -201,21 +155,21 @@ const CourseEdit: NextPage = () => {
     );
     const placesImageData: File[] = placesImageDataSetter();
     for (let i = 0; i < placesImageData.length; i++) {
-      formData.append('images', placesImageData[i]);
+      formData.append('images', placesImageData[i] ? placesImageData[i] : new Blob());
     }
     const updateCourse = async (formData: FormData) => {
       await CourseApi.update(courseInfo.id, formData).then((res) => {
         switch (res) {
           case 201:
-            alert('코스 수정이 완료되었습니다!');
+            Toast.show('코스 수정이 완료되었습니다!');
             router.push(`/course/${courseInfo.id}`);
             break;
           case 400:
-            alert('잘못된 요청입니다. 메인 페이지로 이동합니다.');
+            Toast.show('잘못된 요청입니다. 메인 페이지로 이동합니다.');
             router.push('/');
             break;
           case 500:
-            alert('잘못된 요청입니다. 메인 페이지로 이동합니다.');
+            Toast.show('잘못된 요청입니다. 메인 페이지로 이동합니다.');
             router.push('/');
             break;
           default:
@@ -239,9 +193,17 @@ const CourseEdit: NextPage = () => {
   };
 
   const handleSelectTags = (data: SearchTagsValues) => {
-    formCourseData.period = data.period !== null ? data.period : '';
-    formCourseData.themes = data.themes;
-    formCourseData.spots = data.spots;
+    //formCourseData.period = data.period !== null ? data.period : '';
+    //formCourseData.themes = data.themes;
+    //formCourseData.spots = data.spots;
+    const { period, themes, spots } = data;
+    setQueries({
+      ...queries,
+      period,
+      themes,
+      spots,
+      page: 0
+    });
   };
 
   return (
@@ -257,9 +219,22 @@ const CourseEdit: NextPage = () => {
             <CourseMap course={courseMapData} />
           </MapWrapper>
           <TitleInputWrapper>
-            <TitleInput placeholder="코스의 제목을 입력해주세요" ref={titleRef} />
+            <TitleInput
+              placeholder="코스의 제목을 입력해주세요"
+              ref={titleRef}
+              onChange={(e) => setTitle(e.target.value)}
+              value={title}
+            />
             <TitleUnderLine />
-            <SelectTags style={{ marginTop: '10px' }} onSelect={handleSelectTags} />
+            <SelectTags
+              style={{ marginTop: '10px' }}
+              onSelect={handleSelectTags}
+              defaultValues={{
+                period: courseInfo.period as Period,
+                themes: courseInfo.themes as Theme[],
+                spots: courseInfo.spots as Spot[]
+              }}
+            />
           </TitleInputWrapper>
           <PlacesWrapper>
             {courseInfo.places.map((place, index, courseInfo) => (

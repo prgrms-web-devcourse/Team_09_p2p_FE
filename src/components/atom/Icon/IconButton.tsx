@@ -1,3 +1,4 @@
+import { CSSProperties } from '@emotion/serialize';
 import { MouseEvent } from 'react';
 import Icon, { IconProps } from '.';
 

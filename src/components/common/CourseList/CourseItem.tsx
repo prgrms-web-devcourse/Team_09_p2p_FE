@@ -119,13 +119,15 @@ const ItemContainer = styled.li<{ grid: number }>`
   box-sizing: border-box;
   padding: 0 10px 46px 10px;
   overflow: hidden;
-  cursor: pointer;
 
   &:hover .courseImage {
     transform: scale(1.05);
   }
   &:hover .courseInfo {
     color: ${fontGray};
+  }
+  a {
+    cursor: pointer;
   }
 `;
 

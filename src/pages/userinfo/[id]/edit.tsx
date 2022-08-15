@@ -54,7 +54,7 @@ const UserinfoEdit: NextPage = () => {
   useEffect(() => {
     if (typeof router.query.id === 'string') {
       if (currentUser.user.id !== userId) {
-        alert('잘못된 요청입니다.');
+        Toast.show('잘못된 요청입니다.');
         router.push('/');
         return;
       }

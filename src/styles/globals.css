@@ -44,3 +44,7 @@ body.modal-open {
 span {
   line-height: 1.5;
 }
+
+main.content {
+  margin-bottom: 100px;
+}

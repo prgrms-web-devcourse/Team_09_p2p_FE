@@ -22,6 +22,16 @@ const Header = ({ full, isLoading }: HeaderProps) => {
     router.push(searchPath);
   };
 
+  const onClickCreate = () => {
+    console.log(isLoggedIn);
+    if (!isLoggedIn) {
+      router.push('/login');
+      return;
+    }
+
+    router.push('/course/create');
+  };
+
   if (full) {
     return (
       <HeaderContainer>
@@ -29,7 +39,6 @@ const Header = ({ full, isLoading }: HeaderProps) => {
           <LeftArea>
             <Link href="/">
               <Logo width={130} height={35} />
-              <Image src="/assets/location/logo.png" alt="이곳저곳" />
             </Link>
           </LeftArea>
           <Buttons>
@@ -66,9 +75,8 @@ const Header = ({ full, isLoading }: HeaderProps) => {
             </InputContainer>
 
             <Buttons>
-              <Link href="/course/create">
-                <Button>코스등록</Button>
-              </Link>
+              <Button onClick={onClickCreate}>코스등록</Button>
+
               {!isLoggedIn && !isLoading && (
                 <Link href="/login">
                   <Button buttonType="borderPrimary">로그인</Button>

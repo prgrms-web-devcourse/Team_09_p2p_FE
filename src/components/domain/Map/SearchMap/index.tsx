@@ -3,10 +3,11 @@ import Script from 'next/script';
 import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { Map, MapMarker, CustomOverlayMap } from 'react-kakao-maps-sdk';
 import { Link, Icon, Text } from '~/components/atom';
-import { SearchInput } from '~/components/common';
+import { SearchInput, Toast } from '~/components/common';
 import PlusIcon from '~/components/domain/CourseCreate/SearchArea/PlusIcon';
 import { MARKER_IMAGE_URLS } from 'src/utils/constants';
 import { IPlaceForm } from '~/types/place';
+import theme from '~/styles/theme';
 
 interface placeType {
   place_name: string;
@@ -27,12 +28,17 @@ const SearchMap = ({ setSelectedPlaces, selectedPlaces }: SearchMap) => {
   const [loaded, setLoaded] = useState(isAlreadyLoaded);
   const [mapObject, setMapObject] = useState<kakao.maps.Map>();
   const [searchedPlaces, setSearchedPlaces] = useState<IPlaceForm[]>([]);
-  const [kakaoDataArray, setKakaoDataArray] = useState<any>([]);
   const [curKeyword, setCurKeyword] = useState('');
+  const [isSearched, setIsSearched] = useState(true);
   useEffect(() => {
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     return () => {};
   }, []);
+  useEffect(() => {
+    if (!isSearched) {
+      alert('장소 검색 결과가 없습니다!');
+    }
+  }, [isSearched]);
   // 검색어가 바뀔 때마다 재렌더링되도록 useEffect 사용
   useEffect(() => {
     if (mapObject === null || mapObject === undefined) {
@@ -69,14 +75,10 @@ const SearchMap = ({ setSelectedPlaces, selectedPlaces }: SearchMap) => {
           if (pagination.current > pagination.last) {
             return;
           }
-          await setSearchedPlaces((selectedPlaces) => [
-            ...selectedPlaces,
-            ...selectedPlacesSetter(data)
-          ]);
-          await setKakaoDataArray((kakaoDataArray: any) => [...kakaoDataArray, ...data]);
+          setSearchedPlaces((selectedPlaces) => [...selectedPlaces, ...selectedPlacesSetter(data)]);
         } else if (status === kakao.maps.services.Status.ZERO_RESULT) {
           console.log('검색 결과가 존재하지 않습니다.');
-          await console.log(pagination);
+          setIsSearched(false);
           return;
         } else if (status === kakao.maps.services.Status.ERROR) {
           console.log('검색 결과 중 오류가 발생했습니다.');
@@ -88,11 +90,12 @@ const SearchMap = ({ setSelectedPlaces, selectedPlaces }: SearchMap) => {
       // 15개씩 3개의 페이지 data 요청
       setSearchedPlaces([]);
       const syncSearch = async () => {
-        ps.keywordSearch(keyword, await searchPlaceCallback, { page: 1 });
-        ps.keywordSearch(keyword, await searchPlaceCallback, { page: 2 });
-        ps.keywordSearch(keyword, await searchPlaceCallback, { page: 3 });
+        ps.keywordSearch(keyword, searchPlaceCallback, { page: 1 });
+        ps.keywordSearch(keyword, searchPlaceCallback, { page: 2 });
+        ps.keywordSearch(keyword, searchPlaceCallback, { page: 3 });
       };
       syncSearch();
+      setIsSearched(true);
     };
     // 키워드로 장소를 검색합니다
     searchPlaces();
@@ -165,7 +168,7 @@ const SearchMap = ({ setSelectedPlaces, selectedPlaces }: SearchMap) => {
   const addPlace = (place: IPlaceForm) => {
     const isExist = selectedPlaces.indexOf(place);
     if (isExist !== -1) {
-      alert('이미 추가된 장소입니다!');
+      Toast.show('이미 추가된 장소입니다!');
       return;
     }
     setSelectedPlaces((selectedPlace: any) => [...selectedPlace, place]);
@@ -218,11 +221,11 @@ const SearchMap = ({ setSelectedPlaces, selectedPlaces }: SearchMap) => {
                         onMouseEnter={(e) => placeMouseEnter(e, place)}
                       >
                         <SearchedPlace>
-                          <div style={{ margin: '20px 0px 0px 20px' }}>
-                            <Text size="lg">{place.name}</Text>
+                          <SearchedHeader>
+                            <PlaceName>{place.name}</PlaceName>
                             <PlusIcon onClick={() => addPlace(place)} />
-                          </div>
-                          <Text size="sm" color="gray" style={{ marginLeft: '20px' }}>
+                          </SearchedHeader>
+                          <Text size="sm" color="gray" ellipsis>
                             {/* {place.roadAddressName} */}
                             {place.addressName}
                           </Text>
@@ -260,14 +263,38 @@ const SearchedPlace = styled.div`
   align-items: flex-start;
   justify-content: flex-end;
   position: relative;
-  padding: 35px 0px 13px 0px;
+  padding: 20px 20px;
+  box-sizing: border-box;
   margin-bottom: 20px;
-  gap: 20px;
   width: 90%;
-  height: 60px;
-  border: 1px solid #f3f4f4;
-  border-shadow: 0px 2px 6px rgba(0, 0, 0, 0.08);
+  text-align: left;
+  border: 1px solid ${theme.color.borderGray};
+  box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.08);
   border-radius: 8px;
+
+  &:hover {
+    border-color: #c9c9c9;
+  }
+`;
+
+const SearchedHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  align-items: center;
+  margin-bottom: 6px;
+`;
+
+const PlaceName = styled.span`
+  font-size: 20px;
+  font-weight: 500;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  word-break: break-word;
+
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
 `;
 
 const FlexGridWrapper = styled.div`
@@ -350,6 +377,7 @@ const SearchResult = styled.div`
     padding: 0.75rem;
     font-size: 0.9375rem;
     background-color: #ecf4f7;
+    padding-left: 20px;
     .result-keyword {
       margin-right: 0.25rem;
       font-weight: 700;

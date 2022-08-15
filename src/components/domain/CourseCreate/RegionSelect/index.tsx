@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
-import React, { Dispatch, MouseEvent, SetStateAction, useEffect, useState } from 'react';
+import React, { Dispatch, MouseEvent, SetStateAction, useState } from 'react';
 import { Button, Text } from '~/components/atom';
-import { REGIONS, FONT_COLORS } from '~/utils/constants';
+import { REGIONS } from '~/utils/constants';
 import { Region } from '~/types';
 import theme from '~/styles/theme';
 import CloseIcon from '~/components/domain/CourseCreate/SelectedArea/CloseIcon';
@@ -9,48 +9,47 @@ import Router from 'next/router';
 import { IPlaceForm } from '~/types/place';
 
 interface RegionSelectProps {
-  setRegion: Dispatch<SetStateAction<string>>;
-  onClose?: () => void;
-  isModify?: boolean;
+  onClose: () => void;
+  isModify: boolean;
+  setIsModify: Dispatch<SetStateAction<boolean>>;
   loadedRegion?: string;
   setSelectedPlaces: Dispatch<SetStateAction<IPlaceForm[]>>;
+  setLoadedRegion?: Dispatch<SetStateAction<string>>;
+  selectedPlacesLength: number;
 }
 const RegionSelect = ({
-  setRegion,
   onClose,
   isModify,
+  setIsModify,
   loadedRegion,
-  setSelectedPlaces
+  setSelectedPlaces,
+  setLoadedRegion,
+  selectedPlacesLength
 }: RegionSelectProps) => {
   const [beforeRegion, setBeforeRegion] = useState<HTMLButtonElement | null>(null);
-  const [isSeleted, setIsSeleted] = useState(false);
+  const [isSelected, setIsSelected] = useState(false);
   const [selectedRegion, setSelectedRegion] = useState('');
   const regions: Region[] = [...REGIONS];
+
   const closeForm = () => {
-    Router.back();
+    onClose();
   };
   const regionSelectHandler = (e: MouseEvent<HTMLButtonElement>) => {
-    setIsSeleted(true);
+    setIsSelected(true);
     if (beforeRegion !== null) {
-      beforeRegion.style.border = '1px solid white';
-      beforeRegion.style.color = FONT_COLORS.gray;
+      beforeRegion.classList.remove('select');
     }
     if (e.target instanceof HTMLButtonElement) {
-      e.target.style.border = `2px solid ${theme.color.mainColor}`;
-      e.target.style.borderRadius = '20px';
-      e.target.style.color = theme.color.mainColor;
-      setRegion(e.target.innerText);
+      e.target.classList.add('select');
       setBeforeRegion(e.target);
       setSelectedRegion(e.target.innerText);
     }
   };
   const completeSelect = () => {
-    if (isModify && loadedRegion !== selectedRegion) {
+    if (isModify && loadedRegion !== selectedRegion && selectedPlacesLength > 0) {
       if (
         window.confirm(
-          `이전 선택 지역 : ${loadedRegion}
-          
-이전에 선택한 지역과 다를 경우 장소 목록이 초기화됩니다.
+          `이전에 선택한 지역과 다를 경우 장소 목록이 초기화됩니다.
 장소 목록을 초기화 하시겠습니까?`
         )
       ) {
@@ -59,7 +58,11 @@ const RegionSelect = ({
         return;
       }
     }
-    if (onClose && isSeleted) {
+    if (isSelected) {
+      if (setLoadedRegion) {
+        setLoadedRegion(selectedRegion);
+      }
+      setIsModify(true);
       onClose();
     }
   };
@@ -73,17 +76,6 @@ const RegionSelect = ({
       </FormHeader>
       <FormBody>
         {regions.map((region) => {
-          if (region === '강원') {
-            return (
-              <React.Fragment key={region}>
-                <br />
-                <br />
-                <RegionButton key={region} onClick={regionSelectHandler}>
-                  {region}
-                </RegionButton>
-              </React.Fragment>
-            );
-          }
           return (
             <RegionButton key={region} onClick={regionSelectHandler}>
               {region}
@@ -91,13 +83,7 @@ const RegionSelect = ({
           );
         })}
       </FormBody>
-      <Button
-        disabled={!isSeleted}
-        buttonType="primary"
-        size="lg"
-        fontSize={24}
-        onClick={completeSelect}
-      >
+      <Button disabled={!isSelected} buttonType="primary" size="lg" onClick={completeSelect}>
         지역선택완료
       </Button>
     </SelectForm>
@@ -113,16 +99,28 @@ const SelectForm = styled.div`
 `;
 
 const FormHeader = styled.div`
-  padding: 130px 0 60px 0;
+  padding: 130px 0 46px 0;
 `;
 
 const FormBody = styled.div`
+  width: 650px;
   padding-bottom: 60px;
+  margin: 0 auto;
 `;
 
 const RegionButton = styled.button`
-  width: 50px;
-  height: 30px;
-  color: ${FONT_COLORS.gray};
-  font-size: 16px;
+  padding: 5px 15px;
+  color: ${theme.color.fontGray};
+  font-size: 18px;
+  margin-bottom: 10px;
+  border: 2px solid white;
+  border-radius: 20px;
+
+  &:hover {
+    color: ${theme.color.mainColor};
+  }
+  &.select {
+    border: 2px solid ${theme.color.mainColor};
+    color: ${theme.color.mainColor};
+  }
 `;
