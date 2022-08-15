@@ -1,6 +1,12 @@
 import styled from '@emotion/styled';
-import { useRouter } from 'next/router';
-import React, { forwardRef, LegacyRef, MouseEvent, useState } from 'react';
+import React, {
+  Dispatch,
+  forwardRef,
+  LegacyRef,
+  MouseEvent,
+  SetStateAction,
+  useState
+} from 'react';
 import { Link, Text, Title } from '~/components/atom';
 import Avatar from '~/components/atom/Avatar';
 import { useUser } from '~/hooks/useUser';
@@ -14,9 +20,10 @@ interface CourseItemProps {
   course: ICourseItem;
   grid?: number;
   index?: number;
+  onModal: Dispatch<SetStateAction<boolean>>;
 }
 
-const CourseItem = forwardRef(({ course, grid = 3, index }: CourseItemProps, ref) => {
+const CourseItem = forwardRef(({ course, grid = 3, index, onModal }: CourseItemProps, ref) => {
   const {
     id,
     thumbnail,
@@ -32,7 +39,6 @@ const CourseItem = forwardRef(({ course, grid = 3, index }: CourseItemProps, ref
 
   const [isBookmarked, setIsBookmarked] = useState(bookmarked);
   const { isLoggedIn } = useUser();
-  const router = useRouter();
 
   const COURSE_COUNT = course.places.length;
   const THUMBNAIL_URL = thumbnail ? thumbnail : '';
@@ -43,7 +49,7 @@ const CourseItem = forwardRef(({ course, grid = 3, index }: CourseItemProps, ref
     e.stopPropagation();
 
     if (!isLoggedIn) {
-      router.push('/login');
+      onModal(true);
       return;
     }
     const result = await BookmarkApi.bookmarkCourse(Number(id));
