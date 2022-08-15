@@ -22,6 +22,7 @@ import {
   correctedThemes,
   makeQueryString
 } from '~/utils/converter';
+import { useUser } from '~/hooks/useUser';
 
 export const getServerSideProps = async (context: NextPageContext) => {
   const { query } = context;
@@ -46,6 +47,7 @@ const Course = ({ query }: { query: Record<string, string> }) => {
   const [lastTarget, setLastTarget] = useState(null);
   const [isLast, setIsLast] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const { isLoggedIn } = useUser();
 
   const router = useRouter();
   const SIZE = 15;
