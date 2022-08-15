@@ -14,7 +14,7 @@ interface SearchMap {
   selectedPlaces: IPlaceForm[];
   selectedRegion: string;
 }
-interface PolyLineCourse {
+interface IPolyLineCourse {
   placeId: number;
   lat: number;
   lng: number;
@@ -29,10 +29,23 @@ const SearchMap = ({ setSelectedPlaces, selectedPlaces, selectedRegion }: Search
   const [searchedPlaces, setSearchedPlaces] = useState<IPlaceForm[]>([]);
   const [curKeyword, setCurKeyword] = useState('');
   const [isSearched, setIsSearched] = useState(true);
-  const [polyLineCourse, setPolyLineCourse] = useState<PolyLineCourse[]>();
+  const [polyLineCourse, setPolyLineCourse] = useState<IPolyLineCourse[]>();
   useEffect(() => {
     // eslint-disable-next-line @typescript-eslint/no-empty-function
-    return () => {};
+    return () => {
+      if (loaded) {
+        const bounds = new kakao.maps.LatLngBounds();
+        selectedPlaces.forEach((place) => {
+          bounds.extend(new kakao.maps.LatLng(Number(place.latitude), Number(place.longitude)));
+        });
+        const map = mapObject;
+        console.log(selectedPlaces);
+        console.log(map);
+        if (map) {
+          map.setBounds(bounds);
+        }
+      }
+    };
   }, []);
   useEffect(() => {
     if (!isSearched) {
@@ -41,13 +54,16 @@ const SearchMap = ({ setSelectedPlaces, selectedPlaces, selectedRegion }: Search
   }, [isSearched]);
   useEffect(() => {
     if (loaded) {
+      if (selectedPlaces.length === 0) {
+        return;
+      }
       const drawPloyLine = selectedPlaces.map((place) => {
         return {
           placeId: place.id,
           lat: Number(place.latitude),
           lng: Number(place.longitude),
           placeName: place.name
-        } as PolyLineCourse;
+        } as IPolyLineCourse;
       });
       setPolyLineCourse(drawPloyLine);
       const bounds = new kakao.maps.LatLngBounds();
@@ -59,7 +75,7 @@ const SearchMap = ({ setSelectedPlaces, selectedPlaces, selectedRegion }: Search
         map.setBounds(bounds);
       }
     }
-  }, [selectedPlaces]);
+  }, [selectedPlaces, mapObject]);
   useEffect(() => {
     if (mapObject === null || mapObject === undefined) {
       return;
