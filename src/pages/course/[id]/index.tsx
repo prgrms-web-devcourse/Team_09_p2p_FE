@@ -189,6 +189,7 @@ const CourseDetail = ({ course, courseId }: Props) => {
             id={detailData.id}
             defaultLiked={detailData.isLiked}
             defaultBookmarked={detailData.isBookmarked}
+            comments={detailData.comments}
             type="course"
           />
         </PageContainer>

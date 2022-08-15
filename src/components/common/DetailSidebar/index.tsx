@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { Icon, Text } from '~/components/atom';
 import KakaoButton from '~/components/domain/CourseDetail/KakaoButton';
+import useMoveScroll from '~/hooks/useMoveScroll';
 import { useUser } from '~/hooks/useUser';
 import { BookmarkApi, LikeApi } from '~/service';
 import theme from '~/styles/theme';
@@ -11,6 +12,7 @@ import ConfirmModal from '../ConfirmModal';
 
 interface DetailSidebarProps {
   likes?: number;
+  comments?: number;
   id: number;
   defaultLiked?: boolean;
   defaultBookmarked?: boolean;
@@ -19,6 +21,7 @@ interface DetailSidebarProps {
 
 const DetailSidebar = ({
   likes = 0,
+  comments = 0,
   id,
   defaultLiked,
   defaultBookmarked,
@@ -30,6 +33,7 @@ const DetailSidebar = ({
   const [isBookmarked, setIsBookmarked] = useState(defaultBookmarked);
   const [totalLikes, setTotalLikes] = useState(likes);
   const router = useRouter();
+  const { onMoveToElement } = useMoveScroll(document.getElementById('comment'));
 
   const handleGoLogin = () => {
     setModalVisible(false);
@@ -75,6 +79,12 @@ const DetailSidebar = ({
         <Text color="darkGray" style={{ marginTop: 8 }}>
           {totalLikes}
         </Text>
+        <IconButton onClick={onMoveToElement}>
+          <Icon name="commentRound" size={32} />
+        </IconButton>
+        <Text color="darkGray" style={{ marginTop: 8 }}>
+          {comments}
+        </Text>
 
         <IconButton onClick={handleClickBookmark}>
           {isBookmarked ? (
@@ -83,6 +93,7 @@ const DetailSidebar = ({
             <Icon name="bookmarkInactive" size={28} />
           )}
         </IconButton>
+
         <KakaoButton />
       </Sticky>
       <ConfirmModal
