@@ -33,7 +33,7 @@ const ProfileCard = ({
   isMyPage,
   userId
 }: ProfileCardProps) => {
-  const { logout } = useUser();
+  const { logout, updateProfile } = useUser();
   const router = useRouter();
 
   const profileImageRef = useRef<HTMLInputElement>(null);
@@ -52,10 +52,10 @@ const ProfileCard = ({
     reader.onloadend = async () => {
       const formData = new FormData();
       formData.append('file', imageFile);
-
       const result = await UserApi.changeProfileImage(formData);
 
       if (result) {
+        updateProfile(result.data.profileImage);
         setPreviewImage(reader.result as string);
       }
     };

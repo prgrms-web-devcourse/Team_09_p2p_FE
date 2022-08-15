@@ -57,7 +57,7 @@ const Course = ({ query }: { query: Record<string, string> }) => {
     spots: (query.spots && correctedSpots(query.spots)) || [],
     page: 0,
     size: SIZE,
-    sorting: '인기순'
+    sorting: '최신순'
   });
 
   const onIntersect: IntersectionObserverCallback = (entries, observer) => {
