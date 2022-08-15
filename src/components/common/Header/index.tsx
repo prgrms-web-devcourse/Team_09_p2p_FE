@@ -49,7 +49,7 @@ const Header = ({ full, isLoading }: HeaderProps) => {
           </LeftArea>
           <Buttons>
             {isLoggedIn && (
-              <Link href="/userinfo">
+              <Link href={`/userinfo/${currentUser.user.id}`}>
                 <Avatar size={54} src={currentUser.user.profileImage} />
               </Link>
             )}

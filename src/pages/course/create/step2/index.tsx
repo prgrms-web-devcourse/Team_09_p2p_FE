@@ -15,7 +15,7 @@ import { ICourseInfo, ISelectedPlace } from '..';
 import { IPlaceForm } from '~/types/place';
 
 interface ICourseMap {
-  id: number;
+  kakaoMapId: number;
   latitude: string;
   longitude: string;
   name: string;
@@ -49,7 +49,7 @@ const Course: NextPage = () => {
   formCourseData.region = courseInfo.region;
   const courseMapData = courseInfo.places.map((place) => {
     return {
-      id: place.kakaoMapId,
+      kakaoMapId: place.kakaoMapId,
       latitude: place.latitude,
       longitude: place.longitude,
       name: place.name

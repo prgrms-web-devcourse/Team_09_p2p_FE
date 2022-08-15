@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Map, MapMarker, CustomOverlayMap, Polyline } from 'react-kakao-maps-sdk';
-import markerIcon from 'public/assets/place/course.png';
 import Script from 'next/script';
 import styled from '@emotion/styled';
 import { IPlace } from '~/types/place';
+import { MARKER_IMAGE_URLS } from 'src/utils/constants';
 
 interface CourseType {
-  id: number;
+  kakaoMapId: number;
   latitude: string;
   longitude: string;
   name: string;
@@ -44,7 +44,7 @@ const CourseMap = ({ course }: CourseMapProps) => {
   }, [mapState]);
   const polyLineCourse = course.map((place) => {
     return {
-      placeId: place.id,
+      placeId: place.kakaoMapId,
       lat: Number(place.latitude),
       lng: Number(place.longitude),
       placeName: place.name
@@ -59,7 +59,7 @@ const CourseMap = ({ course }: CourseMapProps) => {
             isAlreadyLoaded = true;
             setLoaded(true);
           });
-        }} // 동적으로 로드
+        }}
       />
       {loaded && (
         <Map
@@ -78,59 +78,37 @@ const CourseMap = ({ course }: CourseMapProps) => {
               <MapMarker
                 position={{ lat: Number(place.latitude), lng: Number(place.longitude) }}
                 image={{
-                  src: markerIcon.src,
+                  src: MARKER_IMAGE_URLS.placeNumberSprite,
                   size: {
-                    width: 64,
-                    height: 69
-                  },
-                  options: {
-                    offset: {
-                      x: 27,
-                      y: 69
-                    }
-                  }
-                }}
-              ></MapMarker>
-              {/* <MapMarker
-                position={{ lat: Number(place.latitude), lng: Number(place.longitude) }}
-                image={{
-                  src: 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_number_blue.png',
-                  size: {
-                    // width: 64,
-                    // height: 69
-                    width: 64,
-                    height: 69
+                    width: 48,
+                    height: 48
                   },
                   options: {
                     spriteSize: {
-                      // width: 36,
-                      // height: 691
                       width: 48,
-                      height: 921
+                      height: 720
                     },
                     spriteOrigin: {
-                      x: 10,
-                      y: index * 46 + 20
+                      x: 0,
+                      y: index * 48 - 1
                     },
                     offset: {
-                      // x: 27,
-                      // y: 69
-                      x: 13,
-                      y: 37
+                      x: 24,
+                      y: 48
                     }
                   }
                 }}
-              ></MapMarker> */}
+              />
               <CustomOverlayMap
                 position={{ lat: Number(place.latitude), lng: Number(place.longitude) }}
                 xAnchor={0}
-                yAnchor={0.98}
+                yAnchor={1}
                 clickable={true}
               >
-                {index + 1}
+                {/* {index + 1} */}
                 <MarkerWithCustomOverlayStyle>
                   <a
-                    href={`https://map.kakao.com/link/map/${place.id}`}
+                    href={`https://place.map.kakao.com/${place.kakaoMapId}`}
                     target="_blank"
                     rel="noreferrer"
                   >

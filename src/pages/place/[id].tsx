@@ -14,7 +14,7 @@ import theme from '~/styles/theme';
 import { PlacePost } from '~/types';
 import { ICourseItem } from '~/types/course';
 
-const COURSE_SORT = '인기순';
+const COURSE_SORT = '최신순';
 const COURSE_SIZE = 9;
 
 export const getServerSideProps = async (context: NextPageContext) => {

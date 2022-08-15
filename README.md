@@ -26,7 +26,7 @@ https://team-09-p2p-fe.vercel.app/
 
 |                                      [Jini](https://github.com/jinist94)                                      |                                    [Grew](https://github.com/ryong9rrr)                                     |                                       [Joe](https://github.com/hwoo3303)                                       |
 | :-------------------------------------------------------------------------------------------------------------: | :-------------------------------------------------------------------------------------------------------------: | :-------------------------------------------------------------------------------------------------------------: |
-| ![image](https://user-images.githubusercontent.com/15838144/173637791-afd31c0a-6d87-464e-ab22-a15058b1361c.png) | ![image](https://user-images.githubusercontent.com/15838144/173637791-afd31c0a-6d87-464e-ab22-a15058b1361c.png) | ![image](https://user-images.githubusercontent.com/15838144/173637791-afd31c0a-6d87-464e-ab22-a15058b1361c.png) |
+| ![image](https://user-images.githubusercontent.com/15838144/173637791-afd31c0a-6d87-464e-ab22-a15058b1361c.png) | ![image](https://user-images.githubusercontent.com/15838144/184652462-e56f4b15-f713-433a-a452-208c0d38cef6.png) | ![image](https://user-images.githubusercontent.com/15838144/173637791-afd31c0a-6d87-464e-ab22-a15058b1361c.png) |
 
 ---
 

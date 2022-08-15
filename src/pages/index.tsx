@@ -1,5 +1,4 @@
 import styled from '@emotion/styled';
-import Head from 'next/head';
 import { useRouter } from 'next/router';
 import React, { FormEvent, ReactElement, useEffect, useRef, useState } from 'react';
 import { Button, Link, PageContainer, Image, Icon } from '~/components/atom';
@@ -17,12 +16,25 @@ const COURSE_COUNT = 6;
 const PLACE_COUNT = 4;
 const SORT = '인기순';
 
+const getCoursesAndPlaces = async () => {
+  const getCourses = CourseApi.getCourses({ size: COURSE_COUNT, sorting: SORT });
+  const getPlaces = PlaceApi.getPlaces({ size: PLACE_COUNT, sorting: SORT });
+  const [courses, places] = await Promise.allSettled([getCourses, getPlaces]);
+  return {
+    courses: courses.status === 'fulfilled' ? courses.value.content : null,
+    places: places.status === 'fulfilled' ? places.value.content : null
+  };
+};
+
 export const getServerSideProps = async () => {
   try {
-    const courses = await CourseApi.getCourses({ size: COURSE_COUNT, sorting: SORT });
-    const places = await PlaceApi.getPlaces({ size: PLACE_COUNT, sorting: SORT });
+    const { courses, places } = await getCoursesAndPlaces();
+
     return {
-      props: { courses: courses.content, places: places.content }
+      props: {
+        courses: courses,
+        places: places
+      }
     };
   } catch (e) {
     return {
@@ -43,14 +55,10 @@ const HomePage = ({ places, courses }: Props) => {
   const [placeList, setPlaceList] = useState(places || []);
   const { isLoggedIn } = useUser();
 
-  const getCourseList = async () => {
-    const result = await CourseApi.getCourses({ size: COURSE_COUNT, sorting: SORT });
-    setCourseList(result.content);
-  };
-
-  const getPlaceList = async () => {
-    const result = await PlaceApi.getPlaces({ size: PLACE_COUNT, sorting: SORT });
-    setPlaceList(result.content);
+  const getCategoryData = async () => {
+    const { courses, places } = await getCoursesAndPlaces();
+    setCourseList(courses);
+    setPlaceList(places);
   };
 
   const handleSearch = (e: FormEvent) => {
@@ -65,8 +73,7 @@ const HomePage = ({ places, courses }: Props) => {
 
   useEffect(() => {
     if (isLoggedIn) {
-      getCourseList();
-      getPlaceList();
+      getCategoryData();
     }
   }, [isLoggedIn]);
 
@@ -104,13 +111,13 @@ const HomePage = ({ places, courses }: Props) => {
               <Link href="/course">
                 <ArrowTitle name="인기 여행코스" />
               </Link>
-              <CourseList courses={courseList} />
+              {courseList && <CourseList courses={courseList} />}
             </CategoryArea>
             <CategoryArea>
               <Link href="/place">
                 <ArrowTitle name="추천 핫플레이스" />
               </Link>
-              <PlaceList places={placeList} />
+              {placeList && <PlaceList places={placeList} />}
             </CategoryArea>
           </PageContainer>
         </MainContent>
