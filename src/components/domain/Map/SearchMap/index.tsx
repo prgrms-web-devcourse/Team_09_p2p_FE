@@ -59,7 +59,7 @@ const SearchMap = ({ setSelectedPlaces, selectedPlaces, selectedRegion }: Search
       }
       const drawPloyLine = selectedPlaces.map((place) => {
         return {
-          placeId: place.id,
+          placeId: place.kakaoMapId,
           lat: Number(place.latitude),
           lng: Number(place.longitude),
           placeName: place.name
@@ -76,6 +76,10 @@ const SearchMap = ({ setSelectedPlaces, selectedPlaces, selectedRegion }: Search
       }
     }
   }, [selectedPlaces, mapObject]);
+  useEffect(() => {
+    setSearchedPlaces([]);
+    setCurKeyword('');
+  }, [selectedRegion]);
   useEffect(() => {
     if (mapObject === null || mapObject === undefined) {
       return;
@@ -94,7 +98,7 @@ const SearchMap = ({ setSelectedPlaces, selectedPlaces, selectedRegion }: Search
       const selectedPlacesSetter = (data: any[]) => {
         return data.map((place) => {
           return {
-            id: place.id,
+            kakaoMapId: place.id,
             latitude: place.y,
             longitude: place.x,
             name: place.place_name,
@@ -166,6 +170,22 @@ const SearchMap = ({ setSelectedPlaces, selectedPlaces, selectedRegion }: Search
     if (mapObject) {
       curMarkerObject.setMap(mapObject);
       mapObject.setBounds(bound);
+    }
+  };
+  const placeMouseOut = (e: any) => {
+    if (curMarkerObject !== null) {
+      curMarkerObject.setMap(null);
+    }
+    if (selectedPlaces.length === 0) {
+      return;
+    }
+    const bounds = new kakao.maps.LatLngBounds();
+    selectedPlaces.forEach((place) => {
+      bounds.extend(new kakao.maps.LatLng(Number(place.latitude), Number(place.longitude)));
+    });
+    const map = mapObject;
+    if (map) {
+      map.setBounds(bounds);
     }
   };
   const markerImageSetter = (placeType: string) => {
@@ -254,10 +274,24 @@ const SearchMap = ({ setSelectedPlaces, selectedPlaces, selectedRegion }: Search
                     key={index}
                     position={{ lat: Number(place.latitude), lng: Number(place.longitude) }}
                     image={{
-                      src: MARKER_IMAGE_URLS.defaultPlace,
+                      src: MARKER_IMAGE_URLS.placeNumberSprite,
                       size: {
                         width: 48,
                         height: 48
+                      },
+                      options: {
+                        spriteSize: {
+                          width: 48,
+                          height: 720
+                        },
+                        spriteOrigin: {
+                          x: 0,
+                          y: index * 48 - 1
+                        },
+                        offset: {
+                          x: 24,
+                          y: 48
+                        }
                       }
                     }}
                   />
@@ -290,6 +324,7 @@ const SearchMap = ({ setSelectedPlaces, selectedPlaces, selectedRegion }: Search
                         key={index}
                         id={`place_${index}`}
                         onMouseEnter={(e) => placeMouseEnter(e, place)}
+                        onMouseLeave={(e) => placeMouseOut(e)}
                       >
                         <SearchedPlace>
                           <SearchedHeader>

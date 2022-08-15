@@ -59,7 +59,7 @@ const CourseCreate = () => {
   const setPlaces = () => {
     return selectedPlaces.map((selectedPlace) => {
       return {
-        kakaoMapId: selectedPlace.id,
+        kakaoMapId: selectedPlace.kakaoMapId,
         latitude: selectedPlace.latitude,
         longitude: selectedPlace.longitude,
         name: selectedPlace.name,
@@ -78,7 +78,9 @@ const CourseCreate = () => {
   };
   const deletePlace = (deleteSelectedPlace: IPlaceForm) => {
     setSelectedPlaces(
-      selectedPlaces.filter((selectedPlace) => selectedPlace.id !== deleteSelectedPlace.id)
+      selectedPlaces.filter(
+        (selectedPlace) => selectedPlace.kakaoMapId !== deleteSelectedPlace.kakaoMapId
+      )
     );
   };
   const handleNextStep = () => {
@@ -121,9 +123,7 @@ const CourseCreate = () => {
               <div>
                 <Icon.Button name="arrow" size={25} rotate={180} onClick={() => setVisible(true)} />
               </div>
-              {/* <Icon name="arrow" size={25} rotate={180} /> */}
               <Title size="sm" style={{ marginLeft: '40%' }}>
-                {/* {visible === false ? region : '서울'} */}
                 {selectedRegion}
               </Title>
             </SelectedHeader>

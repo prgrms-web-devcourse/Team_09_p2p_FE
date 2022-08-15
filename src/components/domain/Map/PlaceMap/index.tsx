@@ -126,11 +126,7 @@ const PlaceMap = ({ placeId, placeName, placeType, center, height = null }: Plac
             yAnchor={1}
           >
             <MarkerWithCustomOverlayStyle>
-              <a
-                href={`https://map.kakao.com/link/map/${placeId}`}
-                target="_blank"
-                rel="noreferrer"
-              >
+              <a href={`https://place.map.kakao.com/${placeId}`} target="_blank" rel="noreferrer">
                 <span>{placeName}</span>
               </a>
             </MarkerWithCustomOverlayStyle>
