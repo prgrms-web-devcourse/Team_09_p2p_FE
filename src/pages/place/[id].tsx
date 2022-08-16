@@ -107,7 +107,7 @@ const PlaceDetailByPostId = ({ place, placeId, courses }: Props) => {
           </MapButton>
           {detailData && isOpenMap && (
             <PlaceMap
-              placeId={detailData.id}
+              placeId={Number(detailData.kakaoMapId)}
               placeType={detailData.category}
               placeName={detailData.name}
               center={{ lat: Number(detailData.latitude), lng: Number(detailData.longitude) }}
