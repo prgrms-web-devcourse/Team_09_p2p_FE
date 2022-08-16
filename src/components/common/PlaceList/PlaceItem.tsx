@@ -7,7 +7,7 @@ import theme from '~/styles/theme';
 import { BookmarkApi } from '~/service';
 import { useUser } from '~/hooks/useUser';
 import { useRouter } from 'next/router';
-import { forwardRef, LegacyRef, MouseEvent, useState } from 'react';
+import { forwardRef, LegacyRef, MouseEvent, useEffect, useState } from 'react';
 
 export type PlaceGrid = 3 | 4;
 interface PlaceItemProps {
@@ -33,6 +33,10 @@ const PlaceItem = forwardRef(({ place, grid }: PlaceItemProps, ref) => {
     const result = await BookmarkApi.bookmarkPlace(Number(id));
     setIsBookmarked(result.isBookmarked);
   };
+
+  useEffect(() => {
+    setIsBookmarked(bookmarked);
+  }, [bookmarked]);
 
   return (
     <PlaceContainer grid={grid} ref={ref as LegacyRef<HTMLLIElement>}>

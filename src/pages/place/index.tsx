@@ -105,6 +105,7 @@ const Place = ({ query }: { query: Record<string, string> }) => {
         ...queries,
         region: queries.region === '전체보기' ? undefined : queries.region
       });
+
       setPlaceList(response.content);
     } catch (e) {
       Toast.show('장소페이지에서 장소목록을 불러오는데 실패했어요.');
