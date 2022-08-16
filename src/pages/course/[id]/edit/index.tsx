@@ -255,9 +255,9 @@ const CourseEdit: NextPage = () => {
             ))}
           </PlacesWrapper>
           <SubmitWrapper>
-            <Button buttonType="darkGray" width={184} height={75} onClick={placeModifyhandler}>
+            {/* <Button buttonType="darkGray" width={184} height={75} onClick={placeModifyhandler}>
               장소 수정
-            </Button>
+            </Button> */}
             <Button buttonType="primary" width={184} height={75} onClick={courseUpdatehandler}>
               코스 수정
             </Button>
