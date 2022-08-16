@@ -41,13 +41,11 @@ class PlaceApi extends Api {
 
   getPlaces = async (filter?: PlaceFilter) => {
     const response = await this.authInstance.get(`${this.path}`, { params: filter });
-    console.log(response.data, 'response Data');
     return response.data;
   };
 
   search = async (params: PlaceSearchParams) => {
     const queries = makeQueryString(params);
-    console.log(queries);
     try {
       const response = await this.authInstance.get(`${this.path}${queries}`);
       if (response.status === 200 || response.status === 204) {

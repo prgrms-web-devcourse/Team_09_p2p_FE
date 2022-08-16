@@ -33,7 +33,6 @@ const CommentItem = ({
   const [isOpenRecomment, setIsOpenRecomment] = useState(false);
   const isRecomment = comment.rootCommentId !== null;
   const { currentUser, isLoggedIn } = useUser();
-  console.log(comment);
 
   const IS_UPDATED = comment.createdAt !== comment.updatedAt;
 

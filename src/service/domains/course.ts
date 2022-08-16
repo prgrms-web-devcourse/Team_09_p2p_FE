@@ -83,7 +83,6 @@ class CourseApi extends Api {
 
   search = async (params: CourseSearchParams) => {
     const queries = makeQueryString(params);
-    console.log(queries);
     try {
       const response = await this.authInstance.get(`${this.path}${queries}`);
       if (response.status === 200 || response.status === 204) {
@@ -93,23 +92,6 @@ class CourseApi extends Api {
     } catch (e) {
       console.error(`코스 목록 조회 오류: ${e}`);
     }
-  };
-
-  searchBookmarked = async (paramData: CourseSearchBookmarked) => {
-    /* try {
-      const response = await this.baseInstance.get(this.path, {
-        params: {
-          page: paramData.page,
-          size: paramData.size,
-          sort: paramData.sort,
-          userId: paramData.userId
-        }
-      });
-      console.log(response);
-      return response.data;
-    } catch (e) {
-      console.error(`코스 목록 조회 오류: ${e}`);
-    } */
   };
 
   getComments = async (courseId: number) => {
