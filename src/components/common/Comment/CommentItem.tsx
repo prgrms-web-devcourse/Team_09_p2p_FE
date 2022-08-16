@@ -122,7 +122,7 @@ const CommentItem = ({
       {isOpenRecomment && (
         <CommentContainer style={{ paddingLeft: 50 }}>
           <Link href={`/userinfo/${comment.user.id}`}>
-            <Avatar size={66} src={comment.user.profileImage} />
+            <Avatar size={66} src={currentUser.user.profileImage} />
           </Link>
           <CommentEditor
             onSubmit={handleCreateRecomment}
