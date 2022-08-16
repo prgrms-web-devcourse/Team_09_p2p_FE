@@ -268,8 +268,8 @@ const CourseEdit: NextPage = () => {
             visible={modalVisible}
             onClose={closeModal}
             onConfirm={courseUpdatehandler}
-            message="코스 등록"
-            subMessage="코스를 등록하시겠어요?"
+            message="코스 수정"
+            subMessage="코스를 수정하시겠어요?"
           />
         </PageContainer>
       </main>
