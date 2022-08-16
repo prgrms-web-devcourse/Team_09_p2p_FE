@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import { useRouter } from 'next/router';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Icon, Link, Text, Title } from '~/components/atom';
 import Avatar from '~/components/atom/Avatar';
 import { Toast } from '~/components/common';
@@ -60,6 +60,9 @@ const ProfileCard = ({
       }
     };
   };
+  useEffect(() => {
+    setPreviewImage(profileImage);
+  }, [profileImage]);
 
   const imageId = 'imgFile';
 

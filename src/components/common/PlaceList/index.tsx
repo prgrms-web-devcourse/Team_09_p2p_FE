@@ -22,7 +22,7 @@ const PlaceList = forwardRef(({ grid = 4, places }: PlaceListProps, ref) => {
     <StyledPlaceList>
       {places.map((place, index) => (
         <PlaceItem
-          key={index}
+          key={place.id}
           grid={grid}
           place={place}
           ref={places.length - 1 === index ? ref : null}
