@@ -23,6 +23,9 @@ export interface IPlace {
   phoneNumber: string;
 }
 export interface ICourseInfo {
+  spots: string[];
+  themes: string[];
+  period: string;
   region: string;
   places: IPlaceForm[];
 }
@@ -84,7 +87,6 @@ const CourseCreate = () => {
     );
   };
   const handleNextStep = () => {
-    console.log(selectedPlaces.length);
     if (selectedPlaces.length < 2) {
       Toast.show('장소를 두 군데 이상 추가해주세요!');
       return;
