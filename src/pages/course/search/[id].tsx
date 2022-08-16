@@ -42,7 +42,6 @@ const CourseSearch = ({ placeId }: Props) => {
   const onIntersect: IntersectionObserverCallback = (entries, observer) => {
     entries.forEach(async (entry) => {
       if (entry.isIntersecting && !isLoading && !isLast) {
-        console.log('관찰');
         getCourseList({ page: page + 1, sorting });
         setPage((prev) => prev + 1);
 
@@ -76,7 +75,6 @@ const CourseSearch = ({ placeId }: Props) => {
     }
 
     if (result.last) {
-      console.log('마지막 페이지 입니다.');
       setIsLast(true);
     }
 

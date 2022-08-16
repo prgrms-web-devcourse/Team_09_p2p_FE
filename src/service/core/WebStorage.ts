@@ -12,7 +12,6 @@ export default class WebStorage {
         }
         this.removeToken();
       } catch (e) {
-        console.error('토큰 에러!', e);
         this.removeToken();
       }
     }

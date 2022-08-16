@@ -39,8 +39,6 @@ const SearchMap = ({ setSelectedPlaces, selectedPlaces, selectedRegion }: Search
           bounds.extend(new kakao.maps.LatLng(Number(place.latitude), Number(place.longitude)));
         });
         const map = mapObject;
-        console.log(selectedPlaces);
-        console.log(map);
         if (map) {
           map.setBounds(bounds);
         }
@@ -91,7 +89,6 @@ const SearchMap = ({ setSelectedPlaces, selectedPlaces, selectedRegion }: Search
     const searchPlaces = () => {
       const keyword = curKeyword;
       if (!keyword.replace(/^\s+|\s+$/g, '')) {
-        console.log('키워드를 입력해주세요!');
         return false;
       }
 
@@ -117,11 +114,9 @@ const SearchMap = ({ setSelectedPlaces, selectedPlaces, selectedRegion }: Search
           }
           setSearchedPlaces((selectedPlaces) => [...selectedPlaces, ...selectedPlacesSetter(data)]);
         } else if (status === kakao.maps.services.Status.ZERO_RESULT) {
-          console.log('검색 결과가 존재하지 않습니다.');
           setIsSearched(false);
           return;
         } else if (status === kakao.maps.services.Status.ERROR) {
-          console.log('검색 결과 중 오류가 발생했습니다.');
           return;
         }
       };

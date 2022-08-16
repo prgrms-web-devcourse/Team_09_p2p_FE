@@ -127,7 +127,6 @@ const Course: NextPage = () => {
     formCourseData.places = placesFormDataSetter();
     const courseFormData = new FormData();
     const uploaderString = JSON.stringify(formCourseData);
-    console.log(formCourseData);
     courseFormData.append(
       'course',
       new Blob([uploaderString], {
@@ -139,9 +138,6 @@ const Course: NextPage = () => {
       courseFormData.append('images', placesImageData[i]);
     }
     const createCourse = async (courseFormData: FormData) => {
-      for (const [key, value] of courseFormData.entries()) {
-        console.log(key, value);
-      }
       await CourseApi.create(courseFormData).then((res) => {
         switch (res) {
           case 201:
