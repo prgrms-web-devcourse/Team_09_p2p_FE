@@ -23,9 +23,9 @@ export interface IPlace {
   phoneNumber: string;
 }
 export interface ICourseInfo {
-  spots: any;
-  themes: any;
-  period: any;
+  spots: string[];
+  themes: string[];
+  period: string;
   region: string;
   places: IPlaceForm[];
 }
