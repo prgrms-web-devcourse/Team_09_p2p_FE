@@ -9,7 +9,8 @@ import {
   CourseList,
   SelectRegion,
   SelectTags,
-  SortFilter
+  SortFilter,
+  Toast
 } from '~/components/common';
 
 import { Period, RegionAndAll, SearchTagsValues, Spot, Theme } from '~/types';
@@ -116,7 +117,7 @@ const Course = ({ query }: { query: Record<string, string> }) => {
       const response = await CourseApi.search({ ...queries, size: SIZE });
       setCourseList(response.content);
     } catch (e) {
-      alert('코스페이지에서 코스목록을 불러오는데 실패했어요.');
+      Toast.show('코스페이지에서 코스목록을 불러오는데 실패했어요.');
       setCourseList([]);
     }
   };

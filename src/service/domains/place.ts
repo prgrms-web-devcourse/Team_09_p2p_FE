@@ -10,7 +10,7 @@ class PlaceApi extends Api {
       const response = await this.authInstance.get(`${this.path}/${placeId}`);
       return response.data;
     } catch (e) {
-      console.error(`장소 상세 조회 오류: ${e}`);
+      alert(`장소 조회에 실패했습니다.`);
     }
   };
 
@@ -53,7 +53,7 @@ class PlaceApi extends Api {
       }
       throw new Error(`코스 목록 조회 오류, 상태코드 : ${response.status}`);
     } catch (e) {
-      console.error(`코스 목록 조회 오류: ${e}`);
+      alert(`코스 목록 조회에 실패했습니다.`);
     }
   };
 

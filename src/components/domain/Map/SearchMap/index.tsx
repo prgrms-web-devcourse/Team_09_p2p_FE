@@ -89,7 +89,6 @@ const SearchMap = ({ setSelectedPlaces, selectedPlaces, selectedRegion }: Search
     const searchPlaces = () => {
       const keyword = curKeyword;
       if (!keyword.replace(/^\s+|\s+$/g, '')) {
-        alert('키워드를 입력해주세요!');
         return false;
       }
 
@@ -115,11 +114,9 @@ const SearchMap = ({ setSelectedPlaces, selectedPlaces, selectedRegion }: Search
           }
           setSearchedPlaces((selectedPlaces) => [...selectedPlaces, ...selectedPlacesSetter(data)]);
         } else if (status === kakao.maps.services.Status.ZERO_RESULT) {
-          alert('검색 결과가 존재하지 않습니다.');
           setIsSearched(false);
           return;
         } else if (status === kakao.maps.services.Status.ERROR) {
-          alert('검색 결과 중 오류가 발생했습니다.');
           return;
         }
       };

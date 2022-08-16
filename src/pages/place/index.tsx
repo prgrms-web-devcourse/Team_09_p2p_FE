@@ -4,7 +4,7 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import { PageContainer } from '~/components/atom';
-import { CategoryTitle, PlaceList, SelectRegion, SortFilter } from '~/components/common';
+import { CategoryTitle, PlaceList, SelectRegion, SortFilter, Toast } from '~/components/common';
 import { useUser } from '~/hooks/useUser';
 import { PlaceApi } from '~/service';
 import { Period, Region, RegionAndAll } from '~/types';
@@ -107,7 +107,7 @@ const Place = ({ query }: { query: Record<string, string> }) => {
       });
       setPlaceList(response.content);
     } catch (e) {
-      console.error('장소페이지에서 장소목록을 불러오는데 실패했어요.', e);
+      Toast.show('장소페이지에서 장소목록을 불러오는데 실패했어요.');
       setPlaceList([]);
     }
   };
