@@ -102,7 +102,7 @@ const CourseMap = ({ course }: CourseMapProps) => {
               <CustomOverlayMap
                 position={{ lat: Number(place.latitude), lng: Number(place.longitude) }}
                 xAnchor={0}
-                yAnchor={1}
+                yAnchor={0.5}
                 clickable={true}
               >
                 {/* {index + 1} */}

@@ -22,6 +22,7 @@ import {
   correctedThemes,
   makeQueryString
 } from '~/utils/converter';
+import { useUser } from '~/hooks/useUser';
 
 export const getServerSideProps = async (context: NextPageContext) => {
   const { query } = context;
@@ -105,7 +106,8 @@ const Course = ({ query }: { query: Record<string, string> }) => {
         pathname: '/course',
         query: { ...queries, themes: queries.themes.join(','), spots: queries.spots.join(',') }
       },
-      `/course${makeQueryString(queries)}`,
+      // `/course${makeQueryString(queries)}`,
+      '/course',
       {
         scroll: false
       }

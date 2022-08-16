@@ -59,7 +59,7 @@ const SearchMap = ({ setSelectedPlaces, selectedPlaces, selectedRegion }: Search
       }
       const drawPloyLine = selectedPlaces.map((place) => {
         return {
-          placeId: place.id,
+          placeId: place.kakaoMapId,
           lat: Number(place.latitude),
           lng: Number(place.longitude),
           placeName: place.name
@@ -98,7 +98,7 @@ const SearchMap = ({ setSelectedPlaces, selectedPlaces, selectedRegion }: Search
       const selectedPlacesSetter = (data: any[]) => {
         return data.map((place) => {
           return {
-            id: place.id,
+            kakaoMapId: place.id,
             latitude: place.y,
             longitude: place.x,
             name: place.place_name,
