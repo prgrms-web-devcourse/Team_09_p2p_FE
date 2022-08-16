@@ -107,7 +107,7 @@ const SearchMap = ({ setSelectedPlaces, selectedPlaces, selectedRegion }: Search
         });
       };
 
-      const searchPlaceCallback = async (data: any, status: any, pagination: any) => {
+      const searchPlaceCallback = (data: any, status: any, pagination: any) => {
         if (status === kakao.maps.services.Status.OK) {
           if (pagination.current > pagination.last) {
             return;
@@ -121,25 +121,31 @@ const SearchMap = ({ setSelectedPlaces, selectedPlaces, selectedRegion }: Search
         }
       };
 
-      // 장소검색 객체를 통해 키워드로 장소검색을 요청
-      // 15개씩 3개의 페이지 data 요청
-      setSearchedPlaces([]);
-      const syncSearch = async () => {
-        const sw = new kakao.maps.LatLng(
-          REGION_BOUNDARY[selectedRegion].sw.lat,
-          REGION_BOUNDARY[selectedRegion].sw.lng
-        );
-        const ne = new kakao.maps.LatLng(
-          REGION_BOUNDARY[selectedRegion].ne.lat,
-          REGION_BOUNDARY[selectedRegion].ne.lng
-        );
-        const bounds = new kakao.maps.LatLngBounds(sw, ne);
-        ps.keywordSearch(keyword, searchPlaceCallback, { page: 1, bounds: bounds });
-        ps.keywordSearch(keyword, searchPlaceCallback, { page: 2, bounds: bounds });
-        ps.keywordSearch(keyword, searchPlaceCallback, { page: 3, bounds: bounds });
+      const placeSearch = (index: number) => {
+        return new Promise(() => {
+          const sw = new kakao.maps.LatLng(
+            REGION_BOUNDARY[selectedRegion].sw.lat,
+            REGION_BOUNDARY[selectedRegion].sw.lng
+          );
+          const ne = new kakao.maps.LatLng(
+            REGION_BOUNDARY[selectedRegion].ne.lat,
+            REGION_BOUNDARY[selectedRegion].ne.lng
+          );
+          const bounds = new kakao.maps.LatLngBounds(sw, ne);
+          ps.keywordSearch(keyword, searchPlaceCallback, { page: index, bounds: bounds });
+        });
       };
-      syncSearch();
+      setSearchedPlaces([]);
       setIsSearched(true);
+      (async () => {
+        try {
+          for (let i = 1; i <= 3; i++) {
+            const result = await placeSearch(i);
+          }
+        } catch (e) {
+          console.error('장소 검색에 실패했어요.', e);
+        }
+      })();
     };
     // 키워드로 장소를 검색합니다
     searchPlaces();
