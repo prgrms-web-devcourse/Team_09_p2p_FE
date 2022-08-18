@@ -13,11 +13,13 @@ const KakaoButton = () => {
   }, []);
 
   const onClick = () => {
-    const { Kakao, location } = window;
-    Kakao.Share.sendScrap({
-      templateId: 81335,
-      requestUrl: location.href
-    });
+    if (typeof window !== 'undefined') {
+      const { Kakao, location } = window;
+      Kakao.Share.sendScrap({
+        templateId: 81335,
+        requestUrl: location.href
+      });
+    }
   };
   return (
     <IconButton id="kakao-link-btn" onClick={onClick}>
