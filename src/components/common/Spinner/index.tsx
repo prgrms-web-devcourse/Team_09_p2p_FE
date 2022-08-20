@@ -15,7 +15,8 @@ const { mainColor } = theme.color;
 
 const Loader = styled.div`
   width: 100%;
-  height: 100%;
+  height: calc(100% - 85px);
+  position: relative;
 
   @keyframes spinner {
     from {

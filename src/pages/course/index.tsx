@@ -22,7 +22,6 @@ import {
   correctedThemes,
   makeQueryString
 } from '~/utils/converter';
-import useDidMountEffect from '~/hooks/useDidMountEffect';
 
 export const getServerSideProps = async (context: NextPageContext) => {
   const { query } = context;
