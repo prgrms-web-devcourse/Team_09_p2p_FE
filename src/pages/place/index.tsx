@@ -94,7 +94,8 @@ const Place = ({ query }: { query: Record<string, string> }) => {
       },
       `/place${makeQueryString(queries)}`,
       {
-        scroll: false
+        scroll: false,
+        shallow: true
       }
     );
   };
