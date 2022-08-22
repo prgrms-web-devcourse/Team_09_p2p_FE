@@ -21,7 +21,7 @@ export default ArrowTitle;
 
 const Container = styled.div`
   margin-bottom: 30px;
-  display: flex;
+  display: inline-flex;
   align-items: center;
 `;
 
