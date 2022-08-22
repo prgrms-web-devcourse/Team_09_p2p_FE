@@ -1,14 +1,15 @@
 import styled from '@emotion/styled';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Icon, Text } from '~/components/atom';
 import KakaoButton from '~/components/domain/CourseDetail/KakaoButton';
 import useMoveScroll from '~/hooks/useMoveScroll';
 import { useUser } from '~/hooks/useUser';
 import { BookmarkApi, LikeApi } from '~/service';
-import theme from '~/styles/theme';
 import { CourseOrPlace } from '~/types';
 import ConfirmModal from '../ConfirmModal';
+import SideButton from './SideButton';
+import ToggleButton from './SideToggleButton';
 
 interface DetailSidebarProps {
   likes?: number;
@@ -23,17 +24,17 @@ const DetailSidebar = ({
   likes = 0,
   comments = 0,
   id,
-  defaultLiked,
-  defaultBookmarked,
+  defaultLiked = false,
+  defaultBookmarked = false,
   type
 }: DetailSidebarProps) => {
   const { isLoggedIn } = useUser();
   const [modalVisible, setModalVisible] = useState(false);
-  const [isLiked, setIsLiked] = useState(defaultLiked);
-  const [isBookmarked, setIsBookmarked] = useState(defaultBookmarked);
   const [totalLikes, setTotalLikes] = useState(likes);
   const router = useRouter();
-  const { onMoveToElement } = useMoveScroll(document.getElementById('comment'));
+  const { onMoveToElement } = useMoveScroll(
+    typeof window !== 'undefined' ? document.getElementById('comment') : null
+  );
 
   const handleGoLogin = () => {
     setModalVisible(false);
@@ -47,7 +48,6 @@ const DetailSidebar = ({
     }
 
     const result = await LikeApi.like(id, type);
-    setIsLiked(result.isLiked);
     setTotalLikes((oldLikes) => (result.isLiked ? oldLikes + 1 : oldLikes - 1));
   };
 
@@ -56,44 +56,31 @@ const DetailSidebar = ({
       setModalVisible(true);
       return;
     }
-    const result = await BookmarkApi.bookmark(id, type);
-    setIsBookmarked(result.isBookmarked);
+    await BookmarkApi.bookmark(id, type);
   };
-
-  useEffect(() => {
-    setIsLiked(defaultLiked);
-    setIsBookmarked(defaultBookmarked);
-    // 로그인 유저의 데이터로 변경되었을 때를 위해 default값 감지
-  }, [defaultLiked, defaultBookmarked]);
 
   return (
     <Container>
       <Sticky>
-        <IconButton onClick={handleClickLike}>
-          {isLiked ? (
-            <Icon name="heartActive" size={32} />
-          ) : (
-            <Icon name="heartInactive" size={32} />
-          )}
-        </IconButton>
-        <Text color="darkGray" style={{ marginTop: 8 }}>
-          {totalLikes}
-        </Text>
-        <IconButton onClick={onMoveToElement}>
+        <ToggleButton
+          active="heartActive"
+          inactive="heartInactive"
+          size={32}
+          onClick={handleClickLike}
+          defaultValue={defaultLiked}
+        />
+        <CountText color="darkGray">{totalLikes}</CountText>
+        <SideButton onClick={onMoveToElement}>
           <Icon name="commentRound" size={32} />
-        </IconButton>
-        <Text color="darkGray" style={{ marginTop: 8 }}>
-          {comments}
-        </Text>
-
-        <IconButton onClick={handleClickBookmark}>
-          {isBookmarked ? (
-            <Icon name="bookmarkActive" size={28} />
-          ) : (
-            <Icon name="bookmarkInactive" size={28} />
-          )}
-        </IconButton>
-
+        </SideButton>
+        <CountText color="darkGray">{comments}</CountText>
+        <ToggleButton
+          active="bookmarkActive"
+          inactive="bookmarkInactive"
+          size={28}
+          onClick={handleClickBookmark}
+          defaultValue={defaultBookmarked}
+        />
         <KakaoButton />
       </Sticky>
       <ConfirmModal
@@ -109,8 +96,6 @@ const DetailSidebar = ({
 
 export default DetailSidebar;
 
-const { borderDarkGray } = theme.color;
-
 const Container = styled.div`
   position: absolute;
   top: -18px;
@@ -125,20 +110,6 @@ const Sticky = styled.div`
   padding-top: 1px;
 `;
 
-const IconButton = styled.button`
-  width: 66px;
-  height: 66px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: white;
-  border-radius: 50%;
-  border: 1px solid ${borderDarkGray};
-  margin-top: 20px;
-  box-shadow: 0px 2px 4px 1px rgb(0 0 0 / 5%);
-  transition: all 0.3s;
-
-  &:hover {
-    border-color: #adadad;
-  }
+const CountText = styled(Text)`
+  margin-top: 8px;
 `;
