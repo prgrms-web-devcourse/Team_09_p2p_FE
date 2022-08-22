@@ -41,6 +41,7 @@ export type RegionAndAll = Region | '전체보기';
 
 export type PlacePost = {
   id: number;
+  kakaoMapId: string;
   name: string;
   addressName: string;
   roadAddressName: string;
@@ -53,6 +54,7 @@ export type PlacePost = {
   bookmarked: boolean;
   likeCount: number;
   usedCount: number;
+  comments: number;
 };
 
 export type Period = '당일' | '1~3일' | '4~7일' | '8~15일' | '15일이상';

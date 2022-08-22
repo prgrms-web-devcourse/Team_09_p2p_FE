@@ -51,7 +51,8 @@ export const MARKER_IMAGE_URLS: { [key: string]: string } = {
   restaurant: '/assets/place/restaurant.png',
   cafe: '/assets/place/cafe.png',
   hospital: '/assets/place/hospital.png',
-  pharmacy: '/assets/place/pharmacy.png'
+  pharmacy: '/assets/place/pharmacy.png',
+  placeNumberSprite: '/assets/place/_place-number-sprite.png'
 };
 
 export const TAGS_PERIOD: Period[] = ['당일', '1~3일', '4~7일', '8~15일', '15일이상'];

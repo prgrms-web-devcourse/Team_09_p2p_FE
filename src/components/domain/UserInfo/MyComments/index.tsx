@@ -11,31 +11,41 @@ interface MyComments {
 const MyComments = ({ comments }: MyComments) => {
   return (
     <div>
-      {comments.map((comment) => (
-        <Container key={comment.id}>
-          <CommentContent>
-            <Link href={`/course/${comment.content.id}`}>
-              <Text color="gray">`{textEllipsis(comment.content.title, 14)}`에 남긴 댓글</Text>
-            </Link>
-            <Link href={`/course/${comment.content.id}`}>
-              <Text size="lg" ellipsis block style={{ width: 500 }}>
-                {comment.comment}
+      {comments.map((comment) => {
+        const path =
+          comment.content.type === '코스'
+            ? `/course/${comment.content.id}`
+            : `/place/${comment.content.id}`;
+        return (
+          <Container key={comment.id}>
+            <CommentContent>
+              <Link href={path}>
+                <Text color="gray">`{textEllipsis(comment.content.title, 14)}`에 남긴 댓글</Text>
+              </Link>
+              <Link href={path}>
+                <Text size="lg" ellipsis block style={{ width: 500 }}>
+                  {comment.comment}
+                </Text>
+              </Link>
+            </CommentContent>
+            <CommentContent>
+              <Text color="gray" block>
+                {sliceDate(comment.createdAt)}
               </Text>
-            </Link>
-          </CommentContent>
-          <CommentContent>
-            <Text color="gray" block>
-              {sliceDate(comment.createdAt)}
-            </Text>
-            <Link href={`/course/${comment.content.id}`}>
-              <CommentCount>
-                <Icon size={20} name="comment" />
-                <Text color="gray">{comment.subCommentCount}</Text>
-              </CommentCount>
-            </Link>
-          </CommentContent>
-        </Container>
-      ))}
+              <Link href={path}>
+                <CommentCount>
+                  {!comment.rootCommentId && (
+                    <>
+                      <Icon size={20} name="comment" />
+                      <Text color="gray">{comment.subCommentCount}</Text>
+                    </>
+                  )}
+                </CommentCount>
+              </Link>
+            </CommentContent>
+          </Container>
+        );
+      })}
     </div>
   );
 };

@@ -4,7 +4,7 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import { PageContainer } from '~/components/atom';
-import { CategoryTitle, PlaceList, SelectRegion, SortFilter } from '~/components/common';
+import { CategoryTitle, PlaceList, SelectRegion, SortFilter, Toast } from '~/components/common';
 import { useUser } from '~/hooks/useUser';
 import { PlaceApi } from '~/service';
 import { Period, Region, RegionAndAll } from '~/types';
@@ -48,7 +48,6 @@ const Place = ({ query }: { query: Record<string, string> }) => {
   const onIntersect: IntersectionObserverCallback = (entries, observer) => {
     entries.forEach(async (entry) => {
       if (entry.isIntersecting && !isLoading && !isLast) {
-        console.log('관찰');
         setPage((prev) => prev + 1);
 
         observer.unobserve(entry.target);
@@ -79,9 +78,7 @@ const Place = ({ query }: { query: Record<string, string> }) => {
         page,
         size: SIZE
       });
-      console.log('요청', { ...queries, page, size: SIZE });
       if (result.last) {
-        console.log('마지막 페이지 입니다.');
         setIsLast(true);
       }
       setPlaceList(placeList.concat(result.content));
@@ -108,9 +105,10 @@ const Place = ({ query }: { query: Record<string, string> }) => {
         ...queries,
         region: queries.region === '전체보기' ? undefined : queries.region
       });
+
       setPlaceList(response.content);
     } catch (e) {
-      console.error('장소페이지에서 장소목록을 불러오는데 실패했어요.', e);
+      Toast.show('장소페이지에서 장소목록을 불러오는데 실패했어요.');
       setPlaceList([]);
     }
   };
@@ -137,7 +135,6 @@ const Place = ({ query }: { query: Record<string, string> }) => {
   }, [queries, currentUser.accessToken]);
 
   useEffect(() => {
-    console.log(page, 'page!');
     if (page !== 0) {
       getPlaceList();
     }

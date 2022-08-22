@@ -16,7 +16,7 @@ const ConfirmModal = ({ ...props }: ConfirmModalProps) => {
         <Icon name="alert" size={75} />
         <Message>
           <Title>{props.message || '삭제'}</Title>
-          <Text color="gray" size="sm">
+          <Text color="gray" size="md" style={{ marginTop: 4 }}>
             {props.subMessage || '정말 삭제할까요?'}
           </Text>
         </Message>
@@ -24,7 +24,7 @@ const ConfirmModal = ({ ...props }: ConfirmModalProps) => {
           <Button fontSize={20} onClick={props.onConfirm}>
             확인
           </Button>
-          <Button fontSize={20} onClick={props.onClose}>
+          <Button fontSize={20} buttonType="gray" onClick={props.onClose}>
             취소
           </Button>
         </Buttons>
@@ -42,6 +42,7 @@ const Container = styled.div`
   justify-content: center;
   align-items: center;
   gap: 20px;
+  padding-top: 10px;
 `;
 
 const Message = styled.div`
@@ -57,6 +58,7 @@ const Buttons = styled.div`
   display: flex;
   justify-content: center;
   gap: 10px;
+  margin-top: 12px;
 
   button {
     padding: 16px 0;

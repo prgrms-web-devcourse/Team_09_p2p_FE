@@ -18,6 +18,7 @@ import {
   correctedSpots,
   correctedThemes
 } from '~/utils/converter';
+import ConfirmModal from '~/components/common/ConfirmModal';
 
 export async function getServerSideProps() {
   return {
@@ -25,7 +26,7 @@ export async function getServerSideProps() {
   };
 }
 interface ICourseMap {
-  id: number;
+  kakaoMapId: number;
   latitude: string;
   longitude: string;
   name: string;
@@ -46,6 +47,7 @@ const CourseEdit: NextPage = () => {
   const { courseQuery } = router.query;
   const courseInfo: ICourseForm = JSON.parse(courseQuery as string);
   const [title, setTitle] = useState(courseInfo.title);
+  const [modalVisible, setModalVisible] = useState(false);
   const titleRef = useRef<HTMLInputElement>(null as unknown as HTMLInputElement);
   const textAreasRef = useRef([] as HTMLTextAreaElement[]);
   const isRecommendedRef = useRef([] as HTMLButtonElement[]);
@@ -63,7 +65,7 @@ const CourseEdit: NextPage = () => {
   const formCourseData = {} as ICourseForm;
   const courseMapData = courseInfo.places.map((place) => {
     return {
-      id: place.kakaoMapId,
+      kakaoMapId: place.kakaoMapId,
       latitude: place.latitude,
       longitude: place.longitude,
       name: place.name
@@ -177,9 +179,7 @@ const CourseEdit: NextPage = () => {
         }
       });
     };
-    if (window.confirm('코스를 수정하시겠어요?')) {
-      updateCourse(formData);
-    }
+    updateCourse(formData);
   };
 
   const placeModifyhandler = () => {
@@ -193,9 +193,6 @@ const CourseEdit: NextPage = () => {
   };
 
   const handleSelectTags = (data: SearchTagsValues) => {
-    //formCourseData.period = data.period !== null ? data.period : '';
-    //formCourseData.themes = data.themes;
-    //formCourseData.spots = data.spots;
     const { period, themes, spots } = data;
     setQueries({
       ...queries,
@@ -205,7 +202,12 @@ const CourseEdit: NextPage = () => {
       page: 0
     });
   };
-
+  const onUpdate = () => {
+    setModalVisible(true);
+  };
+  const closeModal = () => {
+    setModalVisible(false);
+  };
   return (
     <React.Fragment>
       <main>
@@ -255,13 +257,20 @@ const CourseEdit: NextPage = () => {
             ))}
           </PlacesWrapper>
           <SubmitWrapper>
-            <Button buttonType="darkGray" width={184} height={75} onClick={placeModifyhandler}>
+            {/* <Button buttonType="darkGray" width={184} height={75} onClick={placeModifyhandler}>
               장소 수정
-            </Button>
-            <Button buttonType="primary" width={184} height={75} onClick={courseUpdatehandler}>
+            </Button> */}
+            <Button buttonType="primary" width={184} height={75} onClick={onUpdate}>
               코스 수정
             </Button>
           </SubmitWrapper>
+          <ConfirmModal
+            visible={modalVisible}
+            onClose={closeModal}
+            onConfirm={courseUpdatehandler}
+            message="코스 수정"
+            subMessage="코스를 수정하시겠어요?"
+          />
         </PageContainer>
       </main>
     </React.Fragment>

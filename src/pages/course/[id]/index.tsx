@@ -55,7 +55,6 @@ const CourseDetail = ({ course, courseId }: Props) => {
   const getDetailInfo = async () => {
     if (isLoggedIn) {
       const result = await CourseApi.authRead(courseId);
-      console.log('로그인 데이터', result);
 
       if (result) {
         setDetailData(result);

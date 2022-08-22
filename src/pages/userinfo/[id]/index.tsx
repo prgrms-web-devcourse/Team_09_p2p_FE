@@ -64,7 +64,8 @@ const Userinfo: NextPage = () => {
     setActiveMenu(value);
 
     if (value === 'course') {
-      if (!courseData) {
+      if (!courseData || userData?.id !== userId) {
+        // userId 변경될 경우 재요청
         const result = await CourseApi.getUserCourses(userId);
         setCourseData(result.content);
       }
@@ -122,8 +123,14 @@ const Userinfo: NextPage = () => {
         router.push('/');
         return;
       }
-
       getUserData(userId);
+
+      // 유저 id 변경되면 bookmark/comment 초기화
+      setBookmarkData({
+        course: null,
+        places: null
+      });
+      setCommentData(null);
     }
   }, [userId]);
 

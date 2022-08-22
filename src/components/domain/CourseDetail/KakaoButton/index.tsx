@@ -1,14 +1,25 @@
 import styled from '@emotion/styled';
+import { useEffect } from 'react';
 import { Icon } from '~/components/atom';
 import theme from '~/styles/theme';
 
 const KakaoButton = () => {
+  useEffect(() => {
+    const kakao = window.Kakao;
+    if (kakao && !kakao.isInitialized()) {
+      console.log('카카오실행');
+      kakao.init(process.env.NEXT_PUBLIC_KAKAO_SHARE_KEY);
+    }
+  }, []);
+
   const onClick = () => {
-    const { Kakao, location } = window;
-    Kakao.Share.sendScrap({
-      templateId: 81335,
-      requestUrl: location.href
-    });
+    if (typeof window !== 'undefined') {
+      const { Kakao, location } = window;
+      Kakao.Share.sendScrap({
+        templateId: 81335,
+        requestUrl: location.href
+      });
+    }
   };
   return (
     <IconButton id="kakao-link-btn" onClick={onClick}>

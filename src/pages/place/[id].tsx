@@ -14,7 +14,7 @@ import theme from '~/styles/theme';
 import { PlacePost } from '~/types';
 import { ICourseItem } from '~/types/course';
 
-const COURSE_SORT = '인기순';
+const COURSE_SORT = '최신순';
 const COURSE_SIZE = 9;
 
 export const getServerSideProps = async (context: NextPageContext) => {
@@ -107,7 +107,7 @@ const PlaceDetailByPostId = ({ place, placeId, courses }: Props) => {
           </MapButton>
           {detailData && isOpenMap && (
             <PlaceMap
-              placeId={detailData.id}
+              placeId={Number(detailData.kakaoMapId)}
               placeType={detailData.category}
               placeName={detailData.name}
               center={{ lat: Number(detailData.latitude), lng: Number(detailData.longitude) }}

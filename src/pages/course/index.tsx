@@ -9,7 +9,8 @@ import {
   CourseList,
   SelectRegion,
   SelectTags,
-  SortFilter
+  SortFilter,
+  Toast
 } from '~/components/common';
 
 import { Period, RegionAndAll, SearchTagsValues, Spot, Theme } from '~/types';
@@ -22,6 +23,7 @@ import {
   correctedThemes,
   makeQueryString
 } from '~/utils/converter';
+import { useUser } from '~/hooks/useUser';
 
 export const getServerSideProps = async (context: NextPageContext) => {
   const { query } = context;
@@ -57,13 +59,12 @@ const Course = ({ query }: { query: Record<string, string> }) => {
     spots: (query.spots && correctedSpots(query.spots)) || [],
     page: 0,
     size: SIZE,
-    sorting: '인기순'
+    sorting: '최신순'
   });
 
   const onIntersect: IntersectionObserverCallback = (entries, observer) => {
     entries.forEach(async (entry) => {
       if (entry.isIntersecting && !isLoading && !isLast) {
-        console.log('관찰');
         setPage((prev) => prev + 1);
 
         observer.unobserve(entry.target);
@@ -80,9 +81,7 @@ const Course = ({ query }: { query: Record<string, string> }) => {
       // 뒤로가기 시 index 코드
     } else {
       const result = await CourseApi.search({ ...queries, page, size: SIZE });
-      console.log('요청', { ...queries, ...filter, size: SIZE });
       if (result.last) {
-        console.log('마지막 페이지 입니다.');
         setIsLast(true);
       }
       setCourseList(courseList.concat(result.content));
@@ -105,7 +104,8 @@ const Course = ({ query }: { query: Record<string, string> }) => {
         pathname: '/course',
         query: { ...queries, themes: queries.themes.join(','), spots: queries.spots.join(',') }
       },
-      `/course${makeQueryString(queries)}`,
+      // `/course${makeQueryString(queries)}`,
+      '/course',
       {
         scroll: false
       }
@@ -116,9 +116,8 @@ const Course = ({ query }: { query: Record<string, string> }) => {
     try {
       const response = await CourseApi.search({ ...queries, size: SIZE });
       setCourseList(response.content);
-      console.log('요청', { ...queries, size: SIZE });
     } catch (e) {
-      console.error('코스페이지에서 코스목록을 불러오는데 실패했어요.', e);
+      Toast.show('코스페이지에서 코스목록을 불러오는데 실패했어요.');
       setCourseList([]);
     }
   };
@@ -132,7 +131,6 @@ const Course = ({ query }: { query: Record<string, string> }) => {
   };
 
   const handleSelectTags = async (data: SearchTagsValues) => {
-    console.log('d');
     const { period, themes, spots } = data;
     setQueries({
       ...queries,
@@ -158,7 +156,6 @@ const Course = ({ query }: { query: Record<string, string> }) => {
   }, [queries]);
 
   useEffect(() => {
-    console.log(page, 'page!');
     if (page !== 0) {
       getCourseList({ page });
     }

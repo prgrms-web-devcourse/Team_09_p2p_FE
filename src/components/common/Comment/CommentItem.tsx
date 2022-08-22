@@ -32,7 +32,7 @@ const CommentItem = ({
   const [isOpenEditor, setIsOpenEditor] = useState(false);
   const [isOpenRecomment, setIsOpenRecomment] = useState(false);
   const isRecomment = comment.rootCommentId !== null;
-  const { currentUser } = useUser();
+  const { currentUser, isLoggedIn } = useUser();
 
   const IS_UPDATED = comment.createdAt !== comment.updatedAt;
 
@@ -61,17 +61,23 @@ const CommentItem = ({
   return (
     <>
       <CommentContainer isRecomment={isRecomment}>
-        <Link href={`/userinfo/${comment.user.id}`}>
+        {comment.createdAt ? (
+          <Link href={`/userinfo/${comment.user.id}`}>
+            <Avatar size={66} src={comment.user.profileImage} />
+          </Link>
+        ) : (
           <Avatar size={66} src={comment.user.profileImage} />
-        </Link>
+        )}
         {!isOpenEditor ? (
           <>
             <CommentContent>
               <div>
                 <Link href={`/userinfo/${comment.user.id}`}>
-                  <Text size="lg" fontWeight={700}>
-                    {comment.user?.nickname}
-                  </Text>
+                  {comment.user.nickname && (
+                    <Text size="lg" fontWeight={700}>
+                      {comment.user.nickname}
+                    </Text>
+                  )}
                 </Link>
                 {writerId === comment.user.id && <Writer>작성자</Writer>}
               </div>
@@ -84,7 +90,7 @@ const CommentItem = ({
                     <Text color="gray">
                       {sliceDate(comment.createdAt)} {IS_UPDATED && '(편집됨)'}
                     </Text>
-                    {!isRecomment && (
+                    {!isRecomment && isLoggedIn && (
                       <Text.Button onClick={() => setIsOpenRecomment(true)} color="gray">
                         답글 작성
                       </Text.Button>
@@ -93,7 +99,7 @@ const CommentItem = ({
                 )}
               </CommentInfo>
             </CommentContent>
-            {currentUser.user.id === comment.user.id && (
+            {currentUser.user.id === comment.user.id && comment.createdAt !== null && (
               <Buttons>
                 <Text.Button color="gray" onClick={() => setIsOpenEditor(true)}>
                   수정
@@ -115,7 +121,7 @@ const CommentItem = ({
       {isOpenRecomment && (
         <CommentContainer style={{ paddingLeft: 50 }}>
           <Link href={`/userinfo/${comment.user.id}`}>
-            <Avatar size={66} src={comment.user.profileImage} />
+            <Avatar size={66} src={currentUser.user.profileImage} />
           </Link>
           <CommentEditor
             onSubmit={handleCreateRecomment}

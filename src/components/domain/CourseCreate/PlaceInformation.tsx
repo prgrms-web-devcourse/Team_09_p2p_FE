@@ -61,7 +61,7 @@ const PlaceInformation = ({
     try {
       return await imageCompression(fileSrc, options);
     } catch (error) {
-      alert(error);
+      Toast.show('이미지 변환에 실패했습니다.');
     }
   };
 

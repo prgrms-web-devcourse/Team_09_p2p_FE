@@ -10,12 +10,18 @@ import PlaceInformation from '~/components/domain/CourseCreate/PlaceInformation'
 import { SelectTags } from '~/components/common';
 import { useRouter } from 'next/router';
 import { CourseApi } from '~/service';
-import { SearchTagsValues } from '~/types';
+import { Period, RegionAndAll, SearchTagsValues, Spot, Theme } from '~/types';
 import { ICourseInfo, ISelectedPlace } from '..';
 import { IPlaceForm } from '~/types/place';
-
+import ConfirmModal from '~/components/common/ConfirmModal';
+import {
+  correctedPeriod,
+  correctedRegion,
+  correctedSpots,
+  correctedThemes
+} from '~/utils/converter';
 interface ICourseMap {
-  id: number;
+  kakaoMapId: number;
   latitude: string;
   longitude: string;
   name: string;
@@ -31,6 +37,16 @@ interface ICourseForm {
   places: IPlaceForm[];
 }
 
+type QueryState = {
+  keyword: string;
+  period: Period | null;
+  region: RegionAndAll;
+  themes: Theme[];
+  spots: Spot[];
+  page: number;
+  size: number;
+};
+
 const Course: NextPage = () => {
   const router = useRouter();
   const { courseQuery } = router.query;
@@ -40,6 +56,7 @@ const Course: NextPage = () => {
   const placeImagesRef = useRef([] as any);
   const ThumbnailButtonRef = useRef([] as HTMLButtonElement[]);
   const [selectedPlaces, setSelectedPlaces] = useState<ISelectedPlace[]>([]);
+  const [modalVisible, setModalVisible] = useState(false);
   if (!courseQuery) {
     return null;
   }
@@ -49,11 +66,21 @@ const Course: NextPage = () => {
   formCourseData.region = courseInfo.region;
   const courseMapData = courseInfo.places.map((place) => {
     return {
-      id: place.kakaoMapId,
+      kakaoMapId: place.kakaoMapId,
       latitude: place.latitude,
       longitude: place.longitude,
       name: place.name
     } as unknown as ICourseMap;
+  });
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const [queries, setQueries] = useState<QueryState>({
+    keyword: '',
+    period: (courseInfo.period && correctedPeriod(courseInfo.period)) || null,
+    region: (courseInfo.region && correctedRegion(courseInfo.region)) || '전체보기',
+    themes: (courseInfo.themes && correctedThemes(courseInfo.themes.toString())) || [],
+    spots: (courseInfo.spots && correctedSpots(courseInfo.spots.toString())) || [],
+    page: 0,
+    size: 15
   });
   const placesFormDataSetter = () => {
     return courseInfo.places.map((place, index) => {
@@ -91,6 +118,9 @@ const Course: NextPage = () => {
       }
     });
   };
+  const onCreate = () => {
+    setModalVisible(true);
+  };
   const courseCreatehandler = () => {
     if (titleRef.current.value === '') {
       Toast.show('코스 제목을 입력해주세요!');
@@ -101,15 +131,15 @@ const Course: NextPage = () => {
     } else {
       formCourseData.title = titleRef.current.value;
     }
-    if (formCourseData.period === '') {
+    if (!queries.period) {
       Toast.show('기간을 설정해주세요!');
       return;
     }
-    if (formCourseData.themes.length === 0) {
+    if (!queries.themes) {
       Toast.show('테마를 설정해주세요!');
       return;
     }
-    if (formCourseData.spots.length === 0) {
+    if (!queries.spots) {
       Toast.show('장소를 설정해주세요!');
       return;
     }
@@ -125,9 +155,11 @@ const Course: NextPage = () => {
       }
     }
     formCourseData.places = placesFormDataSetter();
+    formCourseData.period = queries.period;
+    formCourseData.themes = queries.themes;
+    formCourseData.spots = queries.spots;
     const courseFormData = new FormData();
     const uploaderString = JSON.stringify(formCourseData);
-    console.log(formCourseData);
     courseFormData.append(
       'course',
       new Blob([uploaderString], {
@@ -139,9 +171,6 @@ const Course: NextPage = () => {
       courseFormData.append('images', placesImageData[i]);
     }
     const createCourse = async (courseFormData: FormData) => {
-      for (const [key, value] of courseFormData.entries()) {
-        console.log(key, value);
-      }
       await CourseApi.create(courseFormData).then((res) => {
         switch (res) {
           case 201:
@@ -162,9 +191,10 @@ const Course: NextPage = () => {
         }
       });
     };
-    if (window.confirm('코스를 등록하시겠어요?')) {
+    createCourse(courseFormData);
+    /* if (window.confirm('코스를 등록하시겠어요?')) {
       createCourse(courseFormData);
-    }
+    } */
   };
 
   const placeModifyhandler = () => {
@@ -178,11 +208,19 @@ const Course: NextPage = () => {
   };
 
   const handleSelectTags = (data: SearchTagsValues) => {
-    formCourseData.period = data.period !== null ? data.period : '';
-    formCourseData.themes = data.themes;
-    formCourseData.spots = data.spots;
+    const { period, themes, spots } = data;
+    setQueries({
+      ...queries,
+      period,
+      themes,
+      spots,
+      page: 0
+    });
   };
 
+  const closeModal = () => {
+    setModalVisible(false);
+  };
   return (
     <React.Fragment>
       <main>
@@ -222,10 +260,17 @@ const Course: NextPage = () => {
             <Button buttonType="darkGray" width={184} height={75} onClick={placeModifyhandler}>
               장소 수정
             </Button>
-            <Button buttonType="primary" width={184} height={75} onClick={courseCreatehandler}>
+            <Button buttonType="primary" width={184} height={75} onClick={onCreate}>
               코스 등록
             </Button>
           </SubmitWrapper>
+          <ConfirmModal
+            visible={modalVisible}
+            onClose={closeModal}
+            onConfirm={courseCreatehandler}
+            message="코스 등록"
+            subMessage="코스를 등록하시겠어요?"
+          />
         </PageContainer>
       </main>
     </React.Fragment>

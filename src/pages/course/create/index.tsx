@@ -23,6 +23,9 @@ export interface IPlace {
   phoneNumber: string;
 }
 export interface ICourseInfo {
+  spots: string[];
+  themes: string[];
+  period: string;
   region: string;
   places: IPlaceForm[];
 }
@@ -59,7 +62,7 @@ const CourseCreate = () => {
   const setPlaces = () => {
     return selectedPlaces.map((selectedPlace) => {
       return {
-        kakaoMapId: selectedPlace.id,
+        kakaoMapId: selectedPlace.kakaoMapId,
         latitude: selectedPlace.latitude,
         longitude: selectedPlace.longitude,
         name: selectedPlace.name,
@@ -78,11 +81,12 @@ const CourseCreate = () => {
   };
   const deletePlace = (deleteSelectedPlace: IPlaceForm) => {
     setSelectedPlaces(
-      selectedPlaces.filter((selectedPlace) => selectedPlace.id !== deleteSelectedPlace.id)
+      selectedPlaces.filter(
+        (selectedPlace) => selectedPlace.kakaoMapId !== deleteSelectedPlace.kakaoMapId
+      )
     );
   };
   const handleNextStep = () => {
-    console.log(selectedPlaces.length);
     if (selectedPlaces.length < 2) {
       Toast.show('장소를 두 군데 이상 추가해주세요!');
       return;
@@ -121,9 +125,7 @@ const CourseCreate = () => {
               <div>
                 <Icon.Button name="arrow" size={25} rotate={180} onClick={() => setVisible(true)} />
               </div>
-              {/* <Icon name="arrow" size={25} rotate={180} /> */}
               <Title size="sm" style={{ marginLeft: '40%' }}>
-                {/* {visible === false ? region : '서울'} */}
                 {selectedRegion}
               </Title>
             </SelectedHeader>

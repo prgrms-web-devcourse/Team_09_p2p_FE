@@ -39,8 +39,6 @@ const SearchMap = ({ setSelectedPlaces, selectedPlaces, selectedRegion }: Search
           bounds.extend(new kakao.maps.LatLng(Number(place.latitude), Number(place.longitude)));
         });
         const map = mapObject;
-        console.log(selectedPlaces);
-        console.log(map);
         if (map) {
           map.setBounds(bounds);
         }
@@ -59,7 +57,7 @@ const SearchMap = ({ setSelectedPlaces, selectedPlaces, selectedRegion }: Search
       }
       const drawPloyLine = selectedPlaces.map((place) => {
         return {
-          placeId: place.id,
+          placeId: place.kakaoMapId,
           lat: Number(place.latitude),
           lng: Number(place.longitude),
           placeName: place.name
@@ -77,6 +75,10 @@ const SearchMap = ({ setSelectedPlaces, selectedPlaces, selectedRegion }: Search
     }
   }, [selectedPlaces, mapObject]);
   useEffect(() => {
+    setSearchedPlaces([]);
+    setCurKeyword('');
+  }, [selectedRegion]);
+  useEffect(() => {
     if (mapObject === null || mapObject === undefined) {
       return;
     }
@@ -87,14 +89,13 @@ const SearchMap = ({ setSelectedPlaces, selectedPlaces, selectedRegion }: Search
     const searchPlaces = () => {
       const keyword = curKeyword;
       if (!keyword.replace(/^\s+|\s+$/g, '')) {
-        console.log('키워드를 입력해주세요!');
         return false;
       }
 
       const selectedPlacesSetter = (data: any[]) => {
         return data.map((place) => {
           return {
-            id: place.id,
+            kakaoMapId: place.id,
             latitude: place.y,
             longitude: place.x,
             name: place.place_name,
@@ -106,41 +107,45 @@ const SearchMap = ({ setSelectedPlaces, selectedPlaces, selectedRegion }: Search
         });
       };
 
-      const searchPlaceCallback = async (data: any, status: any, pagination: any) => {
+      const searchPlaceCallback = (data: any, status: any, pagination: any) => {
         if (status === kakao.maps.services.Status.OK) {
           if (pagination.current > pagination.last) {
             return;
           }
           setSearchedPlaces((selectedPlaces) => [...selectedPlaces, ...selectedPlacesSetter(data)]);
         } else if (status === kakao.maps.services.Status.ZERO_RESULT) {
-          console.log('검색 결과가 존재하지 않습니다.');
           setIsSearched(false);
           return;
         } else if (status === kakao.maps.services.Status.ERROR) {
-          console.log('검색 결과 중 오류가 발생했습니다.');
           return;
         }
       };
 
-      // 장소검색 객체를 통해 키워드로 장소검색을 요청
-      // 15개씩 3개의 페이지 data 요청
-      setSearchedPlaces([]);
-      const syncSearch = async () => {
-        const sw = new kakao.maps.LatLng(
-          REGION_BOUNDARY[selectedRegion].sw.lat,
-          REGION_BOUNDARY[selectedRegion].sw.lng
-        );
-        const ne = new kakao.maps.LatLng(
-          REGION_BOUNDARY[selectedRegion].ne.lat,
-          REGION_BOUNDARY[selectedRegion].ne.lng
-        );
-        const bounds = new kakao.maps.LatLngBounds(sw, ne);
-        ps.keywordSearch(keyword, searchPlaceCallback, { page: 1, bounds: bounds });
-        ps.keywordSearch(keyword, searchPlaceCallback, { page: 2, bounds: bounds });
-        ps.keywordSearch(keyword, searchPlaceCallback, { page: 3, bounds: bounds });
+      const placeSearch = (index: number) => {
+        return new Promise(() => {
+          const sw = new kakao.maps.LatLng(
+            REGION_BOUNDARY[selectedRegion].sw.lat,
+            REGION_BOUNDARY[selectedRegion].sw.lng
+          );
+          const ne = new kakao.maps.LatLng(
+            REGION_BOUNDARY[selectedRegion].ne.lat,
+            REGION_BOUNDARY[selectedRegion].ne.lng
+          );
+          const bounds = new kakao.maps.LatLngBounds(sw, ne);
+          ps.keywordSearch(keyword, searchPlaceCallback, { page: index, bounds: bounds });
+        });
       };
-      syncSearch();
+      setSearchedPlaces([]);
       setIsSearched(true);
+      (async () => {
+        try {
+          for (let i = 1; i <= 3; i++) {
+            const result = await placeSearch(i);
+          }
+        } catch (e) {
+          console.error('장소 검색에 실패했어요.', e);
+        }
+      })();
     };
     // 키워드로 장소를 검색합니다
     searchPlaces();
@@ -166,6 +171,22 @@ const SearchMap = ({ setSelectedPlaces, selectedPlaces, selectedRegion }: Search
     if (mapObject) {
       curMarkerObject.setMap(mapObject);
       mapObject.setBounds(bound);
+    }
+  };
+  const placeMouseOut = (e: any) => {
+    if (curMarkerObject !== null) {
+      curMarkerObject.setMap(null);
+    }
+    if (selectedPlaces.length === 0) {
+      return;
+    }
+    const bounds = new kakao.maps.LatLngBounds();
+    selectedPlaces.forEach((place) => {
+      bounds.extend(new kakao.maps.LatLng(Number(place.latitude), Number(place.longitude)));
+    });
+    const map = mapObject;
+    if (map) {
+      map.setBounds(bounds);
     }
   };
   const markerImageSetter = (placeType: string) => {
@@ -254,10 +275,24 @@ const SearchMap = ({ setSelectedPlaces, selectedPlaces, selectedRegion }: Search
                     key={index}
                     position={{ lat: Number(place.latitude), lng: Number(place.longitude) }}
                     image={{
-                      src: MARKER_IMAGE_URLS.defaultPlace,
+                      src: MARKER_IMAGE_URLS.placeNumberSprite,
                       size: {
                         width: 48,
                         height: 48
+                      },
+                      options: {
+                        spriteSize: {
+                          width: 48,
+                          height: 720
+                        },
+                        spriteOrigin: {
+                          x: 0,
+                          y: index * 48 - 1
+                        },
+                        offset: {
+                          x: 24,
+                          y: 48
+                        }
                       }
                     }}
                   />
@@ -290,6 +325,7 @@ const SearchMap = ({ setSelectedPlaces, selectedPlaces, selectedRegion }: Search
                         key={index}
                         id={`place_${index}`}
                         onMouseEnter={(e) => placeMouseEnter(e, place)}
+                        onMouseLeave={(e) => placeMouseOut(e)}
                       >
                         <SearchedPlace>
                           <SearchedHeader>
