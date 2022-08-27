@@ -32,9 +32,7 @@ const DetailSidebar = ({
   const [modalVisible, setModalVisible] = useState(false);
   const [totalLikes, setTotalLikes] = useState(likes);
   const router = useRouter();
-  const { onMoveToElement } = useMoveScroll(
-    typeof window !== 'undefined' ? document.getElementById('comment') : null
-  );
+  const { onMoveToElement } = useMoveScroll('comment');
 
   const handleGoLogin = () => {
     setModalVisible(false);
