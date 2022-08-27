@@ -66,6 +66,7 @@ const DetailSidebar = ({
           size={32}
           onClick={handleClickLike}
           defaultValue={defaultLiked}
+          isLoggedIn={isLoggedIn}
         />
         <CountText color="darkGray">{totalLikes}</CountText>
         <SideButton onClick={onMoveToElement}>
@@ -78,6 +79,7 @@ const DetailSidebar = ({
           size={28}
           onClick={handleClickBookmark}
           defaultValue={defaultBookmarked}
+          isLoggedIn={isLoggedIn}
         />
         <KakaoButton />
       </Sticky>

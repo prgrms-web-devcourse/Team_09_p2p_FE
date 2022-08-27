@@ -9,13 +9,24 @@ interface ToggleButtonProps {
   size: number;
   onClick: () => void;
   defaultValue: boolean;
+  isLoggedIn: boolean;
 }
 
-const SideToggleButton = ({ active, inactive, size, onClick, defaultValue }: ToggleButtonProps) => {
+const SideToggleButton = ({
+  active,
+  inactive,
+  size,
+  onClick,
+  defaultValue,
+  isLoggedIn
+}: ToggleButtonProps) => {
   const [isClicked, setIsClicked] = useState(defaultValue);
 
   const handleClick = () => {
-    setIsClicked(!isClicked);
+    if (isLoggedIn) {
+      setIsClicked(!isClicked);
+    }
+
     onClick();
   };
 
