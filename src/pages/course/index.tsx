@@ -1,6 +1,5 @@
 import styled from '@emotion/styled';
 import type { NextPageContext } from 'next';
-import Head from 'next/head';
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { PageContainer } from '~/components/atom';
@@ -23,7 +22,6 @@ import {
   correctedThemes,
   makeQueryString
 } from '~/utils/converter';
-import { useUser } from '~/hooks/useUser';
 
 export const getServerSideProps = async (context: NextPageContext) => {
   const { query } = context;
@@ -107,7 +105,8 @@ const Course = ({ query }: { query: Record<string, string> }) => {
       // `/course${makeQueryString(queries)}`,
       '/course',
       {
-        scroll: false
+        scroll: false,
+        shallow: true
       }
     );
   };

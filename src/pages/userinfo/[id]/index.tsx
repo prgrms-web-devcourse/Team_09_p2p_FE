@@ -57,7 +57,9 @@ const Userinfo: NextPage = () => {
   */
 
   const replaceRoute = (query: UserInfoTab) => {
-    router.replace({ pathname: '/userinfo/[id]', query: { tab: query } }, `/userinfo/${userId}`);
+    router.replace({ pathname: '/userinfo/[id]', query: { tab: query } }, `/userinfo/${userId}`, {
+      shallow: true
+    });
   };
 
   const onClickAction = async (value: UserInfoTab) => {
