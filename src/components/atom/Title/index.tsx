@@ -31,7 +31,7 @@ const Title: React.FC<TitleProps> = ({
   const fontStyle = {
     fontSize: size && (typeof size === 'number' ? size + 'px' : TITLE_SIZES[size] + 'px'),
     fontWeight: fontWeight && fontWeight,
-    display: block ? 'block' : 'inline-block',
+    display: block || ellipsis ? 'block' : 'inline-block',
     color: color && (FONT_COLORS[color] || color),
     lineHeight: 1.5
   };
