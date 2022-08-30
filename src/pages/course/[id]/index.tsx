@@ -151,7 +151,7 @@ const CourseDetail = ({ course, courseId }: Props) => {
 
             <Profile>
               <Link href={`/userinfo/${detailData.userId}`}>
-                <Avatar size={55} src={detailData.profileImage} />
+                <Avatar src={detailData.profileImage} />
               </Link>
               <Text color="dark" fontWeight={500}>
                 {detailData.nickname}
