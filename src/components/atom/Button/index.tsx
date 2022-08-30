@@ -1,10 +1,6 @@
 import styled from '@emotion/styled';
 import { CSSProperties, MouseEvent, ReactNode } from 'react';
-import theme from '~/styles/theme';
-
-type ButtonTypes = 'primary' | 'borderPrimary' | 'tag' | 'darkGray' | 'borderNone' | 'gray';
-type ButtonSizes = 'sm' | 'md' | 'lg';
-
+import { buttonSize, ButtonSizes, buttonStyle, ButtonTypes } from './types';
 interface ButtonProps {
   type?: 'button' | 'submit';
   buttonType?: ButtonTypes;
@@ -49,90 +45,7 @@ const Button = ({
 
 export default Button;
 
-interface buttonStyleInterface {
-  [key: string]: string;
-}
-
-const { mainColor, fontDarkGray, borderDarkGray } = theme.color;
-
-const buttonStyle: buttonStyleInterface = {
-  primary: `
-    color: #fff;
-    background-color:${mainColor};
-
-    &:hover{
-      background-color:#438ce1;
-    }
-  `,
-  borderPrimary: `
-    color: ${mainColor};
-    background-color: #fff;
-    border: 1px solid ${mainColor};
-
-    &:hover {
-      background-color: #f6f9ff;
-    }
-  `,
-  tag: `
-    color: ${fontDarkGray};
-    border: 1px solid ${borderDarkGray};
-    box-shadow: 0px 2px 4px 1px rgb(0 0 0 / 5%);
-
-    &:hover {
-      background-color: #f4f8fb;
-      background-color: #f7f8f9;
- 
-    }
-  `,
-  darkGray: `
-    color: #fff;
-    background-color: #909090;
-
-  `,
-  gray: `
-    color: #262626;
-    background-color: #f1f1f1;
-
-    &:hover {
-      background-color:#e3e3e3;
-    }
-  `,
-  borderNone: `
-    color: ${mainColor};
-    background-color: #fff;
-
-    &:hover {
-      background-color: #f6f9ff;
-    }
-
-  `
-};
-
-const buttonSize: buttonStyleInterface = {
-  sm: `
-    padding: 10px 20px;
-    font-size: 18px;
-  `,
-  md: `
-    padding: 16px 22px;
-    font-size: 20px;
-  `,
-  lg: `
-    padding: 20px 45px;
-    font-size: 22px;
-  `
-};
-
-interface ButtonInterface {
-  buttonType?: string;
-  size?: string;
-  width?: number | string;
-  height?: number;
-  fontSize?: number;
-  disabled?: boolean;
-}
-
-const StyledButton = styled.button<ButtonInterface>`
+const StyledButton = styled.button<ButtonProps>`
   ${({ buttonType }) => buttonType && buttonStyle[buttonType]};
   ${({ size }) => size && buttonSize[size]};
 
