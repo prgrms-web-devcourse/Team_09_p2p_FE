@@ -1,9 +1,9 @@
 import styled from '@emotion/styled';
-import type { NextPage } from 'next';
+import type { NextPageContext } from 'next';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import { PageContainer } from '~/components/atom';
-import { CourseList, Toast } from '~/components/common';
+import { CourseList } from '~/components/common';
 import MyBookmarks from '~/components/domain/UserInfo/MyBookmarks';
 import MyComments from '~/components/domain/UserInfo/MyComments';
 import ProfileCard from '~/components/domain/UserInfo/ProfileCard';
@@ -11,6 +11,7 @@ import Tab from '~/components/domain/UserInfo/Tab';
 import { useUser } from '~/hooks/useUser';
 import { CommentApi, CourseApi, PlaceApi, UserApi } from '~/service';
 import type { UserInfoTab } from '~/components/domain/UserInfo/types';
+import PageHead from '~/components/common/PageHead';
 
 interface IBookmarkCounts {
   total: number;
@@ -33,10 +34,37 @@ interface IUserInfo {
   counts: ICounts;
 }
 
-const Userinfo: NextPage = () => {
+export const getServerSideProps = async (context: NextPageContext) => {
+  const { id } = context.query;
+  const userId = Number(id);
+
+  if (Number.isNaN(userId)) {
+    return {
+      notFound: true
+    };
+  }
+
+  try {
+    const user = await UserApi.getUser(userId);
+    return {
+      props: { user, userId }
+    };
+  } catch (e) {
+    return {
+      notFound: true
+    };
+  }
+};
+
+interface UserInfoProps {
+  user: IUserInfo;
+  userId: number;
+}
+
+const Userinfo = ({ user, userId }: UserInfoProps) => {
   const [ActiveMenu, setActiveMenu] = useState('post');
   const [ActiveBookmark, setActiveBookmark] = useState('course');
-  const [userData, setUserData] = useState<IUserInfo | null>(null);
+  const [userData, setUserData] = useState<IUserInfo>(user);
   const router = useRouter();
   const { currentUser } = useUser();
 
@@ -47,7 +75,6 @@ const Userinfo: NextPage = () => {
   const [commentData, setCommentData] = useState(null);
   const [courseData, setCourseData] = useState(null);
 
-  const userId = Number(router.query.id);
   const isMyPage = userId === currentUser.user.id;
 
   /*
@@ -56,17 +83,20 @@ const Userinfo: NextPage = () => {
   */
 
   const replaceRoute = (query: UserInfoTab) => {
-    router.replace({ pathname: '/userinfo/[id]', query: { tab: query } }, `/userinfo/${userId}`, {
-      shallow: true
-    });
+    router.replace(
+      { pathname: '/userinfo/[id]', query: { tab: query } },
+      `/userinfo/${userId}?tab=${query}`,
+      {
+        shallow: true
+      }
+    );
   };
 
-  const onClickAction = async (value: UserInfoTab) => {
+  const onClickAction = async (value: UserInfoTab, isFirst?: boolean) => {
     setActiveMenu(value);
 
     if (value === 'course') {
-      if (!courseData || userData?.id !== userId) {
-        // userId 변경될 경우 재요청
+      if (!courseData || isFirst) {
         const result = await CourseApi.getUserCourses(userId);
         setCourseData(result.content);
       }
@@ -103,43 +133,37 @@ const Userinfo: NextPage = () => {
     }
   };
 
-  const getUserData = async (userId: number) => {
-    const result = await UserApi.getUser(userId);
-    if (!result) {
-      Toast.show('잘못된 요청입니다.');
-      router.push('/');
-      return;
-    }
-
-    setUserData(result);
-
-    const tab = router.query.tab || 'course';
-    onClickAction(tab as UserInfoTab);
-  };
-
   useEffect(() => {
-    if (typeof router.query.id === 'string') {
-      if (Number.isNaN(userId)) {
-        Toast.show('잘못된 요청입니다.');
-        router.push('/');
-        return;
-      }
-      getUserData(userId);
+    // 유저 id 변경되면 bookmark/comment 초기화
+    setBookmarkData({
+      course: null,
+      places: null
+    });
+    setCommentData(null);
 
-      // 유저 id 변경되면 bookmark/comment 초기화
-      setBookmarkData({
-        course: null,
-        places: null
-      });
-      setCommentData(null);
-    }
+    setUserData(user);
+    const tab = router.query.tab || 'course';
+    onClickAction(tab as UserInfoTab, true);
+
+    // 뒤로가기 시 state 초기화
+    router.beforePopState(({ as, options }) => {
+      if (options.shallow) {
+        router.replace(as);
+        setCourseData(null);
+        setBookmarkData({
+          course: null,
+          places: null
+        });
+        setCommentData(null);
+        return false;
+      }
+      return true;
+    });
   }, [userId]);
 
-  if (!userData) {
-    return null;
-  }
   return (
     <React.Fragment>
+      <PageHead title={`${userData.nickname}님의 페이지`} />
       <main>
         <PageContainer>
           <Wrapper>
