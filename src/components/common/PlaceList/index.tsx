@@ -36,7 +36,7 @@ PlaceList.displayName = 'PlaceList';
 
 export default PlaceList;
 
-const StyledPlaceList = styled.div`
+const StyledPlaceList = styled.ul`
   display: flex;
   flex-wrap: wrap;
   margin-right: -10px;
