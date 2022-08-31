@@ -18,7 +18,7 @@ export default class LocalStorage<T> {
     }
   }
 
-  get(key: string, defaultValue?: T): T | undefined {
+  protected get(key: string, defaultValue?: T): T | undefined {
     if (!this.storage) {
       return;
     }
@@ -37,7 +37,7 @@ export default class LocalStorage<T> {
     }
   }
 
-  set(key: string, value: T): void {
+  protected set(key: string, value: T): void {
     if (!this.storage) {
       return;
     }
@@ -48,7 +48,7 @@ export default class LocalStorage<T> {
     }
   }
 
-  clear(key: string): void {
+  protected clear(key: string): void {
     if (!this.storage) {
       return;
     }
