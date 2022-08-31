@@ -1,14 +1,9 @@
-import LocalStorage from './core/LocalStorage';
-
+import LocalStorage from './LocalStorage';
 const JWT_TOKEN = 'jwt-token' as const;
 
 class TokenStorage extends LocalStorage<string> {
-  getToken(): string {
-    try {
-      return this.get(JWT_TOKEN);
-    } catch (e) {
-      throw new Error('토큰이 없습니다.');
-    }
+  getToken(): string | undefined {
+    return this.get(JWT_TOKEN, '');
   }
 
   setToken(token: string): void {

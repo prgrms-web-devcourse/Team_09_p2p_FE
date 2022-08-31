@@ -1,5 +1,5 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
-import LocalStorage from './WebStorage';
+import TokenStorage from '~/utils/storage/TokenStorage';
 
 export default class Api {
   private readonly API_END_POINT = process.env.NEXT_PUBLIC_API_END_POINT as string;
@@ -7,7 +7,7 @@ export default class Api {
   private interceptors = (instance: AxiosInstance): AxiosInstance => {
     instance.interceptors.request.use(
       (config) => {
-        const token = LocalStorage.getToken();
+        const token = TokenStorage.getToken();
         config.headers = {
           Authorization: token || ''
         };

@@ -6,16 +6,23 @@ interface Storage {
 
 export default class LocalStorage<T> {
   static instance: LocalStorage<any>;
-  protected readonly storage: Storage = window.localStorage;
+  protected readonly storage: Storage | undefined;
 
   constructor() {
     if (LocalStorage.instance) {
       return LocalStorage.instance;
     }
     LocalStorage.instance = this;
+    if (typeof window !== 'undefined') {
+      this.storage = window.localStorage;
+    }
   }
 
-  get(key: string, defaultValue?: T): T {
+  get(key: string, defaultValue?: T): T | undefined {
+    if (!this.storage) {
+      return;
+    }
+
     try {
       const value = this.storage.getItem(key);
       if (!value) {
@@ -31,6 +38,9 @@ export default class LocalStorage<T> {
   }
 
   set(key: string, value: T): void {
+    if (!this.storage) {
+      return;
+    }
     try {
       this.storage.setItem(key, JSON.stringify(value));
     } catch (e) {
@@ -39,6 +49,9 @@ export default class LocalStorage<T> {
   }
 
   clear(key: string): void {
+    if (!this.storage) {
+      return;
+    }
     this.storage.removeItem(key);
   }
 }
