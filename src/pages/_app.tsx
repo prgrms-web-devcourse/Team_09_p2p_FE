@@ -3,10 +3,9 @@ import '../styles/reset.css';
 import type { AppProps } from 'next/app';
 import type { NextPage } from 'next';
 import Layout from '~/components/common/Layout';
-import { ReactElement, ReactNode, useEffect, useState } from 'react';
+import { ReactElement, ReactNode } from 'react';
 import { RecoilRoot } from 'recoil';
 import AppHead from '~/components/domain/AppHead';
-import { Router } from 'next/router';
 import Spinner from '~/components/common/Spinner';
 import { useRouteChange } from '~/hooks';
 

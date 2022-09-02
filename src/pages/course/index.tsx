@@ -22,6 +22,7 @@ import {
   correctedThemes,
   makeQueryString
 } from '~/utils/converter';
+import PageHead from '~/components/common/PageHead';
 
 export const getServerSideProps = async (context: NextPageContext) => {
   const { query } = context;
@@ -162,6 +163,7 @@ const Course = ({ query }: { query: Record<string, string> }) => {
 
   return (
     <React.Fragment>
+      <PageHead title="여행 코스" />
       <main style={{ position: 'relative' }}>
         <PageContainer>
           <CategoryTitle name="여행코스" />
