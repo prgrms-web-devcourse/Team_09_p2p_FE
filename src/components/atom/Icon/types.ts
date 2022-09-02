@@ -19,6 +19,7 @@ export const ICON_URLS = {
   plus: '/assets/icons/plus.svg',
   pencil: '/assets/icons/pencil.svg',
   comment: '/assets/icons/comment.svg',
+  commentRound: '/assets/icons/comment-round.svg',
   bookmarkThumb: '/assets/icons/bookmark-thumb.svg',
   bookmarkThumbActive: '/assets/icons/bookmark-thumb-active.svg',
   recommendActive: '/assets/icons/recommend-active.svg',

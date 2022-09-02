@@ -32,6 +32,7 @@ export interface ICourseDetail {
   profileImage: string;
   createdAt: string;
   updatedAt: string;
+  comments: number;
 }
 
 export interface CourseFilter {
