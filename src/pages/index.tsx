@@ -82,7 +82,12 @@ const HomePage = ({ places, courses }: Props) => {
       <main>
         <PageContainer>
           <SearchArea>
-            <Image width={550} src="/assets/search-img.png" alt="여행할 땐 이곳저곳" />
+            <Image
+              width={550}
+              src="/assets/search-img.png"
+              alt="여행할 땐 이곳저곳"
+              priority={true}
+            />
             <MainSearchForm onSubmit={handleSearch}>
               <SearchIcon name="searchBlue" size={30} />
               <MainSearchInput

@@ -7,7 +7,12 @@ interface ImageProps {
   cover?: boolean;
 }
 
-const Image = ({ width = '100%', height, cover, ...props }: ImageProps & NextImageProps) => {
+const Image = ({
+  width = '100%',
+  height = 'auto',
+  cover,
+  ...props
+}: ImageProps & NextImageProps) => {
   return (
     <ImageWrapper width={width} height={height}>
       <NextImage layout="fill" objectFit={cover ? 'cover' : 'contain'} {...props} />
@@ -20,6 +25,7 @@ export default Image;
 const ImageWrapper = styled.div<ImageProps>`
   width: ${({ width }) => (typeof width === 'number' ? width + 'px' : width)};
   height: ${({ height }) => (typeof height === 'number' ? height + 'px' : height)};
+  position: relative;
   & > span {
     position: unset !important;
     height: ${({ height }) => (typeof height === 'number' ? height + 'px' : height)} !important;

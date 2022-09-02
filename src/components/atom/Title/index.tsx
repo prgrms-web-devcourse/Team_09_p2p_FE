@@ -1,4 +1,3 @@
-import styled from '@emotion/styled';
 import { CSSProperties, ReactNode } from 'react';
 import { FontColors, TitleSizes } from '~/types/font';
 import { TITLE_SIZES, FONT_COLORS } from '~/utils/constants';
@@ -16,8 +15,6 @@ interface TitleProps {
 
 type tagType = 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
 
-let tag: tagType = 'h2'; // default
-
 const Title: React.FC<TitleProps> = ({
   size = 'sm',
   level = 2,
@@ -26,42 +23,24 @@ const Title: React.FC<TitleProps> = ({
   block,
   ellipsis,
   children,
+  style,
   ...props
 }) => {
-  tag = level ? (`h${level}` as tagType) : tag;
+  const Tag: tagType = `h${level}`;
+
+  const fontStyle = {
+    fontSize: size && (typeof size === 'number' ? size + 'px' : TITLE_SIZES[size] + 'px'),
+    fontWeight: fontWeight && fontWeight,
+    display: block || ellipsis ? 'block' : 'inline-block',
+    color: color && (FONT_COLORS[color] || color),
+    lineHeight: 1.5
+  };
 
   return (
-    <Styled
-      size={size}
-      fontWeight={fontWeight}
-      block={block}
-      color={color}
-      ellipsis={ellipsis}
-      {...props}
-    >
+    <Tag className={ellipsis ? 'ellipsis' : ''} style={{ ...fontStyle, ...style }} {...props}>
       {children}
-    </Styled>
+    </Tag>
   );
 };
 
 export default Title;
-
-const Styled = styled[tag]<Omit<TitleProps, 'children'>>`
-  line-height: 1.5;
-  font-size: ${({ size }) =>
-    size && (typeof size === 'number' ? size + 'px' : TITLE_SIZES[size] + 'px')};
-  font-weight: ${({ fontWeight }) => fontWeight && fontWeight};
-  display: ${({ block }) => (block ? 'block' : 'inline-block')};
-
-  color: ${({ color }) => color && (FONT_COLORS[color] || color)};
-
-  ${({ ellipsis }) =>
-    ellipsis &&
-    `
-    display: block;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  `}
-  word-break: break-all;
-`;

@@ -8,7 +8,7 @@ class MainDocument extends Document {
 
   render() {
     return (
-      <Html>
+      <Html lang="ko">
         <Head />
         <script defer src="https://developers.kakao.com/sdk/js/kakao.min.js"></script>
         <body>
