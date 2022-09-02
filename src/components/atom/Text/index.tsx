@@ -1,4 +1,3 @@
-import styled from '@emotion/styled';
 import React, { CSSProperties, ReactNode } from 'react';
 import { FontColors, FontSizes } from '~/types/font';
 import { FONT_SIZES, FONT_COLORS } from '~/types/font';
@@ -32,7 +31,7 @@ const Text = ({
     fontSize: size && (typeof size === 'number' ? size + 'px' : FONT_SIZES[size] + 'px'),
     color: color && (FONT_COLORS[color] || color),
     fontWeight: fontWeight && fontWeight,
-    display: block ? 'block' : 'inline-block'
+    display: block || ellipsis ? 'block' : 'inline-block'
   };
 
   return (

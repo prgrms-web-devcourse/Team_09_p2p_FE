@@ -1,11 +1,10 @@
-import 'slick-carousel/slick/slick.css';
-import 'slick-carousel/slick/slick-theme.css';
 import CourseItem from '~/components/common/CourseList/CourseItem';
 import { ICourseItem } from '~/types/course';
 import SliderContainer from '~/components/common/SliderContainer';
 import { useState } from 'react';
 import ConfirmModal from '~/components/common/ConfirmModal';
 import { useRouter } from 'next/router';
+import styled from '@emotion/styled';
 
 interface SliderProps {
   courses: ICourseItem[];
@@ -21,11 +20,11 @@ const RelevantCourses = ({ courses }: SliderProps) => {
 
   return (
     <>
-      <SliderContainer>
+      <StyledSlider>
         {courses.map((course) => (
           <CourseItem course={course} key={course.id} grid={1} onModal={setModalVisible} />
         ))}
-      </SliderContainer>
+      </StyledSlider>
       <ConfirmModal
         visible={modalVisible}
         onClose={() => setModalVisible(false)}
@@ -38,3 +37,7 @@ const RelevantCourses = ({ courses }: SliderProps) => {
 };
 
 export default RelevantCourses;
+
+const StyledSlider = styled(SliderContainer)`
+  height: 360px;
+`;

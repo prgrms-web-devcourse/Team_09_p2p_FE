@@ -6,6 +6,7 @@ import { Button, Icon, Link, PageContainer, Text, Title } from '~/components/ato
 import Comment from '~/components/common/Comment';
 import DetailSidebar from '~/components/common/DetailSidebar';
 import ImageViewer from '~/components/common/ImageViewer';
+import PageHead from '~/components/common/PageHead';
 import PlaceMap from '~/components/domain/Map/PlaceMap';
 import RelevantCourses from '~/components/domain/Place/RelevantCourses';
 import { useUser } from '~/hooks/useUser';
@@ -82,9 +83,7 @@ const PlaceDetailByPostId = ({ place, placeId, courses }: Props) => {
 
   return (
     <React.Fragment>
-      <Head>
-        <title>{place.name} | 이곳저곳</title>
-      </Head>
+      <PageHead title={place.name} />
       <main>
         <Container type="detail" style={{ position: 'relative' }}>
           <PostHeader>

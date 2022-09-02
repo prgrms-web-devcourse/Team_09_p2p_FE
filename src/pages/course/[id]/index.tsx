@@ -1,6 +1,5 @@
 import styled from '@emotion/styled';
-import type { NextPage, NextPageContext } from 'next';
-import Head from 'next/head';
+import type { NextPageContext } from 'next';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import { Link, PageContainer, Text, Title } from '~/components/atom';
@@ -8,6 +7,7 @@ import Avatar from '~/components/atom/Avatar';
 import Comment from '~/components/common/Comment';
 import ConfirmModal from '~/components/common/ConfirmModal';
 import DetailSidebar from '~/components/common/DetailSidebar';
+import PageHead from '~/components/common/PageHead';
 import CourseDetailList from '~/components/domain/CourseDetail/CourseDetailList';
 import CourseOverview from '~/components/domain/CourseDetail/CourseOverview';
 import CourseSlider from '~/components/domain/CourseSlider';
@@ -116,10 +116,8 @@ const CourseDetail = ({ course, courseId }: Props) => {
   }
 
   return (
-    <React.Fragment>
-      <Head>
-        <title>{course.title} | 이곳저곳</title>
-      </Head>
+    <>
+      <PageHead title={course.title} />
       <main>
         <PageContainer type="detail" style={{ position: 'relative' }}>
           <CourseDetailHeader>
@@ -151,7 +149,7 @@ const CourseDetail = ({ course, courseId }: Props) => {
 
             <Profile>
               <Link href={`/userinfo/${detailData.userId}`}>
-                <Avatar size={55} src={detailData.profileImage} />
+                <Avatar src={detailData.profileImage} />
               </Link>
               <Text color="dark" fontWeight={500}>
                 {detailData.nickname}
@@ -188,6 +186,7 @@ const CourseDetail = ({ course, courseId }: Props) => {
             id={detailData.id}
             defaultLiked={detailData.isLiked}
             defaultBookmarked={detailData.isBookmarked}
+            comments={detailData.comments}
             type="course"
           />
         </PageContainer>
@@ -199,7 +198,7 @@ const CourseDetail = ({ course, courseId }: Props) => {
           subMessage="게시물을 정말 삭제하시겠습니까?"
         />
       </main>
-    </React.Fragment>
+    </>
   );
 };
 

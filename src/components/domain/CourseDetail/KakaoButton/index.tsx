@@ -7,7 +7,6 @@ const KakaoButton = () => {
   useEffect(() => {
     const kakao = window.Kakao;
     if (kakao && !kakao.isInitialized()) {
-      console.log('카카오실행');
       kakao.init(process.env.NEXT_PUBLIC_KAKAO_SHARE_KEY);
     }
   }, []);

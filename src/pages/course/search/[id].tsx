@@ -1,5 +1,4 @@
 import type { NextPageContext } from 'next';
-import Head from 'next/head';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import { PageContainer } from '~/components/atom';
@@ -103,11 +102,6 @@ const CourseSearch = ({ placeId }: Props) => {
 
   return (
     <React.Fragment>
-      <Head>
-        <title>우리의 여행코스 | 이곳저곳</title>
-        <meta name="description" content="our travel course" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
       <main style={{ position: 'relative' }}>
         <PageContainer>
           <CategoryTitle name={`#${placeName}`} />

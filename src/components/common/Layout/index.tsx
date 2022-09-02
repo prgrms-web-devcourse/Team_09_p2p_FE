@@ -27,11 +27,11 @@ const Layout = ({ children, footer, full }: LayoutProps) => {
   }, [currentUser.accessToken, token]);
 
   return (
-    <div>
+    <>
       <Header full={full} isLoading={isLoading} />
       {children}
       {footer && <Footer />}
-    </div>
+    </>
   );
 };
 

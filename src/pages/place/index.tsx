@@ -5,6 +5,7 @@ import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import { PageContainer } from '~/components/atom';
 import { CategoryTitle, PlaceList, SelectRegion, SortFilter, Toast } from '~/components/common';
+import PageHead from '~/components/common/PageHead';
 import { useUser } from '~/hooks/useUser';
 import { PlaceApi } from '~/service';
 import { Period, Region, RegionAndAll } from '~/types';
@@ -94,7 +95,8 @@ const Place = ({ query }: { query: Record<string, string> }) => {
       },
       `/place${makeQueryString(queries)}`,
       {
-        scroll: false
+        scroll: false,
+        shallow: true
       }
     );
   };
@@ -142,6 +144,7 @@ const Place = ({ query }: { query: Record<string, string> }) => {
 
   return (
     <React.Fragment>
+      <PageHead title="추천 장소" />
       <main className="content">
         <PageContainer>
           <CategoryTitle name="추천장소" />

@@ -5,6 +5,7 @@ import { LoginForm } from '~/components/domain';
 import { LoginValues } from '~/types';
 import { useUser } from '~/hooks/useUser';
 import { useRouter } from 'next/router';
+import PageHead from '~/components/common/PageHead';
 
 const Login: NextPage = () => {
   const { login } = useUser();
@@ -22,9 +23,7 @@ const Login: NextPage = () => {
 
   return (
     <React.Fragment>
-      <Head>
-        <title>로그인 | 이곳저곳</title>
-      </Head>
+      <PageHead title="로그인" />
 
       <main>
         <LoginForm onSubmit={handleSubmit} errorMessage={errorMessage} />
