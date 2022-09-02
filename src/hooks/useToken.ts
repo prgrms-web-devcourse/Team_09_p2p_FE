@@ -3,14 +3,14 @@ import TokenStorage from '~/utils/storage/TokenStorage';
 
 const useToken = () => {
   const storage = useMemo(() => TokenStorage, []);
-  const [token, _setToken] = useState<string | undefined>();
+  const [tokenState, setTokenState] = useState<string | undefined>();
 
   useEffect(() => {
-    _setToken(storage.getToken());
+    setTokenState(storage.getToken());
   }, [storage]);
 
   return {
-    token,
+    token: tokenState,
     setToken: (token: string) => storage.setToken(token),
     removeToken: () => storage.removeToken()
   };
