@@ -1,4 +1,4 @@
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import ToastManager, { CreateToast } from './ToastManager';
 
 const TOAST_PORTAL_ID = 'toast-portal';
@@ -28,13 +28,14 @@ class Toast {
         document.body.appendChild(this.portal);
       }
 
-      ReactDOM.render(
+      const root = createRoot(this.portal);
+
+      root.render(
         <ToastManager
           bind={(createToast) => {
             this.createToast = createToast;
           }}
-        />,
-        this.portal
+        />
       );
     }
   }
