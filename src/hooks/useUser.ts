@@ -2,8 +2,8 @@ import { ErrorConfirm } from './../types/user';
 import { useRecoilState, useResetRecoilState } from 'recoil';
 import { userState } from '~/recoil';
 import { UserApi } from '~/service';
-import WebStorage from '~/service/core/WebStorage';
 import { LoginValues } from '~/types';
+import useToken from './useToken';
 
 interface SystemError {
   code: string;
@@ -17,6 +17,7 @@ export const useUser = () => {
   const [currentUser, setCurrentUser] = useRecoilState(userState);
   const resetUser = useResetRecoilState(userState);
   const isLoggedIn = currentUser.accessToken !== null;
+  const { setToken, removeToken } = useToken();
 
   const login = async (data: LoginValues): Promise<ErrorConfirm> => {
     setCurrentUser({ ...currentUser });
@@ -24,7 +25,7 @@ export const useUser = () => {
     try {
       const response = await UserApi.login(data);
       setCurrentUser({ ...response });
-      WebStorage.setToken(response.accessToken);
+      setToken(response.accessToken);
 
       return {
         isError: false,
@@ -65,7 +66,7 @@ export const useUser = () => {
         }
       });
     } catch (e) {
-      WebStorage.removeToken();
+      removeToken();
       setCurrentUser({
         accessToken: null,
         user: {
@@ -85,7 +86,7 @@ export const useUser = () => {
   };
 
   const logout = async () => {
-    WebStorage.removeToken();
+    removeToken();
     resetUser();
   };
 
