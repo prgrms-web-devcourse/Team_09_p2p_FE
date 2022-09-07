@@ -27,13 +27,13 @@ export default class LocalStorage<T> {
       const value = this.storage.getItem(key);
       if (!value) {
         if (defaultValue === undefined) {
-          throw new Error('storage item has not value and is not defined default value.');
+          console.log('storage item has not value and is not defined default value.');
         }
         return defaultValue;
       }
       return JSON.parse(value);
     } catch (e) {
-      throw new Error('error occurs in storage get.');
+      console.log('error occurs in storage get.');
     }
   }
 
@@ -44,7 +44,7 @@ export default class LocalStorage<T> {
     try {
       this.storage.setItem(key, JSON.stringify(value));
     } catch (e) {
-      throw new Error('error occurs in storage set.');
+      console.log('error occurs in storage set.');
     }
   }
 
