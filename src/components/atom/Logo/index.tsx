@@ -1,4 +1,5 @@
 import { Image } from '~/components/atom';
+import { IMAGE_URL } from '~/utils/constants';
 
 interface LogoProps {
   width?: number;
@@ -6,7 +7,7 @@ interface LogoProps {
 }
 
 const Logo = ({ width = 100, height = 30 }: LogoProps) => {
-  return <Image src="/assets/logo.png" alt="logo" width={width} height={height} />;
+  return <Image src={`${IMAGE_URL}/assets/logo.png`} alt="logo" width={width} height={height} />;
 };
 
 export default Logo;

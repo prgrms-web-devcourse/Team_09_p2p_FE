@@ -2,6 +2,7 @@ import theme from '~/styles/theme';
 import { Period, Region, Spot, Theme } from '~/types';
 
 const { fontGray, fontDarkGray, fontDarkBlack } = theme.color;
+export const IMAGE_URL = 'https://devcourse-f-s3-storage.s3.ap-northeast-2.amazonaws.com';
 
 export const FONT_SIZES = {
   xs: 14,
@@ -23,36 +24,27 @@ export const FONT_COLORS: { [key: string]: string } = {
   dark: fontDarkBlack
 };
 
-export const ICON_URLS: { [key: string]: string } = {
-  heart: '/assets/icons/heart.svg',
-  bookmark: '/assets/icons/bookmark.svg',
-  arrow: '/assets/icons/arrow.svg',
-  search: '/assets/icons/search.svg',
-  close: '/assets/icons/close.svg',
-  plus: '/assets/icons/plus.svg'
-};
-
 export const MARKER_IMAGE_URLS: { [key: string]: string } = {
-  academy: '/assets/place/academy.png',
-  agency: '/assets/place/agency.png',
-  bank: '/assets/place/bank.png',
-  convenience: '/assets/place/convenience.png',
-  culturalFacility: '/assets/place/culturalFacility.png',
-  defaultPlace: '/assets/place/defaultPlace.png',
-  gasStation: '/assets/place/gasStation.png',
-  kindergarden: '/assets/place/kindergarden.png',
-  parking: '/assets/place/parking.png',
-  publicInstitutions: '/assets/place/publicInstitutions.png',
-  school: '/assets/place/school.png',
-  shopping: '/assets/place/shopping.png',
-  subway: '/assets/place/subway.png',
-  attractions: '/assets/place/attractions.png',
-  accommodation: '/assets/place/accommodation.png',
-  restaurant: '/assets/place/restaurant.png',
-  cafe: '/assets/place/cafe.png',
-  hospital: '/assets/place/hospital.png',
-  pharmacy: '/assets/place/pharmacy.png',
-  placeNumberSprite: '/assets/place/_place-number-sprite.png'
+  academy: `${IMAGE_URL}/assets/place/academy.png`,
+  agency: `${IMAGE_URL}/assets/place/agency.png`,
+  bank: `${IMAGE_URL}/assets/place/bank.png`,
+  convenience: `${IMAGE_URL}/assets/place/convenience.png`,
+  culturalFacility: `${IMAGE_URL}/assets/place/culturalFacility.png`,
+  defaultPlace: `${IMAGE_URL}/assets/place/defaultPlace.png`,
+  gasStation: `${IMAGE_URL}/assets/place/gasStation.png`,
+  kindergarden: `${IMAGE_URL}/assets/place/kindergarden.png`,
+  parking: `${IMAGE_URL}/assets/place/parking.png`,
+  publicInstitutions: `${IMAGE_URL}/assets/place/publicInstitutions.png`,
+  school: `${IMAGE_URL}/assets/place/school.png`,
+  shopping: `${IMAGE_URL}/assets/place/shopping.png`,
+  subway: `${IMAGE_URL}/assets/place/subway.png`,
+  attractions: `${IMAGE_URL}/assets/place/attractions.png`,
+  accommodation: `${IMAGE_URL}/assets/place/accommodation.png`,
+  restaurant: `${IMAGE_URL}/assets/place/restaurant.png`,
+  cafe: `${IMAGE_URL}/assets/place/cafe.png`,
+  hospital: `${IMAGE_URL}/assets/place/hospital.png`,
+  pharmacy: `${IMAGE_URL}/assets/place/pharmacy.png`,
+  placeNumberSprite: `${IMAGE_URL}/assets/place/_place-number-sprite.png`
 };
 
 export const TAGS_PERIOD: Period[] = ['당일', '1~3일', '4~7일', '8~15일', '15일이상'];
