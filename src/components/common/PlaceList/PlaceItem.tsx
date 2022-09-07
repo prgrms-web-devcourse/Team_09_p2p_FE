@@ -8,6 +8,7 @@ import { BookmarkApi } from '~/service';
 import { useUser } from '~/hooks/useUser';
 import { useRouter } from 'next/router';
 import { forwardRef, LegacyRef, MouseEvent, useEffect, useState } from 'react';
+import { THUMBNAIL_DEFAULT_IMAGE } from '~/utils/constants/images';
 
 export type PlaceGrid = 3 | 4;
 interface PlaceItemProps {
@@ -17,7 +18,7 @@ interface PlaceItemProps {
 
 const PlaceItem = forwardRef(({ place, grid }: PlaceItemProps, ref) => {
   const { id, title, likeCount, usedCount, thumbnail, bookmarked } = place;
-  const THUMBNAIL_URL = thumbnail ? thumbnail : '/assets/images/image-not-found.png';
+  const THUMBNAIL_URL = thumbnail ? thumbnail : THUMBNAIL_DEFAULT_IMAGE;
   const { isLoggedIn } = useUser();
   const router = useRouter();
   const [isBookmarked, setIsBookmarked] = useState(bookmarked);

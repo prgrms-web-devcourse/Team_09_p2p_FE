@@ -1,5 +1,5 @@
 import { Image } from '~/components/atom';
-import { IMAGE_URL } from '~/utils/constants';
+import { IMAGE_URL } from '~/utils/constants/images';
 
 interface LogoProps {
   width?: number;

@@ -1,4 +1,4 @@
-import { IMAGE_URL } from '~/utils/constants';
+import { IMAGE_URL } from '~/utils/constants/images';
 
 export const ICON_URLS = {
   heart: `${IMAGE_URL}/assets/icons/heart.svg`,

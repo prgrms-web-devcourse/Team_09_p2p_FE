@@ -1,6 +1,7 @@
 import styled from '@emotion/styled';
 import { Button, Link, Title } from '~/components/atom';
 import theme from '~/styles/theme';
+import { IMAGE_URL } from '~/utils/constants/images';
 
 interface CourseSliderItemProps {
   name: string;
@@ -10,8 +11,8 @@ interface CourseSliderItemProps {
   imageUrl: string;
 }
 
-const DOT_BG = 'url(/assets/dot-gray.png)';
-const LINE_BG = 'url(/assets/line-bluegray.png)';
+const DOT_BG = `url(${IMAGE_URL}/assets/dot-gray.png)`;
+const LINE_BG = `url(${IMAGE_URL}/assets/line-bluegray.png)`;
 
 const CourseSliderItem = ({ name, placeId, index, lastCount, imageUrl }: CourseSliderItemProps) => {
   const IS_START = index === 0;

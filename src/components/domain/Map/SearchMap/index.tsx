@@ -5,7 +5,8 @@ import { Map, MapMarker, Polyline } from 'react-kakao-maps-sdk';
 import { Text } from '~/components/atom';
 import { SearchInput, Toast } from '~/components/common';
 import PlusIcon from '~/components/domain/CourseCreate/SearchArea/PlusIcon';
-import { MARKER_IMAGE_URLS, REGION_BOUNDARY } from 'src/utils/constants';
+import { MARKER_IMAGE_URLS } from 'src/utils/constants/images';
+import { REGION_BOUNDARY } from 'src/utils/constants/index';
 import { IPlaceForm } from '~/types/place';
 import theme from '~/styles/theme';
 
