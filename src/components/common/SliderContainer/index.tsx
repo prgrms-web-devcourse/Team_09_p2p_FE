@@ -9,18 +9,26 @@ interface SliderContainerProps {
   children: ReactNode;
   dots?: boolean;
   button?: buttonType;
+  show?: number;
+  itemMargin?: number;
 }
 
-const SliderContainer = ({ children, dots, button = 'normal' }: SliderContainerProps) => {
+const SliderContainer = ({
+  children,
+  dots,
+  button = 'normal',
+  show = 3,
+  itemMargin = 0
+}: SliderContainerProps) => {
   const settings = {
     infinite: false,
     speed: 500,
-    slidesToShow: 3,
-    slidesToScroll: 3,
+    slidesToShow: show,
+    slidesToScroll: show,
     dots: dots
   };
   return (
-    <StyledSlider {...settings} button={button}>
+    <StyledSlider {...settings} button={button} itemMargin={itemMargin}>
       {children}
     </StyledSlider>
   );
@@ -30,12 +38,13 @@ export default SliderContainer;
 
 const StyledSlider = styled(Slider)<SliderContainerProps>`
   margin-top: 24px;
+  margin-bottom: ${({ dots }) => dots && `${40}px`};
 
   ${({ button }) => button && buttonStyle[button]}
 
   .slick-list {
-    margin-left: -10px;
-    margin-right: -10px;
+    margin-left: ${({ itemMargin }) => itemMargin && `${-itemMargin}px`};
+    margin-right: ${({ itemMargin }) => itemMargin && `${-itemMargin}px`};
   }
 
   .slick-track {
@@ -61,7 +70,10 @@ const StyledSlider = styled(Slider)<SliderContainerProps>`
   }
 
   .slick-dots {
-    position: static;
-    margin-top: 20px;
+    position: absolute;
+    bottom: -36px;
+    li {
+      margin: 0 2px;
+    }
   }
 `;

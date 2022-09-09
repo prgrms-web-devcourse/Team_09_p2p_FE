@@ -49,7 +49,7 @@ export type PlacePost = {
   longitude: string;
   category: string;
   phoneNumber?: string;
-  imageUrl?: string;
+  imageUrls: string[];
   liked: boolean;
   bookmarked: boolean;
   likeCount: number;
