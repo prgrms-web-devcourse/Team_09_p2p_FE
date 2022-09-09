@@ -111,6 +111,7 @@ const PlaceDetailByPostId = ({ place, placeId, courses }: Props) => {
             id={detailData.id}
             defaultLiked={detailData.liked}
             defaultBookmarked={detailData.bookmarked}
+            comments={detailData.comments}
             type="place"
           />
         </Container>
