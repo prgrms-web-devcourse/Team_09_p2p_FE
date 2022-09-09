@@ -7,8 +7,10 @@ import Comment from '~/components/common/Comment';
 import DetailSidebar from '~/components/common/DetailSidebar';
 import ImageViewer from '~/components/common/ImageViewer';
 import PageHead from '~/components/common/PageHead';
+import SliderContainer from '~/components/common/SliderContainer';
 import PlaceMap from '~/components/domain/Map/PlaceMap';
 import RelevantCourses from '~/components/domain/Place/RelevantCourses';
+import PlaceSlider from '~/components/domain/PlaceSlider';
 import { useUser } from '~/hooks/useUser';
 import { CourseApi, PlaceApi } from '~/service';
 import theme from '~/styles/theme';
@@ -74,7 +76,6 @@ const PlaceDetailByPostId = ({ place, placeId, courses }: Props) => {
     if (isLoggedIn) {
       // 로그인 상태일 경우 유저용 데이터 받아오기
       getDetailInfo();
-      console.log(detailData, 'detailData');
     }
   }, [placeId, isLoggedIn]);
 
@@ -113,11 +114,10 @@ const PlaceDetailByPostId = ({ place, placeId, courses }: Props) => {
               center={{ lat: Number(detailData.latitude), lng: Number(detailData.longitude) }}
             />
           )}
-          <ContentContainer>
-            <ImageViewer src={detailData.imageUrls[0]} alt={detailData.name} />
-          </ContentContainer>
+
+          <PlaceSlider images={detailData.imageUrls} name={detailData.name} />
+
           <RelevantContainer>
-            {/* 검색 결과로 이동 시켜야함 */}
             <RelevantHeader>
               <Title size="sm">이 장소가 포함된 코스</Title>
               <Link href={`/course/search/${placeId}`}>
@@ -154,10 +154,6 @@ const PostHeader = styled.div`
   display: flex;
   flex-direction: column;
   gap: 6px;
-`;
-
-const ContentContainer = styled.section`
-  margin: 20px 0;
 `;
 
 const HorizonDivideLine = styled.div`
