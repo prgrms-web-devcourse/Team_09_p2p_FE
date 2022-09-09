@@ -20,7 +20,7 @@ const RelevantCourses = ({ courses }: SliderProps) => {
 
   return (
     <>
-      <StyledSlider>
+      <StyledSlider itemMargin={10}>
         {courses.map((course) => (
           <CourseItem course={course} key={course.id} grid={1} onModal={setModalVisible} />
         ))}
