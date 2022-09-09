@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import React from 'react';
-import { FONT_SIZES } from '~/utils/constants';
+import { FONT_SIZES } from '~/types/font';
 
 interface LabelProps {
   htmlFor: string;

@@ -1,6 +1,5 @@
 import { CSSProperties, ReactNode } from 'react';
-import { FontColors, TitleSizes } from '~/types/font';
-import { TITLE_SIZES, FONT_COLORS } from '~/utils/constants';
+import { FontColors, TitleSizes, TITLE_SIZES, FONT_COLORS } from '~/types/font';
 
 interface TitleProps {
   size?: TitleSizes | number;

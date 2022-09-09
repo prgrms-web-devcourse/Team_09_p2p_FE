@@ -130,7 +130,7 @@ export default Comment;
 
 const CommentContainer = styled.div`
   margin-top: 20px;
-  margin-bottom: 150px;
+  padding-bottom: 100px;
 `;
 const CommentList = styled.div`
   margin-top: 42px;

@@ -2,7 +2,7 @@ import React, { ChangeEvent, useCallback, useMemo, useState } from 'react';
 import { Button, Input, Label } from '~/components/atom';
 import { ErrorMessage, Field } from '~/components/common';
 import { UserApi } from '~/service';
-import { FONT_SIZES } from '~/utils/constants';
+import { FONT_SIZES } from '~/types/font';
 
 interface EmailFieldProps {
   value: string;
