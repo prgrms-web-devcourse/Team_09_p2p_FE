@@ -74,6 +74,7 @@ const PlaceDetailByPostId = ({ place, placeId, courses }: Props) => {
     if (isLoggedIn) {
       // 로그인 상태일 경우 유저용 데이터 받아오기
       getDetailInfo();
+      console.log(detailData, 'detailData');
     }
   }, [placeId, isLoggedIn]);
 
@@ -113,7 +114,7 @@ const PlaceDetailByPostId = ({ place, placeId, courses }: Props) => {
             />
           )}
           <ContentContainer>
-            <ImageViewer src={detailData.imageUrl} alt={detailData.name} />
+            <ImageViewer src={detailData.imageUrls[0]} alt={detailData.name} />
           </ContentContainer>
           <RelevantContainer>
             {/* 검색 결과로 이동 시켜야함 */}
