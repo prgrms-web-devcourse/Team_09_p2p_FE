@@ -9,7 +9,7 @@ interface CourseSliderProps {
 
 const CourseSlider = ({ places }: CourseSliderProps) => {
   return (
-    <StyledSlider button="circle" itemMargin={10}>
+    <StyledSlider button="circle" itemMargin={10} dots>
       {places?.map((place, index) => (
         <CourseSliderItem
           key={place.id}

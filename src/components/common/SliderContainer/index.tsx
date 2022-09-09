@@ -38,6 +38,7 @@ export default SliderContainer;
 
 const StyledSlider = styled(Slider)<SliderContainerProps>`
   margin-top: 24px;
+  margin-bottom: ${({ dots }) => dots && `${40}px`};
 
   ${({ button }) => button && buttonStyle[button]}
 
@@ -69,7 +70,10 @@ const StyledSlider = styled(Slider)<SliderContainerProps>`
   }
 
   .slick-dots {
-    position: static;
-    margin-top: 20px;
+    position: absolute;
+    bottom: -36px;
+    li {
+      margin: 0 2px;
+    }
   }
 `;
