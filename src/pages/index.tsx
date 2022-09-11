@@ -8,6 +8,7 @@ import ArrowTitle from '~/components/common/ArrowTitle';
 import { CourseApi, PlaceApi } from '~/service';
 import theme from '~/styles/theme';
 import { TAGS_THEME } from '~/utils/constants';
+import { IMAGE_URL } from '~/utils/constants/images';
 import { IPlaceItem } from '~/types/place';
 import { ICourseItem } from '~/types/course';
 import { useUser } from '~/hooks/useUser';
@@ -82,7 +83,12 @@ const HomePage = ({ places, courses }: Props) => {
       <main>
         <PageContainer>
           <SearchArea>
-            <Image width={550} src="/assets/search-img.png" alt="여행할 땐 이곳저곳" />
+            <Image
+              width={550}
+              src={`${IMAGE_URL}/assets/search-img.png`}
+              alt="여행할 땐 이곳저곳"
+              priority={true}
+            />
             <MainSearchForm onSubmit={handleSearch}>
               <SearchIcon name="searchBlue" size={30} />
               <MainSearchInput

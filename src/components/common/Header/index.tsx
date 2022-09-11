@@ -50,7 +50,7 @@ const Header = ({ full, isLoading }: HeaderProps) => {
           <Buttons>
             {isLoggedIn && (
               <Link href={`/userinfo/${currentUser.user.id}`}>
-                <Avatar size={54} src={currentUser.user.profileImage} />
+                <Avatar src={currentUser.user.profileImage} />
               </Link>
             )}
           </Buttons>
@@ -97,7 +97,7 @@ const Header = ({ full, isLoading }: HeaderProps) => {
                 )}
                 {isLoggedIn && !isLoading && (
                   <Link href={`/userinfo/${currentUser.user.id}`}>
-                    <Avatar size={54} src={currentUser.user.profileImage} />
+                    <Avatar src={currentUser.user.profileImage} />
                   </Link>
                 )}
               </Buttons>

@@ -63,10 +63,10 @@ const CommentItem = ({
       <CommentContainer isRecomment={isRecomment}>
         {comment.createdAt ? (
           <Link href={`/userinfo/${comment.user.id}`}>
-            <Avatar size={66} src={comment.user.profileImage} />
+            <Avatar src={comment.user.profileImage} />
           </Link>
         ) : (
-          <Avatar size={66} src={comment.user.profileImage} />
+          <Avatar src={comment.user.profileImage} />
         )}
         {!isOpenEditor ? (
           <>
@@ -121,7 +121,7 @@ const CommentItem = ({
       {isOpenRecomment && (
         <CommentContainer style={{ paddingLeft: 50 }}>
           <Link href={`/userinfo/${comment.user.id}`}>
-            <Avatar size={66} src={currentUser.user.profileImage} />
+            <Avatar src={currentUser.user.profileImage} />
           </Link>
           <CommentEditor
             onSubmit={handleCreateRecomment}

@@ -3,6 +3,7 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import React from 'react';
 import { Toast } from '~/components/common';
+import PageHead from '~/components/common/PageHead';
 import { SignupForm } from '~/components/domain';
 import { UserApi } from '~/service';
 import { SignupValues } from '~/types';
@@ -24,9 +25,7 @@ const Signup: NextPage = () => {
 
   return (
     <React.Fragment>
-      <Head>
-        <title>회원가입 | 이곳저곳</title>
-      </Head>
+      <PageHead title="회원가입" />
 
       <main>
         <SignupForm onSubmit={handleSubmit} />

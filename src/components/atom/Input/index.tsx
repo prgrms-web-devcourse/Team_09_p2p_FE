@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 import React, { ChangeEvent, forwardRef, InputHTMLAttributes } from 'react';
 import theme from '~/styles/theme';
-import { FONT_SIZES } from '~/utils/constants';
+import { FONT_SIZES } from '~/types/font';
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   name: string;

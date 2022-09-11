@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Map, MapMarker, CustomOverlayMap } from 'react-kakao-maps-sdk';
-import { MARKER_IMAGE_URLS } from 'src/utils/constants';
+import { IMAGE_URL, MARKER_IMAGE_URLS } from 'src/utils/constants/images';
 import Script from 'next/script';
 import styled from '@emotion/styled';
 
@@ -20,7 +20,7 @@ const PlaceMap = ({ placeId, placeName, placeType, center, height = null }: Plac
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     return () => {};
   }, []);
-  let imageSrc = '/assets/place/';
+  let imageSrc = `${IMAGE_URL}/assets/place/`;
   switch (placeType) {
     case 'MT1':
       imageSrc = MARKER_IMAGE_URLS.shopping;

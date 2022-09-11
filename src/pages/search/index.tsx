@@ -4,6 +4,7 @@ import Head from 'next/head';
 import React, { useEffect, useState } from 'react';
 import { PageContainer, Title } from '~/components/atom';
 import { SelectTags, SelectRegion, CourseList, SortFilter } from '~/components/common';
+import PageHead from '~/components/common/PageHead';
 import { CourseApi } from '~/service';
 import { Period, RegionAndAll, SearchTagsValues, Spot, Theme } from '~/types';
 import { ICourseItem, SortType } from '~/types/course';
@@ -104,6 +105,7 @@ const SearchPage = ({ query }: { query: Record<string, string> }) => {
 
   return (
     <React.Fragment>
+      <PageHead title={query.keyword || ''} />
       <main>
         <PageContainer>
           <Title level={1} size="sm" style={{ margin: '30px 0' }}>

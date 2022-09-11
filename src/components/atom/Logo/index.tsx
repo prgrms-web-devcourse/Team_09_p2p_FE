@@ -1,5 +1,5 @@
-import styled from '@emotion/styled';
-import Image from 'next/image';
+import { Image } from '~/components/atom';
+import { IMAGE_URL } from '~/utils/constants/images';
 
 interface LogoProps {
   width?: number;
@@ -7,17 +7,7 @@ interface LogoProps {
 }
 
 const Logo = ({ width = 100, height = 30 }: LogoProps) => {
-  return (
-    <ImageWrapper width={width} height={height}>
-      <Image src="/assets/logo.png" alt="logo" layout="fill" objectFit="contain" />
-    </ImageWrapper>
-  );
+  return <Image src={`${IMAGE_URL}/assets/logo.png`} alt="logo" width={width} height={height} />;
 };
 
 export default Logo;
-
-const ImageWrapper = styled.div<{ width: number; height: number }>`
-  position: relative;
-  width: ${({ width }) => width}px;
-  height: ${({ height }) => height}px;
-`;

@@ -1,6 +1,7 @@
 import styled from '@emotion/styled';
 import { CSSProperties } from 'react';
 import theme from '~/styles/theme';
+import { USER_DEFAULT_IMAGE } from '~/utils/constants/images';
 import Image from '../Image';
 
 interface AvatarProps {
@@ -9,10 +10,8 @@ interface AvatarProps {
   style?: CSSProperties;
 }
 
-const defaultImage = '/assets/profile-default.jpg';
-
-const Avatar: React.FC<AvatarProps> = ({ src, size = 66, ...props }) => {
-  const imageUrl = src || defaultImage;
+const Avatar = ({ src, size = 55, ...props }: AvatarProps) => {
+  const imageUrl = src || USER_DEFAULT_IMAGE;
   return (
     <ImageWrapper {...props} style={{ width: size, height: size }}>
       <Image src={imageUrl} width={size} height={size} alt="profile" cover />

@@ -3,7 +3,7 @@ import { Map, MapMarker, CustomOverlayMap, Polyline } from 'react-kakao-maps-sdk
 import Script from 'next/script';
 import styled from '@emotion/styled';
 import { IPlace } from '~/types/place';
-import { MARKER_IMAGE_URLS } from 'src/utils/constants';
+import { MARKER_IMAGE_URLS } from 'src/utils/constants/images';
 
 interface CourseType {
   kakaoMapId: number;

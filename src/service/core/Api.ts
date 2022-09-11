@@ -1,40 +1,16 @@
-import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
-import LocalStorage from './WebStorage';
+import { AxiosInstance } from 'axios';
+import { createInstance, auth, handleError, handleResponse } from './workers';
 
 export default class Api {
   private readonly API_END_POINT = process.env.NEXT_PUBLIC_API_END_POINT as string;
+  protected baseInstance: AxiosInstance;
+  protected authInstance: AxiosInstance;
 
-  private interceptors = (instance: AxiosInstance): AxiosInstance => {
-    instance.interceptors.request.use(
-      (config) => {
-        const token = LocalStorage.getToken();
-        config.headers = {
-          Authorization: token || ''
-        };
-        return config;
-      },
-      (error) => Promise.reject(error.response)
-    );
-    return instance;
-  };
+  constructor() {
+    const instance = createInstance(this.API_END_POINT);
+    instance.interceptors.response.use(handleResponse, handleError);
 
-  private createInstance = (url: string, config?: AxiosRequestConfig<any>): AxiosInstance => {
-    return axios.create({
-      baseURL: url,
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      ...config
-    });
-  };
-
-  private baseAPI = (url: string, config?: AxiosRequestConfig<any>): AxiosInstance => {
-    return this.createInstance(url, config);
-  };
-  private authAPI = (url: string, config?: AxiosRequestConfig<any>): AxiosInstance => {
-    return this.interceptors(this.createInstance(url, config));
-  };
-
-  protected baseInstance = this.baseAPI(this.API_END_POINT);
-  protected authInstance = this.authAPI(this.API_END_POINT);
+    this.baseInstance = instance;
+    this.authInstance = auth(instance);
+  }
 }

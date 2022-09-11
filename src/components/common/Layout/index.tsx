@@ -1,8 +1,8 @@
 import { ReactNode, useEffect, useState } from 'react';
 import { Header } from '~/components/common';
 import Footer from '~/components/common/Footer';
+import { useToken } from '~/hooks';
 import { useUser } from '~/hooks/useUser';
-import WebStorage from '~/service/core/WebStorage';
 
 interface LayoutProps {
   children: ReactNode;
@@ -11,6 +11,7 @@ interface LayoutProps {
 }
 
 const Layout = ({ children, footer, full }: LayoutProps) => {
+  const { token } = useToken();
   const { currentUser, updateUser } = useUser();
   const [isLoading, setIsLoading] = useState(false);
 
@@ -20,18 +21,17 @@ const Layout = ({ children, footer, full }: LayoutProps) => {
     setIsLoading(false);
   };
   useEffect(() => {
-    const token = WebStorage.getToken();
     if (token && currentUser.accessToken !== token) {
       compareUser(token);
     }
-  }, [currentUser.accessToken]);
+  }, [currentUser.accessToken, token]);
 
   return (
-    <div>
+    <>
       <Header full={full} isLoading={isLoading} />
       {children}
       {footer && <Footer />}
-    </div>
+    </>
   );
 };
 
