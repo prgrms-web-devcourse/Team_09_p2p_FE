@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 import { useRouter } from 'next/router';
 import React, { FormEvent, ReactElement, useEffect, useRef, useState } from 'react';
 import { Button, Link, PageContainer, Image, Icon } from '~/components/atom';
-import { CourseList, PlaceList } from '~/components/common';
+import { CourseList, PlaceList, Toast } from '~/components/common';
 import Layout from '~/components/common/Layout';
 import ArrowTitle from '~/components/common/ArrowTitle';
 import { CourseApi, PlaceApi } from '~/service';
@@ -73,6 +73,10 @@ const HomePage = ({ places, courses }: Props) => {
   };
 
   useEffect(() => {
+    if (!courses || !places) {
+      Toast.show('데이터 요청에 실패하였습니다.');
+    }
+
     if (isLoggedIn) {
       getCategoryData();
     }

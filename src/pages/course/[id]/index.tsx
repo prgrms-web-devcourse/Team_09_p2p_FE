@@ -17,6 +17,7 @@ import { CourseApi } from '~/service';
 import theme from '~/styles/theme';
 import { ICourseDetail, ICourseForm } from '~/types/course';
 import { IPlaceForm } from '~/types/place';
+import { USER_ROLE } from '~/types/user';
 import { sliceDate } from '~/utils/converter';
 
 export const getServerSideProps = async (context: NextPageContext) => {
@@ -108,6 +109,7 @@ const CourseDetail = ({ course, courseId }: Props) => {
   useEffect(() => {
     if (isLoggedIn) {
       getDetailInfo();
+      console.log(currentUser, 'currentUser');
     }
   }, [courseId, isLoggedIn]);
 
@@ -125,8 +127,9 @@ const CourseDetail = ({ course, courseId }: Props) => {
               <Title level={2} size="lg" fontWeight={700} block>
                 {detailData.title}
               </Title>
-              {currentUser.user.id === detailData.userId && (
-                <HeaderButtons>
+
+              <HeaderButtons>
+                {currentUser.user.id === detailData.userId && (
                   <Link
                     href={{
                       pathname: `/course/${courseId}/edit`,
@@ -136,11 +139,14 @@ const CourseDetail = ({ course, courseId }: Props) => {
                   >
                     수정
                   </Link>
-                  <Text.Button color="gray" onClick={() => setModalVisible(true)}>
-                    삭제
-                  </Text.Button>
-                </HeaderButtons>
-              )}
+                )}
+                {currentUser.user.id === detailData.userId ||
+                  (currentUser.user.role === USER_ROLE.ADMIN && (
+                    <Text.Button color="gray" onClick={() => setModalVisible(true)}>
+                      삭제
+                    </Text.Button>
+                  ))}
+              </HeaderButtons>
             </CourseTitle>
             <CourseDate>
               <Text color="gray">업로드한 날: {sliceDate(detailData.createdAt)}</Text>

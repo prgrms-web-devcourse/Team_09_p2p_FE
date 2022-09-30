@@ -4,6 +4,7 @@ import TokenStorage from '~/utils/storage/TokenStorage';
 const createInstance = (url: string, config?: AxiosRequestConfig): AxiosInstance => {
   return axios.create({
     baseURL: url,
+    timeout: 10000,
     headers: {
       'Content-Type': 'application/json'
     },
@@ -32,6 +33,12 @@ const handleError = (error: AxiosError) => {
     window.alert('현재 서버에 문제가 있습니다.');
     console.error(error);
   }
+
+  if (error.code === 'ECONNABORTED' || error.response?.status === 408) {
+    alert('요청이 만료되었습니다.');
+    console.error(error);
+  }
+
   return Promise.reject(error);
 };
 

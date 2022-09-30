@@ -1,3 +1,4 @@
+import styled from '@emotion/styled';
 import Text, { TextProps } from '.';
 
 interface TextButtonProps extends TextProps {
@@ -16,7 +17,7 @@ const TextButton = ({
   ...props
 }: TextButtonProps) => {
   return (
-    <button onClick={onClick}>
+    <StyledButton onClick={onClick}>
       <Text
         size={size}
         block={block}
@@ -28,8 +29,12 @@ const TextButton = ({
       >
         {children}
       </Text>
-    </button>
+    </StyledButton>
   );
 };
 
 export default TextButton;
+
+const StyledButton = styled.button`
+  flex-shrink: 0;
+`;
