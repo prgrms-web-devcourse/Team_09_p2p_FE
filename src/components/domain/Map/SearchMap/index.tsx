@@ -92,7 +92,7 @@ const SearchMap = ({ setSelectedPlaces, selectedPlaces, selectedRegion }: Search
         return false;
       }
 
-      const selectedPlacesSetter = (data: any[]) => {
+      const selectedPlacesSetter = (data: kakao.maps.services.PlacesSearchResult) => {
         return data.map((place) => {
           return {
             kakaoMapId: place.id,
@@ -103,11 +103,15 @@ const SearchMap = ({ setSelectedPlaces, selectedPlaces, selectedRegion }: Search
             roadAddressName: place.road_address_name,
             category: place.category_group_code,
             phoneNumber: place.phone
-          } as IPlaceForm;
+          } as unknown as IPlaceForm;
         });
       };
 
-      const searchPlaceCallback = (data: any, status: any, pagination: any) => {
+      const searchPlaceCallback = (
+        data: kakao.maps.services.PlacesSearchResult,
+        status: kakao.maps.services.Status,
+        pagination: kakao.maps.Pagination | any
+      ) => {
         if (status === kakao.maps.services.Status.OK) {
           if (pagination.current > pagination.last) {
             return;
@@ -153,12 +157,12 @@ const SearchMap = ({ setSelectedPlaces, selectedPlaces, selectedRegion }: Search
   const hendleSearch = (curKeyword: string) => {
     setCurKeyword(curKeyword);
   };
-  const placeMouseEnter = (e: any, place: any) => {
+  const placeMouseEnter = (place: IPlaceForm) => {
     if (curMarkerObject !== null) {
       curMarkerObject.setMap(null);
     }
     const markerImageSrc = markerImageSetter(place.category);
-    const placePosition = new kakao.maps.LatLng(place.latitude, place.longitude);
+    const placePosition = new kakao.maps.LatLng(Number(place.latitude), Number(place.longitude));
     const imageSize = new kakao.maps.Size(48, 48);
     const markerImage = new kakao.maps.MarkerImage(markerImageSrc, imageSize);
     const selectedMarker = new kakao.maps.Marker({
@@ -173,7 +177,7 @@ const SearchMap = ({ setSelectedPlaces, selectedPlaces, selectedRegion }: Search
       mapObject.setBounds(bound);
     }
   };
-  const placeMouseOut = (e: any) => {
+  const placeMouseOut = () => {
     if (curMarkerObject !== null) {
       curMarkerObject.setMap(null);
     }
@@ -240,7 +244,7 @@ const SearchMap = ({ setSelectedPlaces, selectedPlaces, selectedRegion }: Search
     if (curMarkerObject !== null) {
       curMarkerObject.setMap(null);
     }
-    setSelectedPlaces((selectedPlace: any) => [...selectedPlace, place]);
+    setSelectedPlaces((selectedPlace) => [...selectedPlace, place]);
   };
   return (
     <>
@@ -324,8 +328,8 @@ const SearchMap = ({ setSelectedPlaces, selectedPlaces, selectedRegion }: Search
                       <li
                         key={index}
                         id={`place_${index}`}
-                        onMouseEnter={(e) => placeMouseEnter(e, place)}
-                        onMouseLeave={(e) => placeMouseOut(e)}
+                        onMouseEnter={() => placeMouseEnter(place)}
+                        onMouseLeave={() => placeMouseOut()}
                       >
                         <SearchedPlace>
                           <SearchedHeader>
