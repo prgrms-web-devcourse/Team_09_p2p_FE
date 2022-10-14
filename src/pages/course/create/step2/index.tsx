@@ -241,7 +241,7 @@ const Course: NextPage = () => {
                 place={place}
                 textAreaRef={(el: HTMLTextAreaElement) => (textAreasRef.current[index] = el)}
                 isRecommendedRef={(el: HTMLButtonElement) => (isRecommendedRef.current[index] = el)}
-                placeImageRef={(el: HTMLElement) => (placeImagesRef.current[index] = el)}
+                placeImageRef={(el: HTMLInputElement) => (placeImagesRef.current[index] = el)}
                 ThumbnailButtonRef={(el: HTMLButtonElement) =>
                   (ThumbnailButtonRef.current[index] = el)
                 }

@@ -1,5 +1,14 @@
 import styled from '@emotion/styled';
-import { MutableRefObject, ReactNode, SetStateAction, useCallback, useRef, useState } from 'react';
+import {
+  MutableRefObject,
+  ReactNode,
+  SetStateAction,
+  useRef,
+  useState,
+  MouseEvent,
+  MouseEventHandler,
+  RefObject
+} from 'react';
 import { Text, Title } from '~/components/atom';
 import theme from '~/styles/theme';
 import Textarea from '~/components/atom/Textarea';
@@ -18,8 +27,8 @@ interface IPlaceInformation {
   textAreaRef: (el: HTMLTextAreaElement) => HTMLTextAreaElement;
   isRecommendedRef: (el: HTMLButtonElement) => HTMLButtonElement;
   ThumbnailButtonRef: (el: HTMLButtonElement) => HTMLButtonElement;
-  placeImageRef: any;
-  onChangeThumnail: any;
+  placeImageRef: (el: HTMLInputElement) => HTMLInputElement;
+  onChangeThumnail: MouseEventHandler<HTMLButtonElement>;
   isModify?: boolean;
   ModPropIsRecommended?: boolean;
   ModPropIsThumbnail?: boolean;
@@ -46,9 +55,9 @@ const PlaceInformation = ({
   const [previewUrl, setPreviewUrl] = useState('');
   const [isRecommended, setIsRecommended] = useState(isModify ? ModPropIsRecommended : false);
   const imageLabelRef = useRef<HTMLLabelElement>(null);
-  // any는 추후 제거하겠습니다!
-  const handleRecommend = (e: any) => {
-    e.target.value = !isRecommended;
+  const handleRecommend = (e: MouseEvent<HTMLButtonElement>) => {
+    const element = e.target as HTMLButtonElement;
+    element.value = (!isRecommended).toString();
     setIsRecommended(!isRecommended);
   };
 
@@ -65,7 +74,6 @@ const PlaceInformation = ({
     }
   };
 
-  // any는 추후 제거하겠습니다!
   const handleFileOnChange = async (imageFile: File) => {
     const reader = new FileReader();
     const MAX_MB = 10;
@@ -170,7 +178,7 @@ const PlaceInformation = ({
           <ImageUploadWrapper>
             <ImageUpload
               onImageUpload={handleFileOnChange}
-              imageRef={placeImageRef}
+              imageRef={placeImageRef as unknown as RefObject<HTMLInputElement>}
               labelId={imageId}
             />
             <FileUploadWrapper>
